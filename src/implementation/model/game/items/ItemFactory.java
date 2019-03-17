@@ -14,6 +14,10 @@ public class ItemFactory {
 		return new BodyPart(point, owner);
 	}
 	
+	public static Item createWall(Point point, Optional<Long> expirationTime) {
+		return new Wall(point, expirationTime);
+	}
+	
 	public static Item createApple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		return new Apple(point, expirationTime, effectDuration);
 	}
