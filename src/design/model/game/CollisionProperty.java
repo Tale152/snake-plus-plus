@@ -9,5 +9,9 @@ public interface CollisionProperty {
 	public void setIntangibility(boolean intangibility);
 	
 	public boolean getIntangibility();
+	
+	public void setSpring(boolean spring);
+	
+	public boolean getSpring();
 
 }

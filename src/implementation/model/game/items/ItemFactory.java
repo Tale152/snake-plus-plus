@@ -46,4 +46,8 @@ public class ItemFactory {
 		return new GhostMode(point, expirationTime, effectDuration);
 	}
 	
+	public static Item createSpring(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new Spring(point, expirationTime, effectDuration);
+	}
+	
 }

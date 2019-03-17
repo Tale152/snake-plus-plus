@@ -13,9 +13,13 @@ public class Wall extends ItemAbstract{
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				//TODO gestire molla
-				if (!target.getProperties().getCollision().getIntangibility() && !target.getProperties().getCollision().getInvincibility()) {
-					target.kill();
+				if (!target.getProperties().getCollision().getIntangibility()){
+					if (target.getProperties().getCollision().getSpring()) {
+						target.reverse();
+					}
+					else if (!target.getProperties().getCollision().getInvincibility()) {
+						target.kill();
+					}
 				}
 			}
 			
