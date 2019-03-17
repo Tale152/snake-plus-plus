@@ -3,11 +3,16 @@ package implementation.model.game.items;
 import java.awt.Point;
 import java.util.Optional;
 import design.model.game.Item;
+import design.model.game.Snake;
 
 public class ItemFactory {
 	
-	public static int SCORE = 100;
-	public static int LENGHT_INCREMENT = 1;
+	protected static int SCORE = 100;
+	protected static int LENGHT_INCREMENT = 1;
+	
+	public static Item createBodyPart(Point point, Snake owner) {
+		return new BodyPart(point, owner);
+	}
 	
 	public static Item createApple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		return new Apple(point, expirationTime, effectDuration);
