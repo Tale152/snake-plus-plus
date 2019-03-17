@@ -28,4 +28,13 @@ public class ItemFactory {
 	public static Item createScoreLoss(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		return new ScoreLoss(point, expirationTime, effectDuration);
 	}
+	
+	public static Item createGodMode(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new GodMode(point, expirationTime, effectDuration);
+	}
+	
+	public static Item createGhostMode(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new GhostMode(point, expirationTime, effectDuration);
+	}
+	
 }
