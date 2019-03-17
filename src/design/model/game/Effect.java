@@ -4,16 +4,16 @@ import java.util.Optional;
 
 public interface Effect {
 	
-	void effectStart(Snake target, long collisionTime);
+	public void effectStart(Snake target, long collisionTime);
 	
-	void effectEnd(Snake target);
+	public void effectEnd(Snake target);
 	
-	void expirationEffect(Field field);
+	public void expirationEffect(Field field);
 	
-	Optional<Long> getEffectEndTime();
+	public Optional<Long> getEffectEndTime();
 	
-	Optional<Long> getExpirationTime();
+	public Optional<Long> getExpirationTime();
 	
-	void incrementDuration(long time);
+	public boolean incrementDuration(long time);
 
 }

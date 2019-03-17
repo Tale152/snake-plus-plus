@@ -6,6 +6,9 @@ import design.model.game.Item;
 
 public class ItemFactory {
 	
+	public static int SCORE = 100;
+	public static int LENGHT_INCREMENT = 1;
+	
 	public static Item createApple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		return new Apple(point, expirationTime, effectDuration);
 	}
@@ -18,4 +21,11 @@ public class ItemFactory {
 		return new Beer(point, expirationTime, effectDuration);
 	}
 
+	public static Item createScoreEarning(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new ScoreEarning(point, expirationTime, effectDuration);
+	}
+	
+	public static Item createScoreLoss(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new ScoreLoss(point, expirationTime, effectDuration);
+	}
 }

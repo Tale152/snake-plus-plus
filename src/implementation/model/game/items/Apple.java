@@ -6,9 +6,6 @@ import design.model.game.Snake;
 
 public class Apple extends ItemAbstract{
 	
-	private static int LENGTH_INCREASE = 1;
-	private static int SCORE = 100;
-	
 	protected Apple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		
 		super(point);
@@ -16,8 +13,8 @@ public class Apple extends ItemAbstract{
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				target.getProperties().getLength().lengthen(LENGTH_INCREASE);
-				target.getPlayer().addScore(SCORE);
+				target.getProperties().getLength().lengthen(ItemFactory.LENGHT_INCREMENT);
+				target.getPlayer().addScore(ItemFactory.SCORE);
 			}
 
 			@Override
