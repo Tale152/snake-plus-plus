@@ -8,6 +8,9 @@ public class Beer extends ItemAbstract{
 
 	protected Beer(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
+		if (!effectDuration.isPresent()) {
+			throw new IllegalStateException();
+		}
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
 			@Override
