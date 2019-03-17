@@ -50,4 +50,8 @@ public class ItemFactory {
 		return new Spring(point, expirationTime, effectDuration);
 	}
 	
+	public static Item createDoublePoints(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new DoublePoints(point, expirationTime, effectDuration);
+	}
+	
 }
