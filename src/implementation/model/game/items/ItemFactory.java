@@ -66,4 +66,8 @@ public class ItemFactory {
 		return new Slug(point, expirationTime, effectDuration);
 	}
 	
+	public static Item createIce(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new Ice(point, expirationTime, effectDuration);
+	}
+	
 }
