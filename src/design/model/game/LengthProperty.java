@@ -4,8 +4,8 @@ public interface LengthProperty {
 	
 	public int getLength();
 	
-	public boolean lengthen(int n);
+	public void lengthen(int n);
 	
-	public boolean shorten(int n);
+	public void shorten(int n);
 	
 }
