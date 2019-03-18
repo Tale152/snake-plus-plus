@@ -54,4 +54,8 @@ public class ItemFactory {
 		return new DoublePoints(point, expirationTime, effectDuration);
 	}
 	
+	public static Item createMagnet(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new Magnet(point, expirationTime, effectDuration);
+	}
+	
 }
