@@ -12,14 +12,13 @@ public class Magnet extends ItemAbstract{
 	
 	protected Magnet(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
-		if (!effectDuration.isPresent()) {
-			throw new IllegalStateException();
-		}
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				target.getProperties().getPickup().setPickupRadius(EXTENDED_RADIUS);
+				if (effectDuration.isPresent()) {
+					target.getProperties().getPickup().setPickupRadius(EXTENDED_RADIUS);
+				}
 			}
 			
 			@Override

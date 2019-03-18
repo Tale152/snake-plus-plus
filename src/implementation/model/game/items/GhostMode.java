@@ -9,13 +9,12 @@ public class GhostMode extends ItemAbstract{
 
 	protected GhostMode(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
-		if (!effectDuration.isPresent()) {
-			throw new IllegalStateException();
-		}
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				target.getProperties().getCollision().setIntangibility(true);;
+				if (effectDuration.isPresent()) {
+					target.getProperties().getCollision().setIntangibility(true);
+				}
 			}
 			
 			@Override

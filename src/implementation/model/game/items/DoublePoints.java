@@ -12,14 +12,13 @@ public class DoublePoints extends ItemAbstract{
 	
 	protected DoublePoints(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
-		if (!effectDuration.isPresent()) {
-			throw new IllegalStateException();
-		}
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				target.getPlayer().applyScoreMultiplier(BASE_MULTIPLIER);
+				if (effectDuration.isPresent()) {
+					target.getPlayer().applyScoreMultiplier(BASE_MULTIPLIER);
+				}
 			}
 			
 			@Override
