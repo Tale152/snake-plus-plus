@@ -4,7 +4,7 @@ public interface SpeedProperty {
 
 	public long getDeltaT();
 	
-	public void setDeltaT();
+	public void setDeltaT(long deltaT);
 	
 	public void applySpeedMultiplier(double mul);
 	
