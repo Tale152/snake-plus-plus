@@ -38,6 +38,11 @@ public class BadApple extends ItemAbstract{
 				target.getProperties().getLength().lengthen((target.getProperties().getLength().getLength() * multiplier) - target.getProperties().getLength().getLength());
 			}
 			
+			@Override
+			public String toString() {
+				return super.toString() + "\n\tMultiplier: " + multiplier;
+			}
+			
 		});
 		
 	}

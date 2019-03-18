@@ -37,6 +37,11 @@ public class ScoreEarning extends ItemAbstract{
 				/*This instance of effect will be removed from snake, so it's like resetting multiplier*/
 			}
 			
+			@Override 
+			public String toString() {
+				return super.toString() + "\n\tMultiplier: " + multiplier;
+			}
+			
 		});
 	}
 

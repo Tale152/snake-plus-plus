@@ -72,5 +72,16 @@ public abstract class EffectAbstract implements Effect {
 		}
 		return false;
 	}
+	
+	public String toString() {
+		String name = this.getClass().getName().replaceFirst(this.getClass().getPackage().getName() + ".", "");
+		String res = "Effect:\t" + name + "\n\tExpires at: ";
+		res += expirationTime.isPresent() ? expirationTime.get() : "NO";
+		res += "\n\tDuration: ";
+		res += effectDuration.isPresent() ? effectDuration.get() : "NO";
+		res += "\n\tEffect ends at: ";
+		res += effectEndTime.isPresent() ? effectEndTime.get() : "NO";
+		return res;
+	}
 
 }

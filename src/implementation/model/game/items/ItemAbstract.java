@@ -38,5 +38,11 @@ public abstract class ItemAbstract implements Item {
 			throw new IllegalStateException();
 		}
 	}
+	
+	public String toString() {
+		String str = "Item:\t" + this.getClass().getSimpleName() + "\n\t";
+		str += "[" + (int)point.getX() + "," + (int)point.getY() + "]\n";
+		return str + effect.toString();
+	}
 
 }
