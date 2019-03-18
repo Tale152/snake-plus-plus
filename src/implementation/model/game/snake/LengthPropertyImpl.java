@@ -25,13 +25,15 @@ public class LengthPropertyImpl implements LengthProperty{
 
 	@Override
 	public void shorten(int n) {
-		
 		if(this.length - n > 1) {
 			this.length -= n;
 		} else {
 			this.length = 1;
 		}
-		
+	}
+	
+	public String toString() {
+		return " " + this.length;
 	}
 
 }
