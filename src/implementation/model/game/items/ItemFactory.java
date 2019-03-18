@@ -58,4 +58,12 @@ public class ItemFactory {
 		return new Magnet(point, expirationTime, effectDuration);
 	}
 	
+	public static Item createTurbo(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new Turbo(point, expirationTime, effectDuration);
+	}
+	
+	public static Item createSlug(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		return new Slug(point, expirationTime, effectDuration);
+	}
+	
 }
