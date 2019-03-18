@@ -51,8 +51,8 @@ public class SpeedPropertyImpl implements SpeedProperty {
 	
 	public String toString() {
 		return "Last update: " + this.lastUpdate + "\n"
-				+ "Delta: " + this.deltaT + "\n"
 				+ "Multiplier: " + this.lastUpdate + "\n"
+				+ "Delta: " + this.deltaT + "\n"
 				+ "Next update: " + getNextUpdate() + "\n";
 	}
 
