@@ -112,7 +112,7 @@ public class GeneralItemsTests {
 	@Test
 	public void testOnGhost() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Snake testSnake;
-		classesList.remove("Ghost");
+		classesList.remove("GhostMode");
 		for (String s : classesList) {
 			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
 			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(100L));
@@ -128,7 +128,7 @@ public class GeneralItemsTests {
 		item.onCollision(testSnake, 0L);
 		assertEquals(testSnake.getEffects().size(), 1);
 		
-		classesList.add("Ghost");
+		classesList.add("GhostMode");
 	}
 	
 }
