@@ -10,41 +10,6 @@ public class AppleTest {
 
 	private Item apple;
 	private Point pointZero = new Point(0,0);
-	@Test
-	public void testInitApple() {
-		
-		try{
-            apple = ItemFactory.createApple(null, Optional.empty(), Optional.empty());
-            fail("Apple's point cannot be null");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception thrown");
-        }
-		
-		try{
-            apple = ItemFactory.createApple(pointZero, null, Optional.empty());
-            fail("Apple's expiration time cannot be null");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception thrown");
-        }
-		
-		try{
-            apple = ItemFactory.createApple(pointZero, Optional.empty(), null);
-            fail("Apple's effect duration cannot be null");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception thrown");
-        }
-		
-		apple = ItemFactory.createApple(pointZero, Optional.empty(), Optional.empty());
-		assertEquals(apple.getPoint(), pointZero);
-		assertEquals(apple.getDuration(), Optional.empty());
-		
-		apple = ItemFactory.createApple(pointZero, Optional.empty(), Optional.of(0L));
-		assertEquals(apple.getDuration(), Optional.of(0L));
-	
-	}
 	
 	@Test
 	public void testInstantaneousEffect() {
@@ -92,15 +57,4 @@ public class AppleTest {
 		assertEquals(testSnake.getEffects().size(),0);
 	}
 	
-	@Test
-	public void testLastingEffectOnGhost() {
-		apple = ItemFactory.createApple(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.ghostSnake();
-		assertEquals(testSnake.getPlayer().getScore(), 0);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 1);
-		apple.onCollision(testSnake, 1000L);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 1);
-		assertEquals(testSnake.getPlayer().getScore(), 0);
-		assertEquals(testSnake.getEffects().size(),0);
-	}
 }
