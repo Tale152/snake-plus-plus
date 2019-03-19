@@ -60,7 +60,6 @@ public class BadAppleTest {
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertEquals(testSnake.getPlayer().getScore(), 250);
 		assertEquals(testSnake.getProperties().getLength().getLength(), 8);
-		assertEquals(testSnake.getEffects().size(),0);
 	}
 	
 }

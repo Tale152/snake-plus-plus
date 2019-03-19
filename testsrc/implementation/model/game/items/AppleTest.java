@@ -54,7 +54,6 @@ public class AppleTest {
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		assertEquals(testSnake.getProperties().getLength().getLength(), 1);
-		assertEquals(testSnake.getEffects().size(),0);
 	}
 	
 }
