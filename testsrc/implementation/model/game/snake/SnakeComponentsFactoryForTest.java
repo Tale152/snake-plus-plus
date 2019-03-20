@@ -1,8 +1,6 @@
 package implementation.model.game.snake;
 
-import design.model.game.LengthProperty;
-import design.model.game.Player;
-import design.model.game.PlayerNumber;
+import design.model.game.*;
 
 public class SnakeComponentsFactoryForTest {
 
@@ -13,6 +11,11 @@ public class SnakeComponentsFactoryForTest {
 	
 	public static LengthProperty createLengthProperty(int initialLength) {
 		//TODO
+		return null;
+	}
+	
+	public static DirectionProperty createDirectionProperty(Direction initialDirection, boolean reversDirection) {
+		//TODO 
 		return null;
 	}
 }
