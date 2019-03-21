@@ -5,23 +5,27 @@ import design.model.game.PlayerNumber;
 
 public class PlayerImpl implements Player{
 
-	private PlayerNumber player;
+	private static final int MULTIPLIER = 1;
+	
+	private PlayerNumber playerNumber;
 	private String name;
 	private int score;
 	private double multiplier;
 	
-	public PlayerImpl(PlayerNumber player, String name, int score, double multiplier) {
-		this.player = player;
+	public PlayerImpl(PlayerNumber playerNumber, String name, int score) {
+		checkPlayerNumber(playerNumber);
+		this.playerNumber = playerNumber;
+		checkName(name);
 		this.name = name;
 		checkScore(score);
 		this.score = score;
-		this.multiplier = multiplier;
+		this.multiplier = MULTIPLIER;
 	}
 	
 	
 	@Override
 	public PlayerNumber getPlayerNumber() {
-		return this.player;
+		return this.playerNumber;
 	}
 
 	@Override
@@ -36,8 +40,11 @@ public class PlayerImpl implements Player{
 
 	@Override
 	public void reduceScore(int score) {
-		checkScore(this.score-score);
-		this.score -= (score * this.multiplier);
+		if(this.score-(score * this.multiplier) > 0) {
+			this.score -= (score * this.multiplier);
+		} else {
+			this.score = 0;
+		}
 	}
 
 	@Override
@@ -57,12 +64,24 @@ public class PlayerImpl implements Player{
 
 	private void checkScore(int score) {
 		if(score < 0) {
-			throw new IllegalStateException();
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	private void checkPlayerNumber(PlayerNumber p) {
+		if(p.equals(null)) {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	private void checkName(String n) {
+		if(n.equals(null)) {
+			throw new IllegalArgumentException();
 		}
 	}
 	
 	public String toString() {
-		return "Player number: " + this.player + "\n" 
+		return "Player number: " + this.playerNumber + "\n" 
 				+ "Player name: " + this.name + "\n"
 				+ "Player score: " + this.score + "\n"
 				+ "Player multiplier: " + this.multiplier + "\n";
