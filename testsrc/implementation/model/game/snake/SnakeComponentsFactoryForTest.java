@@ -1,5 +1,8 @@
 package implementation.model.game.snake;
 
+import java.awt.Point;
+import java.util.List;
+
 import design.model.game.*;
 
 public class SnakeComponentsFactoryForTest {
@@ -31,6 +34,16 @@ public class SnakeComponentsFactoryForTest {
 	
 	public static SpeedProperty createSpeedProperty(long delta, double speedMultipier, long lastUpdate) {
 		//TODO
+		return null;
+	}
+	
+	public static Properties createProperties() {
+		//TODO
+		return null;
+	}
+	
+	public static Snake createSnake(List<Point> initialPoints) {
+		//TODO 
 		return null;
 	}
 }
