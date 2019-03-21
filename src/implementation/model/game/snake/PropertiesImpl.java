@@ -16,12 +16,11 @@ public class PropertiesImpl implements Properties{
 	private final CollisionProperty collision;
 	private final SpeedProperty speed;
 	
-	public PropertiesImpl(int startLength, Direction direction, boolean reversed, int radius, boolean invincible,
-			boolean intangible, boolean spring, long deltaT, double multiplier, long lastUpdate) {
-		this.length = new LengthPropertyImpl(startLength);
-		this.direction = new DirectionPropertyImpl(direction, reversed);
-		this.pickup = new PickupPropertyImpl(radius);
-		this.collision = new CollisionPropertyImpl(invincible, intangible, spring);
+	public PropertiesImpl(int length, Direction direction, long deltaT, double multiplier, long lastUpdate) {
+		this.length = new LengthPropertyImpl(length);
+		this.direction = new DirectionPropertyImpl(direction);
+		this.pickup = new PickupPropertyImpl();
+		this.collision = new CollisionPropertyImpl();
 		this.speed = new SpeedPropertyImpl(deltaT, multiplier, lastUpdate);
 	}
 	
