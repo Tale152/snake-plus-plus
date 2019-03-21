@@ -8,9 +8,9 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	private Direction direction;
 	private boolean reversed;
 	
-	public DirectionPropertyImpl(Direction direction, boolean reversed) {
+	public DirectionPropertyImpl(Direction direction) {
 		this.direction = direction;
-		this.reversed = reversed;
+		this.reversed = false;
 		
 	}
 	
@@ -59,7 +59,8 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	}
 	
 	public String toString() {
-		return this.direction.name();
+		return "Current direction: " + this.direction.name() + "\n" 
+				+ "Reversed status: " + this.reversed + "\n";
 	}
 
 }
