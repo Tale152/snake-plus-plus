@@ -3,12 +3,13 @@ package implementation.model.game.snake;
 import design.model.game.PickupProperty;
 
 public class PickupPropertyImpl implements PickupProperty {
-
+	
+	private static final int RADIUS = 1;
+	
 	private int radius;
 	
-	public PickupPropertyImpl(int radius) {
-		checkRadius(radius);
-		this.radius = radius;
+	public PickupPropertyImpl() {
+		this.radius = RADIUS;
 	}
 	
 	@Override
