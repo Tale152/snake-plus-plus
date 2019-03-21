@@ -3,14 +3,13 @@ package implementation.model.game.snake;
 import design.model.game.LengthProperty;
 
 public class LengthPropertyImpl implements LengthProperty{
-
+	
+	private static final int LENGTH = 1;
+	
 	private int length;
 	
-	public LengthPropertyImpl(int length) {
-		if(length < 1) {
-			throw new IllegalArgumentException();
-		}
-		this.length = length;
+	public LengthPropertyImpl() {
+		this.length = LENGTH;
 	}
 	
 	@Override
