@@ -30,13 +30,13 @@ public class BeerTest {
 		beer.onCollision(testSnake, 1000L);
 		assertTrue(testSnake.getProperties().getDirection().getReverseDirection());
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1100L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
 		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
 		beer = ItemFactory.createBeer(pointZero, Optional.empty(), Optional.of(250L));
 		beer.onCollision(testSnake, 1050L);
 		assertTrue(testSnake.getProperties().getDirection().getReverseDirection());
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1350L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertFalse(testSnake.getProperties().getDirection().getReverseDirection());
 	}

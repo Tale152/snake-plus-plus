@@ -1,27 +1,30 @@
 package implementation.model.game.items;
 
-import design.model.game.Snake;
+import design.model.game.*;
+import implementation.model.game.snake.SnakeImpl;
 
 public class SnakeFactoryForTests {
 
 	public static Snake baseSnake() {
-		//TODO
-		return null;
+		return new SnakeImpl(PlayerNumber.PLAYER1, "Player", Direction.RIGHT, 1000, 1, 0);
 	}
 	
 	public static Snake ghostSnake() {
-		//TODO
-		return null;
+		Snake snake = baseSnake();
+		snake.getProperties().getCollision().setIntangibility(true);
+		return snake;
 	}
 	
 	public static Snake godSnake() {
-		//TODO
-		return null;
+		Snake snake = baseSnake();
+		snake.getProperties().getCollision().setInvincibility(true);
+		return snake;
 	}
 	
 	public static Snake springSnake() {
-		//TODO
-		return null;
+		Snake snake = baseSnake();
+		snake.getProperties().getCollision().setSpring(true);
+		return snake;
 	}
 	
 }

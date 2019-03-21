@@ -30,13 +30,13 @@ public class DoublePointsTest {
 		doublePoints.onCollision(testSnake, 1000L);
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1100L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
 		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
 		doublePoints = ItemFactory.createDoublePoints(pointZero, Optional.empty(), Optional.of(250L));
 		doublePoints.onCollision(testSnake, 1050L);
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1350L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
 	}

@@ -30,13 +30,13 @@ public class MagnetTest {
 		magnet.onCollision(testSnake, 1000L);
 		assertEquals(testSnake.getProperties().getPickup().getPickupRadius(),2);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1100L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
 		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
 		magnet = ItemFactory.createMagnet(pointZero, Optional.empty(), Optional.of(250L));
 		magnet.onCollision(testSnake, 1050L);
 		assertEquals(testSnake.getProperties().getPickup().getPickupRadius(),2);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1350L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertEquals(testSnake.getProperties().getPickup().getPickupRadius(),1);
 	}
