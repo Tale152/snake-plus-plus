@@ -6,20 +6,20 @@ import design.model.game.PlayerNumber;
 public class PlayerImpl implements Player{
 
 	private static final int MULTIPLIER = 1;
+	private static final int SCORE = 0;
 	
 	private PlayerNumber playerNumber;
-	private String name;
+	private String playerName;
 	private int score;
-	private double multiplier;
+	private double scoreMultiplier;
 	
-	public PlayerImpl(PlayerNumber playerNumber, String name, int score) {
+	public PlayerImpl(PlayerNumber playerNumber, String playerName) {
 		checkPlayerNumber(playerNumber);
 		this.playerNumber = playerNumber;
-		checkName(name);
-		this.name = name;
-		checkScore(score);
-		this.score = score;
-		this.multiplier = MULTIPLIER;
+		checkName(playerName);
+		this.playerName = playerName;
+		this.score = SCORE;
+		this.scoreMultiplier = MULTIPLIER;
 	}
 	
 	
@@ -30,18 +30,20 @@ public class PlayerImpl implements Player{
 
 	@Override
 	public String getName() {
-		return this.name;
+		return this.playerName;
 	}
 
 	@Override
 	public void addScore(int score) {
-		this.score += (score * this.multiplier);
+		checkScore(score);
+		this.score += (score * this.scoreMultiplier);
 	}
 
 	@Override
 	public void reduceScore(int score) {
-		if(this.score-(score * this.multiplier) > 0) {
-			this.score -= (score * this.multiplier);
+		checkScore(score);
+		if(this.score-(score * this.scoreMultiplier) > 0) {
+			this.score -= (score * this.scoreMultiplier);
 		} else {
 			this.score = 0;
 		}
@@ -49,12 +51,12 @@ public class PlayerImpl implements Player{
 
 	@Override
 	public void applyScoreMultiplier(double mult) {
-		this.multiplier = mult;	
+		this.scoreMultiplier = mult;	
 	}
 
 	@Override
 	public double getScoreMultiplier() {
-		return this.multiplier;
+		return this.scoreMultiplier;
 	}
 
 	@Override
@@ -74,17 +76,17 @@ public class PlayerImpl implements Player{
 		}
 	}
 	
-	private void checkName(String n) {
-		if(n.equals(null)) {
+	private void checkName(String name) {
+		if(name.equals(null)) {
 			throw new IllegalArgumentException();
 		}
 	}
 	
 	public String toString() {
 		return "Player number: " + this.playerNumber + "\n" 
-				+ "Player name: " + this.name + "\n"
+				+ "Player name: " + this.playerName + "\n"
 				+ "Player score: " + this.score + "\n"
-				+ "Player multiplier: " + this.multiplier + "\n";
+				+ "Player multiplier: " + this.scoreMultiplier + "\n";
 	}
 
 }
