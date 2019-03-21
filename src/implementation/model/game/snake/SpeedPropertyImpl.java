@@ -8,7 +8,7 @@ public class SpeedPropertyImpl implements SpeedProperty {
 	private double multiplier;
 	private long lastUpdate;
 	
-	public SpeedPropertyImpl(long deltaT, int multiplier, long lastUpdate) {
+	public SpeedPropertyImpl(long deltaT, double multiplier, long lastUpdate) {
 		this.deltaT = deltaT;
 		this.multiplier = multiplier;
 		this.lastUpdate = lastUpdate;
