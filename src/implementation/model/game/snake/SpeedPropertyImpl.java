@@ -3,12 +3,12 @@ package implementation.model.game.snake;
 import design.model.game.SpeedProperty;
 
 public class SpeedPropertyImpl implements SpeedProperty {
-
+	
 	private long deltaT;
 	private double multiplier;
 	private long lastUpdate;
 	
-	public SpeedPropertyImpl(long deltaT, double multiplier, long lastUpdate) {
+	public SpeedPropertyImpl(long deltaT, int multiplier, long lastUpdate) {
 		this.deltaT = deltaT;
 		this.multiplier = multiplier;
 		this.lastUpdate = lastUpdate;
