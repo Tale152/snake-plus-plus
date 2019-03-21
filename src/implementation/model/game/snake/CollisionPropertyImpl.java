@@ -8,10 +8,10 @@ public class CollisionPropertyImpl implements CollisionProperty{
 	private boolean intangible;
 	private boolean spring;
 	
-	public CollisionPropertyImpl(boolean invincible, boolean intangible, boolean spring) {
-		this.invincible = invincible;
-		this.intangible = intangible;
-		this.spring = spring;
+	public CollisionPropertyImpl() {
+		this.invincible = false;
+		this.intangible = false;
+		this.spring = false;
 	}
 	
 	@Override
@@ -45,9 +45,9 @@ public class CollisionPropertyImpl implements CollisionProperty{
 	}
 	
 	public String toString() {
-		return "Stato invincibility: " + this.invincible + "\n"
-				+ "Stato intangibility: " + this.intangible + "\n"
-				+ "Stato spring: " + this.spring + "\n";
+		return "Invincibility: " + this.invincible + "\n"
+				+ "Intangibility: " + this.intangible + "\n"
+				+ "Spring: " + this.spring + "\n";
 	}
 
 }
