@@ -19,8 +19,10 @@ public interface Snake {
 	
 	public boolean isAlive();
 	
-	public boolean kill();
+	public void kill();
 	
 	public void reverse();
+	
+	public List<Item> getBodyParts();
 	
 }
