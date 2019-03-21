@@ -20,11 +20,13 @@ public class LengthPropertyImpl implements LengthProperty{
 
 	@Override
 	public void lengthen(int n) {
+		checkLength(n);
 		this.length += n;
 	}
 
 	@Override
 	public void shorten(int n) {
+		checkLength(n);
 		if(this.length - n > 1) {
 			this.length -= n;
 		} else {
@@ -32,8 +34,14 @@ public class LengthPropertyImpl implements LengthProperty{
 		}
 	}
 	
+	private void checkLength(int n) {
+		if(n < 1) {
+			throw new IllegalArgumentException();
+		}	
+	}
+	
 	public String toString() {
-		return " " + this.length;
+		return "Snake length: " + this.length + "\n";
 	}
 
 }
