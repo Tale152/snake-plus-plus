@@ -18,5 +18,20 @@ public class SnakeComponentsFactoryForTest {
 		//TODO 
 		return null;
 	}
+	
+	public static PickupProperty createPickupProperty(int initialRange) {
+		//TODO 
+		return null;
+	}
+	
+	public static CollisionProperty createCollisionProperty(boolean invincible, boolean intangible, boolean spring) {
+		//TODO
+		return null;
+	}
+	
+	public static SpeedProperty createSpeedProperty(long delta, double speedMultipier, long lastUpdate) {
+		//TODO
+		return null;
+	}
 }
 
