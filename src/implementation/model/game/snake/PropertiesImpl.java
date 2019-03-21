@@ -16,12 +16,12 @@ public class PropertiesImpl implements Properties{
 	private final CollisionProperty collision;
 	private final SpeedProperty speed;
 	
-	public PropertiesImpl(int length, Direction direction, long deltaT, double multiplier, long lastUpdate) {
+	public PropertiesImpl(int length, Direction direction, long deltaT, double speedMultiplier, long lastUpdate) {
 		this.length = new LengthPropertyImpl(length);
 		this.direction = new DirectionPropertyImpl(direction);
 		this.pickup = new PickupPropertyImpl();
 		this.collision = new CollisionPropertyImpl();
-		this.speed = new SpeedPropertyImpl(deltaT, multiplier, lastUpdate);
+		this.speed = new SpeedPropertyImpl(deltaT, speedMultiplier, lastUpdate);
 	}
 	
 	@Override
