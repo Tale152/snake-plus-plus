@@ -15,15 +15,15 @@ public class Slug extends ItemAbstract{
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent()) {
+				if (effectDuration.isPresent() && target.getEffects().contains(this)) {
 					originalMultiplier = target.getProperties().getSpeed().getSpeedMultiplier();
-					target.getProperties().getSpeed().applySpeedMultiplier(originalMultiplier * DIVIDE); 
+					target.getProperties().getSpeed().applySpeedMultiplier(-(originalMultiplier * DIVIDE)); 
 				}
 			}
 			
 			@Override
 			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getSpeed().applySpeedMultiplier(originalMultiplier);
+				target.getProperties().getSpeed().applySpeedMultiplier(originalMultiplier * DIVIDE);
 			}
 			
 		});

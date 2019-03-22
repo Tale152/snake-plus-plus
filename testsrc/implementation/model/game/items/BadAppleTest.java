@@ -27,7 +27,7 @@ public class BadAppleTest {
 	@Test
 	public void testInstantaneousEffectOnGhost() {
 		badApple = ItemFactory.createBadApple(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.ghostSnake();
 		testSnake.getPlayer().addScore(100);
 		testSnake.getProperties().getLength().lengthen(5);
 		assertEquals(testSnake.getPlayer().getScore(), 100);
@@ -59,7 +59,7 @@ public class BadAppleTest {
 		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertEquals(testSnake.getPlayer().getScore(), 250);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 8);
+		assertEquals(testSnake.getProperties().getLength().getLength(), 6);
 	}
 	
 }

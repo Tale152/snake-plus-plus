@@ -17,13 +17,13 @@ public class DoublePoints extends ItemAbstract{
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
 				if (effectDuration.isPresent()) {
-					target.getPlayer().applyScoreMultiplier(BASE_MULTIPLIER);
+					target.getPlayer().applyScoreMultiplier(APPLY_MULTIPLIER);
 				}
 			}
 			
 			@Override
 			protected void behaviorOnEffectEnd(Snake target) {
-				target.getPlayer().applyScoreMultiplier(APPLY_MULTIPLIER);
+				target.getPlayer().applyScoreMultiplier(BASE_MULTIPLIER);
 			}
 			
 		});

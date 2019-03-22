@@ -30,7 +30,14 @@ public abstract class ItemAbstract implements Item {
 	@Override
 	public void onCollision(Snake snake, long time) {
 		checkEffect();
-		effect.effectStart(snake, time);
+		if (!snake.getProperties().getCollision().getIntangibility()) {
+			effect.effectStart(snake, time);
+		}
+		else {
+			if (this instanceof GhostMode) {
+				effect.effectStart(snake, time);
+			}
+		}
 	}
 	
 	private void checkEffect() {

@@ -26,11 +26,19 @@ public class BadApple extends ItemAbstract{
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				if (targetSnake == null) {
-					targetSnake = target;
+				if (effectDuration.isPresent()) {
+					if (target.getEffects().contains(this)) {
+						if (targetSnake == null) {
+							targetSnake = target;
+						}
+						target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
+						target.getPlayer().reduceScore(target.getPlayer().getScore()/2);
+					}
 				}
-				target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
-				target.getPlayer().reduceScore(target.getPlayer().getScore()/2);
+				else {
+					target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
+					target.getPlayer().reduceScore(target.getPlayer().getScore()/2);
+				}	
 			}
 
 			@Override

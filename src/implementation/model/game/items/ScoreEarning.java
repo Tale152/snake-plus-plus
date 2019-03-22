@@ -26,10 +26,17 @@ public class ScoreEarning extends ItemAbstract{
 			
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
-				if (targetSnake == null) {
-					targetSnake = target;
+				if (effectDuration.isPresent()) {
+					if (target.getEffects().contains(this)) {
+						if (targetSnake == null) {
+							targetSnake = target;
+						}
+						target.getPlayer().addScore(ItemFactory.SCORE * multiplier);
+					}
 				}
-				target.getPlayer().addScore(ItemFactory.SCORE * multiplier);
+				else {
+					target.getPlayer().addScore(ItemFactory.SCORE);
+				}
 			}
 			
 			@Override
