@@ -9,6 +9,9 @@ public class BodyPart extends ItemAbstract{
 	
 	protected BodyPart(Point point, Snake owner) {
 		super(point);
+		if (owner == null) {
+			throw new IllegalArgumentException();
+		}
 		setEffect(new EffectAbstract(Optional.empty(), Optional.empty()) {
 			
 			@Override

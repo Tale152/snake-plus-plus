@@ -10,6 +10,9 @@ public abstract class EffectAbstract implements Effect {
 	private final Optional<Long> effectDuration;
 	
 	public EffectAbstract( Optional<Long> expirationTime, Optional<Long> effectDuration) {
+		if (expirationTime == null || effectDuration == null) {
+			throw new IllegalArgumentException();
+		}
 		this.effectEndTime = Optional.empty();
 		this.expirationTime = expirationTime;
 		this.effectDuration = effectDuration;

@@ -33,7 +33,7 @@ public class WallTest {
 		wall = ItemFactory.createWall(pointZero, Optional.empty());
 		assertEquals(wall.getDuration(), Optional.empty());
 		wall = ItemFactory.createWall(pointZero, Optional.of(100L));
-		assertEquals(wall.getDuration(), Optional.of(0L));
+		assertEquals(wall.getDuration(), Optional.of(100L));
 		
 		Snake testSnake = SnakeFactoryForTests.baseSnake();
 		wall.onCollision(testSnake, 300L);

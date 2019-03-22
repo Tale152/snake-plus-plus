@@ -39,34 +39,36 @@ public class GeneralItemsTests {
 			try{
 	            item = (Item)method.invoke(null, null, Optional.empty(), Optional.empty());
 	            fail(s + "'s point cannot be null");
-	        } catch (IllegalArgumentException e){
 	        } catch (Exception e){
-				System.out.println(e.toString());
-	            fail("wrong exception thrown at " + s);
+	        	if (!(e.getCause() instanceof IllegalArgumentException)) {
+	        		fail("wrong exception thrown at " + s);
+	        	}
 	        }
 			
 			try{
-	            item = (Item)method.invoke(null, new Point(0,0), null, Optional.empty());
+				item = (Item)method.invoke(null, new Point(0,0), null, Optional.empty());
 	            fail(s + "'s expiration time cannot be null");
-	        } catch (IllegalArgumentException e){
 	        } catch (Exception e){
-	            fail("wrong exception thrown at " + s);
+	        	if (!(e.getCause() instanceof IllegalArgumentException)) {
+	        		fail("wrong exception thrown at " + s);
+	        	}
 	        }
 			
 			try{
 				item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), null);
 				fail(s + "'s effect duration cannot be null");
-	        } catch (IllegalArgumentException e){
 	        } catch (Exception e){
-	            fail("wrong exception thrown at " + s);
+	        	if (!(e.getCause() instanceof IllegalArgumentException)) {
+	        		fail("wrong exception thrown at " + s);
+	        	}
 	        }
 			
 			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.empty());
 			assertTrue(item.getPoint().equals(new Point(0,0)));
 			assertTrue(item.getDuration().equals(Optional.empty()));
 			
-			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(0L));
-			assertTrue(item.getDuration().equals(Optional.of(0L)));
+			item = (Item)method.invoke(null, new Point(0,0), Optional.of (100L), Optional.empty());
+			assertTrue(item.getDuration().equals(Optional.of(100L)));
 		}
 
 	}
