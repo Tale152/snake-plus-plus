@@ -14,7 +14,7 @@ public class PlayerTest {
 		Player player;
 		
 		try{
-			player = SnakeComponentsFactoryForTest.createPlayer(null, "Ale", 0, 1);
+			player = SnakeComponentsFactoryForTest.createPlayer(null, "Ale");
             fail("Player number cannot be null");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
@@ -22,30 +22,14 @@ public class PlayerTest {
         }
 		
 		try{
-			player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, null, 0, 1);
+			player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, null);
             fail("Player name cannot be null");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		
-		try{
-			player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, "Ale", -1, 1);
-            fail("Initial score cannot be negative");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception");
-        }
-		
-		try{
-			player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, "Ale", 0, -1);
-            fail("Initial multiplier cannot be negative");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception");
-        }
-		
-		player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, "Ale", 0, 1);
+		player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, "Ale");
 		
 		assertEquals(player.getPlayerNumber(), PlayerNumber.PLAYER1);
 		assertEquals(player.getName(), "Ale");

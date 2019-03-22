@@ -9,25 +9,9 @@ public class LengthPropertyTest {
 	
 	@Test
 	public void testLengthProperty() {
-		LengthProperty length;
-		
-		try{
-			length = SnakeComponentsFactoryForTest.createLengthProperty(0);
-            fail("Length cannot be zero");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception");
-        }
-		
-		try{
-			length = SnakeComponentsFactoryForTest.createLengthProperty(-1);
-            fail("Length cannot be negative");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception");
-        }
-		
-		length = SnakeComponentsFactoryForTest.createLengthProperty(5);
+		LengthProperty length = SnakeComponentsFactoryForTest.createLengthProperty();
+		assertEquals(length.getLength(), 1);
+		length.lengthen(4);
 		assertEquals(length.getLength(), 5);
 		length.lengthen(1);
 		assertEquals(length.getLength(), 6);

@@ -44,17 +44,17 @@ public class SpeedPropertyTest {
 		
 		speed = SnakeComponentsFactoryForTest.createSpeedProperty(900L, 1, 0L);
 		assertEquals(speed.getDeltaT(), 900L);
-		//TODO speed.setDeltaT(1000L);
+		speed.setDeltaT(1000L);
 		assertEquals(speed.getDeltaT(), 1000L);
 		try{
-			//TODO speed.setDeltaT(0L);
+			speed.setDeltaT(0L);
             fail("delta cannot be zero");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		try{
-			//TODO speed.setDeltaT(-1L);
+			speed.setDeltaT(-1L);
             fail("delta cannot be negative");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
@@ -69,11 +69,14 @@ public class SpeedPropertyTest {
 		try{
 			speed.applySpeedMultiplier(-1.5);
             fail("multiplier cannot be negative");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalStateException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		speed.applySpeedMultiplier(1.5);
+		System.out.println(speed.getSpeedMultiplier());
+		System.out.println(speed.getDeltaT());
+		System.out.println(speed.getLastUpdate());
 		assertEquals(speed.getLastUpdate(), 0L);
 		assertEquals(speed.getNextUpdate(), 1500L);
 		speed.applySpeedMultiplier(0.5);

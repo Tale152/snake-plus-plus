@@ -10,7 +10,7 @@ import design.model.game.DirectionProperty;
 public class DirectionPropertyTest {
 	
 	private boolean standardDirectionTestSupport(Direction current, Direction opposite, Direction possible1, Direction possible2) {
-		DirectionProperty direction = SnakeComponentsFactoryForTest.createDirectionProperty(current, false);
+		DirectionProperty direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
 		direction.setDirection(current);
 		if (!direction.getDirection().equals(current)) {
 			return false;
@@ -23,7 +23,7 @@ public class DirectionPropertyTest {
 		if (!direction.getDirection().equals(possible1)) {
 			return false;
 		}
-		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current, false);
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
 		direction.setDirection(possible2);
 		if (!direction.getDirection().equals(possible2)) {
 			return false;
@@ -32,7 +32,8 @@ public class DirectionPropertyTest {
 	}
 	
 	private boolean oppositeDirectionTestSupport(Direction current, Direction opposite, Direction possible1, Direction possible2) {
-		DirectionProperty direction = SnakeComponentsFactoryForTest.createDirectionProperty(current, true);
+		DirectionProperty direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+		direction.setReverseDirection(true);
 		direction.setDirection(opposite);
 		if (!direction.getDirection().equals(current)) {
 			return false;
@@ -45,7 +46,8 @@ public class DirectionPropertyTest {
 		if (!direction.getDirection().equals(possible2)) {
 			return false;
 		}
-		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current, true);
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+		direction.setReverseDirection(true);
 		direction.setDirection(possible2);
 		if (!direction.getDirection().equals(possible1)) {
 			return false;
@@ -57,14 +59,14 @@ public class DirectionPropertyTest {
 	public void testDirectionProperty() {
 		DirectionProperty direction;
 		try{
-			direction = SnakeComponentsFactoryForTest.createDirectionProperty(null, false);
+			direction = SnakeComponentsFactoryForTest.createDirectionProperty(null);
             fail("initial direction cannot be null");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		
-		direction = SnakeComponentsFactoryForTest.createDirectionProperty(null, false);
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(null);
 		assertFalse(direction.getReverseDirection());
 		direction.setReverseDirection(true);
 		assertTrue(direction.getReverseDirection());

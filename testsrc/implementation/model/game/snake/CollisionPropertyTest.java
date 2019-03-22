@@ -8,7 +8,7 @@ public class CollisionPropertyTest {
 	
 	@Test
 	public void testCollisionProperty() {
-		CollisionProperty collision = SnakeComponentsFactoryForTest.createCollisionProperty(false, false, false);
+		CollisionProperty collision = SnakeComponentsFactoryForTest.createCollisionProperty();
 		
 		assertFalse(collision.getInvincibility());
 		collision.setInvincibility(true);

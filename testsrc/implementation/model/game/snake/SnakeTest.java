@@ -26,7 +26,8 @@ public class SnakeTest {
 		snake.getProperties().getDirection().setDirection(Direction.RIGHT);
 		assertEquals(snake.getProperties().getLength().getLength(), 1);
 		assertEquals(snake.move(new Point(0, 1)).size(),0);
-		//TODO verifica che la posizione della testa ora si sia effettivamente spostata in (0,1)
+		snake.getBodyParts().get(0).getPoint().equals(new Point(0,1));
+		assertEquals(snake.getProperties().getLength().getLength(), 1);
 	}
 	
 	@Test
@@ -61,7 +62,8 @@ public class SnakeTest {
 		assertTrue(differences.get(1) instanceof BodyPart);
 		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(0,0));}));
 		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(0, 1));}));
-		//TODO verificare che i pezzi rimasti siano in posizione (0,3) e (0,4)
+		snake.getBodyParts().get(0).getPoint().equals(new Point(0,4));
+		snake.getBodyParts().get(1).getPoint().equals(new Point(0,3));
 		assertEquals(snake.move(new Point(0, 5)), 0);
 		
 	}
