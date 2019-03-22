@@ -10,6 +10,9 @@ public abstract class ItemAbstract implements Item {
 	private Effect effect;
 	
 	public ItemAbstract(Point point) {
+		if (point == null) {
+			throw new IllegalArgumentException();
+		}
 		this.point = point;
 	}
 	

@@ -31,12 +31,16 @@ public class BadApple extends ItemAbstract{
 						if (targetSnake == null) {
 							targetSnake = target;
 						}
-						target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
+						if (target.getProperties().getLength().getLength() / 2 > 0) {
+							target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
+						}
 						target.getPlayer().reduceScore(target.getPlayer().getScore()/2);
 					}
 				}
 				else {
-					target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
+					if (target.getProperties().getLength().getLength() / 2 > 0) {
+						target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() / 2);
+					}
 					target.getPlayer().reduceScore(target.getPlayer().getScore()/2);
 				}	
 			}
