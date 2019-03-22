@@ -32,13 +32,13 @@ public class TurboTest {
 		turbo.onCollision(testSnake, 1000L);
 		assertTrue((baseSpeedMul*1.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1100L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
 		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
 		turbo = ItemFactory.createTurbo(pointZero, Optional.empty(), Optional.of(250L));
 		turbo.onCollision(testSnake, 1050L);
 		assertTrue((baseSpeedMul*1.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime().get(), Optional.of(1350L));
+		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 	}
