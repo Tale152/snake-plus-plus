@@ -36,7 +36,6 @@ public class SnakeComponentsFactoryForTest {
 	}
 	
 	public static Snake createSnake(List<Point> initialPoints) {
-		//TODO 
 		return null;
 	}
 }

@@ -40,13 +40,14 @@ public class SnakeTest {
 		assertEquals(differences.size(), 1);
 		assertTrue(differences.get(0) instanceof BodyPart);
 		assertEquals(differences.get(0).getPoint(), new Point(0,0));
-		//TODO verifica che ora il corpo sia effettivamente composto da 2 pezzi e che essi siano in (0,1) e (0,2) (serve ottenere tutta la lista dei bodypart)
-		//e che la coda sia la stessa Istanza contenuta dentro l'unico item di differences
+		assertTrue(snake.getBodyParts().get(0).getPoint().equals(new Point(0,1)));
+		assertTrue(snake.getBodyParts().get(1).getPoint().equals(new Point(0,0)));
+		assertTrue(differences.get(0) == snake.getBodyParts().get(1));
 		snake.getProperties().getLength().lengthen(2);
 		assertEquals(snake.getProperties().getLength().getLength(), 4);
 		assertEquals(snake.move(new Point(0, 2)).size(),1);
 		assertEquals(snake.move(new Point(0, 3)).size(),1);
-		assertEquals(differences.get(0).getPoint(), new Point(0, 2)); //just to be sure that you updated Point and not BodyPart
+		assertEquals(snake.move(new Point(0, 4)).size(),0);
 	}
 	
 	@Test
@@ -108,7 +109,7 @@ public class SnakeTest {
 		List<Point> even = new ArrayList<>(Arrays.asList(new Point(0,3), new Point(0,2), new Point(0,1), new Point(0,0))); //Point(0,3) is head
 		List<Point> odd = new ArrayList<>(even);
 		odd.add(0, new Point(0,4)); //Point (0,4) is head
-		fail("beh senza sapere come stan messi i pezzi non c'è proprio niente da implementare per ora, Eli metti quel metodo maledetto");
+		//TODO implement
 	}
 	
 	

@@ -15,14 +15,14 @@ public class TestEntireGame {
 		// new LengthPropertyTest().testLengthProperty(); TODO può far comodo poter passare zero a shorten e lenghten
 		new PickupPropertyTest().testPickupProperty();
 		// new SpeedPropertyTest().testSpeedProperty(); TODO un po di cose da correggere, in più mi sa che prima devi convertire il last update in double, moltiplicarlo per il multilier e POI riconvertirlo in long sennò i dati si sminchiano
-		new PropertiesTest().testProperties();
+		/*new PropertiesTest().testProperties(); //TODO manca Point nel costruttore di Snake
 		new SnakeTest().testInit();
 		new SnakeTest().testEffect();
 		new SnakeTest().testKill();
 		new SnakeTest().testNormalMove();
 		new SnakeTest().testLenghtenMove();
 		new SnakeTest().testShortenMove();
-		new SnakeTest().testReverse();
+		new SnakeTest().testReverse();*/
 		
 	}
 	
