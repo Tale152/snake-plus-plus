@@ -66,7 +66,7 @@ public class DirectionPropertyTest {
             fail("wrong exception");
         }
 		
-		direction = SnakeComponentsFactoryForTest.createDirectionProperty(null);
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(Direction.DOWN);
 		assertFalse(direction.getReverseDirection());
 		direction.setReverseDirection(true);
 		assertTrue(direction.getReverseDirection());
@@ -78,6 +78,6 @@ public class DirectionPropertyTest {
 		assertTrue(oppositeDirectionTestSupport(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT));
 		assertTrue(oppositeDirectionTestSupport(Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN));
 		assertTrue(oppositeDirectionTestSupport(Direction.RIGHT, Direction.LEFT, Direction.UP, Direction.DOWN));
-		
+	
 	}
 }
