@@ -3,7 +3,7 @@ package implementation.model.game.initializers;
 import java.util.ArrayList;
 import java.util.List;
 import design.model.game.GameRules;
-import implementation.model.game.snake.SnakeImpl;
+import implementation.model.game.items.BodyPart;
 
 public class GameRulesImpl implements GameRules{
 
@@ -11,7 +11,7 @@ public class GameRulesImpl implements GameRules{
 	private final long initialSnakeDelta;
 	
 	public GameRulesImpl(List<ItemRule> itemRules, long initialSnakeDelta) {
-		if (initialSnakeDelta <= 0 || itemRules == null || itemRules.stream().noneMatch(i -> {return i.getItemClass().equals(SnakeImpl.class);})) {
+		if (initialSnakeDelta <= 0 || itemRules == null || itemRules.stream().noneMatch(i -> {return i.getItemClass().equals(BodyPart.class);})) {
 			throw new IllegalArgumentException();
 		}
 		this.itemRules = itemRules;
