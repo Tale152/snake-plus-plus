@@ -1,13 +1,15 @@
 package design.model.game;
 
 import java.util.List;
+import java.util.Optional;
+
 import design.model.game.Item;
 
 public interface GameRules {
 
 	public interface ItemRule {
 		
-		public Class<? extends Item> getItemClass();
+		public Class<Item> getItemClass();
 		
 		public long getSpawnDelta();
 		
@@ -15,18 +17,14 @@ public interface GameRules {
 		
 		public int getMax();
 		
-		public long getItemDuration();
+		public Optional<Long> getItemDuration();
 		
-		public long getEffectDuration();
-		
-		public int getScore();
+		public Optional<Long> getEffectDuration();
 		
 	}
 	
 	public List<ItemRule> getItemRules();
 	
 	public long getInitialSnakeDelta();
-	
-	public long getIncrementalSnakeDelta();
 	
 }
