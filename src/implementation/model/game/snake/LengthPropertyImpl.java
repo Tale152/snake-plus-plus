@@ -34,7 +34,7 @@ public class LengthPropertyImpl implements LengthProperty{
 	}
 	
 	private void checkLength(int n) {
-		if(n < 1) {
+		if(n < 0) {
 			throw new IllegalArgumentException();
 		}	
 	}
