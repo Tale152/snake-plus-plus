@@ -13,7 +13,7 @@ public interface InitialGameState {
 	
 	public interface InitialPlayerState {
 		String getName();
-		Point getPosition();
+		List<Point> getBodyPoints();
 		Direction getDirection();
 		int getScore();
 	}
