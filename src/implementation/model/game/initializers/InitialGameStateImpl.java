@@ -6,9 +6,9 @@ import design.model.game.*;
 
 public class InitialGameStateImpl implements InitialGameState {
 
-	List<Item> items;
-	Point fieldSize;
-	List<InitialPlayerState> initialPlayerStates;
+	private final List<Item> items;
+	private final Point fieldSize;
+	private final List<InitialPlayerState> initialPlayerStates;
 	public static final int MAX_PLAYERS = 4;
 	
 	public InitialGameStateImpl(List<Item> items, Point fieldSize, List<InitialPlayerState> initialPlayerStates) {
@@ -33,45 +33,45 @@ public class InitialGameStateImpl implements InitialGameState {
 		return new ArrayList<>(initialPlayerStates);
 	}
 	
-	private boolean invalidPoint(Point field, Point toCheck) {
-		if (toCheck.x >= field.x || toCheck.x < 0) {
-			return true;
+	public String toString() {
+		String res = "Field size: [" + fieldSize.x + "," + fieldSize.y + "]\n";
+		int cells = fieldSize.x * fieldSize.y;
+		res += "Total cells: " + cells + "\n";
+		int freeCells = cells - items.size();
+		for (InitialPlayerState p : initialPlayerStates) {
+			freeCells -= p.getBodyPoints().size();
 		}
-		else if (toCheck.y >= field.y || toCheck.y < 0) {
-			return true;
+		res += "Free cells: " + freeCells + "\n";
+		res += "Occupied cells: " + (cells - freeCells) + "\n";
+		res += "Max players: " + MAX_PLAYERS + "\n\n";
+		res += "Current players: " + initialPlayerStates.size() + "\n";
+		int i = 1;
+		for (InitialPlayerState player : initialPlayerStates) {
+			res += "---Player " + i++ + "---\n";
+			res += player.toString();
 		}
-		return false;
+		res += "\nItems on field: " + items.size() + "\n";
+		for (Item item : items) {
+			res += "[" + item.getPoint().x + "," + item.getPoint().y + "]\t" + item.getClass().getSimpleName() + "\n";
+		}
+		return res;
 	}
 	
 	private void check(List<Item> items, Point fieldSize, List<InitialPlayerState> initialPlayerStates) {
-		if (fieldSize == null) {
-			throw new NullPointerException("Argument fieldSize into InitialGameStateImpl's contructor cannot be null");
-		}
-		else if (fieldSize.x < 0 || fieldSize.y < 0) {
-			throw new IllegalArgumentException("Field size cannot be negative");
-		}
-		else if (items == null) {
-			throw new NullPointerException("Argument items into InitialGameStateImpl's contructor cannot be null");
-		}
-		else if (items.contains(null)) {
-			throw new IllegalStateException("List items contains some null entries");
-		}
-		else if (items.stream().anyMatch(i -> { return invalidPoint(fieldSize, i.getPoint());})) {
-			throw new IllegalStateException("Some items entries have invalid attribute point compared to field size");
-		}
-		else if (initialPlayerStates == null) {
-			throw new NullPointerException("Argument initialPlayerStates into InitialGameStateImpl's contructor cannot be null");
-		}
-		else if (initialPlayerStates.isEmpty() || initialPlayerStates.size() > MAX_PLAYERS) {
-			throw new IllegalArgumentException("initialPlayerStates size must be greater than zero and cannot be greater than " + MAX_PLAYERS);
-		}
+		List<Point> allPoints = new ArrayList<>();
+		Utils.throwNullPointer(fieldSize == null || items == null || initialPlayerStates == null, "Null args");
+		Utils.throwIllegalState(fieldSize.x < 0 || fieldSize.y < 0, "Field size cannot be negative");
+		Utils.throwIllegalState(items.contains(null), "List items contains some null entries");
+		boolean itemPointsValidity = items.stream().anyMatch(i -> { allPoints.add(i.getPoint()); return Utils.invalidPoint(fieldSize, i.getPoint());});
+		Utils.throwIllegalState(itemPointsValidity, "Some items entries have invalid attribute point compared to field size");
+		Utils.throwIllegalState(initialPlayerStates.isEmpty() || initialPlayerStates.size() > MAX_PLAYERS, "initialPlayerStates size must be greater than zero and cannot be greater than " + MAX_PLAYERS);
 		for (InitialPlayerState player : initialPlayerStates) {
+			allPoints.addAll(player.getBodyPoints());
 			for (Point bodyPoint : player.getBodyPoints()) {
-				if (invalidPoint(fieldSize, bodyPoint)) {
-					throw new IllegalStateException("InitialPlayerState '" + player.getName() + "' has some invalid bodyPoints compared to field size");
-				}
+				Utils.throwIllegalState(Utils.invalidPoint(fieldSize, bodyPoint), "InitialPlayerState '" + player.getName() + "' has some invalid bodyPoints compared to field size");
 			}
 		}
+		Utils.throwIllegalState(Utils.sameCoordinates(allPoints), "The coordinates of at least 2 points are euqual (looking into items and initialPlayerStates)");
 	}
 
 }

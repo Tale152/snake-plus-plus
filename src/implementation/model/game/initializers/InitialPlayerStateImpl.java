@@ -50,6 +50,7 @@ public class InitialPlayerStateImpl implements InitialPlayerState {
 		String res = "Name:\t" + name + "\n";
 		res += "Score:\t" + score + "\n";
 		res += "Dir:\t" + direction + "\n";
+		res += "Len:\t" + bodyPoints.size() + "\n";
 		res += "Coord:";
 		int i = 0;
 		for (Point point : bodyPoints) {
@@ -58,67 +59,15 @@ public class InitialPlayerStateImpl implements InitialPlayerState {
 		return res;
 	}
 	
-	private boolean invalidDirection(List<Point> bodyPoints, Direction direction) {
-		if (bodyPoints.size() > 1) {
-			switch (direction) {
-				case UP : if (!(bodyPoints.get(0).y - bodyPoints.get(1).y == 1)) {return true;} break;
-				case DOWN : if (!(bodyPoints.get(0).y - bodyPoints.get(1).y == -1)) {return true;} break;
-				case LEFT : if (!(bodyPoints.get(0).x - bodyPoints.get(1).x == 1)) {return true;} break;
-				case RIGHT: if (!(bodyPoints.get(0).x - bodyPoints.get(1).x == -1)) {return true;} break;
-			}
-		}
-		return false;
-	}
-	
-	private boolean sameCoordinates(List<Point> bodyPoints) {
-		ArrayList<Point> tmp = new ArrayList<>(bodyPoints);
-		while (!tmp.isEmpty()) {
-			Point toCheck = tmp.remove(0);
-			for (Point p : tmp) {
-				if (p.equals(toCheck)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	private boolean notConsecutive(List<Point> bodyPoints) {
-		//TODO
-		return false;
-	}
-	
 	private void check(String name, List<Point> bodyPoints, Direction direction, int score) {
-		if (name == null) {
-			throw new NullPointerException("Argument name into InitialPlayerStateImpl's constructor cannot be null");
-		}
-		else if (direction == null) {
-			throw new NullPointerException("Argument direction into InitialPlayerStateImpl's constructor cannot be null");
-		}
-		else if (score < 0) {
-			throw new IllegalArgumentException("Argument score into InitialPlayerStateImpl's constructor cannot be negative");
-		}
-		else if (bodyPoints == null) {
-			throw new NullPointerException("Argument bodyPoints into InitialPlayerStateImpl's constructor cannot be null");
-		}
-		else if (bodyPoints.isEmpty()) {
-			throw new IllegalStateException("List bodyPoints into InitialPlayerStateImpl's constructor cannot be empty");
-		}
-		else if (bodyPoints.contains(null)) {
-			throw new IllegalStateException("Some entries into list bodyPoints are null");
-		}
-		else if (bodyPoints.stream().anyMatch(b -> {return b.x < 0 || b.y < 0;})) {
-			throw new IllegalStateException("Some entries into list bodyPoints have negative coordinates");
-		}
-		else if (sameCoordinates(bodyPoints)) {
-			throw new IllegalStateException(""); //TODO
-		}
-		else if (notConsecutive(bodyPoints)) {
-			throw new IllegalStateException(""); //TODO
-		}
-		else if (invalidDirection(bodyPoints, direction)) {
-			throw new IllegalStateException(""); //TODO
-		}
+		Utils.throwNullPointer(name == null || direction == null || bodyPoints == null, "Null args");
+		Utils.throwIllegalState(score < 0, "Argument score into InitialPlayerStateImpl's constructor cannot be negative");
+		Utils.throwIllegalState(bodyPoints.isEmpty(), "List bodyPoints into InitialPlayerStateImpl's constructor cannot be empty");
+		Utils.throwIllegalState(bodyPoints.contains(null), "Some entries into list bodyPoints are null");
+		Utils.throwIllegalState(bodyPoints.stream().anyMatch(b -> {return b.x < 0 || b.y < 0;}), "Some entries into list bodyPoints have negative coordinates");
+		Utils.throwIllegalState(Utils.sameCoordinates(bodyPoints), "Some entries into list bodyPoints have same coordinates");
+		Utils.throwIllegalState(Utils.notConsecutive(bodyPoints), "Some entries into list bodyPoints are not consecutive");
+		Utils.throwIllegalState(Utils.invalidDirection(bodyPoints, direction), "Direction of the head cannot go to towards the next point");
 	}
 
 }
