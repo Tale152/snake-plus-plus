@@ -11,18 +11,9 @@ public class GameRulesImpl implements GameRules{
 	private final long initialSnakeDelta;
 	
 	public GameRulesImpl(List<ItemRule> itemRules, long initialSnakeDelta) {
-		if (initialSnakeDelta <= 0 || itemRules == null || itemRules.stream().noneMatch(i -> {return i.getItemClass().equals(BodyPart.class);})) {
-			throw new IllegalArgumentException();
-		}
+		check(itemRules, initialSnakeDelta);
 		this.itemRules = itemRules;
 		this.initialSnakeDelta = initialSnakeDelta;
-		for (ItemRule rule : this.itemRules) {
-			ArrayList<ItemRule> tmp = new ArrayList<>(this.itemRules);
-			tmp.remove(rule);
-			if (tmp.stream().anyMatch(r -> {return r.getItemClass().equals(rule.getItemClass());})) {
-				throw new IllegalStateException();
-			}
-		}
 	}
 	
 	@Override
@@ -33,6 +24,28 @@ public class GameRulesImpl implements GameRules{
 	@Override
 	public long getInitialSnakeDelta() {
 		return initialSnakeDelta;
+	}
+	
+	public String toString() {
+		String res = "Starting snake delta: " + initialSnakeDelta + "\n";
+		res += "Item rules: " + itemRules.size() + "\n";
+		for (ItemRule rule : itemRules) {
+			res += "--------\n" + rule.toString();
+		}
+		return res;
+	}
+	
+	private void check(List<ItemRule> itemRules, long initialSnakeDelta) {
+		Utils.throwNullPointer(itemRules == null, "null argument");
+		Utils.throwIllegalState(initialSnakeDelta <= 0, "initialSnakeDelta cannot be negative");
+		boolean bodyPartPresent = itemRules.stream().noneMatch(i -> {return i.getItemClass().equals(BodyPart.class);});
+		Utils.throwIllegalState(bodyPartPresent, "itemRules MUST contains BodyPart");
+		for (ItemRule rule : this.itemRules) {
+			ArrayList<ItemRule> tmp = new ArrayList<>(this.itemRules);
+			tmp.remove(rule);
+			boolean checkDuplicate = tmp.stream().anyMatch(r -> {return r.getItemClass().equals(rule.getItemClass());});
+			Utils.throwIllegalState(checkDuplicate, "Two or more entries in itemRules are equals");
+		}
 	}
 
 }

@@ -34,16 +34,16 @@ public class InitialGameStateImpl implements InitialGameState {
 	}
 	
 	public String toString() {
-		String res = "Field size: [" + fieldSize.x + "," + fieldSize.y + "]\n";
+		String res = "Field size:\t[" + fieldSize.x + "," + fieldSize.y + "]\n";
 		int cells = fieldSize.x * fieldSize.y;
-		res += "Total cells: " + cells + "\n";
+		res += "Total cells:\t" + cells + "\n";
 		int freeCells = cells - items.size();
 		for (InitialPlayerState p : initialPlayerStates) {
 			freeCells -= p.getBodyPoints().size();
 		}
-		res += "Free cells: " + freeCells + "\n";
-		res += "Occupied cells: " + (cells - freeCells) + "\n";
-		res += "Max players: " + MAX_PLAYERS + "\n\n";
+		res += "Free cells:\t" + freeCells + "\n";
+		res += "Occupied cells:\t" + (cells - freeCells) + "\n";
+		res += "Max players:\t" + MAX_PLAYERS + "\n\n";
 		res += "Current players: " + initialPlayerStates.size() + "\n";
 		int i = 1;
 		for (InitialPlayerState player : initialPlayerStates) {

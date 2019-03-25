@@ -9,7 +9,7 @@ public interface GameRules {
 
 	public interface ItemRule {
 		
-		public Class<Item> getItemClass();
+		public Class<? extends Item> getItemClass();
 		
 		public long getSpawnDelta();
 		
