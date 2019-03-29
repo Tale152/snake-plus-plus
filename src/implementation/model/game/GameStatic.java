@@ -46,6 +46,11 @@ public class GameStatic {
 	protected static List<Item> updateSnakes(List<Snake> snakes, Field field, long gameTime){
 		List<Item> differences = new ArrayList<>();
 		for (Snake snake : snakes) {
+			for (Effect effect : snake.getEffects()) {
+				if (effect.getEffectEndTime().get() <= gameTime) {
+					snake.removeEffect(effect);
+				}
+			}
 			if (timeToUpdateSnake(snake, gameTime)) {
 				updateSnakeTime(snake);
 				differences.addAll(snake.move(getNextPoint(snake, field)));
@@ -71,9 +76,14 @@ public class GameStatic {
 		//TODO
 	}
 	
-	protected static List<Item> updateItems(){
+	protected static List<Item> updateItems(Field field, long gameTime){
 		List<Item> differences = new ArrayList<>();
-		//TODO
+		for (Item item : field.getItems()) {
+			if (item.getDuration().isPresent() && item.getDuration().get() <= gameTime) {
+				field.removeItem(item);
+			}
+			//TODO spawn items
+		}
 		return differences;
 	}
 	
