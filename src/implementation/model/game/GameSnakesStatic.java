@@ -55,9 +55,27 @@ public class GameSnakesStatic {
 		snake.getProperties().getSpeed().setLastUpdate(snake.getProperties().getSpeed().getNextUpdate());
 	}
 	
+	private static int fieldLimits(int value, int limit) {
+		if (value >= 0 && value < limit) {
+			return value;
+		}
+		else if (value < 0) {
+			return limit - 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	
 	private static Point getNextPoint(Snake snake, Field field) {
-		//TODO 
-		return null;
+		Point point = snake.getBodyParts().get(0).getPoint();
+		switch (snake.getProperties().getDirection().getDirection()) {
+			case UP: point.y = fieldLimits(point.y - 1, field.getHeight()); return point;
+			case DOWN: point.y = fieldLimits(point.y + 1, field.getHeight()); return point;
+			case LEFT: point.x = fieldLimits(point.x - 1, field.getWidth()); return point;
+			case RIGHT: point.x = fieldLimits(point.x + 1, field.getWidth()); return point;
+		}
+		throw new IllegalStateException();
 	}
 	
 	private static List<Item> collide(Field field, Snake snake, long gameTime) {
