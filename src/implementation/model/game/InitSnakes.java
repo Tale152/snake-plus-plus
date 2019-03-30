@@ -14,7 +14,7 @@ public class InitSnakes {
 	public static void initSnakes(GameRules gameRules, InitialGameState initialGameState, List<Snake> snakes, long gameTime) {
 		int nPlayer = 0;
 		long delta = gameRules.getInitialSnakeDelta();
-		double multiplier = 1; //TODO not always one
+		double multiplier = gameRules.getInitialSnakeMultiplier();
 		for (InitialPlayerState player : initialGameState.getInitialPlayerState()) {
 			snakes.add(createSnake(gameTime, delta, multiplier, nPlayer++, player)); 
 		}

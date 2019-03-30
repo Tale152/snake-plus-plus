@@ -9,11 +9,13 @@ public class GameRulesImpl implements GameRules{
 
 	private final List<ItemRule> itemRules;
 	private final long initialSnakeDelta;
+	private final double initialSnakeMultiplier;
 	
-	public GameRulesImpl(List<ItemRule> itemRules, long initialSnakeDelta) {
+	public GameRulesImpl(List<ItemRule> itemRules, long initialSnakeDelta, double initialSnakeMultiplier) {
 		check(itemRules, initialSnakeDelta);
 		this.itemRules = itemRules;
 		this.initialSnakeDelta = initialSnakeDelta;
+		this.initialSnakeMultiplier = initialSnakeMultiplier;
 	}
 	
 	@Override
@@ -26,8 +28,14 @@ public class GameRulesImpl implements GameRules{
 		return initialSnakeDelta;
 	}
 	
+	@Override
+	public double getInitialSnakeMultiplier() {
+		return initialSnakeMultiplier;
+	}
+	
 	public String toString() {
 		String res = "Starting snake delta: " + initialSnakeDelta + "\n";
+		res += "Starting snake multiplier: " + initialSnakeMultiplier + "\n";
 		res += "Item rules: " + itemRules.size() + "\n";
 		for (ItemRule rule : itemRules) {
 			res += "--------\n" + rule.toString();

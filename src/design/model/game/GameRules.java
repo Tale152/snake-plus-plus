@@ -27,4 +27,6 @@ public interface GameRules {
 	
 	public long getInitialSnakeDelta();
 	
+	public double getInitialSnakeMultiplier();
+	
 }
