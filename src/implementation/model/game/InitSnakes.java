@@ -1,5 +1,6 @@
 package implementation.model.game;
 
+import java.awt.Point;
 import java.util.List;
 import design.model.game.*;
 import design.model.game.InitialGameState.InitialPlayerState;
@@ -11,15 +12,22 @@ public class InitSnakes {
 	private InitSnakes() {}
 	
 	public static void initSnakes(GameRules gameRules, InitialGameState initialGameState, List<Snake> snakes, long gameTime) {
+		int nPlayer = 0;
 		long delta = gameRules.getInitialSnakeDelta();
-		int playerEnum = 0;
+		double multiplier = 1; //TODO not always one
 		for (InitialPlayerState player : initialGameState.getInitialPlayerState()) {
-			PlayerNumber number = determinePlayerNumber(playerEnum++);
-			String name = player.getName();
-			Direction direction = player.getDirection();
-			snakes.add(new SnakeImpl(number, name, direction, delta, 1, gameTime)); //TODO multiplier not always 1, cannot set initial coord
-			throw new IllegalStateException("not finished implementing");
+			snakes.add(createSnake(gameTime, delta, multiplier, nPlayer++, player)); 
 		}
+	}
+	
+	private static Snake createSnake(long gameTime, long delta, double multiplier, int nPlayer, InitialPlayerState player) {
+		PlayerNumber number = determinePlayerNumber(nPlayer);
+		String name = player.getName();
+		Direction direction = player.getDirection();
+		List<Point> bodyPoints = player.getBodyPoints();
+		throw new IllegalStateException("bodyPoints misses from snake's constructor"); //TODO remove
+		//return new SnakeImpl(number, name, direction, delta, multiplier, gameTime); //TODO bodyPoints misses from snake's constructor
+
 	}
 	
 	private static PlayerNumber determinePlayerNumber(int i) {
