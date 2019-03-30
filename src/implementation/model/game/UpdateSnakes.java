@@ -10,33 +10,35 @@ public class UpdateSnakes {
 	private UpdateSnakes() {}
 	
 	public static void updateSnakes(List<Snake> snakes, Field field, long gameTime, List<Item> differences){
-		for (Snake snake : snakes) {		
-			updateSnakeEffects(snake, gameTime);
-			updateSnakePosition(snake, gameTime, differences, field);	
-		}
+		snakes.stream()
+			.filter(s ->{return s.isAlive();})
+			.forEach(Snake ->{
+				updateSnakeEffects(Snake, gameTime);
+				if (timeToMoveSnake(Snake, gameTime)) {
+					updateSnakePosition(Snake, gameTime, differences, field);
+				}
+			});
 	}
 	
 	private static void updateSnakeEffects(Snake snake, long gameTime) {
-		for (Effect effect : snake.getEffects()) {
-			if (effectEnded(effect, gameTime)) {
-				snake.removeEffect(effect);
-			}
-		}
+		snake.getEffects().stream()
+			.filter(e -> {return effectEnded(e, gameTime);})
+			.forEach(Effect -> {
+				snake.removeEffect(Effect);
+			});
 	}
 	
 	private static boolean effectEnded(Effect effect, long gameTime) {
 		return effect.getEffectEndTime().get() <= gameTime;
 	}
 	
-	private static void updateSnakePosition(Snake snake, long gameTime, List<Item> differences, Field field){
-		if (timeToUpdateSnake(snake, gameTime)) {
-			updateSnakeTime(snake);
-			moveSnake(snake, field, gameTime, differences);
-		}
+	private static boolean timeToMoveSnake(Snake snake, long gameTime) {
+		return snake.getProperties().getSpeed().getNextUpdate() <= gameTime;
 	}
 	
-	private static boolean timeToUpdateSnake(Snake snake, long gameTime) {
-		return snake.getProperties().getSpeed().getNextUpdate() <= gameTime;
+	private static void updateSnakePosition(Snake snake, long gameTime, List<Item> differences, Field field){
+		updateSnakeTime(snake);
+		moveSnake(snake, field, gameTime, differences);
 	}
 	
 	private static void updateSnakeTime(Snake snake) {
