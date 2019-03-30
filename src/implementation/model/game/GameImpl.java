@@ -5,7 +5,8 @@ import design.model.game.*;
 import implementation.model.game.initializers.Utils;
 import implementation.model.game.items.*;
 import static implementation.model.game.GameFieldStatic.*;
-import static implementation.model.game.GameSnakesStatic.*;
+import static implementation.model.game.InitSnakes.initSnakes;
+import static implementation.model.game.UpdateSnakes.updateSnakes;
 
 public class GameImpl implements Game {
 	
@@ -23,7 +24,8 @@ public class GameImpl implements Game {
 	@Override
 	public List<Item> update(long enlapsedTime) {
 		gameTime += enlapsedTime;
-		List<Item> differences = new ArrayList<>(updateSnakes(snakes, field, gameTime));
+		List<Item> differences = new ArrayList<>();
+		updateSnakes(snakes, field, gameTime, differences);
 		differences.addAll(updateItems(field, gameTime));
 		return differences;
 	}
