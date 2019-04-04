@@ -2,6 +2,7 @@ package implementation.model.game.snake;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import design.model.game.Direction;
@@ -21,13 +22,22 @@ public class SnakeImpl implements Snake{
 	private List<Effect> effects;
 	private boolean isAlive;
 	private List<BodyPart> bodyPart;
+	private BodyPart firstPart;
 	
-	public SnakeImpl(PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, double speedMultiplier, long lastUpdate) {
+	//aggiungi point nel costruttore
+	public SnakeImpl(List<Point> point, PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, double speedMultiplier, long lastUpdate) {
 		this.player = new PlayerImpl(playerNumber, playerName);
 		this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier, lastUpdate);
 		this.effects = new ArrayList<>();
 		this.isAlive = true;
 		this.bodyPart = new ArrayList<>(); 
+		
+		checkPoint(point);
+		for(int i = 0; i < point.size() - 1; i++) {
+			this.firstPart = (BodyPart) ItemFactory.createBodyPart(point.get(i), this);
+			this.bodyPart.add(firstPart);
+		}
+
 	}
 	
 	@Override
@@ -42,20 +52,20 @@ public class SnakeImpl implements Snake{
 
 	@Override
 	public List<Item> move(Point point) {
-		final int currentSize = this.properties.getLength().getLength();
+		final int currentLength = this.properties.getLength().getLength();
 		final Point oldTail;
 		List<Item> differences = new ArrayList<>();
 		
 		//if Snake is longer than the size he supposed to be
-		if (this.bodyPart.size() > currentSize) {
-			while(this.bodyPart.size() != currentSize) {
+		if (this.bodyPart.size() > currentLength) {
+			while(this.bodyPart.size() != currentLength) {
 				differences.add(this.bodyPart.get(this.bodyPart.size()));
 				this.bodyPart.remove(this.bodyPart.size());
 			}
 		}
 		//calcola le nuove posizioni di ogni pezzo ma si salva la vecchia posizione della coda 
 		oldTail = this.bodyPart.get(this.bodyPart.size()).getPoint();
-		for(int i = 1; i <= this.bodyPart.size(); i++) {
+		for(int i = 1; i <= this.bodyPart.size() - 1 ; i++) {
 				this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
 		}
 		this.bodyPart.get(0).getPoint().move(point.x, point.y);
@@ -63,8 +73,8 @@ public class SnakeImpl implements Snake{
 		//crea al massimo un nuovo pezzo assegnandogli le coordinate della vecchia coda
 		if(this.bodyPart.size() < this.properties.getLength().getLength()) {
 			BodyPart b = (BodyPart) ItemFactory.createBodyPart(oldTail, this);
-			this.bodyPart.add(this.bodyPart.size() + 1, b);
-			differences.add(this.bodyPart.get(this.bodyPart.size()));
+			this.bodyPart.add(b);
+			differences.add(b);
 		}
 		
 		return differences;
@@ -77,13 +87,7 @@ public class SnakeImpl implements Snake{
 
 	@Override
 	public boolean removeEffect(Effect effect) {
-		if(this.effects.contains(effect)) {
-			this.effects.remove(effect);
-		}
-		if(this.effects.contains(effect)) {
-			return false;
-		}
-		return true;
+		return this.effects.remove(effect);
 	}
 
 	@Override
@@ -112,12 +116,14 @@ public class SnakeImpl implements Snake{
 		Direction direction = determinateDirection(p1, p2);
 		this.properties.getDirection().setDirection(direction);
 		
-		//algoritmo da cambiare in modo migliore
-		for(int i = 0, j = this.bodyPart.size(); i < this.bodyPart.size()/2; i++, j--) {
-			Point temp = this.bodyPart.get(i).getPoint();
-			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(j).getPoint().x, this.bodyPart.get(j).getPoint().y);
-			this.bodyPart.get(j).getPoint().move(temp.x, temp.y);
-		}
+		//non sono convinta funzioni
+		Collections.reverse(this.bodyPart); 
+//		//algoritmo da cambiare in modo migliore
+//		for(int i = 0, j = this.bodyPart.size(); i < this.bodyPart.size()/2; i++, j--) {
+//			Point temp = this.bodyPart.get(i).getPoint();
+//			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(j).getPoint().x, this.bodyPart.get(j).getPoint().y);
+//			this.bodyPart.get(j).getPoint().move(temp.x, temp.y);
+//		}
 	}
 
 	@Override
@@ -129,18 +135,43 @@ public class SnakeImpl implements Snake{
 		//if x are the same Snake is moving up or down
 		if(p1.x == p2.x) {
 			if(p1.y > p2.y) {
-				return Direction.DOWN;
-			} 
-			return Direction.UP;
+				if(p1.y - p2.y == 1) {
+					return Direction.DOWN;
+				}else {
+					return Direction.UP;
+				}
+			} else {
+				if(p1.y - p2.y == 1) {
+					return Direction.UP;
+				}else {
+					return Direction.DOWN;
+				}		
+			}
 		}
 		
 		//in this case Snake is moving right or left
 		if(p1.y == p2.y) {
-			if(p1.y > p2.y) {
-				return Direction.LEFT;
+			if(p1.x > p2.x) {
+				if(p1.x - p2.x == 1) {
+					return Direction.LEFT;
+				}else {
+					return Direction.RIGHT;
+				}
+			} else {
+				if(p1.x - p2.x == 1) {
+					return Direction.RIGHT;
+				}else {
+					return Direction.LEFT;
+				}		
 			}
 		}
-		return Direction.RIGHT;
+		throw new IllegalStateException();
 	}
 	
+	
+	private void checkPoint(List<Point> point) {
+		if(point.size() < 0) {
+			throw new IllegalArgumentException(); 
+		}
+	}
 }
