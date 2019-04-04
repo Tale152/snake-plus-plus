@@ -9,12 +9,12 @@ public class TestEntireGame {
 
 	@Test
 	public void testSnake() {
-		// new PlayerTest().testPlayer(); TODO il check degli argomenti chiama l'equals su null, che da nullpointer invece di illegal arguments
+		new PlayerTest().testPlayer();
 		new CollisionPropertyTest().testCollisionProperty();
-		// new DirectionPropertyTest().testDirectionProperty(); TODO il check di null è sbagliato e direction non gestisce quando la reverse è attiva
-		// new LengthPropertyTest().testLengthProperty(); TODO può far comodo poter passare zero a shorten e lenghten
+		new DirectionPropertyTest().testDirectionProperty(); 
+		new LengthPropertyTest().testLengthProperty();
 		new PickupPropertyTest().testPickupProperty();
-		// new SpeedPropertyTest().testSpeedProperty(); TODO un po di cose da correggere, in più mi sa che prima devi convertire il last update in double, moltiplicarlo per il multilier e POI riconvertirlo in long sennò i dati si sminchiano
+		new SpeedPropertyTest().testSpeedProperty();
 		/*new PropertiesTest().testProperties(); //TODO manca Point nel costruttore di Snake
 		new SnakeTest().testInit();
 		new SnakeTest().testEffect();
