@@ -12,7 +12,8 @@ public interface InitialGameState {
 	public Point getFieldSize();
 	
 	public interface InitialPlayerState {
-		Point getPosition();
+		String getName();
+		List<Point> getBodyPoints();
 		Direction getDirection();
 		int getScore();
 	}
