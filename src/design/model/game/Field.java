@@ -35,8 +35,9 @@ public interface Field{
 	 * 
 	 * @return 
 	 * @param item 
+	 * @throws IllegalStateException 
 	 */
-	public boolean addItem(Item item);
+	public boolean addItem(Item item) throws IllegalStateException;
 
 	/**
 	 * 
