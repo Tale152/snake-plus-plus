@@ -1,6 +1,5 @@
 package implementation.model.game;
 
-import java.awt.Point;
 import java.util.List;
 import design.model.game.*;
 import design.model.game.InitialGameState.InitialPlayerState;
@@ -21,13 +20,7 @@ public class InitSnakes {
 	}
 	
 	private static Snake createSnake(long gameTime, long delta, double multiplier, int nPlayer, InitialPlayerState player) {
-		PlayerNumber number = determinePlayerNumber(nPlayer);
-		String name = player.getName();
-		Direction direction = player.getDirection();
-		List<Point> bodyPoints = player.getBodyPoints();
-		throw new IllegalStateException("bodyPoints misses from snake's constructor"); //TODO remove
-		//return new SnakeImpl(number, name, direction, delta, multiplier, gameTime); //TODO bodyPoints misses from snake's constructor
-
+		return new SnakeImpl(player.getBodyPoints(), determinePlayerNumber(nPlayer), player.getName(), player.getDirection(), delta, multiplier, gameTime);
 	}
 	
 	private static PlayerNumber determinePlayerNumber(int i) {
