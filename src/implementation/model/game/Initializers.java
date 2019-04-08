@@ -6,6 +6,7 @@ import design.model.game.*;
 import design.model.game.InitialGameState.InitialPlayerState;
 import implementation.model.game.field.FieldImpl;
 import implementation.model.game.initializers.Utils;
+import implementation.model.game.items.BodyPart;
 import implementation.model.game.snake.SnakeImpl;
 
 public class Initializers {
@@ -15,7 +16,7 @@ public class Initializers {
 	public static Field initField(InitialGameState initialGameState, List<Snake> snakes, ItemCounter itemCounter) {
 		Field field = new FieldImpl(initialGameState.getFieldSize());
 		for (Snake snake : snakes) {
-			itemCounter.applyQuantity(snake.getBodyParts().get(0).getClass(), snake.getBodyParts().size());
+			itemCounter.applyQuantity(BodyPart.class, snake.getBodyParts().size());
 			for (Item bodyPart : snake.getBodyParts()) {
 				field.addItem(bodyPart);
 			}
