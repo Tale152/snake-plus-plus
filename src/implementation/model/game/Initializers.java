@@ -1,5 +1,6 @@
 package implementation.model.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import design.model.game.*;
 import design.model.game.InitialGameState.InitialPlayerState;
@@ -24,13 +25,15 @@ public class Initializers {
 		return field;
 	}
 	
-	public static void initSnakes(GameRules gameRules, InitialGameState initialGameState, List<Snake> snakes, long gameTime) {
+	public static List<Snake> initSnakes(GameRules gameRules, InitialGameState initialGameState, long gameTime) {
+		List<Snake> snakes = new ArrayList<>();
 		int nPlayer = 0;
 		long delta = gameRules.getInitialSnakeDelta();
 		double multiplier = gameRules.getInitialSnakeMultiplier();
 		for (InitialPlayerState player : initialGameState.getInitialPlayerState()) {
 			snakes.add(createSnake(gameTime, delta, multiplier, nPlayer++, player)); 
 		}
+		return snakes;
 	}
 	
 	private static Snake createSnake(long gameTime, long delta, double multiplier, int nPlayer, InitialPlayerState player) {

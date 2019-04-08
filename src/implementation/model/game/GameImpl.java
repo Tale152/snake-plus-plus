@@ -12,15 +12,15 @@ public class GameImpl implements Game {
 	
 	private long gameTime;
 	private final Field field;
-	private final List<Snake> snakes = new ArrayList<>();
+	private final List<Snake> snakes;
 	private final GameRules gameRules;
 	
 	public GameImpl(GameRules gameRules, InitialGameState initialGameState, long gameTime) {
 		check(gameRules, initialGameState, gameTime);
 		this.gameTime = gameTime;
-		initSnakes(gameRules, initialGameState, snakes, gameTime);
-		field = initField(initialGameState, snakes);
 		this.gameRules = gameRules;
+		snakes = initSnakes(gameRules, initialGameState, gameTime);
+		field = initField(initialGameState, snakes);
 	}
 	
 	@Override
