@@ -33,14 +33,14 @@ public class UpdateField {
 	
 	private static void spawnItems(Field field, long currentTime, ItemCounter itemCounter, List<Item> differences, GameRules gameRules) {
 		for (ItemRule rule : gameRules.getItemRules()) {
-			if (canSpawn(itemCounter, rule, currentTime)) { 
+			if (canSpawn(itemCounter, rule, currentTime)) {
 				tryToSpawn(itemCounter, rule, currentTime, differences, field);
 			}
 		}
 	}
 	
 	private static boolean canSpawn(ItemCounter itemCounter, ItemRule itemRule, long currentTime) {
-		return itemCounter.getLastSpawnAttempt(itemRule.getItemClass()) + itemRule.getSpawnDelta() >= currentTime &&
+		return itemCounter.getLastSpawnAttempt(itemRule.getItemClass()) + itemRule.getSpawnDelta() <= currentTime &&
 				!(itemRule.getItemClass().equals(BodyPart.class) || itemRule.getItemClass().equals(Wall.class));
 	}
 	
@@ -63,6 +63,7 @@ public class UpdateField {
 			Method methodCreate = ItemFactory.class.getMethod("create" + rule.getItemClass().getSimpleName(), Point.class, Optional.class, Optional.class);
 			Item item = (Item)methodCreate.invoke(null, generatePoint(field), rule.getItemDuration(), rule.getEffectDuration());
 			differences.add(item);
+			field.addItem(item);
 			itemCounter.applyQuantity(rule.getItemClass(), 1);
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
