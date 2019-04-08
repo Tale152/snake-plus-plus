@@ -2,6 +2,7 @@ package implementation.model.game;
 
 import java.util.*;
 import design.model.game.*;
+import implementation.model.game.items.BodyPart;
 
 public class UpdateField {
 
@@ -14,8 +15,13 @@ public class UpdateField {
 	
 	private static void updateFieldFromSnakeDifferences(Field field, List<Item> differences) {
 		for (Item diff : differences) {
-			if (!field.removeItem(diff)) {
-				field.addItem(diff);
+			if (diff.getClass() == BodyPart.class) {
+				if (!field.removeItem(diff)) {
+					field.addItem(diff);
+				}
+			}
+			else {
+				field.removeItem(diff);
 			}
 		}
 	}
