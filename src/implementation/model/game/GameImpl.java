@@ -11,6 +11,7 @@ import static implementation.model.game.UpdateSnakes.updateSnakes;
 public class GameImpl implements Game {
 	
 	private long gameTime;
+	private final ItemCounter itemCounter;
 	private final Field field;
 	private final List<Snake> snakes;
 	private final GameRules gameRules;
@@ -19,8 +20,9 @@ public class GameImpl implements Game {
 		check(gameRules, initialGameState, gameTime);
 		this.gameTime = gameTime;
 		this.gameRules = gameRules;
+		itemCounter = new ItemCounter(gameRules);
 		snakes = initSnakes(gameRules, initialGameState, gameTime);
-		field = initField(initialGameState, snakes);
+		field = initField(initialGameState, snakes, itemCounter);
 	}
 	
 	@Override

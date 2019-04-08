@@ -12,14 +12,16 @@ public class Initializers {
 
 	private Initializers() {}
 	
-	public static Field initField(InitialGameState initialGameState, List<Snake> snakes) {
+	public static Field initField(InitialGameState initialGameState, List<Snake> snakes, ItemCounter itemCounter) {
 		Field field = new FieldImpl(initialGameState.getFieldSize());
 		for (Snake snake : snakes) {
+			itemCounter.applyQuantity(snake.getBodyParts().get(0).getClass(), snake.getBodyParts().size());
 			for (Item bodyPart : snake.getBodyParts()) {
 				field.addItem(bodyPart);
 			}
 		}
 		for (Item item : initialGameState.getFieldItems()) {
+			itemCounter.applyQuantity(item.getClass(), 1);
 			field.addItem(item);
 		}
 		return field;
