@@ -22,22 +22,30 @@ public class ItemCounter {
 	}
 	
 	private final List<AnItem> items;
+	private int total;
 	
 	public ItemCounter(GameRules gameRules) {
 		items = new ArrayList<>();
 		for (ItemRule rule : gameRules.getItemRules()) {
 			items.add(new AnItem(rule.getItemClass()));
 		}
+		total = 0;
 	}
 	
-	public int getClassCounter(Class<? extends Item> itemClass) {
+	public int getTotal() {
+		return total;
+	}
+	
+	public int getCounter(Class<? extends Item> itemClass) {
 		return findItem(itemClass).counter;
 	}
 	
 	public void applyQuantity(Class<? extends Item> itemClass, int quantity) {
 		AnItem item = findItem(itemClass);
 		item.counter += quantity;
+		total += quantity;
 		if (item.counter < 0) {
+			total += quantity * -1;
 			item.counter = 0;
 		}
 	}
