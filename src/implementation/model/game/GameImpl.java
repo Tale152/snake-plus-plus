@@ -29,7 +29,7 @@ public class GameImpl implements Game {
 	public List<Item> update(long enlapsedTime) {
 		gameTime += enlapsedTime;
 		List<Item> differences = new ArrayList<>();
-		updateSnakes(snakes, field, gameTime, differences);
+		updateSnakes(snakes, field, gameTime, differences, itemCounter);
 		updateField(field, enlapsedTime, differences, gameRules);
 		return differences;
 	}
