@@ -9,6 +9,7 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	private boolean reversed;
 	
 	public DirectionPropertyImpl(Direction direction) {
+		checkDirection(direction);
 		this.direction = direction;
 		this.reversed = false;
 		
@@ -21,31 +22,36 @@ public class DirectionPropertyImpl implements DirectionProperty{
 
 	@Override
 	public boolean setDirection(Direction direction) {
+		checkDirection(direction);
 		switch(direction) {
-			case UP: if(!this.direction.equals(Direction.DOWN)) { 
-				this.direction = direction;
-				return true;
-				} 
+			case UP: if(!this.direction.equals(Direction.DOWN) && !this.reversed) { 
+							this.direction = direction;
+						} else if(!this.direction.equals(Direction.UP) && this.reversed){
+							this.direction = reversedDirection(direction);
+						}	
 			break;
-			case DOWN: if(!this.direction.equals(Direction.UP)) { 
-				this.direction = direction; 
-				return true;
-				} 
+			case DOWN: if(!this.direction.equals(Direction.UP) && !this.reversed) { 
+								this.direction = direction; 
+							} else if(!this.direction.equals(Direction.DOWN) && this.reversed){
+								this.direction = reversedDirection(direction);
+							} 
 			break;
-			case LEFT: if(!this.direction.equals(Direction.RIGHT)) { 
-				this.direction = direction; 
-				return true;
-				} 
+			case LEFT: if(!this.direction.equals(Direction.RIGHT) && !this.reversed) { 
+								this.direction = direction; 
+							} else if(!this.direction.equals(Direction.LEFT) && this.reversed) {
+								this.direction = reversedDirection(direction);
+							}
 			break;
-			case RIGHT: if(!this.direction.equals(Direction.LEFT)) { 
-				this.direction = direction; 
-				return true;
-				} 
+			case RIGHT: if(!this.direction.equals(Direction.LEFT) && !this.reversed) { 
+								this.direction = direction; 
+							} else if(!this.direction.equals(Direction.RIGHT) && this.reversed){
+								this.direction = reversedDirection(direction);
+							}
 			break;
 			default: throw new IllegalStateException();
 		
 		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -56,6 +62,28 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	@Override
 	public boolean getReverseDirection() {
 		return this.reversed;
+	}
+	
+	private void checkDirection(Direction direction) {
+		if(direction == null) {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	private Direction reversedDirection(Direction direction) {
+		
+		switch(direction) {
+		case UP:  direction = Direction.DOWN;
+		break;
+		case DOWN: direction = Direction.UP;
+		break;
+		case LEFT: direction = Direction.RIGHT;
+		break;
+		case RIGHT: direction = Direction.LEFT;
+		break;
+		default: throw new IllegalStateException();
+		}
+		return direction;
 	}
 	
 	public String toString() {

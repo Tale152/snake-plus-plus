@@ -71,13 +71,13 @@ public class PlayerImpl implements Player{
 	}
 	
 	private void checkPlayerNumber(PlayerNumber p) {
-		if(p.equals(null)) {
+		if(p == null) {
 			throw new IllegalArgumentException();
 		}
 	}
 	
 	private void checkName(String name) {
-		if(name.equals(null)) {
+		if(name == null) {
 			throw new IllegalArgumentException();
 		}
 	}

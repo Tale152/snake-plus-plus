@@ -73,6 +73,7 @@ public class SpeedPropertyTest {
         } catch (Exception e){
             fail("wrong exception");
         }
+		
 		speed.applySpeedMultiplier(1.5);
 		System.out.println(speed.getSpeedMultiplier());
 		System.out.println(speed.getDeltaT());
