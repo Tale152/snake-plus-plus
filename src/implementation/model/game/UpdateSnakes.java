@@ -52,6 +52,7 @@ public class UpdateSnakes {
 			if (!field.removeItem(bodyPart)) {
 				field.addItem(bodyPart);
 				itemCounter.applyQuantity(BodyPart.class, 1);
+				itemCounter.setLastSpawnAttempt(BodyPart.class, gameTime);
 			}
 			else {
 				itemCounter.applyQuantity(BodyPart.class, -1);
