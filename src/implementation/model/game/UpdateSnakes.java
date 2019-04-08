@@ -47,13 +47,17 @@ public class UpdateSnakes {
 	}
 	
 	private static void moveSnake(Snake snake, Field field, long gameTime, List<Item> differences, ItemCounter itemCounter) {
-		int snakeSizeDelta = snake.getBodyParts().size();
 		differences.addAll(snake.move(getNextPoint(snake, field)));
-		snakeSizeDelta = Math.abs(snakeSizeDelta - snake.getBodyParts().size());
-		if (snakeSizeDelta != 0) {
-			itemCounter.applyQuantity(snake.getBodyParts().get(0).getClass(), snakeSizeDelta);
+		for (Item bodyPart : differences) {
+			if (!field.removeItem(bodyPart)) {
+				field.addItem(bodyPart);
+				itemCounter.applyQuantity(BodyPart.class, 1);
+			}
+			else {
+				itemCounter.applyQuantity(BodyPart.class, -1);
+			}
 		}
-		collide(field, snake, gameTime, differences);
+		collide(field, snake, gameTime, differences, itemCounter);
 	}
 	
 	private static Point getNextPoint(Snake snake, Field field) {
@@ -67,7 +71,7 @@ public class UpdateSnakes {
 		throw new IllegalStateException();
 	}
 	
-	private static void collide(Field field, Snake snake, long gameTime, List<Item> differences) {
+	private static void collide(Field field, Snake snake, long gameTime, List<Item> differences, ItemCounter itemCounter) {
 		Optional<List<Item>> cell = field.getCell(snake.getBodyParts().get(0).getPoint());
 		if (!cell.isPresent()) {
 			throw new IllegalStateException();
@@ -76,6 +80,8 @@ public class UpdateSnakes {
 		for (Item item : cell.get()) {
 			item.onCollision(snake, gameTime);
 			if ((!(item instanceof Wall) || !(item instanceof BodyPart)) && snake.getProperties().getCollision().getIntangibility() == false) {
+				itemCounter.applyQuantity(item.getClass(), -1);
+				field.removeItem(item);
 				differences.add(item);
 			}
 		}
