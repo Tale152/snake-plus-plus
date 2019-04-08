@@ -9,13 +9,13 @@ public class UpdateSnakes {
 
 	private UpdateSnakes() {}
 	
-	public static void updateSnakes(List<Snake> snakes, Field field, long gameTime, List<Item> differences, Map<Class<? extends Item>, Integer> itemCounter){
+	public static void updateSnakes(List<Snake> snakes, Field field, long gameTime, List<Item> differences){
 		snakes.stream()
 			.filter(s ->{return s.isAlive();})
 			.forEach(Snake ->{
 				updateSnakeEffects(Snake, gameTime);
 				if (timeToMoveSnake(Snake, gameTime)) {
-					updateSnakePosition(Snake, gameTime, differences, field, itemCounter);
+					updateSnakePosition(Snake, gameTime, differences, field);
 				}
 			});
 	}
@@ -36,21 +36,18 @@ public class UpdateSnakes {
 		return snake.getProperties().getSpeed().getNextUpdate() <= gameTime;
 	}
 	
-	private static void updateSnakePosition(Snake snake, long gameTime, List<Item> differences, Field field, Map<Class<? extends Item>, Integer> itemCounter){
+	private static void updateSnakePosition(Snake snake, long gameTime, List<Item> differences, Field field){
 		updateSnakeTime(snake);
-		moveSnake(snake, field, gameTime, differences, itemCounter);
+		moveSnake(snake, field, gameTime, differences);
 	}
 	
 	private static void updateSnakeTime(Snake snake) {
 		snake.getProperties().getSpeed().setLastUpdate(snake.getProperties().getSpeed().getNextUpdate());
 	}
 	
-	private static void moveSnake(Snake snake, Field field, long gameTime, List<Item> differences, Map<Class<? extends Item>, Integer> itemCounter) {
-		int deltaBodyPart = snake.getBodyParts().size();
+	private static void moveSnake(Snake snake, Field field, long gameTime, List<Item> differences) {
 		differences.addAll(snake.move(getNextPoint(snake, field)));
-		deltaBodyPart += snake.getBodyParts().size();
-		itemCounter.remove(BodyPart.class, itemCounter.get(BodyPart.class) + deltaBodyPart);
-		collide(field, snake, gameTime, differences, itemCounter);
+		collide(field, snake, gameTime, differences);
 	}
 	
 	private static Point getNextPoint(Snake snake, Field field) {
@@ -64,7 +61,7 @@ public class UpdateSnakes {
 		throw new IllegalStateException();
 	}
 	
-	private static void collide(Field field, Snake snake, long gameTime, List<Item> differences, Map<Class<? extends Item>, Integer> itemCounter) {
+	private static void collide(Field field, Snake snake, long gameTime, List<Item> differences) {
 		Optional<List<Item>> cell = field.getCell(snake.getBodyParts().get(0).getPoint());
 		if (!cell.isPresent()) {
 			throw new IllegalStateException();
@@ -74,7 +71,6 @@ public class UpdateSnakes {
 			item.onCollision(snake, gameTime);
 			if ((!(item instanceof Wall) || !(item instanceof BodyPart)) && snake.getProperties().getCollision().getIntangibility() == false) {
 				field.removeItem(item);
-				itemCounter.replace(item.getClass(), itemCounter.get(item.getClass()) - 1);
 				differences.add(item);
 			}
 		}

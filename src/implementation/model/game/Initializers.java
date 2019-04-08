@@ -3,12 +3,26 @@ package implementation.model.game;
 import java.util.List;
 import design.model.game.*;
 import design.model.game.InitialGameState.InitialPlayerState;
+import implementation.model.game.field.FieldImpl;
 import implementation.model.game.initializers.Utils;
 import implementation.model.game.snake.SnakeImpl;
 
-public class InitSnakes {
+public class Initializers {
 
-	private InitSnakes() {}
+	private Initializers() {}
+	
+	public static Field initField(InitialGameState initialGameState, List<Snake> snakes) {
+		Field field = new FieldImpl(initialGameState.getFieldSize());
+		for (Snake snake : snakes) {
+			for (Item bodyPart : snake.getBodyParts()) {
+				field.addItem(bodyPart);
+			}
+		}
+		for (Item item : initialGameState.getFieldItems()) {
+			field.addItem(item);
+		}
+		return field;
+	}
 	
 	public static void initSnakes(GameRules gameRules, InitialGameState initialGameState, List<Snake> snakes, long gameTime) {
 		int nPlayer = 0;

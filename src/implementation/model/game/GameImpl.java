@@ -5,24 +5,21 @@ import design.model.game.*;
 import implementation.model.game.initializers.Utils;
 import implementation.model.game.items.*;
 import static implementation.model.game.UpdateField.updateField;
-import static implementation.model.game.InitSnakes.initSnakes;
+import static implementation.model.game.Initializers.*;
 import static implementation.model.game.UpdateSnakes.updateSnakes;
-import static implementation.model.game.InitItemCounter.initItemCounter;
 
 public class GameImpl implements Game {
 	
 	private long gameTime;
 	private final Field field;
 	private final List<Snake> snakes = new ArrayList<>();
-	private final Map<Class<? extends Item>, Integer> itemCounter = new HashMap<>();
 	private final GameRules gameRules;
 	
 	public GameImpl(GameRules gameRules, InitialGameState initialGameState, long gameTime) {
 		check(gameRules, initialGameState, gameTime);
 		this.gameTime = gameTime;
-		initItemCounter(itemCounter, gameRules, initialGameState);
 		initSnakes(gameRules, initialGameState, snakes, gameTime);
-		field = null; //TODO init field
+		field = initField(initialGameState, snakes);
 		this.gameRules = gameRules;
 	}
 	
@@ -30,8 +27,8 @@ public class GameImpl implements Game {
 	public List<Item> update(long enlapsedTime) {
 		gameTime += enlapsedTime;
 		List<Item> differences = new ArrayList<>();
-		updateSnakes(snakes, field, gameTime, differences, itemCounter);
-		updateField(field, enlapsedTime, differences, gameRules, itemCounter);
+		updateSnakes(snakes, field, gameTime, differences);
+		updateField(field, enlapsedTime, differences, gameRules);
 		return differences;
 	}
 	

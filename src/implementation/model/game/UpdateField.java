@@ -8,7 +8,7 @@ public class UpdateField {
 
 	private  UpdateField() {}
 	
-	public static void updateField(Field field, long gameTime, List<Item> differences, GameRules gameRules, Map<Class<? extends Item>, Integer> itemCounter){
+	public static void updateField(Field field, long gameTime, List<Item> differences, GameRules gameRules){
 		updateFieldFromSnakeDifferences(field, differences);
 		
 	}
