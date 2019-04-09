@@ -28,14 +28,14 @@ public class SnakeTest {
 		snake.getBodyParts().get(0).getPoint().equals(new Point(0,1));
 		assertEquals(snake.getProperties().getLength().getLength(), 1);
 		
-		List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(0,3), new Point(0,2), new Point(0,1), new Point(0,0))); //Point(0,3) is head
+		List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(3,0), new Point(2,0), new Point(1,0), new Point(0,0))); //Point(3,0) is head
 		snake = SnakeComponentsFactoryForTest.createSnake(tmp,PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 1.0, 0L);
 		assertEquals(snake.getProperties().getLength().getLength(), 4);
-		assertEquals(snake.move(new Point(0,4)).size(),0);
-		snake.getBodyParts().get(0).getPoint().equals(new Point(0,4));
-		snake.getBodyParts().get(1).getPoint().equals(new Point(0,3));
-		snake.getBodyParts().get(2).getPoint().equals(new Point(0,2));
-		snake.getBodyParts().get(3).getPoint().equals(new Point(0,1));
+		assertEquals(snake.move(new Point(4,0)).size(),0);
+		snake.getBodyParts().get(0).getPoint().equals(new Point(4,0));
+		snake.getBodyParts().get(1).getPoint().equals(new Point(3,0));
+		snake.getBodyParts().get(2).getPoint().equals(new Point(2,0));
+		snake.getBodyParts().get(3).getPoint().equals(new Point(1,0));
 		assertEquals(snake.getProperties().getLength().getLength(), 4);
 	}
 	
@@ -45,38 +45,38 @@ public class SnakeTest {
 		snake.getProperties().getLength().lengthen(1);
 		assertEquals(snake.getProperties().getLength().getLength(), 2);
 		assertEquals(snake.getBodyParts().size(), 1);
-		List<Item> differences = snake.move(new Point(0, 1));
+		List<Item> differences = snake.move(new Point(1,0));
 		assertEquals(differences.size(), 1);
 		assertTrue(differences.get(0) instanceof BodyPart);
 		assertEquals(differences.get(0).getPoint(), new Point(0,0));
-		assertTrue(snake.getBodyParts().get(0).getPoint().equals(new Point(0,1)));
+		assertTrue(snake.getBodyParts().get(0).getPoint().equals(new Point(1,0)));
 		assertTrue(snake.getBodyParts().get(1).getPoint().equals(new Point(0,0)));
 		assertTrue(differences.get(0) == snake.getBodyParts().get(1));
 		assertEquals(snake.getProperties().getLength().getLength(), 2);
 		assertEquals(snake.getBodyParts().size(), 2);
 		snake.getProperties().getLength().lengthen(2);
 		assertEquals(snake.getProperties().getLength().getLength(), 4);
-		assertEquals(snake.move(new Point(0, 2)).size(),1);
-		assertEquals(snake.move(new Point(0, 3)).size(),1);
-		assertEquals(snake.move(new Point(0, 4)).size(),0);
+		assertEquals(snake.move(new Point(2,0)).size(),1);
+		assertEquals(snake.move(new Point(3,0)).size(),1);
+		assertEquals(snake.move(new Point(4,0)).size(),0);
 	}
 	
 	@Test
 	public void testShortenMove() {
-		List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(0,3), new Point(0,2), new Point(0,1), new Point(0,0))); //Point(0,3) is head
+		List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(3,0), new Point(2,0), new Point(1,0), new Point(0,0))); //Point(3,0) is head
 		snake = SnakeComponentsFactoryForTest.createSnake(tmp,PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 1.0, 0L);
 		snake.getProperties().getLength().shorten(2);
 		assertEquals(snake.getProperties().getLength().getLength(), 2);
 		assertEquals(snake.getBodyParts().size(), 4);
-		List<Item> differences = snake.move(new Point(0, 4));
+		List<Item> differences = snake.move(new Point(4,0));
 		assertEquals(differences.size(), 2);
 		assertTrue(differences.get(0) instanceof BodyPart);
 		assertTrue(differences.get(1) instanceof BodyPart);
 		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(0,0));}));
-		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(0,1));}));
-		snake.getBodyParts().get(0).getPoint().equals(new Point(0,4));
-		snake.getBodyParts().get(1).getPoint().equals(new Point(0,3));
-		assertEquals(snake.move(new Point(0, 5)), 0);
+		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(1,0));}));
+		snake.getBodyParts().get(0).getPoint().equals(new Point(4,0));
+		snake.getBodyParts().get(1).getPoint().equals(new Point(3,0));
+		assertEquals(snake.move(new Point(5,0)), 0);
 		
 	}
 	
@@ -117,10 +117,13 @@ public class SnakeTest {
 	
 	@Test
 	public void testReverse() {
-		List<Point> even = new ArrayList<>(Arrays.asList(new Point(0,3), new Point(0,2), new Point(0,1), new Point(0,0))); //Point(0,3) is head
+		List<Point> even = new ArrayList<>(Arrays.asList(new Point(3,0), new Point(2,0), new Point(1,0), new Point(0,0))); //Point(3,0) is head
 		List<Point> odd = new ArrayList<>(even);
-		odd.add(0, new Point(0,4)); //Point (0,4) is head
-		//TODO implement
+		odd.add(0, new Point(4,0)); //Point (4,0) is head
+		
+		snake = SnakeComponentsFactoryForTest.createSnake(even,PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 1.0, 0L);
+		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.RIGHT);
+		
 	}
 	
 	
