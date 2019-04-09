@@ -33,10 +33,11 @@ public class SnakeImpl implements Snake{
 		this.bodyPart = new ArrayList<>(); 
 		
 		checkPoint(point);
-		for(int i = 0; i < point.size(); i++) {
+		for(int i = 0; i <= point.size() - 1; i++) {
 			this.firstPart = (BodyPart) ItemFactory.createBodyPart(point.get(i), this);
 			this.bodyPart.add(firstPart);
 		}
+		this.properties.getLength().lengthen(point.size() - 1); //update length properties, the beginning length is the number of point - 1 (the first is supposed to exist
 	}
 	
 	@Override
@@ -58,22 +59,23 @@ public class SnakeImpl implements Snake{
 		//if Snake is longer than the size he supposed to be
 		if (this.bodyPart.size() > currentLength) {
 			while(this.bodyPart.size() != currentLength) {
-				differences.add(this.bodyPart.get(this.bodyPart.size()));
-				this.bodyPart.remove(this.bodyPart.size());
+				differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
+				this.bodyPart.remove(this.bodyPart.size() - 1);
 			}
 		}
 		//calcola le nuove posizioni di ogni pezzo ma si salva la vecchia posizione della coda 
-		oldTail = this.bodyPart.get(this.bodyPart.size() - 1).getPoint();
+		oldTail = new Point(this.bodyPart.get(this.bodyPart.size() - 1).getPoint().x, this.bodyPart.get(this.bodyPart.size() - 1).getPoint().y);
 		for(int i = this.bodyPart.size() - 1; i < 0; i--) {
 			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
 		}
+		
 		this.bodyPart.get(0).getPoint().move(point.x, point.y);
 		
 		//crea al massimo un nuovo pezzo assegnandogli le coordinate della vecchia coda
-		if(this.bodyPart.size() < this.properties.getLength().getLength()) {
+		if(this.bodyPart.size() < currentLength) {
 			BodyPart b = (BodyPart) ItemFactory.createBodyPart(oldTail, this);
 			this.bodyPart.add(b);
-			differences.add(b);
+			differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
 		}
 		
 		return differences;
@@ -106,23 +108,20 @@ public class SnakeImpl implements Snake{
 
 	@Override
 	public void reverse() {
-		//le coordinate della testa sono le coordinate della coda ecc
-		//inverte le coordinate dei pezzi 
-		//e poi setta la direzione dello snake 
-		Point p1 = this.bodyPart.get(this.bodyPart.size() - 1).getPoint();
-		Point p2 = this.bodyPart.get(this.bodyPart.size()).getPoint();
-		//determino e setto la nuova direzione dello snake 
-		Direction direction = determinateDirection(p1, p2);
+		Direction direction;
+		if(this.bodyPart.size() > 1) {
+			//le coordinate della testa sono le coordinate della coda ecc
+			//inverte le coordinate dei pezzi 
+			//e poi setta la direzione dello snake 
+			Point p1 = this.bodyPart.get(this.bodyPart.size() - 2).getPoint();
+			Point p2 = this.bodyPart.get(this.bodyPart.size() - 1).getPoint();
+			//determino e setto la nuova direzione dello snake 
+			direction = determinateDirection(p1, p2);
+			Collections.reverse(this.bodyPart);
+		} else {
+			direction = determinateOppositeDirection(this.properties.getDirection().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
+		}
 		this.properties.getDirection().setDirection(direction);
-		
-		//non sono convinta funzioni
-		Collections.reverse(this.bodyPart); 
-//		//algoritmo da cambiare in modo migliore
-//		for(int i = 0, j = this.bodyPart.size(); i < this.bodyPart.size()/2; i++, j--) {
-//			Point temp = this.bodyPart.get(i).getPoint();
-//			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(j).getPoint().x, this.bodyPart.get(j).getPoint().y);
-//			this.bodyPart.get(j).getPoint().move(temp.x, temp.y);
-//		}
 	}
 
 	@Override
@@ -165,6 +164,21 @@ public class SnakeImpl implements Snake{
 			}
 		}
 		throw new IllegalStateException();
+	}
+	
+	
+	private Direction determinateOppositeDirection(Direction d) {
+		Direction updatedDirection;
+		
+		switch(d) {
+		case UP: updatedDirection = Direction.DOWN; break;
+		case DOWN: updatedDirection = Direction.UP; break;
+		case RIGHT: updatedDirection = Direction.LEFT; break;
+		case LEFT: updatedDirection = Direction.RIGHT; break;
+		default: throw new IllegalStateException();	
+		}
+		
+		return updatedDirection;
 	}
 	
 	
