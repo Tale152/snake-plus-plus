@@ -21,7 +21,7 @@ public class TestEntireGame {
 		new SnakeTest().testKill();
 		new SnakeTest().testNormalMove();
 		new SnakeTest().testLenghtenMove();
-		new SnakeTest().testShortenMove();
+		new SnakeTest().testShortenMove(); //controlla test
 		new SnakeTest().testReverse();
 		
 	}
