@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -14,7 +16,7 @@ public class AppleTest {
 	@Test
 	public void testInstantaneousEffect() {
 		apple = ItemFactory.createApple(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		assertEquals(testSnake.getProperties().getLength().getLength(), 1);
 		apple.onCollision(testSnake, 0);
@@ -25,7 +27,7 @@ public class AppleTest {
 	@Test
 	public void testInstantaneousEffectOnGhost() {
 		apple = ItemFactory.createApple(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.ghostSnake();
+		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		assertEquals(testSnake.getProperties().getLength().getLength(), 1);
 		apple.onCollision(testSnake, 0);
@@ -36,7 +38,7 @@ public class AppleTest {
 	@Test 
 	public void testLastingEffect() {
 		apple = ItemFactory.createApple(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		assertEquals(testSnake.getProperties().getLength().getLength(), 1);
 		apple.onCollision(testSnake, 1000L);

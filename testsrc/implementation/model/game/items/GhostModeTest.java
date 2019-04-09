@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -20,7 +22,7 @@ public class GhostModeTest {
 	@Test
 	public void testInstantaneousEffect() {
 		ghost = ItemFactory.createGhostMode(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
 		ghost.onCollision(testSnake, 0);
 		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
@@ -29,7 +31,7 @@ public class GhostModeTest {
 	@Test 
 	public void testLastingEffect() {
 		ghost = ItemFactory.createGhostMode(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
 		ghost.onCollision(testSnake, 1000L);
 		assertTrue(testSnake.getProperties().getCollision().getIntangibility());

@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -14,7 +16,7 @@ public class ScoreEarningTest {
 	@Test
 	public void testInstantaneousEffect() {
 		scoreEarning = ItemFactory.createScoreEarning(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		scoreEarning.onCollision(testSnake, 0);
 		assertEquals(testSnake.getPlayer().getScore(), (int)(testSnake.getPlayer().getScoreMultiplier() * ItemFactory.SCORE));
@@ -23,7 +25,7 @@ public class ScoreEarningTest {
 	@Test
 	public void testInstantaneousEffectOnGhost() {
 		scoreEarning = ItemFactory.createScoreEarning(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.ghostSnake();
+		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		scoreEarning.onCollision(testSnake, 0);
 		assertEquals(testSnake.getPlayer().getScore(), 0);
@@ -32,7 +34,7 @@ public class ScoreEarningTest {
 	@Test 
 	public void testLastingEffect() {
 		scoreEarning = ItemFactory.createScoreEarning(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getPlayer().getScore(), 0);
 		scoreEarning.onCollision(testSnake, 1000L);
 		assertEquals(testSnake.getPlayer().getScore(), (int)(testSnake.getPlayer().getScoreMultiplier() * ItemFactory.SCORE));

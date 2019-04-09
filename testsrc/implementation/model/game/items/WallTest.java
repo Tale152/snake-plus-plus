@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -35,7 +37,7 @@ public class WallTest {
 		wall = ItemFactory.createWall(pointZero, Optional.of(100L));
 		assertEquals(wall.getDuration(), Optional.of(100L));
 		
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		wall.onCollision(testSnake, 300L);
 		assertEquals(testSnake.getEffects().size(),0);
 		
@@ -43,10 +45,10 @@ public class WallTest {
 	
 	@Test
 	public void testCollision(){
-		assertFalse(survives(SnakeFactoryForTests.baseSnake()));
-		assertTrue(survives(SnakeFactoryForTests.godSnake()));
-		assertTrue(survives(SnakeFactoryForTests.ghostSnake()));
-		assertTrue(survives(SnakeFactoryForTests.springSnake()));
+		assertFalse(survives(SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))))));
+		assertTrue(survives(SnakeFactoryForTests.godSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))))));
+		assertTrue(survives(SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))))));
+		assertTrue(survives(SnakeFactoryForTests.springSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))))));
 	}
 	
 	private boolean survives(Snake snake) {

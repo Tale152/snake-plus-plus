@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -14,7 +16,7 @@ public class TurboTest {
 	@Test
 	public void testInstantaneousEffect() {
 		turbo = ItemFactory.createTurbo(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
 		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		turbo.onCollision(testSnake, 0);
@@ -26,7 +28,7 @@ public class TurboTest {
 	@Test 
 	public void testLastingEffect() {
 		turbo = ItemFactory.createTurbo(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
 		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		turbo.onCollision(testSnake, 1000L);

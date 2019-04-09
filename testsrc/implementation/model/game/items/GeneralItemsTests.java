@@ -79,7 +79,7 @@ public class GeneralItemsTests {
 		for (String s : classesList) {
 			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
 			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.empty());
-			testSnake = SnakeFactoryForTests.baseSnake();
+			testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 			item.onCollision(testSnake, 0L);
 			if(testSnake.getEffects().size()!=0) {
 				fail("failed at " + s);
@@ -93,7 +93,7 @@ public class GeneralItemsTests {
 		for (String s : classesList) {
 			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
 			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(100L));
-			testSnake = SnakeFactoryForTests.baseSnake();
+			testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 			item.onCollision(testSnake, 0L);
 			if(testSnake.getEffects().size()!=1) {
 				fail("failed effect association at " + s);
@@ -119,7 +119,7 @@ public class GeneralItemsTests {
 		for (String s : classesList) {
 			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
 			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(100L));
-			testSnake = SnakeFactoryForTests.ghostSnake();
+			testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 			item.onCollision(testSnake, 0L);
 			if(testSnake.getEffects().size()!=0) {
 				fail("failed effect association at " + s);
@@ -127,7 +127,7 @@ public class GeneralItemsTests {
 		}
 		
 		item = ItemFactory.createGhostMode(new Point(0,0), Optional.empty(), Optional.of(100L));
-		testSnake = SnakeFactoryForTests.ghostSnake();
+		testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		item.onCollision(testSnake, 0L);
 		assertEquals(testSnake.getEffects().size(), 1);
 		

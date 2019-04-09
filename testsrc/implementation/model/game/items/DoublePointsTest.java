@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -14,7 +16,7 @@ public class DoublePointsTest {
 	@Test
 	public void testInstantaneousEffect() {
 		doublePoints = ItemFactory.createDoublePoints(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
 		doublePoints.onCollision(testSnake, 0);
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
@@ -25,7 +27,7 @@ public class DoublePointsTest {
 	@Test 
 	public void testLastingEffect() {
 		doublePoints = ItemFactory.createDoublePoints(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
 		doublePoints.onCollision(testSnake, 1000L);
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2);
