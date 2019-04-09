@@ -27,6 +27,16 @@ public class SnakeTest {
 		assertEquals(snake.move(new Point(0, 1)).size(),0);
 		snake.getBodyParts().get(0).getPoint().equals(new Point(0,1));
 		assertEquals(snake.getProperties().getLength().getLength(), 1);
+		
+		List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(0,3), new Point(0,2), new Point(0,1), new Point(0,0))); //Point(0,3) is head
+		snake = SnakeComponentsFactoryForTest.createSnake(tmp,PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 1.0, 0L);
+		assertEquals(snake.getProperties().getLength().getLength(), 4);
+		assertEquals(snake.move(new Point(0,4)).size(),0);
+		snake.getBodyParts().get(0).getPoint().equals(new Point(0,4));
+		snake.getBodyParts().get(1).getPoint().equals(new Point(0,3));
+		snake.getBodyParts().get(2).getPoint().equals(new Point(0,2));
+		snake.getBodyParts().get(3).getPoint().equals(new Point(0,1));
+		assertEquals(snake.getProperties().getLength().getLength(), 4);
 	}
 	
 	@Test
