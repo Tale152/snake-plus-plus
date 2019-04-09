@@ -33,11 +33,10 @@ public class SnakeImpl implements Snake{
 		this.bodyPart = new ArrayList<>(); 
 		
 		checkPoint(point);
-		for(int i = 0; i < point.size() - 1; i++) {
+		for(int i = 0; i < point.size(); i++) {
 			this.firstPart = (BodyPart) ItemFactory.createBodyPart(point.get(i), this);
 			this.bodyPart.add(firstPart);
 		}
-
 	}
 	
 	@Override
@@ -64,9 +63,9 @@ public class SnakeImpl implements Snake{
 			}
 		}
 		//calcola le nuove posizioni di ogni pezzo ma si salva la vecchia posizione della coda 
-		oldTail = this.bodyPart.get(this.bodyPart.size()).getPoint();
-		for(int i = 1; i <= this.bodyPart.size() - 1 ; i++) {
-				this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
+		oldTail = this.bodyPart.get(this.bodyPart.size() - 1).getPoint();
+		for(int i = this.bodyPart.size() - 1; i < 0; i--) {
+			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
 		}
 		this.bodyPart.get(0).getPoint().move(point.x, point.y);
 		
@@ -173,5 +172,9 @@ public class SnakeImpl implements Snake{
 		if(point.size() < 0) {
 			throw new IllegalArgumentException(); 
 		}
+	}
+	
+	public String toString() {
+		return "Snake is alive: " + this.isAlive + "\n";
 	}
 }
