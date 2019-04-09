@@ -35,7 +35,7 @@ public class TestEntireGame {
 		new BodyPartTest().testInitBodyPart();
 		new BodyPartTest().testAllCollisions();
 		new WallTest().testInitWall();
-		//new WallTest().testCollision(); TODO reverse does not work
+		new WallTest().testCollision();
 		new AppleTest().testInstantaneousEffect();
 		new AppleTest().testInstantaneousEffectOnGhost();
 		new AppleTest().testLastingEffect();
@@ -61,12 +61,12 @@ public class TestEntireGame {
 		new ScoreLossTest().testInstantaneousEffectOnGhost();
 		new ScoreLossTest().testLastingEffect();
 		new SlugTest().testInstantaneousEffect();
-		//new SlugTest().testLastingEffect(); TODO applyMultiplier does not behave properly
-		//new SpringTest().testInstantaneousEffect(); TODO i haven't program that part yet -cit
-		//new SpringTest().testInstantaneousEffectOnGhost(); TODO i haven't program that part yet -cit
-		//new SpringTest().testLastingEffect(); TODO i haven't program that part yet -cit
+		new SlugTest().testLastingEffect(); 
+		new SpringTest().testInstantaneousEffect();
+		new SpringTest().testInstantaneousEffectOnGhost();
+		new SpringTest().testLastingEffect();
 		new TurboTest().testInstantaneousEffect();
-		//new TurboTest().testLastingEffect(); TODO applyMultiplier does not behave properly
+		new TurboTest().testLastingEffect();
 	}
 	
 	

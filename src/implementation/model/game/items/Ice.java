@@ -16,7 +16,7 @@ public class Ice extends ItemAbstract{
 			protected void behaviorOnEffectStart(Snake target) {
 				if (effectDuration.isPresent()) {
 					originalMultiplier = target.getProperties().getSpeed().getSpeedMultiplier();
-					target.getProperties().getSpeed().applySpeedMultiplier(0); 
+					target.getProperties().getSpeed().applySpeedMultiplier(-originalMultiplier); 
 				}
 			}
 			
