@@ -36,7 +36,7 @@ public class SnakeTest {
 		snake.getBodyParts().get(1).getPoint().equals(new Point(3,0));
 		snake.getBodyParts().get(2).getPoint().equals(new Point(2,0));
 		snake.getBodyParts().get(3).getPoint().equals(new Point(1,0));
-		assertEquals(snake.getProperties().getLength().getLength(), 4);
+		assertEquals(snake.getProperties().getLength().getLength(), 4); 
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ public class SnakeTest {
 		assertEquals(snake.getProperties().getLength().getLength(), 4);
 		assertEquals(snake.move(new Point(2,0)).size(),1);
 		assertEquals(snake.move(new Point(3,0)).size(),1);
-		assertEquals(snake.move(new Point(4,0)).size(),0);
+		assertEquals(snake.move(new Point(4,0)).size(),0); 
 	}
 	
 	@Test
@@ -76,7 +76,7 @@ public class SnakeTest {
 		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(1,0));}));
 		snake.getBodyParts().get(0).getPoint().equals(new Point(4,0));
 		snake.getBodyParts().get(1).getPoint().equals(new Point(3,0));
-		assertEquals(snake.move(new Point(5,0)), 0);
+		assertEquals(snake.move(new Point(5,0)), 0); // !!!
 		
 	}
 	
@@ -125,20 +125,20 @@ public class SnakeTest {
 		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.RIGHT);
 		snake.reverse();
 		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.DOWN);
-		assertEquals(snake.getBodyParts().get(0), new Point(1,1));
-		assertEquals(snake.getBodyParts().get(1), new Point(1,0));
-		assertEquals(snake.getBodyParts().get(2), new Point(2,0));
-		assertEquals(snake.getBodyParts().get(3), new Point(3,0));
+		assertEquals(snake.getBodyParts().get(0).getPoint(), new Point(1,1));
+		assertEquals(snake.getBodyParts().get(1).getPoint(), new Point(1,0));
+		assertEquals(snake.getBodyParts().get(2).getPoint(), new Point(2,0));
+		assertEquals(snake.getBodyParts().get(3).getPoint(), new Point(3,0));
 		
 		snake = SnakeComponentsFactoryForTest.createSnake(odd,PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 1.0, 0L);
 		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.RIGHT);
 		snake.reverse();
 		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.DOWN);
-		assertEquals(snake.getBodyParts().get(0), new Point(1,1));
-		assertEquals(snake.getBodyParts().get(1), new Point(1,0));
-		assertEquals(snake.getBodyParts().get(2), new Point(2,0));
-		assertEquals(snake.getBodyParts().get(3), new Point(3,0));
-		assertEquals(snake.getBodyParts().get(4), new Point(4,0));
+		assertEquals(snake.getBodyParts().get(0).getPoint(), new Point(1,1));
+		assertEquals(snake.getBodyParts().get(1).getPoint(), new Point(1,0));
+		assertEquals(snake.getBodyParts().get(2).getPoint(), new Point(2,0));
+		assertEquals(snake.getBodyParts().get(3).getPoint(), new Point(3,0));
+		assertEquals(snake.getBodyParts().get(4).getPoint(), new Point(4,0));
 		
 	}
 	
