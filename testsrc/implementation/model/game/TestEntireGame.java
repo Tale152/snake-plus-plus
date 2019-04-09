@@ -15,14 +15,14 @@ public class TestEntireGame {
 		new LengthPropertyTest().testLengthProperty();
 		new PickupPropertyTest().testPickupProperty();
 		new SpeedPropertyTest().testSpeedProperty();
-		/*new PropertiesTest().testProperties(); //TODO manca Point nel costruttore di Snake
+		new PropertiesTest().testProperties();
 		new SnakeTest().testInit();
 		new SnakeTest().testEffect();
 		new SnakeTest().testKill();
 		new SnakeTest().testNormalMove();
 		new SnakeTest().testLenghtenMove();
 		new SnakeTest().testShortenMove();
-		new SnakeTest().testReverse();*/
+		new SnakeTest().testReverse();
 		
 	}
 	

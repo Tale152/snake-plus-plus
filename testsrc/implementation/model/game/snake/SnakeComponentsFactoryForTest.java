@@ -35,8 +35,8 @@ public class SnakeComponentsFactoryForTest {
 		return new PropertiesImpl(Direction.DOWN, 1000L, 1, 0);
 	}
 	
-	public static Snake createSnake(List<Point> initialPoints) {
-		return null;
+	public static Snake createSnake(List<Point> initialPoints, PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, double speedMultiplier, long lastUpdate ) {
+		return new SnakeImpl(initialPoints, playerNumber, playerName, direction, deltaT, speedMultiplier, lastUpdate);
 	}
 }
 
