@@ -2,6 +2,10 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import design.model.game.*;
 
@@ -22,21 +26,33 @@ public class BodyPartTest {
         }
 		
 		try{
-            bodyPart = ItemFactory.createBodyPart(null, SnakeFactoryForTests.baseSnake());
+            bodyPart = ItemFactory.createBodyPart(null, SnakeFactoryForTests.baseSnake(new ArrayList<Point>(null)));
+            fail("Body part's point cannot ben null");
+        } catch (NullPointerException e){
+        } catch (Exception e){
+            fail("wrong exception thrown");
+        }
+		
+		try{
+            bodyPart = ItemFactory.createBodyPart(null, SnakeFactoryForTests.baseSnake(new ArrayList<Point>()));
             fail("Body part's point cannot ben null");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception thrown");
         }
 		
-		bodyPart = ItemFactory.createBodyPart(pointZero, SnakeFactoryForTests.baseSnake());
+		bodyPart = ItemFactory.createBodyPart(pointZero, SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0)))));
 		assertTrue(bodyPart.getPoint().equals(pointZero));
 		assertFalse(bodyPart.getDuration().isPresent());
 		
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		bodyPart.onCollision(testSnake, 0L);
 		assertEquals(testSnake.getEffects().size(), 0);
 		
+	}
+	
+	private List<Point> pointZero(){
+		return new ArrayList<Point>(Arrays.asList(new Point(0,0)));
 	}
 	
 	@Test
@@ -44,36 +60,36 @@ public class BodyPartTest {
 		Snake tmp;
 		
 		//base snake
-		tmp = SnakeFactoryForTests.baseSnake();
+		tmp = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		noOneSurvives(tmp, tmp);
-		onlyASurvives(SnakeFactoryForTests.baseSnake(), SnakeFactoryForTests.baseSnake());
-		onlyBSurvives(SnakeFactoryForTests.baseSnake(), SnakeFactoryForTests.godSnake());
-		bothSurvive(SnakeFactoryForTests.baseSnake(), SnakeFactoryForTests.ghostSnake());
-		onlyASurvives(SnakeFactoryForTests.baseSnake(), SnakeFactoryForTests.springSnake());
+		onlyASurvives(SnakeFactoryForTests.baseSnake(pointZero()), SnakeFactoryForTests.baseSnake(pointZero()));
+		onlyBSurvives(SnakeFactoryForTests.baseSnake(pointZero()), SnakeFactoryForTests.godSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.baseSnake(pointZero()), SnakeFactoryForTests.ghostSnake(pointZero()));
+		onlyASurvives(SnakeFactoryForTests.baseSnake(pointZero()), SnakeFactoryForTests.springSnake(pointZero()));
 		
 		//god snake
-		tmp = SnakeFactoryForTests.godSnake();
+		tmp = SnakeFactoryForTests.godSnake(pointZero());
 		bothSurvive(tmp, tmp);
-		onlyASurvives(SnakeFactoryForTests.godSnake(), SnakeFactoryForTests.baseSnake());
-		bothSurvive(SnakeFactoryForTests.godSnake(), SnakeFactoryForTests.godSnake());
-		bothSurvive(SnakeFactoryForTests.godSnake(), SnakeFactoryForTests.ghostSnake());
-		onlyASurvives(SnakeFactoryForTests.godSnake(), SnakeFactoryForTests.springSnake());
+		onlyASurvives(SnakeFactoryForTests.godSnake(pointZero()), SnakeFactoryForTests.baseSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.godSnake(pointZero()), SnakeFactoryForTests.godSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.godSnake(pointZero()), SnakeFactoryForTests.ghostSnake(pointZero()));
+		onlyASurvives(SnakeFactoryForTests.godSnake(pointZero()), SnakeFactoryForTests.springSnake(pointZero()));
 		
 		//ghost snake
-		tmp = SnakeFactoryForTests.ghostSnake();
+		tmp = SnakeFactoryForTests.ghostSnake(pointZero());
 		bothSurvive(tmp, tmp);
-		bothSurvive(SnakeFactoryForTests.ghostSnake(), SnakeFactoryForTests.baseSnake());
-		bothSurvive(SnakeFactoryForTests.ghostSnake(), SnakeFactoryForTests.godSnake());
-		bothSurvive(SnakeFactoryForTests.ghostSnake(), SnakeFactoryForTests.ghostSnake());
-		bothSurvive(SnakeFactoryForTests.ghostSnake(), SnakeFactoryForTests.springSnake());
+		bothSurvive(SnakeFactoryForTests.ghostSnake(pointZero()), SnakeFactoryForTests.baseSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.ghostSnake(pointZero()), SnakeFactoryForTests.godSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.ghostSnake(pointZero()), SnakeFactoryForTests.ghostSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.ghostSnake(pointZero()), SnakeFactoryForTests.springSnake(pointZero()));
 		
 		//spring snake
-		tmp = SnakeFactoryForTests.springSnake();
+		tmp = SnakeFactoryForTests.springSnake(pointZero());
 		noOneSurvives(tmp, tmp);
-		onlyASurvives(SnakeFactoryForTests.springSnake(), SnakeFactoryForTests.baseSnake());
-		onlyBSurvives(SnakeFactoryForTests.springSnake(), SnakeFactoryForTests.godSnake());
-		bothSurvive(SnakeFactoryForTests.springSnake(), SnakeFactoryForTests.ghostSnake());
-		onlyASurvives(SnakeFactoryForTests.springSnake(), SnakeFactoryForTests.springSnake());
+		onlyASurvives(SnakeFactoryForTests.springSnake(pointZero()), SnakeFactoryForTests.baseSnake(pointZero()));
+		onlyBSurvives(SnakeFactoryForTests.springSnake(pointZero()), SnakeFactoryForTests.godSnake(pointZero()));
+		bothSurvive(SnakeFactoryForTests.springSnake(pointZero()), SnakeFactoryForTests.ghostSnake(pointZero()));
+		onlyASurvives(SnakeFactoryForTests.springSnake(pointZero()), SnakeFactoryForTests.springSnake(pointZero()));
 		
 	}
 	

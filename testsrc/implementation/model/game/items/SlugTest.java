@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -14,7 +16,7 @@ public class SlugTest {
 	@Test
 	public void testInstantaneousEffect() {
 		slug = ItemFactory.createSlug(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
 		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		slug.onCollision(testSnake, 0);
@@ -26,7 +28,7 @@ public class SlugTest {
 	@Test 
 	public void testLastingEffect() {
 		slug = ItemFactory.createSlug(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
 		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		slug.onCollision(testSnake, 1000L);
@@ -36,7 +38,6 @@ public class SlugTest {
 		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
 		slug = ItemFactory.createSlug(pointZero, Optional.empty(), Optional.of(250L));
 		slug.onCollision(testSnake, 1050L);
-		System.out.println(testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		assertTrue((baseSpeedMul*0.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
 		assertEquals(testSnake.getEffects().size(),1);
 		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));

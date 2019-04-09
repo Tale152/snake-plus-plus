@@ -2,6 +2,8 @@ package implementation.model.game.items;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
@@ -14,7 +16,7 @@ public class GodModeTest {
 	@Test
 	public void testInstantaneousEffect() {
 		god = ItemFactory.createGodMode(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertFalse(testSnake.getProperties().getCollision().getInvincibility());
 		god.onCollision(testSnake, 0);
 		assertFalse(testSnake.getProperties().getCollision().getInvincibility());
@@ -25,7 +27,7 @@ public class GodModeTest {
 	@Test 
 	public void testLastingEffect() {
 		god = ItemFactory.createGodMode(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake();
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertFalse(testSnake.getProperties().getCollision().getInvincibility());
 		god.onCollision(testSnake, 1000L);
 		assertTrue(testSnake.getProperties().getCollision().getInvincibility());

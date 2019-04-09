@@ -9,13 +9,13 @@ public class UpdateSnakes {
 
 	private UpdateSnakes() {}
 	
-	public static void updateSnakes(List<Snake> snakes, Field field, long gameTime, List<Item> differences){
+	public static void updateSnakes(List<Snake> snakes, Field field, long gameTime, List<Item> differences, ItemCounter itemCounter){
 		snakes.stream()
 			.filter(s ->{return s.isAlive();})
 			.forEach(Snake ->{
 				updateSnakeEffects(Snake, gameTime);
 				if (timeToMoveSnake(Snake, gameTime)) {
-					updateSnakePosition(Snake, gameTime, differences, field);
+					updateSnakePosition(Snake, gameTime, differences, field, itemCounter);
 				}
 			});
 	}
@@ -24,6 +24,7 @@ public class UpdateSnakes {
 		snake.getEffects().stream()
 			.filter(e -> {return effectEnded(e, gameTime);})
 			.forEach(Effect -> {
+				Effect.effectEnd(snake);
 				snake.removeEffect(Effect);
 			});
 	}
@@ -36,32 +37,44 @@ public class UpdateSnakes {
 		return snake.getProperties().getSpeed().getNextUpdate() <= gameTime;
 	}
 	
-	private static void updateSnakePosition(Snake snake, long gameTime, List<Item> differences, Field field){
+	private static void updateSnakePosition(Snake snake, long gameTime, List<Item> differences, Field field, ItemCounter itemCounter){
 		updateSnakeTime(snake);
-		moveSnake(snake, field, gameTime, differences);
+		moveSnake(snake, field, gameTime, differences, itemCounter);
 	}
 	
 	private static void updateSnakeTime(Snake snake) {
 		snake.getProperties().getSpeed().setLastUpdate(snake.getProperties().getSpeed().getNextUpdate());
 	}
 	
-	private static void moveSnake(Snake snake, Field field, long gameTime, List<Item> differences) {
+	private static void moveSnake(Snake snake, Field field, long gameTime, List<Item> differences, ItemCounter itemCounter) {
 		differences.addAll(snake.move(getNextPoint(snake, field)));
-		collide(field, snake, gameTime, differences);
+		for (Item bodyPart : differences) {
+			if (!field.removeItem(bodyPart)) {
+				field.addItem(bodyPart);
+				itemCounter.applyQuantity(BodyPart.class, 1);
+				itemCounter.setLastSpawnAttempt(BodyPart.class, gameTime);
+			}
+			else {
+				itemCounter.applyQuantity(BodyPart.class, -1);
+			}
+		}
+		collide(field, snake, gameTime, differences, itemCounter);
 	}
 	
 	private static Point getNextPoint(Snake snake, Field field) {
 		Point point = snake.getBodyParts().get(0).getPoint();
+		int x = point.x;
+		int y = point.y;
 		switch (snake.getProperties().getDirection().getDirection()) {
-			case UP: point.y = ((point.y - 1) < 0 ) ? (field.getHeight() - 1) : (point.y - 1); return point;
-			case DOWN: point.y = ((point.y + 1) >= field.getHeight() ) ? 0 : (point.y + 1); return point;
-			case LEFT: point.x = ((point.x - 1) < 0 ) ? (field.getWidth() - 1) : (point.x - 1); return point;
-			case RIGHT: point.x = ((point.x + 1) >= field.getWidth() ) ? 0 : (point.x + 1); return point;
+			case UP: y = ((point.y - 1) < 0 ) ? (field.getHeight() - 1) : (point.y - 1); return new Point(x,y);
+			case DOWN: y = ((point.y + 1) >= field.getHeight() ) ? 0 : (point.y + 1); return new Point(x,y);
+			case LEFT: x = ((point.x - 1) < 0 ) ? (field.getWidth() - 1) : (point.x - 1); return new Point(x,y);
+			case RIGHT: x = ((point.x + 1) >= field.getWidth() ) ? 0 : (point.x + 1); return new Point(x,y);
 		}
 		throw new IllegalStateException();
 	}
 	
-	private static void collide(Field field, Snake snake, long gameTime, List<Item> differences) {
+	private static void collide(Field field, Snake snake, long gameTime, List<Item> differences, ItemCounter itemCounter) {
 		Optional<List<Item>> cell = field.getCell(snake.getBodyParts().get(0).getPoint());
 		if (!cell.isPresent()) {
 			throw new IllegalStateException();
@@ -69,7 +82,8 @@ public class UpdateSnakes {
 		cell.get().remove(snake.getBodyParts().get(0));
 		for (Item item : cell.get()) {
 			item.onCollision(snake, gameTime);
-			if (!(item instanceof Wall) || !(item instanceof BodyPart)) {
+			if ((!(item instanceof Wall) || !(item instanceof BodyPart)) && snake.getProperties().getCollision().getIntangibility() == false) {
+				itemCounter.applyQuantity(item.getClass(), -1);
 				field.removeItem(item);
 				differences.add(item);
 			}

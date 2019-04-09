@@ -4,29 +4,33 @@ import java.util.*;
 import design.model.game.*;
 import implementation.model.game.initializers.Utils;
 import implementation.model.game.items.*;
-import static implementation.model.game.GameFieldStatic.*;
-import static implementation.model.game.InitSnakes.initSnakes;
+import static implementation.model.game.UpdateField.updateField;
+import static implementation.model.game.Initializers.*;
 import static implementation.model.game.UpdateSnakes.updateSnakes;
 
 public class GameImpl implements Game {
 	
 	private long gameTime;
+	private final ItemCounter itemCounter;
 	private final Field field;
-	private final List<Snake> snakes = new ArrayList<>();
+	private final List<Snake> snakes;
+	private final GameRules gameRules;
 	
 	public GameImpl(GameRules gameRules, InitialGameState initialGameState, long gameTime) {
 		check(gameRules, initialGameState, gameTime);
 		this.gameTime = gameTime;
-		initSnakes(gameRules, initialGameState, snakes, gameTime);
-		field = null; //TODO init field
+		this.gameRules = gameRules;
+		itemCounter = new ItemCounter(gameRules);
+		snakes = initSnakes(gameRules, initialGameState, gameTime);
+		field = initField(initialGameState, snakes, itemCounter);
 	}
 	
 	@Override
 	public List<Item> update(long enlapsedTime) {
 		gameTime += enlapsedTime;
 		List<Item> differences = new ArrayList<>();
-		updateSnakes(snakes, field, gameTime, differences);
-		differences.addAll(updateItems(field, gameTime));
+		updateSnakes(snakes, field, gameTime, differences, itemCounter);
+		updateField(field, enlapsedTime, differences, gameRules, itemCounter);
 		return differences;
 	}
 	

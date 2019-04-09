@@ -48,8 +48,8 @@ public class GameRulesImpl implements GameRules{
 		Utils.throwIllegalState(initialSnakeDelta <= 0, "initialSnakeDelta cannot be negative");
 		boolean bodyPartPresent = itemRules.stream().noneMatch(i -> {return i.getItemClass().equals(BodyPart.class);});
 		Utils.throwIllegalState(bodyPartPresent, "itemRules MUST contains BodyPart");
-		for (ItemRule rule : this.itemRules) {
-			ArrayList<ItemRule> tmp = new ArrayList<>(this.itemRules);
+		for (ItemRule rule : itemRules) {
+			ArrayList<ItemRule> tmp = new ArrayList<>(itemRules);
 			tmp.remove(rule);
 			boolean checkDuplicate = tmp.stream().anyMatch(r -> {return r.getItemClass().equals(rule.getItemClass());});
 			Utils.throwIllegalState(checkDuplicate, "Two or more entries in itemRules are equals");

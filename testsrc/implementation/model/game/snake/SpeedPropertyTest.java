@@ -75,9 +75,6 @@ public class SpeedPropertyTest {
         }
 		
 		speed.applySpeedMultiplier(1.5);
-		System.out.println(speed.getSpeedMultiplier());
-		System.out.println(speed.getDeltaT());
-		System.out.println(speed.getLastUpdate());
 		assertEquals(speed.getLastUpdate(), 0L);
 		assertEquals(speed.getNextUpdate(), 1500L);
 		speed.applySpeedMultiplier(0.5);

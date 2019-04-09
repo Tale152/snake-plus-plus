@@ -17,13 +17,13 @@ public class Turbo extends ItemAbstract{
 			protected void behaviorOnEffectStart(Snake target) {
 				if (effectDuration.isPresent() && target.getEffects().contains(this)) {
 					originalMultiplier = target.getProperties().getSpeed().getSpeedMultiplier();
-					target.getProperties().getSpeed().applySpeedMultiplier(originalMultiplier * MULTIPLY); 
+					target.getProperties().getSpeed().applySpeedMultiplier((originalMultiplier * MULTIPLY)-originalMultiplier); 
 				}
 			}
 			
 			@Override
 			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getSpeed().applySpeedMultiplier(-(originalMultiplier * MULTIPLY));
+				target.getProperties().getSpeed().applySpeedMultiplier(-((originalMultiplier * MULTIPLY)-originalMultiplier));
 			}
 			
 		});
