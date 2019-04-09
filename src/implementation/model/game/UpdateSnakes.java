@@ -63,11 +63,13 @@ public class UpdateSnakes {
 	
 	private static Point getNextPoint(Snake snake, Field field) {
 		Point point = snake.getBodyParts().get(0).getPoint();
+		int x = point.x;
+		int y = point.y;
 		switch (snake.getProperties().getDirection().getDirection()) {
-			case UP: point.y = ((point.y - 1) < 0 ) ? (field.getHeight() - 1) : (point.y - 1); return point;
-			case DOWN: point.y = ((point.y + 1) >= field.getHeight() ) ? 0 : (point.y + 1); return point;
-			case LEFT: point.x = ((point.x - 1) < 0 ) ? (field.getWidth() - 1) : (point.x - 1); return point;
-			case RIGHT: point.x = ((point.x + 1) >= field.getWidth() ) ? 0 : (point.x + 1); return point;
+			case UP: y = ((point.y - 1) < 0 ) ? (field.getHeight() - 1) : (point.y - 1); return new Point(x,y);
+			case DOWN: y = ((point.y + 1) >= field.getHeight() ) ? 0 : (point.y + 1); return new Point(x,y);
+			case LEFT: x = ((point.x - 1) < 0 ) ? (field.getWidth() - 1) : (point.x - 1); return new Point(x,y);
+			case RIGHT: x = ((point.x + 1) >= field.getWidth() ) ? 0 : (point.x + 1); return new Point(x,y);
 		}
 		throw new IllegalStateException();
 	}
