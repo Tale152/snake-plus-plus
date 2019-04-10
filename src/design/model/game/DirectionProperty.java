@@ -9,4 +9,6 @@ public interface DirectionProperty {
 	public void setReverseDirection(boolean reverse);
 	
 	public boolean getReverseDirection();
+	
+	public boolean forceDirection(Direction direction);
 }
