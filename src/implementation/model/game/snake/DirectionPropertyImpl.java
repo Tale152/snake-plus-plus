@@ -21,6 +21,12 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	}
 
 	@Override
+	public boolean forceDirection(Direction direction) {
+		this.direction = direction;
+		return true;
+	}
+	
+	@Override
 	public boolean setDirection(Direction direction) {
 		checkDirection(direction);
 		switch(direction) {
