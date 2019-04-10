@@ -121,7 +121,8 @@ public class SnakeImpl implements Snake{
 		} else {
 			direction = determinateOppositeDirection(this.properties.getDirection().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
 		}
-		this.properties.getDirection().setDirection(direction);
+		this.properties.getDirection().forceDirection(direction);
+
 	}
 
 	@Override
