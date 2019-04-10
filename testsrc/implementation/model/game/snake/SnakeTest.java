@@ -76,7 +76,7 @@ public class SnakeTest {
 		assertTrue(differences.stream().anyMatch(b -> {return b.getPoint().equals(new Point(1,0));}));
 		snake.getBodyParts().get(0).getPoint().equals(new Point(4,0));
 		snake.getBodyParts().get(1).getPoint().equals(new Point(3,0));
-		assertEquals(snake.move(new Point(5,0)), 0); // !!!
+		assertEquals(snake.move(new Point(5,0)).size(), 0);
 		
 	}
 	
