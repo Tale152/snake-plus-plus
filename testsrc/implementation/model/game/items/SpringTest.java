@@ -60,7 +60,7 @@ public class SpringTest {
 	
 	@Test 
 	public void testLastingEffect() {
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.empty());
+		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.of(100L));
 		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
 		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
 		spring.onCollision(testSnake, 0);
@@ -70,7 +70,7 @@ public class SpringTest {
 		testSnake.getEffects().get(0).effectEnd(testSnake);
 		assertFalse(testSnake.getProperties().getCollision().getSpring());
 		
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.empty());
+		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.of(100L));
 		testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0), new Point(0,1))));
 		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
 		spring.onCollision(testSnake, 0);
