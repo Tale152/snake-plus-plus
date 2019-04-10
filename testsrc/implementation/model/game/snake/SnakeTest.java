@@ -117,7 +117,14 @@ public class SnakeTest {
 	
 	@Test
 	public void testReverse() {
-		List<Point> even = new ArrayList<>(Arrays.asList(new Point(3,0), new Point(2,0), new Point(1,0), new Point(1,1))); //Point(3,0) is head
+		
+		snake = SnakeComponentsFactoryForTest.createSnake(pos,PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 1.0, 0L);
+		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.RIGHT);
+		snake.reverse();
+		assertEquals(snake.getProperties().getDirection().getDirection(), Direction.LEFT);
+		
+		
+		/*List<Point> even = new ArrayList<>(Arrays.asList(new Point(3,0), new Point(2,0), new Point(1,0), new Point(1,1))); //Point(3,0) is head
 		List<Point> odd = new ArrayList<>(even);
 		odd.add(0, new Point(4,0)); //Point (4,0) is head
 		
@@ -139,7 +146,7 @@ public class SnakeTest {
 		assertEquals(snake.getBodyParts().get(2).getPoint(), new Point(2,0));
 		assertEquals(snake.getBodyParts().get(3).getPoint(), new Point(3,0));
 		assertEquals(snake.getBodyParts().get(4).getPoint(), new Point(4,0));
-		
+		*/
 	}
 	
 	
