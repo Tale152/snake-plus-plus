@@ -2,6 +2,8 @@ package implementation.model.game;
 
 import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
+
+import implementation.model.field.FieldTest;
 import implementation.model.game.items.*;
 import implementation.model.game.snake.*;
 
@@ -21,7 +23,7 @@ public class TestEntireGame {
 		new SnakeTest().testKill();
 		new SnakeTest().testNormalMove();
 		new SnakeTest().testLenghtenMove();
-		new SnakeTest().testShortenMove(); //controlla test
+		new SnakeTest().testShortenMove();
 		new SnakeTest().testReverse();
 		
 	}
@@ -69,5 +71,13 @@ public class TestEntireGame {
 		new TurboTest().testLastingEffect();
 	}
 	
+	@Test
+	public void testField() {
+		new FieldTest().testInit();
+		new FieldTest().testAddItems();
+		new FieldTest().testGetCell();
+		new FieldTest().testGetItem();
+		new FieldTest().testRemoveItem();
+	}
 	
 }
