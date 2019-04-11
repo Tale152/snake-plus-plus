@@ -3,7 +3,7 @@ package implementation.model.game;
 import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
-import implementation.model.field.FieldTest;
+import implementation.model.game.field.FieldTest;
 import implementation.model.game.items.*;
 import implementation.model.game.snake.*;
 
