@@ -1,7 +1,6 @@
-package implementation.model.game;
+package implementation.model.game.initializers;
 
 import java.util.Optional;
-
 import design.model.game.Game;
 import design.model.game.Snake;
 import design.model.game.WinConditions;
@@ -63,3 +62,4 @@ public class WinConditionsImpl implements WinConditions {
 	}
 
 }
+

@@ -1,4 +1,4 @@
-package implementation.model.game;
+package implementation.model.game.initializers;
 
 import java.util.Optional;
 import design.model.game.Game;
