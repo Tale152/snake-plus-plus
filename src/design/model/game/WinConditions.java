@@ -8,6 +8,4 @@ public interface WinConditions {
 	
 	public boolean checkTime(Game game);
 	
-	public boolean checkFieldLimit(Game game);
-	
 }
