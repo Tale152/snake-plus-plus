@@ -1,5 +1,7 @@
 package implementation.model.game;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import design.model.game.*;
 import implementation.model.game.initializers.Utils;
@@ -79,14 +81,22 @@ public class GameImpl implements Game {
 	}
 	
 	@Override
-	public boolean winConditionsReached() {
-		// TODO Auto-generated method stub
+	public boolean winConditionsReached() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		for (Method m : win.getClass().getDeclaredMethods()) {
+			if ((boolean)m.invoke(win, this)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
-	public boolean lossConditionsReached() {
-		// TODO Auto-generated method stub
+	public boolean lossConditionsReached() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		for (Method m : loss.getClass().getDeclaredMethods()) {
+			if ((boolean)m.invoke(loss, this)) {
+				return true;
+			}
+		}
 		return false;
 	}
 	

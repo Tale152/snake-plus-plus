@@ -1,5 +1,6 @@
 package design.model.game;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public interface Game {
@@ -16,8 +17,8 @@ public interface Game {
 	
 	public List<Item> update(long enlapsedTime);
 	
-	public boolean winConditionsReached();
+	public boolean winConditionsReached() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	
-	public boolean lossConditionsReached();
+	public boolean lossConditionsReached() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	
 }
