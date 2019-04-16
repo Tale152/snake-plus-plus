@@ -16,4 +16,8 @@ public interface Game {
 	
 	public List<Item> update(long enlapsedTime);
 	
+	public boolean winConditionsReached();
+	
+	public boolean lossConditionsReached();
+	
 }

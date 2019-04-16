@@ -15,14 +15,18 @@ public class GameImpl implements Game {
 	private final Field field;
 	private final List<Snake> snakes;
 	private final GameRules gameRules;
+	private final WinConditions win;
+	private final LossConditions loss;
 	
-	public GameImpl(GameRules gameRules, InitialGameState initialGameState, long gameTime) {
-		check(gameRules, initialGameState, gameTime);
+	public GameImpl(GameRules gameRules, InitialGameState initialGameState, WinConditions win, LossConditions loss, long gameTime) {
+		check(gameRules, initialGameState, win, loss, gameTime);
 		this.gameTime = gameTime;
 		this.gameRules = gameRules;
 		itemCounter = new ItemCounter(gameRules);
 		snakes = initSnakes(gameRules, initialGameState, gameTime);
 		field = initField(initialGameState, snakes, itemCounter);
+		this.win = win;
+		this.loss = loss;
 	}
 	
 	@Override
@@ -74,8 +78,20 @@ public class GameImpl implements Game {
 		return walls;
 	}
 	
-	private static void check(GameRules gameRules, InitialGameState initialGameState, long gameTime) {
-		Utils.throwNullPointer(gameRules == null || initialGameState == null, "Null args");
+	@Override
+	public boolean winConditionsReached() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean lossConditionsReached() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	private static void check(GameRules gameRules, InitialGameState initialGameState, WinConditions win, LossConditions loss, long gameTime) {
+		Utils.throwNullPointer(gameRules == null || initialGameState == null || win == null || loss == null, "Null args");
 		if (gameTime < 0) {
 			throw new IllegalArgumentException("gameTime cannot be negative");
 		}
