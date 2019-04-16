@@ -47,7 +47,7 @@ public class GameRulesImpl implements GameRules{
 		Utils.throwNullPointer(itemRules == null, "null argument");
 		Utils.throwIllegalState(initialSnakeDelta <= 0, "initialSnakeDelta cannot be negative");
 		boolean bodyPartPresent = itemRules.stream().noneMatch(i -> {return i.getItemClass().equals(BodyPart.class);});
-		Utils.throwIllegalState(bodyPartPresent, "itemRules MUST contains BodyPart");
+		Utils.throwIllegalState(!bodyPartPresent, "itemRules CANNOT contain BodyPart");
 		for (ItemRule rule : itemRules) {
 			ArrayList<ItemRule> tmp = new ArrayList<>(itemRules);
 			tmp.remove(rule);

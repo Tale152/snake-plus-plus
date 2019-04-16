@@ -2,6 +2,7 @@ package implementation.model.game.initializers;
 
 import java.util.Optional;
 import design.model.game.GameRules.ItemRule;
+import implementation.model.game.items.BodyPart;
 import design.model.game.Item;
 
 public class ItemRuleImpl implements ItemRule {
@@ -75,6 +76,7 @@ public class ItemRuleImpl implements ItemRule {
 	
 	private void check(Class<? extends Item> itemClass, long spawnDelta, double spawnChance, int max, Optional<Long> itemDuration, Optional<Long> effectDuration){
 		Utils.throwNullPointer(itemClass == null || itemDuration == null || effectDuration == null, "Null args");
+		Utils.throwIllegalState(itemClass.equals(BodyPart.class), "An ItemRule cannot define a rule for a BodyPart");
 		Utils.throwIllegalState(spawnDelta <= 0, "spawnDelta cannot be zero or less");
 		Utils.throwIllegalState(spawnChance <= 0 || spawnChance >1 , "spawnChance must be a number greater or equal than zero and equal or less than one");
 		Utils.throwIllegalState(max <= 0 , "max cannot be zero or negative");

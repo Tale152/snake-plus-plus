@@ -3,6 +3,7 @@ package implementation.model.game.initializers;
 import java.awt.Point;
 import java.util.*;
 import design.model.game.*;
+import implementation.model.game.items.BodyPart;
 
 public class InitialGameStateImpl implements InitialGameState {
 
@@ -62,6 +63,8 @@ public class InitialGameStateImpl implements InitialGameState {
 		Utils.throwNullPointer(fieldSize == null || items == null || initialPlayerStates == null, "Null args");
 		Utils.throwIllegalState(fieldSize.x < 0 || fieldSize.y < 0, "Field size cannot be negative");
 		Utils.throwIllegalState(items.contains(null), "List items contains some null entries");
+		boolean bodyPartPresent = items.stream().anyMatch(b -> {return b.getClass().equals(BodyPart.class);});
+		Utils.throwIllegalState(bodyPartPresent, "items cannot contain BodyParts, only InitialPlayerState can");
 		boolean itemPointsValidity = items.stream().anyMatch(i -> { allPoints.add(i.getPoint()); return Utils.invalidPoint(fieldSize, i.getPoint());});
 		Utils.throwIllegalState(itemPointsValidity, "Some items entries have invalid attribute point compared to field size");
 		Utils.throwIllegalState(initialPlayerStates.isEmpty() || initialPlayerStates.size() > MAX_PLAYERS, "initialPlayerStates size must be greater than zero and cannot be greater than " + MAX_PLAYERS);

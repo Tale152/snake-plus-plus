@@ -6,6 +6,7 @@ import java.util.Optional;
 import design.model.game.GameRules;
 import design.model.game.GameRules.ItemRule;
 import design.model.game.Item;
+import implementation.model.game.items.BodyPart;
 
 public class ItemCounter {
 	
@@ -28,6 +29,9 @@ public class ItemCounter {
 		items = new ArrayList<>();
 		for (ItemRule rule : gameRules.getItemRules()) {
 			items.add(new AnItem(rule.getItemClass()));
+		}
+		if (!items.stream().anyMatch(b -> {return b.itemClass.equals(BodyPart.class);})) {
+			items.add(new AnItem(BodyPart.class));
 		}
 		total = 0;
 	}
