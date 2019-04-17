@@ -7,10 +7,13 @@ import design.model.game.Snake;
 
 public class ScoreLoss extends ItemAbstract{
 
+	private static final long serialVersionUID = -2648725814031404622L;
+
 	protected ScoreLoss(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
+			private static final long serialVersionUID = -1799117345284556614L;
 			private int multiplier = 1;
 			private Snake targetSnake;
 			

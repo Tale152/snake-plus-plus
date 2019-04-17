@@ -6,10 +6,14 @@ import design.model.game.Snake;
 
 public class Beer extends ItemAbstract{
 
+	private static final long serialVersionUID = 7408391164117282060L;
+
 	protected Beer(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
+			private static final long serialVersionUID = 1252509526232519943L;
+
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
 				if (effectDuration.isPresent()) {

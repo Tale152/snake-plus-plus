@@ -1,13 +1,15 @@
 package implementation.model.game.initializers;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import design.model.game.Direction;
 import design.model.game.InitialGameState.InitialPlayerState;
 
-public class InitialPlayerStateImpl implements InitialPlayerState {
+public class InitialPlayerStateImpl implements InitialPlayerState, Serializable {
 
+	private static final long serialVersionUID = 8449613459753481338L;
 	private final String name;
 	private final List<Point> bodyPoints;
 	private final Direction direction;

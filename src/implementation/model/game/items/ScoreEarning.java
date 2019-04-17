@@ -7,10 +7,13 @@ import design.model.game.Snake;
 
 public class ScoreEarning extends ItemAbstract{
 
+	private static final long serialVersionUID = -7112004431974405548L;
+
 	protected ScoreEarning(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		super(point);
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
+			private static final long serialVersionUID = 1134048507056516407L;
 			private int multiplier = 1;
 			private Snake targetSnake;
 			

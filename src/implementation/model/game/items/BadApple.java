@@ -6,11 +6,14 @@ import design.model.game.Snake;
 
 public class BadApple extends ItemAbstract{
 	
+	private static final long serialVersionUID = 1697875196888508741L;
+
 	protected BadApple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		
 		super(point);
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
+			private static final long serialVersionUID = -7049003211458521239L;
 			private int multiplier = 2;
 			private Snake targetSnake;
 			

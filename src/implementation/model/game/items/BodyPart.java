@@ -7,13 +7,17 @@ import design.model.game.Snake;
 
 public class BodyPart extends ItemAbstract{
 	
+	private static final long serialVersionUID = 2830980380852613962L;
+
 	protected BodyPart(Point point, Snake owner) {
 		super(point);
 		if (owner == null) {
 			throw new IllegalArgumentException();
 		}
 		setEffect(new EffectAbstract(Optional.empty(), Optional.empty()) {
-			
+
+			private static final long serialVersionUID = 6029625488656508817L;
+
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
 				//if at least one is intangible do nothing
