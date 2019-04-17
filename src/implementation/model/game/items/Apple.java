@@ -6,11 +6,15 @@ import design.model.game.Snake;
 
 public class Apple extends ItemAbstract{
 	
+	private static final long serialVersionUID = -3089929506797978235L;
+
 	protected Apple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		
 		super(point);
 		setEffect(new EffectAbstract(expirationTime, effectDuration) {
 			
+			private static final long serialVersionUID = -8622803427857684535L;
+
 			@Override
 			protected void behaviorOnEffectStart(Snake target) {
 				target.getProperties().getLength().lengthen(ItemFactory.LENGHT_INCREMENT);

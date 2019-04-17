@@ -1,12 +1,14 @@
 package implementation.model.game.initializers;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.*;
 import design.model.game.*;
 import implementation.model.game.items.BodyPart;
 
-public class InitialGameStateImpl implements InitialGameState {
+public class InitialGameStateImpl implements InitialGameState, Serializable {
 
+	private static final long serialVersionUID = -3116153028441560831L;
 	private final List<Item> items;
 	private final Point fieldSize;
 	private final List<InitialPlayerState> initialPlayerStates;

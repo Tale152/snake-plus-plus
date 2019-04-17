@@ -1,38 +1,41 @@
 package implementation.model.game.items;
 
+import java.io.Serializable;
 import java.util.Optional;
 import design.model.game.*;
+import implementation.model.game.initializers.SerializableOptional;
 
-public abstract class EffectAbstract implements Effect {
+public abstract class EffectAbstract implements Effect, Serializable {
 
-	private Optional<Long> effectEndTime;
-	private final Optional<Long> expirationTime;
-	private final Optional<Long> effectDuration;
+	private static final long serialVersionUID = 6357063406516445592L;
+	private SerializableOptional<Long> effectEndTime;
+	private final SerializableOptional<Long> expirationTime;
+	private final SerializableOptional<Long> effectDuration;
 	
 	public EffectAbstract( Optional<Long> expirationTime, Optional<Long> effectDuration) {
 		if (expirationTime == null || effectDuration == null) {
 			throw new IllegalArgumentException();
 		}
-		this.effectEndTime = Optional.empty();
-		this.expirationTime = expirationTime;
-		this.effectDuration = effectDuration;
+		this.effectEndTime = SerializableOptional.empty();
+		this.expirationTime = SerializableOptional.fromOptional(expirationTime);
+		this.effectDuration = SerializableOptional.fromOptional(effectDuration);
 	}
 	
 	@Override
 	public Optional<Long> getEffectEndTime() {
-		return effectEndTime;
+		return effectEndTime.asOptional();
 	}
 
 	@Override
 	public Optional<Long> getExpirationTime() {
-		return expirationTime;
+		return expirationTime.asOptional();
 	}
 	
 	protected abstract void behaviorOnEffectStart(Snake target);
 
 	@Override
 	public void effectStart(Snake target, long collisionTime) {
-		if (effectDuration.isPresent()) {
+		if (effectDuration.asOptional().isPresent()) {
 			Optional<Effect> activeEffect = 
 					target
 						.getEffects()
@@ -40,10 +43,10 @@ public abstract class EffectAbstract implements Effect {
 						.filter(f -> {return this.getClass() == f.getClass();})
 						.findFirst();
 			if (activeEffect.isPresent()) {
-				activeEffect.get().incrementDuration(effectDuration.get());
+				activeEffect.get().incrementDuration(effectDuration.asOptional().get());
 			}
 			else {
-				effectEndTime = Optional.of(collisionTime + effectDuration.get());
+				effectEndTime = SerializableOptional.fromOptional(Optional.of(collisionTime + effectDuration.asOptional().get()));
 				target.addEffect(this);
 			}
 		}
@@ -54,7 +57,7 @@ public abstract class EffectAbstract implements Effect {
 	
 	@Override
 	public void effectEnd(Snake target) {
-		if (effectEndTime.isPresent()) {
+		if (effectEndTime.asOptional().isPresent()) {
 			behaviorOnEffectEnd(target);
 		}
 		else {
@@ -69,8 +72,8 @@ public abstract class EffectAbstract implements Effect {
 	
 	@Override
 	public boolean incrementDuration(long time) {
-		if (effectEndTime.isPresent()) {
-			effectEndTime = Optional.of(effectEndTime.get() + time);
+		if (effectEndTime.asOptional().isPresent()) {
+			effectEndTime = SerializableOptional.fromOptional(Optional.of(effectEndTime.asOptional().get() + time));
 			return true;
 		}
 		return false;
@@ -79,11 +82,11 @@ public abstract class EffectAbstract implements Effect {
 	public String toString() {
 		String name = this.getClass().getName().replaceFirst(this.getClass().getPackage().getName() + ".", "");
 		String res = "Effect:\t" + name + "\n\tExpires at: ";
-		res += expirationTime.isPresent() ? expirationTime.get() : "NO";
+		res += expirationTime.asOptional().isPresent() ? expirationTime.asOptional().get() : "NO";
 		res += "\n\tDuration: ";
-		res += effectDuration.isPresent() ? effectDuration.get() : "NO";
+		res += effectDuration.asOptional().isPresent() ? effectDuration.asOptional().get() : "NO";
 		res += "\n\tEffect ends at: ";
-		res += effectEndTime.isPresent() ? effectEndTime.get() : "NO";
+		res += effectEndTime.asOptional().isPresent() ? effectEndTime.asOptional().get() : "NO";
 		return res;
 	}
 

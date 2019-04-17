@@ -1,18 +1,20 @@
 package implementation.model.game.initializers;
 
+import java.io.Serializable;
 import java.util.Optional;
 import design.model.game.GameRules.ItemRule;
 import implementation.model.game.items.BodyPart;
 import design.model.game.Item;
 
-public class ItemRuleImpl implements ItemRule {
+public class ItemRuleImpl implements ItemRule, Serializable {
 
+	private static final long serialVersionUID = 9159991708762970796L;
 	private final Class<? extends Item> itemClass;
 	private final long spawnDelta; 
 	private final double spawnChance;
 	private final int max;
-	private final Optional<Long> itemDuration;
-	private final Optional<Long> effectDuration;
+	private final SerializableOptional<Long> itemDuration;
+	private final SerializableOptional<Long> effectDuration;
 	
 	public ItemRuleImpl(Class<? extends Item> itemClass, long spawnDelta, double spawnChance, int max, Optional<Long> itemDuration, Optional<Long> effectDuration) {
 		check(itemClass, spawnDelta, spawnChance, max, itemDuration, effectDuration);
@@ -20,8 +22,8 @@ public class ItemRuleImpl implements ItemRule {
 		this.spawnDelta = spawnDelta;
 		this.spawnChance = spawnChance;
 		this.max = max;
-		this.itemDuration = itemDuration;
-		this.effectDuration = effectDuration;
+		this.itemDuration = SerializableOptional.fromOptional(itemDuration);
+		this.effectDuration = SerializableOptional.fromOptional(effectDuration);
 	}
 	
 	@Override
@@ -46,12 +48,12 @@ public class ItemRuleImpl implements ItemRule {
 
 	@Override
 	public Optional<Long> getItemDuration() {
-		return itemDuration;
+		return itemDuration.asOptional();
 	}
 
 	@Override
 	public Optional<Long> getEffectDuration() {
-		return effectDuration;
+		return effectDuration.asOptional();
 	}
 	
 	public String toString() {
@@ -59,14 +61,14 @@ public class ItemRuleImpl implements ItemRule {
 		str += "Max on field:\t\t" + max + "\n";
 		str += "Spawn delta:\t\t" + spawnDelta + "\n";
 		str += "Spawn chance:\t\t" + String.format("%.02f", spawnChance * 100) + "%\n";
-		if (itemDuration.isPresent()){
-			str += "Item duration:\t\t" + itemDuration.get() + "\n";
+		if (itemDuration.asOptional().isPresent()){
+			str += "Item duration:\t\t" + itemDuration.asOptional().get() + "\n";
 		}
 		else {
 			str += "Item duration:\t\tNO\n";
 		}
-		if (itemDuration.isPresent()){
-			str += "Effect duration:\t" + effectDuration.get() + "\n";
+		if (itemDuration.asOptional().isPresent()){
+			str += "Effect duration:\t" + effectDuration.asOptional().get() + "\n";
 		}
 		else {
 			str += "Effect duration:\tNO\n";

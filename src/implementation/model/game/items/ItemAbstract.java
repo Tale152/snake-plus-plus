@@ -1,11 +1,13 @@
 package implementation.model.game.items;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.Optional;
 import design.model.game.*;
 
-public abstract class ItemAbstract implements Item {
-
+public abstract class ItemAbstract implements Item, Serializable {
+	
+	private static final long serialVersionUID = -3603153894563489799L;
 	private final Point point;
 	private Effect effect;
 	

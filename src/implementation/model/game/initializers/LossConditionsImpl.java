@@ -1,17 +1,18 @@
 package implementation.model.game.initializers;
 
+import java.io.Serializable;
 import java.util.Optional;
 import design.model.game.Game;
 import design.model.game.LossConditions;
 import design.model.game.Snake;
 
-public class LossConditionsImpl implements LossConditions {
+public class LossConditionsImpl implements LossConditions, Serializable {
 
+	private static final long serialVersionUID = 6779258257820890214L;
 	private final boolean checkAllSnakesDied;
-	private Optional<Long> gameTime;
+	private SerializableOptional<Long> gameTime;
 	
 	public LossConditionsImpl(boolean checkAllSnakesDied, Optional<Long> gameTime) {
-		//i check non si possono mettere in un metodo a parte perchè sarebbe un nuovo metodo chiamato dalla reflection
 		if (gameTime == null) {
 			throw new NullPointerException();
 		}
@@ -19,7 +20,7 @@ public class LossConditionsImpl implements LossConditions {
 			throw new IllegalArgumentException("gameTime cannot less than zero");
 		}
 		this.checkAllSnakesDied = checkAllSnakesDied;
-		this.gameTime = gameTime;
+		this.gameTime = SerializableOptional.fromOptional(gameTime);
 	}
 	
 	@Override
@@ -37,8 +38,8 @@ public class LossConditionsImpl implements LossConditions {
 
 	@Override
 	public boolean checkTime(Game game) {
-		if (gameTime.isPresent()) {
-			return gameTime.get() <= game.getGameTime();
+		if (gameTime.asOptional().isPresent()) {
+			return gameTime.asOptional().get() <= game.getGameTime();
 		}
 		return false;
 	}

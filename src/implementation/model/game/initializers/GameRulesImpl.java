@@ -1,12 +1,14 @@
 package implementation.model.game.initializers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import design.model.game.GameRules;
 import implementation.model.game.items.BodyPart;
 
-public class GameRulesImpl implements GameRules{
+public class GameRulesImpl implements GameRules, Serializable{
 
+	private static final long serialVersionUID = 4741863879306662326L;
 	private final List<ItemRule> itemRules;
 	private final long initialSnakeDelta;
 	private final double initialSnakeMultiplier;
