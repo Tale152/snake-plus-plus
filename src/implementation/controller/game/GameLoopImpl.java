@@ -34,6 +34,12 @@ public class GameLoopImpl implements GameLoop {
 		this.lastUpdate = 0;
 	}
 	
+	// Actual loop (while !game.isOver()? dunno)
+	// three phases:
+	//	1) Handle input: toggle pause, send snake actions to game
+	//	2) Update: get current time, subtract last update, pass delta to
+	//			game.update, update last update time to current time
+	//	3) Draw: send to View things to remove and/or add to screen
 	@Override
 	public void run() {
 		GameInitializer game = new GameInitializerImpl(this.gameLoader, this.spritesLoader, this.currentTime);
@@ -49,19 +55,14 @@ public class GameLoopImpl implements GameLoop {
 				
 				//metti if che controlla se il gioco è in pausa, perché se lo è non devo aggiornare il tempo
 				this.deltaT = this.currentTime - this.lastUpdate;
-				game.getGame().update(this.deltaT);
+				if(!this.pause) {
+					game.getGame().update(this.deltaT);
+				}
 				this.lastUpdate = this.currentTime;
-				
 			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		// Actual loop (while !game.isOver()? dunno)
-		// three phases:
-		//	1) Handle input: toggle pause, send snake actions to game
-		//	2) Update: get current time, subtract last update, pass delta to
-		//			game.update, update last update time to current time
-		//	3) Draw: send to View things to remove and/or add to screen
 	}
 
 	@Override
