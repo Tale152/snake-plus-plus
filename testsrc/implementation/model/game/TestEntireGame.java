@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 import implementation.model.game.field.FieldTest;
+import implementation.model.game.initializers.InitialGameStateTest;
 import implementation.model.game.items.*;
 import implementation.model.game.snake.*;
 
@@ -25,7 +26,6 @@ public class TestEntireGame {
 		new SnakeTest().testLenghtenMove();
 		new SnakeTest().testShortenMove();
 		new SnakeTest().testReverse();
-		
 	}
 	
 	@Test
@@ -78,6 +78,14 @@ public class TestEntireGame {
 		new FieldTest().testGetCell();
 		new FieldTest().testGetItem();
 		new FieldTest().testRemoveItem();
+	}
+	
+	@Test
+	public void testInitialGameState() {
+		new InitialGameStateTest().testInit();
+		new InitialGameStateTest().testGetFieldItems();
+		new InitialGameStateTest().testGetFieldSize();
+		new InitialGameStateTest().testGetInitialPlayerState();
 	}
 	
 }
