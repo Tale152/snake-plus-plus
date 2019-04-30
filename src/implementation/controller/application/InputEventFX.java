@@ -7,27 +7,26 @@ import design.controller.application.InputEvent;
 import javafx.scene.input.KeyEvent;
 
 public class InputEventFX implements InputEvent {
+	
+	private final String key;
 
 	@Override
 	public DeviceType getDeviceType() {
-		// TODO Auto-generated method stub
-		return null;
+		return DeviceType.KEYBOARD;
 	}
 
 	@Override
 	public Optional<Long> getDeviceID() {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
 	public String getInput() {
-		// TODO Auto-generated method stub
-		return null;
+		return key;
 	}
 	
 	public InputEventFX(KeyEvent e) {
-		
+		this.key = e.getText();
 	}
 
 }

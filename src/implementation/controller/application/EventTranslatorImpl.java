@@ -1,5 +1,6 @@
 package implementation.controller.application;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,58 +9,61 @@ import design.controller.application.EventTranslator;
 import design.controller.application.InputEvent;
 
 public class EventTranslatorImpl implements EventTranslator {
+	
+	private final Map<InputEvent,Action> bindings;
 
 	@Override
 	public boolean setBinding(InputEvent e, Action a) {
-		// TODO Auto-generated method stub
-		return false;
+		if (this.getEventBinding(e).isPresent() | this.getActionBinding(a).isPresent()) {
+			return false;
+		}
+		bindings.put(e, a);
+		return true;
 	}
 
 	@Override
 	public void addBindingMap(Map<InputEvent, Action> m) {
-		// TODO Auto-generated method stub
+		m.entrySet().stream().forEach(e -> {
+			this.setBinding(e.getKey(), e.getValue());
+		});
 
 	}
 
 	@Override
 	public Optional<Action> getEventBinding(InputEvent e) {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(bindings.get(e));
 	}
 
 	@Override
 	public Optional<InputEvent> getActionBinding(Action a) {
-		// TODO Auto-generated method stub
-		return null;
+		return bindings.entrySet().stream().filter(e -> e.getValue().equals(a)).map(Map.Entry::getKey).findAny();
 	}
 
 	@Override
 	public Map<InputEvent, Action> getBindingMap() {
-		// TODO Auto-generated method stub
-		return null;
+		return new HashMap<>(bindings);
 	}
 
 	@Override
 	public void clearEventBinding(InputEvent e) {
-		// TODO Auto-generated method stub
-
+		bindings.remove(e);
 	}
 
 	@Override
 	public void clearActionBinding(Action a) {
-		// TODO Auto-generated method stub
-
+		if (this.getActionBinding(a).isPresent()) {
+			bindings.remove(this.getActionBinding(a).get());
+		}
 	}
 
 	@Override
 	public Optional<Action> translateInput(InputEvent e) {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(bindings.get(e));
 	}
 	
 	
 	public EventTranslatorImpl() {
-		
+		bindings = new HashMap<InputEvent,Action>();
 	}
 
 }
