@@ -1,17 +1,22 @@
 package implementation.controller.game;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import design.controller.application.Action;
 import design.controller.game.GameInitializer;
 import design.controller.game.GameLoader;
 import design.controller.game.GameLoop;
 import design.controller.game.SpritesLoader;
+import design.model.game.Item;
+import design.view.GameView;
 
 
 public class GameLoopImpl implements GameLoop {
@@ -23,8 +28,9 @@ public class GameLoopImpl implements GameLoop {
 	private final List<Action> actions;
 	private GameLoader gameLoader;
 	private SpritesLoader spritesLoader;
+	private final GameView gameView;
 	
-	public GameLoopImpl(List<File> snakes, File items, File file, List<String> playerNames, List<Integer> playerScores) 
+	public GameLoopImpl(List<File> snakes, File items, File file, List<String> playerNames, List<Integer> playerScores, GameView gameView) 
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 		this.actions = new ArrayList<Action>();
 		this.pause = false;
@@ -32,6 +38,7 @@ public class GameLoopImpl implements GameLoop {
 		this.gameLoader = new GameLoaderFromFile(file, playerNames, playerScores);
 		this.currentTime = System.currentTimeMillis();
 		this.lastUpdate = 0;
+		this.gameView = gameView;
 	}
 	
 	// Actual loop (while !game.isOver()? dunno)
@@ -48,7 +55,6 @@ public class GameLoopImpl implements GameLoop {
 		try {
 			while(!game.getGame().lossConditionsReached() || !game.getGame().winConditionsReached()) {
 				while(!this.actions.isEmpty()) {
-					// TO DO: scopri come capire se la action che è stata passata è una pausa
 					game.getGame().setSnakeDirection(this.actions.get(i).getPlayerNumber(), this.actions.get(i).getDirection());
 					this.actions.remove(i);
 				}
