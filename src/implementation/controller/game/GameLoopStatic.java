@@ -61,7 +61,9 @@ public class GameLoopStatic {
 		if(snake.getBodyParts().size() == 1) {
 			res.put(snake.getBodyParts().get(0).getPoint(), computeHead(snake.getBodyParts().get(0), Optional.empty(), snake.getProperties().getDirection().getDirection()));
 		} else {
-			for(int i = 1; i < snake.getBodyParts().size() -1; i++) {
+			//controlla prima riga
+			res.put(snake.getBodyParts().get(0).getPoint(), computeHead(snake.getBodyParts().get(0), Optional.of(snake.getBodyParts().get(1)), snake.getProperties().getDirection().getDirection()));
+			for(int i = 1; i < snake.getBodyParts().size() -1; i++) { //in teoria parte da 0 comunque, la testa qui a da colcolare, perché non è single_head
 				res.put(snake.getBodyParts().get(i).getPoint(), 
 						computeBody(snake.getBodyParts().get(i), snake.getBodyParts().get(i+1), snake.getBodyParts().get(i-1)));
 			}
