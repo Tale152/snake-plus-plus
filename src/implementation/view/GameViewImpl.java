@@ -54,11 +54,10 @@ public class GameViewImpl implements GameView{
 			scoreLabels.add(new Label(""));
 		}
 		hud = new GameHudImpl(nPlayer, this);
-		field = new GameFieldImpl(this);
+		field = new GameFieldImpl(this,nPlayer);
 		dirty = false;
 		init(cellNumberWidth, cellNumberHeight);
-		TestLoop tl = new TestLoop(this);
-		tl.start();
+		//qui va fatto partire il gameLoop
 	}
 	
 	@Override
@@ -134,11 +133,17 @@ public class GameViewImpl implements GameView{
 		if (field.getBackground().isPresent()) {
 			gc.drawImage(field.getBackground().get(), left_spacing, top_spacing, bgWidth, bgHeight);
 		}
-		for (Entry<Point, List<Image>> entry : field.getSpritesMap().entrySet()) {
-			for (Image image : entry.getValue()) {
-				gc.drawImage(image, 
-						(entry.getKey().getX() * cellPixelWidth) + left_spacing,
-						(entry.getKey().getY() * cellPixelHeight) + top_spacing, 
+		for (Entry<Point, Image> entry : field.getSpritesMap().entrySet()) {
+			gc.drawImage(entry.getValue(), 
+					(entry.getKey().getX() * cellPixelWidth) + left_spacing,
+					(entry.getKey().getY() * cellPixelHeight) + top_spacing, 
+					cellPixelWidth, cellPixelHeight);
+		}
+		for (int i = 0; i < nPlayer; ++i) {
+			for (Entry<Point, Image> bodyPart : field.getSnakeSprites(i).entrySet()) {
+				gc.drawImage(bodyPart.getValue(), 
+						(bodyPart.getKey().getX() * cellPixelWidth) + left_spacing,
+						(bodyPart.getKey().getY() * cellPixelHeight) + top_spacing, 
 						cellPixelWidth, cellPixelHeight);
 			}
 		}
