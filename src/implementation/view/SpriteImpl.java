@@ -1,6 +1,6 @@
-package implementation.controller.game;
+package implementation.view;
 
-import design.controller.game.Sprite;
+import design.view.Sprite;
 import javafx.scene.image.Image;
 
 public class SpriteImpl implements Sprite {
@@ -22,5 +22,4 @@ public class SpriteImpl implements Sprite {
 	public Image getSprite() {
 		return sprite;
 	}
-
 }

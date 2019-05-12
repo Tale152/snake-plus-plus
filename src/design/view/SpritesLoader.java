@@ -1,4 +1,4 @@
-package design.controller.game;
+package design.view;
 
 public interface SpritesLoader {
 
@@ -9,3 +9,4 @@ public interface SpritesLoader {
 	public Sprite getBodyPart(String name); 
 	
 }
+
