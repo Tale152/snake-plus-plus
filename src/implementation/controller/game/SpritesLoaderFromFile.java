@@ -12,15 +12,15 @@ public class SpritesLoaderFromFile implements SpritesLoader {
 	
 	private final static String ITEMS_DIRECTORY = "Items";
 	private final static String WALLS_DIRECTORY = "Walls";
-	private final static String SNAKES_DIRECTORY = "Snakes";
+	private final static String BODYPARTS_DIRECTORY = "BodyParts";
 	private final List<Sprite> items = new ArrayList<>();
 	private final List<Sprite> walls = new ArrayList<>(); 
-	private final List<Sprite> snakes = new ArrayList<>();
+	private final List<Sprite> bodyParts = new ArrayList<>();
 	
 	public SpritesLoaderFromFile(String path) throws FileNotFoundException, IOException {
 		readDirectory(getDirectory(path, ITEMS_DIRECTORY), items);
 		readDirectory(getDirectory(path, WALLS_DIRECTORY), walls);
-		readDirectory(getDirectory(path, SNAKES_DIRECTORY), snakes);
+		readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts);
 	}
 
 	@Override
@@ -34,8 +34,8 @@ public class SpritesLoaderFromFile implements SpritesLoader {
 	}
 
 	@Override
-	public List<Sprite> getSnakes() {
-		return new ArrayList<>(snakes);
+	public List<Sprite> getBodyParts() {
+		return new ArrayList<>(bodyParts);
 	}
 	
 	private void readDirectory(File directory, List<Sprite> container) throws FileNotFoundException, IOException {
@@ -56,13 +56,15 @@ public class SpritesLoaderFromFile implements SpritesLoader {
 	
 	private void checkPNG(String fileName) {
 		if (fileName.length() > 4) {
-			if (fileName.toLowerCase().charAt(fileName.length() -1) == 'g' &&
+			if (!(fileName.toLowerCase().charAt(fileName.length() -1) == 'g' &&
 					fileName.toLowerCase().charAt(fileName.length() -2) == 'n' && 
 					fileName.toLowerCase().charAt(fileName.length() -3) == 'p' && 
-					fileName.charAt(fileName.length() -4) == '.') {
+					fileName.charAt(fileName.length() -4) == '.')) {
 				throw new IllegalStateException();
 			}
-		throw new IllegalStateException();
+		}
+		else {
+			throw new IllegalStateException();
 		}
 	}
 

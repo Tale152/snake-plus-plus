@@ -8,6 +8,6 @@ public interface SpritesLoader {
 	
 	public List<Sprite> getWalls();
 	
-	public List<Sprite> getSnakes(); 
+	public List<Sprite> getBodyParts(); 
 	
 }
