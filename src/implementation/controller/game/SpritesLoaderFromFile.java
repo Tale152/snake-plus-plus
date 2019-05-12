@@ -1,71 +1,67 @@
 package implementation.controller.game;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import design.controller.game.Sprite;
-import design.controller.game.SpritesLoader;
+import java.util.*;
+import design.controller.game.*;
 import javafx.scene.image.Image;
 
 public class SpritesLoaderFromFile implements SpritesLoader {
 	
+	//directories where sprite are located (inside path)
 	private final static String ITEMS_DIRECTORY = "Items";
 	private final static String WALLS_DIRECTORY = "Walls";
 	private final static String BODYPARTS_DIRECTORY = "BodyParts";
+	
 	private final List<Sprite> items = new ArrayList<>();
 	private final List<Sprite> walls = new ArrayList<>(); 
 	private final List<Sprite> bodyParts = new ArrayList<>();
 	
-	public SpritesLoaderFromFile(String path) throws FileNotFoundException, IOException {
-		readDirectory(getDirectory(path, ITEMS_DIRECTORY), items);
-		readDirectory(getDirectory(path, WALLS_DIRECTORY), walls);
-		readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts);
-	}
-
-	@Override
-	public List<Sprite> getItems() {
-		return new ArrayList<>(items);
-	}
-
-	@Override
-	public List<Sprite> getWalls() {
-		return new ArrayList<>(walls);
-	}
-
-	@Override
-	public List<Sprite> getBodyParts() {
-		return new ArrayList<>(bodyParts);
+	public SpritesLoaderFromFile(String path, double maxSpriteWidth, double maxSpriteHeight) throws FileNotFoundException, IOException {
+		//initialize all 3 lists
+		readDirectory(getDirectory(path, ITEMS_DIRECTORY), items, maxSpriteWidth, maxSpriteHeight);
+		readDirectory(getDirectory(path, WALLS_DIRECTORY), walls, maxSpriteWidth, maxSpriteHeight);
+		readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts, maxSpriteWidth, maxSpriteHeight);
 	}
 	
-	private void readDirectory(File directory, List<Sprite> container) throws FileNotFoundException, IOException {
+	@Override
+	public Sprite getItem(String name) {
+		return getFromList(name, items);
+	}
+
+	@Override
+	public Sprite getWall(String name) {
+		return getFromList(name, walls);
+	}
+
+	@Override
+	public Sprite getBodyPart(String name) {
+		return getFromList(name, bodyParts);
+	}
+	
+	private Sprite getFromList(String object, List<Sprite> source) {
+		Optional<Sprite> result = source.stream().filter(o -> {return o.getName().equals(object);}).findFirst();
+		if (result.isPresent()) {
+			return result.get();
+		}
+		throw new IllegalArgumentException("Cannot find " + object + "into requested list");
+	}
+	
+	private void readDirectory(File directory, List<Sprite> container, double maxSpriteWidth, double maxSpriteHeight) throws FileNotFoundException, IOException {
 		for (File file : directory.listFiles()) {
-			checkPNG(file.getName());
+			//getting sprite file
 			FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
-			container.add(new SpriteImpl(file.getName(), new Image(fis)));
+			//instantiating a new Sprite with file name (without extension) and scaled Image
+			container.add(new SpriteImpl(file.getName().replaceFirst("[.][^.]+$", ""), new Image(fis, maxSpriteWidth, maxSpriteHeight, false, false)));
 		}
 	}
 	
 	private File getDirectory(String path, String directoryName) {
 		File directory = new File(path+ File.separator + directoryName);
-		if (!directory.canRead() || !directory.isDirectory()) {
-			throw new IllegalStateException();
+		//check that everything is OK
+		if (!directory.exists() || !directory.canRead() || !directory.isDirectory()) {
+			throw new IllegalStateException("There are problems with directory " + path);
 		}
 		return directory;
-	}
-	
-	private void checkPNG(String fileName) {
-		if (fileName.length() > 4) {
-			if (!(fileName.toLowerCase().charAt(fileName.length() -1) == 'g' &&
-					fileName.toLowerCase().charAt(fileName.length() -2) == 'n' && 
-					fileName.toLowerCase().charAt(fileName.length() -3) == 'p' && 
-					fileName.charAt(fileName.length() -4) == '.')) {
-				throw new IllegalStateException();
-			}
-		}
-		else {
-			throw new IllegalStateException();
-		}
 	}
 
 }

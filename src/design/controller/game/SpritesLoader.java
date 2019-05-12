@@ -1,13 +1,11 @@
 package design.controller.game;
 
-import java.util.List;
-
 public interface SpritesLoader {
 
-	public List<Sprite> getItems();
+	public Sprite getItem(String name);
 	
-	public List<Sprite> getWalls();
+	public Sprite getWall(String name);
 	
-	public List<Sprite> getBodyParts(); 
+	public Sprite getBodyPart(String name); 
 	
 }
