@@ -11,9 +11,9 @@ public class GameHudImpl implements GameHud{
 
 	private Optional<Image> bg;
 	private final int nPlayer;
-	private String time;
+	private Long time;
 	private final List<String> names;
-	private final List<String> scores;
+	private final List<Integer> scores;
 	private final List<Boolean> deads;
 	private final GameViewImpl gw;
 	
@@ -21,13 +21,13 @@ public class GameHudImpl implements GameHud{
 		this.gw = gw;
 		bg = Optional.empty();
 		this.nPlayer = nPlayer;
-		time = "";
+		time = 0L;
 		names = new ArrayList<>();
 		scores = new ArrayList<>();
 		deads = new ArrayList<>();
 		for (int i = 0; i < nPlayer; ++i) {
 			names.add("");
-			scores.add("");
+			scores.add(0);
 			deads.add(false);
 		}
 	}
@@ -43,14 +43,8 @@ public class GameHudImpl implements GameHud{
 	}
 	
 	@Override
-	public void setTime(String time) {
+	public void setTime(Long time) {
 		this.time = time;
-		gw.setTimeLabelText(time);
-		//gw.setDirty();
-	}
-	
-	protected String getTime() {
-		return time;
 	}
 
 	@Override
@@ -65,14 +59,10 @@ public class GameHudImpl implements GameHud{
 	}
 
 	@Override
-	public void setPlayerScore(int playerNumber, String score) {
+	public void setPlayerScore(int playerNumber, int score) {
 		checkSet(playerNumber);
 		gw.setDirty();
 		scores.set(playerNumber, score);
-	}
-	
-	protected String getPlayerScore(int playerNumber) {
-		return scores.get(playerNumber);
 	}
 
 	@Override

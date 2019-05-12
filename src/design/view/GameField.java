@@ -4,11 +4,13 @@ import java.awt.Point;
 import java.util.Map;
 import java.util.Optional;
 
-import javafx.scene.image.Image;
-
 public interface GameField {
 	
-	public void setBackground(Image image);
+	public void setBackground(Optional<Background> bg);
+	
+	public Optional<Background> getBackgroung();
+	
+	public Map<Point, Sprite> getItemSprites();
 	
 	public Optional<Sprite> getItemCell(Point point);
 	
