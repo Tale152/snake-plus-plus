@@ -2,8 +2,10 @@ package implementation.view;
 
 import design.view.*;
 import javafx.beans.value.*;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 
 import static implementation.view.GameViewStatic.*;
 
@@ -21,10 +23,10 @@ public class GameViewImpl implements GameView {
 	private boolean dirty;
 	private double spriteLen;
 	
-    public GameViewImpl(int nPlayer, ResourcesLoader loader, double hudPercentage, int nCellWidth, int nCellHeight) {
+    public GameViewImpl(int nPlayer, ResourcesLoader loader, int nCellWidth, int nCellHeight) {
 		this.loader = loader;
 		this.nPlayer = nPlayer;
-		this.hudPercentage = hudPercentage;
+		this.hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
 	    this.nCellHeight = nCellHeight;
 	    this.nCellWidth = nCellWidth;
 	    dirty = false;

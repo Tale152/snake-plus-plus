@@ -11,6 +11,10 @@ import javafx.scene.layout.BorderPane;
 
 public class GameViewStatic{
 	
+	private static final double MIN_HUD_PERCENTAGE = 0.1;
+	private static final double DELTA_HUD_PERCENTAGE = 0.005;
+	private static final double HUD_ERROR_PERCENTAGE = 0.5;
+	
 	protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	protected static final BorderPane ROOT = new BorderPane();
@@ -55,7 +59,25 @@ public class GameViewStatic{
     
     private static void drawSprite(GraphicsContext fieldGC, Image sprite, Point point, double spriteLen) {
     	fieldGC.drawImage(sprite, point.x * spriteLen, point.y * spriteLen, spriteLen, spriteLen);
-
     }
+    
+    protected static double calculateHudPercentage(int nCellWidth, int nCellHeight) {
+		double percentage = MIN_HUD_PERCENTAGE;
+		while(true) {
+			if (percentage >= HUD_ERROR_PERCENTAGE) {
+				throw new IllegalStateException("Cannot size screen with this nCellWidth and nCellHeight");
+			}
+			double hudHeight = SCREEN_SIZE.getHeight() * percentage;
+			double fieldHeight = SCREEN_SIZE.getHeight() - (hudHeight * 2);
+			double cellSize = fieldHeight / nCellHeight;
+			if (cellSize * nCellWidth < SCREEN_SIZE.getWidth()) {
+				break;
+			}
+			else {
+				percentage += DELTA_HUD_PERCENTAGE;
+			}
+		}
+		return percentage;
+	}
     
 }
