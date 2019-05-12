@@ -1,195 +1,109 @@
 package implementation.view;
 
-import java.awt.Point;
-import java.util.*;
-import java.util.Map.Entry;
 import design.view.*;
 import javafx.beans.value.*;
-import javafx.scene.*;
-import javafx.scene.canvas.*;
-import javafx.scene.control.Label;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 
-public class GameViewImpl implements GameView{
-	
-	private final static double LEFT_PADDING_PERCENTAGE = 0;
-	private final static double  RIGHT_PADDING_PERCENTAGE = 0;
-	private final static double TOP_PADDING_PERCENTAGE = 0.1;
-	private final static double  BOTTOM_PADDING_PERCENTAGE = 0.1;
-	private final static double TIME_LABEL_PERCENTAGE = 0.9;
-	private final static double PLAYER_INFOS_PERCENTAGE = 0.7;
-	private double cellPixelHeight;
-	private double cellPixelWidth;
-	double left_spacing;
-	double top_spacing;
-	double bgWidth;
-	double bgHeight;
-	
+import static implementation.view.GameViewStatic.*;
+
+public class GameViewImpl implements GameView {
+
+	private final GameHud hud;
+	private final GameField field;
+	private final int nCellWidth;
+	private final int nCellHeight;
 	private final int nPlayer;
-	private final GameHudImpl hud;
-	private final GameFieldImpl field;
+	private final double hudPercentage;
+	private final Scene scene = new Scene(ROOT);
+	private final ResourcesLoader loader;
+   
 	private boolean dirty;
+	private double spriteLen;
 	
-	private Pane root = new Pane();
-	private Scene scene = new Scene(root);
-	private Canvas canvas;
-    private GraphicsContext gc;
-    
-    private int timeLabelTextLength = 0;
-    private final Label timeLabel = new Label();
-    private final ArrayList<Label> nameLabels = new ArrayList<>();
-    private final ArrayList<Label> scoreLabels = new ArrayList<>();
-	
-	public GameViewImpl(int nPlayer, int cellNumberWidth, int cellNumberHeight) {
+    public GameViewImpl(int nPlayer, ResourcesLoader loader, double hudPercentage, int nCellWidth, int nCellHeight) {
+		this.loader = loader;
 		this.nPlayer = nPlayer;
-		if (nPlayer > 1) {
-			for (int i = 0; i < nPlayer; ++i) {
-				nameLabels.add(new Label(""));
-				scoreLabels.add(new Label(""));
-			}
-		}
-		else {
-			scoreLabels.add(new Label(""));
-		}
-		hud = new GameHudImpl(nPlayer, this);
-		field = new GameFieldImpl(this,nPlayer);
-		dirty = false;
-		init(cellNumberWidth, cellNumberHeight);
-		//qui va fatto partire il gameLoop
+		this.hudPercentage = hudPercentage;
+	    this.nCellHeight = nCellHeight;
+	    this.nCellWidth = nCellWidth;
+	    dirty = false;
+	    
+		hud = new GameHudImpl(nPlayer, loader);
+		field = new GameFieldImpl(this, nPlayer, loader);
+		
+		ROOT.setCenter(GameViewStatic.FIELD_CANVAS);
+    	ROOT.setTop(GameViewStatic.TOP_CANVAS);
+    	ROOT.setBottom(GameViewStatic.BOTTOM_CANVAS);
+    	ROOT.setLeft(GameViewStatic.LEFT_CANVAS);
+    	ROOT.setRight(GameViewStatic.RIGHT_CANVAS);
+	    ROOT.widthProperty().addListener(getSizeListener());
+	    ROOT.heightProperty().addListener(getSizeListener());
+
 	}
-	
+    
 	@Override
-	public synchronized GameHud getHUD() {
+	public GameHud getHUD() {
 		return hud;
 	}
 
 	@Override
-	public synchronized GameField getField() {
+	public GameField getField() {
 		return field;
 	}
 
 	@Override
 	public void update() {
 		if (dirty) {
+			//TODO tutto il discorso hud
+			drawBg(FIELD_GRAPHICS_CONTEXT, FIELD_CANVAS, (Image) loader.getFieldBg().getBackground());
+			drawField(loader, field, FIELD_GRAPHICS_CONTEXT, spriteLen, nPlayer);
 			dirty = false;
-			printCanvas();
 		}
 	}
 
 	@Override
 	public void togglePause() {
-		// TODO Auto-generated method stub
+		// TODO implementare
+	}
 
+	@Override
+	public void setDirty() {
+		dirty = true;
 	}
 	
 	public Scene getScene() {
 		return scene;
 	}
 	
-	protected void setDirty() {
-		dirty = true;
-	}
-	
-	protected void setTimeLabelText(String time) {
-		timeLabel.setText(time);
-		if (time.length() != timeLabelTextLength) {
-			timeLabelTextLength = time.length();
-			resizeTimeLabel();
-		}
-	}
-
-	private void resizeTimeLabel() {
-		timeLabel.setFont(new Font(canvas.getHeight() * TOP_PADDING_PERCENTAGE * TIME_LABEL_PERCENTAGE));
-		timeLabel.layoutYProperty().bind(root.heightProperty().multiply(TOP_PADDING_PERCENTAGE).subtract(timeLabel.getHeight()).divide(2));
-		timeLabel.layoutXProperty().bind(root.widthProperty().subtract(timeLabel.widthProperty()).divide(2));
-		//TODO scazza quando si massimizza la finestra e viceversa
-	}
-	
-	protected void setScoreLabelText(String score, int playerNumber) {
-		scoreLabels.get(playerNumber).setText(score); 
-		//TODO stessi cazzi del timeLabel
-	}
-	
-	private void resizePlayers() {
-		if (nPlayer == 1) {
-			nameLabels.get(0).setFont(new Font(canvas.getHeight() * BOTTOM_PADDING_PERCENTAGE * PLAYER_INFOS_PERCENTAGE));
-			nameLabels.get(0).layoutXProperty().bind(root.widthProperty().subtract(nameLabels.get(0).widthProperty()).divide(2));
-			nameLabels.get(0).layoutYProperty().bind(root.heightProperty()
-					.multiply(1 - BOTTOM_PADDING_PERCENTAGE)
-					.add(((root.getHeight() * BOTTOM_PADDING_PERCENTAGE) - nameLabels.get(0).getHeight()) / 2));
-		}
-		else {
-			
-		}
-	}
-	
-	private void printCanvas() {
-		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		if (hud.getBackground().isPresent()) {
-			gc.drawImage(hud.getBackground().get(), 0, 0, canvas.getWidth(), canvas.getHeight());
-		}
-		if (field.getBackground().isPresent()) {
-			gc.drawImage(field.getBackground().get(), left_spacing, top_spacing, bgWidth, bgHeight);
-		}
-		for (Entry<Point, Image> entry : field.getSpritesMap().entrySet()) {
-			gc.drawImage(entry.getValue(), 
-					(entry.getKey().getX() * cellPixelWidth) + left_spacing,
-					(entry.getKey().getY() * cellPixelHeight) + top_spacing, 
-					cellPixelWidth, cellPixelHeight);
-		}
-		for (int i = 0; i < nPlayer; ++i) {
-			for (Entry<Point, Image> bodyPart : field.getSnakeSprites(i).entrySet()) {
-				gc.drawImage(bodyPart.getValue(), 
-						(bodyPart.getKey().getX() * cellPixelWidth) + left_spacing,
-						(bodyPart.getKey().getY() * cellPixelHeight) + top_spacing, 
-						cellPixelWidth, cellPixelHeight);
-			}
-		}
-	}
-	
-	private void init(int cellNumberWidth, int cellNumberHeight){
-		canvas = new Canvas(800, 600);
-	    gc = canvas.getGraphicsContext2D();
-		root.getChildren().add(canvas);
-		widthProperty(canvas.getWidth(), cellNumberWidth);
-		heightProperty(canvas.getHeight(), cellNumberHeight);
-		root.getChildren().add(timeLabel);		
-		for (int i = 0; i < nPlayer; ++i) {
-			root.getChildren().add(nameLabels.get(i));
-			root.getChildren().add(scoreLabels.get(i));
-		}
-		root.widthProperty().addListener(new ChangeListener<Object>() {
+	private ChangeListener<Object> getSizeListener() {
+		return new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				widthProperty((double) newValue, cellNumberWidth);
-				resizeTimeLabel();
-				printCanvas();
+				resize();
+				drawBg(TOP_GRAPHICS_CONTEXT, TOP_CANVAS, (Image) loader.getTopHudBg().getBackground());
+		    	drawBg(RIGHT_GRAPHICS_CONTEXT, RIGHT_CANVAS, (Image) loader.getRightHudBg().getBackground());
+		    	drawBg(BOTTOM_GRAPHICS_CONTEXT, BOTTOM_CANVAS, (Image) loader.getBottomHudBg().getBackground());
+		    	drawBg(LEFT_GRAPHICS_CONTEXT, LEFT_CANVAS, (Image) loader.getLeftHudBg().getBackground());
+				drawBg(FIELD_GRAPHICS_CONTEXT, FIELD_CANVAS, (Image) loader.getFieldBg().getBackground());
+		    	drawField(loader, field, FIELD_GRAPHICS_CONTEXT, spriteLen, nPlayer);
 			}
-		});
-		root.heightProperty().addListener(new ChangeListener<Object>() {
-			@Override
-			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-				heightProperty((double) newValue, cellNumberHeight);
-				resizeTimeLabel();	
-				printCanvas();
-			}
-		});
+		};
 	}
-	
-	private void widthProperty(double newCanvasWidth, int cellNumberWidth) {
-		canvas.setWidth(newCanvasWidth);
-		cellPixelWidth = (canvas.getWidth() * (1 - LEFT_PADDING_PERCENTAGE - RIGHT_PADDING_PERCENTAGE)) / cellNumberWidth;
-		left_spacing = canvas.getWidth() * LEFT_PADDING_PERCENTAGE;
-		bgWidth = canvas.getWidth() - (canvas.getWidth() * RIGHT_PADDING_PERCENTAGE) - left_spacing;
-	}
-	
-	private void heightProperty(double newCanvasHeight, int cellNumberHeight) {
-		canvas.setHeight(newCanvasHeight);
-		cellPixelHeight = (canvas.getHeight() * (1 - TOP_PADDING_PERCENTAGE - BOTTOM_PADDING_PERCENTAGE)) / cellNumberHeight;
-		top_spacing = canvas.getHeight() * TOP_PADDING_PERCENTAGE;
-		bgHeight = canvas.getHeight() - (canvas.getHeight() * BOTTOM_PADDING_PERCENTAGE) - top_spacing;
-	}
+    
+	private void resize() {
+    	double topDownHudHeight = ROOT.getHeight() * hudPercentage;
+    	double canvasHeight = ROOT.getHeight() - (topDownHudHeight * 2);
+    	spriteLen = canvasHeight / nCellHeight;
+    	double canvasWidth = spriteLen * nCellWidth;
+    	double leftRightHudWidth = (ROOT.getWidth() - canvasWidth) / 2;
+    	
+    	resizeCanvas(TOP_CANVAS, ROOT.getWidth(), topDownHudHeight);
+    	resizeCanvas(LEFT_CANVAS, leftRightHudWidth, canvasHeight);
+    	resizeCanvas(RIGHT_CANVAS, leftRightHudWidth, canvasHeight);
+    	resizeCanvas(BOTTOM_CANVAS, ROOT.getWidth(), topDownHudHeight);
+    	resizeCanvas(FIELD_CANVAS, canvasWidth, canvasHeight);
+    	
+    }
 
 }

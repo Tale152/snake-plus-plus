@@ -9,9 +9,9 @@ public class GameFieldImpl implements GameField {
 	private Background bg;
 	private final Map<Point, Sprite> spritesMap;
 	private final List<Map<Point, List<Sprite>>> snakeSprites;
-	private final GameViewImpl gw;
+	private final GameView gw;
 	
-	public GameFieldImpl(GameViewImpl gw, int nPlayer, ResourcesLoader loader) {
+	public GameFieldImpl(GameView gw, int nPlayer, ResourcesLoader loader) {
 		this.gw = gw;
 		bg = loader.getFieldBg();
 		spritesMap = new HashMap<>();

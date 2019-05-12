@@ -1,5 +1,7 @@
 package implementation.view;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
 import design.view.*;
@@ -7,6 +9,8 @@ import javafx.scene.image.Image;
 
 public class ResourcesLoaderFromFile implements ResourcesLoader {
 
+	private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+	
 	//directories where resources are located (inside path)
 	private final static String ITEMS_DIRECTORY = "Items";
 	private final static String WALLS_DIRECTORY = "Walls";
@@ -29,31 +33,32 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 	private final Background hudBottom;
 	private final Background hudLeft;
 	
-	public ResourcesLoaderFromFile(String path, double nCellsWidth, double nCellsHeight, 
-			double maxScreenWidth, double maxScreenHeight, double hudPercentage) throws FileNotFoundException, IOException {
+	public ResourcesLoaderFromFile(String path, double nCellsWidth, double nCellsHeight, double hudPercentage) throws FileNotFoundException, IOException {
 		
-		if (hudPercentage >= 0.5 || hudPercentage < 0) {
+		/*if (hudPercentage >= 0.5 || hudPercentage < 0) {
 			throw new IllegalArgumentException();
-		}
-		double hudTopBottomHeight = maxScreenHeight * hudPercentage;
-		double fieldHeight =  maxScreenHeight - (hudTopBottomHeight * 2);
+		}*/
+		double hudTopBottomHeight = SCREEN_SIZE.getHeight() * hudPercentage;
+		double fieldHeight =  SCREEN_SIZE.getHeight() - (hudTopBottomHeight * 2);
 		double spriteSize = fieldHeight / nCellsHeight;
-		double fieldWidth = spriteSize * nCellsWidth;
+		/*double fieldWidth = spriteSize * nCellsWidth;
 		double hudLeftRightWidth = (maxScreenWidth - fieldWidth) / 2;
 		if (hudLeftRightWidth < 0) {
 			throw new IllegalStateException("error on proportions");
-		}
+		}*/
+		
+		
 		
 		readDirectory(getDirectory(path, ITEMS_DIRECTORY), items, spriteSize, spriteSize);
 		readDirectory(getDirectory(path, WALLS_DIRECTORY), walls, spriteSize, spriteSize);
 		readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts, spriteSize, spriteSize);
 		
 		String bgPath = path + File.separator + BACKGROUNDS_DIRECTORY + File.separator;
-		fieldBg = readBackground(bgPath + BACKGROUND_FIELD, fieldWidth, fieldHeight);
-		hudTop = readBackground(bgPath + BACKGROUND_HUD_TOP, maxScreenWidth, hudTopBottomHeight);
-		hudBottom = readBackground(bgPath + BACKGROUND_HUD_BOTTOM, maxScreenWidth, hudTopBottomHeight);
-		hudRight = readBackground(bgPath + BACKGROUND_HUD_RIGHT, hudLeftRightWidth, fieldHeight);
-		hudLeft = readBackground(bgPath + BACKGROUND_HUD_LEFT, hudLeftRightWidth, fieldHeight);
+		fieldBg = readBackground(bgPath + BACKGROUND_FIELD, 800, 600);
+		hudTop = readBackground(bgPath + BACKGROUND_HUD_TOP, 800, 600);
+		hudBottom = readBackground(bgPath + BACKGROUND_HUD_BOTTOM, 800, 600);
+		hudRight = readBackground(bgPath + BACKGROUND_HUD_RIGHT, 800, 600);
+		hudLeft = readBackground(bgPath + BACKGROUND_HUD_LEFT, 800, 600);
 	}
 	
 	@Override
