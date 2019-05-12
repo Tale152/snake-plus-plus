@@ -10,15 +10,15 @@ public interface GameField {
 	
 	public void setBackground(Image image);
 	
-	public Optional<Image> getItemCell(Point point);
+	public Optional<Sprite> getItemCell(Point point);
 	
-	public void addItemSprite(Point point, Image sprite);
+	public void addItemSprite(Point point, Sprite sprite);
 	
-	public void removeItemSprite(Point point, Image sprite);
+	public void removeItemSprite(Point point, Sprite sprite);
 	
-	public Map<Point, Image> getSnakeSprites(int playerNumber);
+	public Map<Point, Sprite> getSnakeSprites(int playerNumber);
 	
-	public void addBodyPart(int playerNumber, Point point, Image sprite);
+	public void addBodyPart(int playerNumber, Point point, Sprite sprite);
 	
 	public void removeBodyPart(int playerNumer, Point point);
 	
