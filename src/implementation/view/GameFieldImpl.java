@@ -2,33 +2,35 @@ package implementation.view;
 
 import java.awt.Point;
 import java.util.*;
-import design.view.GameField;
-import design.view.Sprite;
-import javafx.scene.image.Image;
+import design.view.*;
 
 public class GameFieldImpl implements GameField {
 
-	private Optional<Image> bg;
+	private Background bg;
 	private final Map<Point, Sprite> spritesMap;
-	private final List<Map<Point, Sprite>> snakeSprites;
+	private final List<Map<Point, List<Sprite>>> snakeSprites;
 	private final GameViewImpl gw;
 	
-	public GameFieldImpl(GameViewImpl gw, int nPlayer) {
+	public GameFieldImpl(GameViewImpl gw, int nPlayer, ResourcesLoader loader) {
 		this.gw = gw;
-		bg = Optional.empty();
+		bg = loader.getFieldBg();
 		spritesMap = new HashMap<>();
 		snakeSprites = new ArrayList<>();
 		for (int i = 0; i < nPlayer; ++i) {
 			snakeSprites.add(new HashMap<>());
 		}
 	}
-	
+
 	@Override
-	public void setBackground(Image image) {
-		bg = Optional.of(image);
-		gw.setDirty();
+	public Background getBackground() {
+		return bg;
 	}
-	
+
+	@Override
+	public Map<Point, Sprite> getItemSprites() {
+		return new HashMap<>(spritesMap);
+	}
+
 	@Override
 	public Optional<Sprite> getItemCell(Point point) {
 		if (spritesMap.containsKey(point)) {
@@ -39,7 +41,7 @@ public class GameFieldImpl implements GameField {
 
 	@Override
 	public void addItemSprite(Point point, Sprite sprite) {
-		if (!spritesMap.containsKey(point)){
+		if (!spritesMap.containsKey(point)) {
 			gw.setDirty();
 			spritesMap.put(point, sprite);
 		}
@@ -54,26 +56,17 @@ public class GameFieldImpl implements GameField {
 	}
 
 	@Override
-	public Map<Point, Sprite> getSnakeSprites(int playerNumber) {
+	public Map<Point, List<Sprite>> getSnakeSprites(int playerNumber) {
 		return new HashMap<>(snakeSprites.get(playerNumber));
 	}
 
 	@Override
 	public void addBodyPart(int playerNumber, Point point, Sprite sprite) {
+		gw.setDirty();
 		if (!snakeSprites.get(playerNumber).containsKey(point)) {
-			gw.setDirty();
-			snakeSprites.get(playerNumber).put(point, sprite);
+			snakeSprites.get(playerNumber).put(point, new ArrayList<>());
 		}
-		
-	}
-
-	@Override
-	public void removeBodyPart(int playerNumer, Point point) {
-		if (snakeSprites.get(playerNumer).containsKey(point)) {
-			gw.setDirty();
-			snakeSprites.get(playerNumer).remove(point);
-		}
-		
+		snakeSprites.get(playerNumber).get(point).add(sprite);
 	}
 
 	@Override
@@ -81,5 +74,5 @@ public class GameFieldImpl implements GameField {
 		gw.setDirty();
 		snakeSprites.get(playerNumber).clear();
 	}
-
+	
 }

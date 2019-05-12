@@ -1,23 +1,13 @@
 package design.view;
 
-import java.util.Optional;
-
 public interface HudBackgrounds {
-
-	public void setTop(Background bg);
 	
-	public Optional<Background> getTop();
+	public Background getTop();
 	
-	public void setBottom(Background bg);
+	public Background getBottom();
 	
-	public Optional<Background> getBottom();
+	public Background getLeft();
 	
-	public void setLeft(Background bg);
-	
-	public Optional<Background> getLeft();
-	
-	public void setRight(Background bg);
-	
-	public Optional<Background> getRight();
+	public Background getRight();
 	
 }

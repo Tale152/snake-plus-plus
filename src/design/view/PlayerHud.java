@@ -12,6 +12,6 @@ public interface PlayerHud {
 	
 	public boolean isAlive();
 	
-	public boolean setAlive(boolean alive);
+	public void setAlive(boolean alive);
 	
 }
