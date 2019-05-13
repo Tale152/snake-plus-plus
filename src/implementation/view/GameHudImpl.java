@@ -7,10 +7,10 @@ public class GameHudImpl implements GameHud{
 
 	private Long time;
 	private final List<PlayerHud> playerHUDs = new ArrayList<>();
-	private final HudBackgrounds hudBg;
+	private final Background hudBg;
 	
 	public GameHudImpl(int nPlayer, ResourcesLoader loader) {
-		hudBg = new HudBackgroundsImpl(loader);
+		hudBg = loader.getHudBackground();
 		time = 0L;
 		for (int i = 0; i < nPlayer; ++i) {
 			playerHUDs.add(new PlayerHudImpl());
@@ -28,7 +28,7 @@ public class GameHudImpl implements GameHud{
 	}
 
 	@Override
-	public HudBackgrounds getHudBackgrounds() {
+	public Background getHudBackground() {
 		return hudBg;
 	}
 

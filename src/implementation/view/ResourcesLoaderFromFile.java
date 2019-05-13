@@ -19,19 +19,13 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 	
 	//background names
 	private final static String BACKGROUND_FIELD = "Field.png";
-	private final static String BACKGROUND_HUD_TOP = "Hud_top.png";
-	private final static String BACKGROUND_HUD_RIGHT = "Hud_right.png";
-	private final static String BACKGROUND_HUD_BOTTOM = "Hud_bottom.png";
-	private final static String BACKGROUND_HUD_LEFT = "Hud_left.png";
+	private final static String BACKGROUND_HUD = "Hud.png";
 	
 	private final List<Sprite> items = new ArrayList<>();
 	private final List<Sprite> walls = new ArrayList<>(); 
 	private final List<Sprite> bodyParts = new ArrayList<>();
 	private final Background fieldBg;
-	private final Background hudTop;
-	private final Background hudRight;
-	private final Background hudBottom;
-	private final Background hudLeft;
+	private final Background hudBg;
 	
 	public ResourcesLoaderFromFile(String path, double nCellsWidth, double nCellsHeight, double hudPercentage) throws FileNotFoundException, IOException {
 		
@@ -54,11 +48,9 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 		readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts, spriteSize, spriteSize);
 		
 		String bgPath = path + File.separator + BACKGROUNDS_DIRECTORY + File.separator;
+		//TODO
 		fieldBg = readBackground(bgPath + BACKGROUND_FIELD, 800, 600);
-		hudTop = readBackground(bgPath + BACKGROUND_HUD_TOP, 800, 600);
-		hudBottom = readBackground(bgPath + BACKGROUND_HUD_BOTTOM, 800, 600);
-		hudRight = readBackground(bgPath + BACKGROUND_HUD_RIGHT, 800, 600);
-		hudLeft = readBackground(bgPath + BACKGROUND_HUD_LEFT, 800, 600);
+		hudBg = readBackground(bgPath + BACKGROUND_HUD, 800, 600);
 	}
 	
 	@Override
@@ -77,30 +69,14 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 	}
 	
 	@Override
-	public Background getFieldBg() {
+	public Background getFieldBackground() {
 		return fieldBg;
 	}
 
 	@Override
-	public Background getTopHudBg() {
-		return hudTop;
+	public Background getHudBackground() {
+		return hudBg;
 	}
-
-	@Override
-	public Background getRightHudBg() {
-		return hudRight;
-	}
-
-	@Override
-	public Background getBottomHudBg() {
-		return hudBottom;
-	}
-
-	@Override
-	public Background getLeftHudBg() {
-		return hudLeft;
-	}
-
 	
 	private Sprite getFromList(String object, List<Sprite> source) {
 		Optional<Sprite> result = source.stream().filter(o -> {return o.getName().equals(object);}).findFirst();

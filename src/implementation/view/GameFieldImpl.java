@@ -13,7 +13,7 @@ public class GameFieldImpl implements GameField {
 	
 	public GameFieldImpl(GameView gw, int nPlayer, ResourcesLoader loader) {
 		this.gw = gw;
-		bg = loader.getFieldBg();
+		bg = loader.getFieldBackground();
 		spritesMap = new HashMap<>();
 		snakeSprites = new ArrayList<>();
 		for (int i = 0; i < nPlayer; ++i) {

@@ -8,15 +8,9 @@ public interface ResourcesLoader {
 	
 	public Sprite getBodyPart(String name); 
 	
-	public Background getFieldBg();
+	public Background getFieldBackground();
 	
-	public Background getTopHudBg();
-	
-	public Background getRightHudBg();
-	
-	public Background getBottomHudBg();
-	
-	public Background getLeftHudBg();
+	public Background getHudBackground();
 	
 }
 

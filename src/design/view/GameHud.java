@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GameHud {
 	
-	public HudBackgrounds getHudBackgrounds();
+	public Background getHudBackground();
 	
 	public void setTime(Long time);
 	
