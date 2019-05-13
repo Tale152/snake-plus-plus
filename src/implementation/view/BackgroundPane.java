@@ -74,7 +74,7 @@ public class BackgroundPane extends Pane{
 		return fieldCanvas;
 	}
 	
-	public GraphicsContext getTopGraphicsContextt() {
+	public GraphicsContext getTopGraphicsContext() {
 		return topGraphicsContext;
 	}
 	

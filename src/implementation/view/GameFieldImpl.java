@@ -9,10 +9,8 @@ public class GameFieldImpl implements GameField {
 	private Background bg;
 	private final Map<Point, Sprite> spritesMap;
 	private final List<Map<Point, List<Sprite>>> snakeSprites;
-	private final GameView gw;
 	
-	public GameFieldImpl(GameView gw, int nPlayer, ResourcesLoader loader) {
-		this.gw = gw;
+	public GameFieldImpl(int nPlayer, ResourcesLoader loader) {
 		bg = loader.getFieldBackground();
 		spritesMap = new HashMap<>();
 		snakeSprites = new ArrayList<>();
@@ -42,7 +40,6 @@ public class GameFieldImpl implements GameField {
 	@Override
 	public void addItemSprite(Point point, Sprite sprite) {
 		if (!spritesMap.containsKey(point)) {
-			gw.setDirty();
 			spritesMap.put(point, sprite);
 		}
 	}
@@ -50,7 +47,6 @@ public class GameFieldImpl implements GameField {
 	@Override
 	public void removeItemSprite(Point point, Sprite sprite) {
 		if (spritesMap.containsKey(point)) {
-			gw.setDirty();
 			spritesMap.remove(point);
 		}
 	}
@@ -62,7 +58,6 @@ public class GameFieldImpl implements GameField {
 
 	@Override
 	public void addBodyPart(int playerNumber, Point point, Sprite sprite) {
-		gw.setDirty();
 		if (!snakeSprites.get(playerNumber).containsKey(point)) {
 			snakeSprites.get(playerNumber).put(point, new ArrayList<>());
 		}
@@ -71,7 +66,6 @@ public class GameFieldImpl implements GameField {
 
 	@Override
 	public void resetSnakeSprites(int playerNumber) {
-		gw.setDirty();
 		snakeSprites.get(playerNumber).clear();
 	}
 	

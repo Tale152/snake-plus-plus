@@ -10,6 +10,4 @@ public interface GameView {
 	
 	public void togglePause();
 	
-	public void setDirty();
-	
 }

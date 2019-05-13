@@ -2,10 +2,15 @@ package implementation.view;
 
 import design.view.*;
 import javafx.beans.value.*;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -15,6 +20,7 @@ import java.util.Map.Entry;
 
 public class GameViewImpl implements GameView {
 
+	private static final double TIME_HEIGHT_PERCENTAGE = 0.9;
 	private static final double MIN_HUD_PERCENTAGE = 0.1;
 	private static final double DELTA_HUD_PERCENTAGE = 0.005;
 	private static final double HUD_ERROR_PERCENTAGE = 0.5;
@@ -26,31 +32,39 @@ public class GameViewImpl implements GameView {
 	private final double hudPercentage;
 	private final Scene scene;
 	private final ResourcesLoader loader;
-   
-	private boolean dirty;
+  
 	private BackgroundPane root;
+	private double timeLabelX = 0;
+	private double timeLabelY = 0;
 	
     public GameViewImpl(int nPlayer, ResourcesLoader loader, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
 		this.loader = loader;
 		this.nPlayer = nPlayer;
 		this.hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
-	    dirty = false;
 	    hud = new GameHudImpl(nPlayer, loader);
-		field = new GameFieldImpl(this, nPlayer, loader);
+		field = new GameFieldImpl(nPlayer, loader);
 		root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
 		scene = new Scene(root);
 	    root.widthProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				refresh();
+				timeLabelX = root.getWidth() / 2; 
+				update();
 			}
 		});
 	    root.heightProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				refresh();
+				timeLabelY = (root.getHeight() * hudPercentage) / 2;
+				root.getBackgroundGraphicsContext().setFont(new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+						(double) newValue * hudPercentage * TIME_HEIGHT_PERCENTAGE));
+				update();
 			}
 		});
+	    
+	    root.getBackgroundGraphicsContext().setTextAlign(TextAlignment.CENTER);
+	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
+    	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
 	}
     
 	@Override
@@ -65,28 +79,15 @@ public class GameViewImpl implements GameView {
 
 	@Override
 	public void update() {
-		if (dirty) {
-			//TODO tutto il discorso hud
-			refresh();
-			dirty = false;
-		}
-	}
-	
-	private void refresh() {
-		//TODO cambiare gli sfondi
 		drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
 		drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
     	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayer);
+    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, timeLabelY);
 	}
 
 	@Override
 	public void togglePause() {
 		// TODO implementare
-	}
-
-	@Override
-	public void setDirty() {
-		dirty = true;
 	}
 	
 	public Scene getScene() {
