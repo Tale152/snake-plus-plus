@@ -6,9 +6,9 @@ public interface PlayerHud {
 	
 	public void setName(String name);
 	
-	public int getScore();
+	public String getScore();
 	
-	public void setScore(int score);
+	public void setScore(String score);
 	
 	public boolean isAlive();
 	

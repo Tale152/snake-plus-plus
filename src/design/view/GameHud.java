@@ -6,9 +6,9 @@ public interface GameHud {
 	
 	public Background getHudBackground();
 	
-	public void setTime(Long time);
+	public void setTime(String time);
 	
-	public Long getTime();
+	public String getTime();
 	
 	public List<PlayerHud> getPlayerHUDs();
 	

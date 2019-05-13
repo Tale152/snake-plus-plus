@@ -1,13 +1,11 @@
 package implementation.view;
 
 import design.view.*;
-import javafx.application.Platform;
 import javafx.beans.value.*;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;

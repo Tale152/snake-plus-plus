@@ -5,12 +5,12 @@ import design.view.PlayerHud;
 public class PlayerHudImpl implements PlayerHud {
 
 	private String name;
-	private int score;
+	private String score;
 	private boolean alive;
 	
 	public PlayerHudImpl() {
 		name = "";
-		score = 0;
+		score = "";
 		alive = true;
 	}
 	
@@ -25,12 +25,12 @@ public class PlayerHudImpl implements PlayerHud {
 	}
 
 	@Override
-	public int getScore() {
+	public String getScore() {
 		return score;
 	}
 
 	@Override
-	public void setScore(int score) {
+	public void setScore(String score) {
 		this.score = score;
 	}
 
