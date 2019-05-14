@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 public class ResourcesLoaderFromFile implements ResourcesLoader {
 
 	private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-	
+	private static final double HUD_PERCENTAGE = 0.1;
 	//directories where resources are located (inside path)
 	private final static String ITEMS_DIRECTORY = "Items";
 	private final static String WALLS_DIRECTORY = "Walls";
@@ -27,30 +27,19 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 	private final Background fieldBg;
 	private final Background hudBg;
 	
-	public ResourcesLoaderFromFile(String path, double nCellsWidth, double nCellsHeight, double hudPercentage) throws FileNotFoundException, IOException {
+	public ResourcesLoaderFromFile(String path, double nCellsWidth, double nCellsHeight) throws FileNotFoundException, IOException {
 		
-		/*if (hudPercentage >= 0.5 || hudPercentage < 0) {
-			throw new IllegalArgumentException();
-		}*/
-		double hudTopBottomHeight = SCREEN_SIZE.getHeight() * hudPercentage;
+		double hudTopBottomHeight = SCREEN_SIZE.getHeight() * HUD_PERCENTAGE;
 		double fieldHeight =  SCREEN_SIZE.getHeight() - (hudTopBottomHeight * 2);
 		double spriteSize = fieldHeight / nCellsHeight;
-		/*double fieldWidth = spriteSize * nCellsWidth;
-		double hudLeftRightWidth = (maxScreenWidth - fieldWidth) / 2;
-		if (hudLeftRightWidth < 0) {
-			throw new IllegalStateException("error on proportions");
-		}*/
-		
-		
 		
 		readDirectory(getDirectory(path, ITEMS_DIRECTORY), items, spriteSize, spriteSize);
 		readDirectory(getDirectory(path, WALLS_DIRECTORY), walls, spriteSize, spriteSize);
 		readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts, spriteSize, spriteSize);
 		
 		String bgPath = path + File.separator + BACKGROUNDS_DIRECTORY + File.separator;
-		//TODO
-		fieldBg = readBackground(bgPath + BACKGROUND_FIELD, 800, 600);
-		hudBg = readBackground(bgPath + BACKGROUND_HUD, 800, 600);
+		fieldBg = readBackground(bgPath + BACKGROUND_FIELD, spriteSize * nCellsWidth, fieldHeight);
+		hudBg = readBackground(bgPath + BACKGROUND_HUD, SCREEN_SIZE.getWidth(), SCREEN_SIZE.getHeight());
 	}
 	
 	@Override

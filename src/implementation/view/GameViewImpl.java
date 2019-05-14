@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 
 public class GameViewImpl implements GameView {
 
+	private static final double PLAYER_HEIGHT_PERCENTAGE = 0.9;
 	private static final double TIME_HEIGHT_PERCENTAGE = 0.9;
 	private static final double MIN_HUD_PERCENTAGE = 0.1;
 	private static final double DELTA_HUD_PERCENTAGE = 0.005;
@@ -34,8 +35,14 @@ public class GameViewImpl implements GameView {
 	private final ResourcesLoader loader;
   
 	private BackgroundPane root;
+	private double labelY = 0;
 	private double timeLabelX = 0;
-	private double timeLabelY = 0;
+	private double playerSpacingX = 0;
+	private double scoreSpacingY = 0;
+	private double namesSpacingY = 0;
+	
+	private Font timeFont;
+	private Font playerFont;
 	
     public GameViewImpl(int nPlayer, ResourcesLoader loader, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
 		this.loader = loader;
@@ -49,22 +56,32 @@ public class GameViewImpl implements GameView {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
 				timeLabelX = root.getWidth() / 2; 
+				playerSpacingX = root.getWidth() / (nPlayer + 1);
 				update();
 			}
 		});
 	    root.heightProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				timeLabelY = (root.getHeight() * hudPercentage) / 2;
-				root.getBackgroundGraphicsContext().setFont(new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-						(double) newValue * hudPercentage * TIME_HEIGHT_PERCENTAGE));
+				labelY = (root.getHeight() * hudPercentage) / 2;
+				scoreSpacingY = root.getHeight() - (root.getHeight() * hudPercentage) / 3;
+				namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 3) * 2);
+				timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+						root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
+				playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
 				update();
 			}
 		});
 	    
+	    timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+				root.getWidth() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
+	    playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
 	    root.getBackgroundGraphicsContext().setTextAlign(TextAlignment.CENTER);
 	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
     	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
+
 	}
     
 	@Override
@@ -82,7 +99,17 @@ public class GameViewImpl implements GameView {
 		drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
 		drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
     	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayer);
-    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, timeLabelY);
+		root.getBackgroundGraphicsContext().setFont(timeFont);
+    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
+    	root.getBackgroundGraphicsContext().setFont(playerFont);
+    	for (int i = 0; i < nPlayer; i++) {
+    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
+    				(playerSpacingX * i) + playerSpacingX,
+    				namesSpacingY);
+    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
+    				(playerSpacingX * i) + playerSpacingX,
+    				scoreSpacingY);
+    	}
 	}
 
 	@Override
