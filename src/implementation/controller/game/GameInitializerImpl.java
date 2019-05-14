@@ -1,7 +1,5 @@
 package implementation.controller.game;
 
-import java.io.*;
-import java.util.List;
 import design.controller.game.*;
 import design.model.game.Game;
 import implementation.model.game.GameImpl;
@@ -9,13 +7,11 @@ import implementation.model.game.GameImpl;
 public class GameInitializerImpl implements GameInitializer {
 
 	private final GameLoader gameLoader;
-	private final SpritesLoader spritesLoader;
 	private final Long time;
 	
-	public GameInitializerImpl(GameLoader gameLoader, SpritesLoader spritesLoader, Long time) {
-		check(gameLoader, spritesLoader, time);
+	public GameInitializerImpl(GameLoader gameLoader, Long time) {
+		check(gameLoader, time);
 		this.gameLoader = gameLoader;
-		this.spritesLoader = spritesLoader;
 		this.time = time;
 	}
 	
@@ -26,19 +22,9 @@ public class GameInitializerImpl implements GameInitializer {
 				gameLoader.getWinConditions(), gameLoader.getLossConditions(), 
 				time);
 	}
-
-	@Override
-	public List<InputStream> getSnakesSpriteSheet() throws FileNotFoundException {
-		return spritesLoader.getSnakesSpriteSheet();
-	}
-
-	@Override
-	public InputStream getItemsSpriteSheet() throws FileNotFoundException {
-		return spritesLoader.getItemsSpriteSheet();
-	}
 	
-	private void check(GameLoader gameLoader, SpritesLoader spritesLoader, Long time) {
-		if (gameLoader == null || spritesLoader == null || time == null) {
+	private void check(GameLoader gameLoader, Long time) {
+		if (gameLoader == null || time == null) {
 			throw new NullPointerException();
 		}
 		if (time < 0 ) {
