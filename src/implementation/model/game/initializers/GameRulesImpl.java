@@ -12,12 +12,14 @@ public class GameRulesImpl implements GameRules, Serializable{
 	private final List<ItemRule> itemRules;
 	private final long initialSnakeDelta;
 	private final double initialSnakeMultiplier;
+	private final boolean timeGoingForward;
 	
-	public GameRulesImpl(List<ItemRule> itemRules, long initialSnakeDelta, double initialSnakeMultiplier) {
+	public GameRulesImpl(List<ItemRule> itemRules, long initialSnakeDelta, double initialSnakeMultiplier, boolean timeGoingForward) {
 		check(itemRules, initialSnakeDelta);
 		this.itemRules = itemRules;
 		this.initialSnakeDelta = initialSnakeDelta;
 		this.initialSnakeMultiplier = initialSnakeMultiplier;
+		this.timeGoingForward = timeGoingForward;
 	}
 	
 	@Override
@@ -33,6 +35,11 @@ public class GameRulesImpl implements GameRules, Serializable{
 	@Override
 	public double getInitialSnakeMultiplier() {
 		return initialSnakeMultiplier;
+	}
+	
+	@Override
+	public boolean isTimeGoingForward() {
+		return timeGoingForward;
 	}
 	
 	public String toString() {
