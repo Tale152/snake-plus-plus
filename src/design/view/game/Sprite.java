@@ -1,4 +1,4 @@
-package design.view;
+package design.view.game;
 
 public interface Sprite {
 	

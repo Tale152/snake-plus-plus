@@ -1,4 +1,4 @@
-package design.controller.application;
+package design.controller.game;
 
 public enum DeviceType {
 	KEYBOARD,

@@ -1,15 +1,12 @@
 package design.model.game;
 
-import java.awt.Point;
 import java.util.List;
 
-public interface Snake {
+public interface Snake extends Runnable{
 
 	public Player getPlayer();
 	
 	public Properties getProperties();
-	
-	public List<Item> move(Point point);
 	
 	public void addEffect(Effect effect);
 	
@@ -23,6 +20,6 @@ public interface Snake {
 	
 	public void reverse();
 	
-	public List<Item> getBodyParts();
+	public List<BodyPart> getBodyParts();
 	
 }

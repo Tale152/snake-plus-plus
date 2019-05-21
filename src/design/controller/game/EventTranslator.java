@@ -1,4 +1,4 @@
-package design.controller.application;
+package design.controller.game;
 
 import java.util.Map;
 import java.util.Optional;

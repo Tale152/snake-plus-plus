@@ -1,29 +1,14 @@
 package design.model.game;
 
 import java.util.List;
-import java.util.Optional;
-
-import design.model.game.Item;
 
 public interface GameRules {
 
-	public interface ItemRule {
-		
-		public Class<? extends Item> getItemClass();
-		
-		public long getSpawnDelta();
-		
-		public double getSpawnChance();
-		
-		public int getMax();
-		
-		public Optional<Long> getItemDuration();
-		
-		public Optional<Long> getEffectDuration();
-		
-	}
+	public WinConditions getWinConditions();
 	
-	public List<ItemRule> getItemRules();
+	public LossConditions getLossConditions();
+	
+	public List<ItemRules> getItemRules();
 	
 	public long getInitialSnakeDelta();
 	
