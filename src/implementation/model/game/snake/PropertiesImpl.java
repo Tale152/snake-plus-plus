@@ -16,36 +16,36 @@ public class PropertiesImpl implements Properties{
 	private final CollisionProperty collision;
 	private final SpeedProperty speed;
 	
-	public PropertiesImpl(Direction direction, long deltaT, double speedMultiplier, long lastUpdate) {
+	public PropertiesImpl(Direction direction, long deltaT, double speedMultiplier) {
 		this.length = new LengthPropertyImpl();
 		this.direction = new DirectionPropertyImpl(direction);
 		this.pickup = new PickupPropertyImpl();
 		this.collision = new CollisionPropertyImpl();
-		this.speed = new SpeedPropertyImpl(deltaT, speedMultiplier, lastUpdate);
+		this.speed = new SpeedPropertyImpl(deltaT, speedMultiplier);
 	}
 	
 	@Override
-	public LengthProperty getLength() {
+	public LengthProperty getLengthProperty() {
 		return this.length;
 	}
 
 	@Override
-	public DirectionProperty getDirection() {
+	public DirectionProperty getDirectionProperty() {
 		return this.direction;
 	}
 
 	@Override
-	public PickupProperty getPickup() {
+	public PickupProperty getPickupProperty() {
 		return this.pickup;
 	}
 
 	@Override
-	public CollisionProperty getCollision() {
+	public CollisionProperty getCollisionProperty() {
 		return this.collision;
 	}
 
 	@Override
-	public SpeedProperty getSpeed() {
+	public SpeedProperty getSpeedProperty() {
 		return this.speed;
 	}
 	
