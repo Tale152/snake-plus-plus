@@ -17,6 +17,8 @@ public class FieldImpl implements Field {
 	
 	private int width;
 	private int height;
+	
+	// TODO: maybe use Sets instead of Lists? order is irrelevant and stuff can't be repeated
 	private List<Item> items;
 	private List<Wall> walls;
 	private List<BodyPart> bodyParts;
