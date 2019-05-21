@@ -1,32 +1,39 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Beer extends ItemAbstract{
+public class Beer extends EffectAbstract{
 
-	private static final long serialVersionUID = 7408391164117282060L;
-
-	protected Beer(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = 1252509526232519943L;
-
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent()) {
-					target.getProperties().getDirection().setReverseDirection(true);
-				}
-			}
-			
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getDirection().setReverseDirection(false);
-			}
-			
-		});
+	public Beer(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void instantaneousEffect(Snake target) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectEnd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

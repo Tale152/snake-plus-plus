@@ -1,34 +1,38 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Ice extends ItemAbstract{
+public class Ice extends EffectAbstract{
 
-	private static final long serialVersionUID = 8445094309313391134L;
-	private double originalMultiplier;
-	
-	protected Ice(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = 7014042636548924708L;
+	public Ice(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+		// TODO Auto-generated constructor stub
+	}
 
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent()) {
-					originalMultiplier = target.getProperties().getSpeed().getSpeedMultiplier();
-					target.getProperties().getSpeed().applySpeedMultiplier(-originalMultiplier); 
-				}
-			}
-			
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getSpeed().applySpeedMultiplier(originalMultiplier);
-			}
-			
-		});
+	@Override
+	public void instantaneousEffect(Snake target) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectEnd() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
