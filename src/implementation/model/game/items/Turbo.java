@@ -1,35 +1,39 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Turbo extends ItemAbstract{
+public class Turbo extends EffectAbstract{
 
-	private static final long serialVersionUID = 7295742469693235763L;
-	private final static double MULTIPLY = 1.5;
-	private double originalMultiplier;
-	
-	protected Turbo(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = 8736312974229187554L;
+	public Turbo(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+		// TODO Auto-generated constructor stub
+	}
 
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent() && target.getEffects().contains(this)) {
-					originalMultiplier = target.getProperties().getSpeed().getSpeedMultiplier();
-					target.getProperties().getSpeed().applySpeedMultiplier((originalMultiplier * MULTIPLY)-originalMultiplier); 
-				}
-			}
-			
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getSpeed().applySpeedMultiplier(-((originalMultiplier * MULTIPLY)-originalMultiplier));
-			}
-			
-		});
+	@Override
+	public void instantaneousEffect(Snake target) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectEnd() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

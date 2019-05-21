@@ -4,46 +4,38 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Optional;
 
-public interface Field{
+public interface Field {
 	
-	/**
-	 * 
-	 * @return 
-	 */
+	public void begin();
+	
+	public List<Item> getEliminatedItems();
+	
+	public void togglePause();
+	
 	public int getWidth();
 
-	/**
-	 * 
-	 * @return 
-	 */
 	public int getHeight();
-
-	/**
-	 * 
-	 * @return 
-	 */
+	
+	public Optional<List<Collidable>> getCell(Point point);
+	
 	public List<Item> getItems();
 
-	/**
-	 * 
-	 * @return 
-	 * @param item 
-	 */
-	public boolean removeItem(Item item);
-
-	/**
-	 * 
-	 * @return 
-	 * @param item 
-	 * @throws IllegalStateException 
-	 */
 	public boolean addItem(Item item) throws IllegalStateException;
-
-	/**
-	 * 
-	 * @return
-	 * @param point
-	 */
-	public Optional<List<Item>> getCell(Point point);
+	
+	public boolean removeItem(Item item);
+	
+	public List<Wall> getWalls();
+	
+	public boolean addWall(Wall wall) throws IllegalStateException;
+	
+	public List<BodyPart> getBodyParts();
+	
+	public boolean addBodyPart(BodyPart bodyPart) throws IllegalStateException;
+	
+	public boolean removeBodyPart(BodyPart bodyPart);
+	
+	public List<Snake> getSnakes();
+	
+	public boolean addSnake(Snake snake);
 	
 }

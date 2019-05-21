@@ -1,15 +1,9 @@
 package design.controller.game;
 
-import design.model.game.*;
+import design.model.game.GameModel;
 
 public interface GameLoader {
 	
-	public InitialGameState getInitialGameState();
-	
-	public GameRules getGameRules();
-	
-	public WinConditions getWinConditions();
-	
-	public LossConditions getLossConditions();
+	public GameModel getGameModel();
 	
 }

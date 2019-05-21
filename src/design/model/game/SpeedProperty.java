@@ -10,10 +10,4 @@ public interface SpeedProperty {
 	
 	public double getSpeedMultiplier();
 	
-	public long getLastUpdate();
-	
-	public void setLastUpdate(long updateTime);
-	
-	public long getNextUpdate();
-	
 }

@@ -1,9 +1,11 @@
 package design.model.game;
 
+import java.util.List;
+
 public interface LossConditions {
 	
-	public boolean checkSnakes(Game game);
+	public boolean checkSnakes(List<Snake> snakes);
 	
-	public boolean checkTime(Game game);
+	public boolean checkTime(Long time);
 
 }
