@@ -42,15 +42,15 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 	}
 
 	private void interlacement() {
-		CollisionProperty property = owner.getProperties().getCollision();
+		CollisionProperty property = owner.getProperties().getCollisionProperty();
 		if (!property.getIntangibility() && !property.getInvincibility()) {
 			owner.kill();
 		}
 	}
 	
 	private void collision(Snake collider) {
-		if (!owner.getProperties().getCollision().getIntangibility()) {
-			CollisionProperty colliderProperty = collider.getProperties().getCollision();
+		if (!owner.getProperties().getCollisionProperty().getIntangibility()) {
+			CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
 			if (!colliderProperty.getIntangibility() && !colliderProperty.getInvincibility()) {
 				collider.kill();
 			}

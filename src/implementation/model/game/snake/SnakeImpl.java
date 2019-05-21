@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import design.model.game.BodyPart;
 import design.model.game.Direction;
 import design.model.game.Effect;
-import design.model.game.Item;
 import design.model.game.Player;
 import design.model.game.PlayerNumber;
 import design.model.game.Properties;
 import design.model.game.Snake;
-import design.model.game.BodyPart;
+import implementation.model.game.items.BodyPartImpl;
 
 public class SnakeImpl implements Snake{
 
@@ -32,7 +32,7 @@ public class SnakeImpl implements Snake{
 		
 		checkPoint(point);
 		for(int i = 0; i <= point.size() - 1; i++) {
-			this.firstPart = new BodyPart(point.get(i));
+			this.firstPart = new BodyPartImpl(point.get(i));
 			this.bodyPart.add(firstPart);
 		}
 		this.properties.getLengthProperty().lengthen(point.size() - 1); //update length properties, the beginning length is the number of point - 1 (the first is supposed to exist
