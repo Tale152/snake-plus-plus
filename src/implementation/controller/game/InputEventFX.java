@@ -1,9 +1,9 @@
-package implementation.controller.application;
+package implementation.controller.game;
 
 import java.util.Optional;
 
-import design.controller.application.DeviceType;
-import design.controller.application.InputEvent;
+import design.controller.game.DeviceType;
+import design.controller.game.InputEvent;
 import javafx.scene.input.KeyEvent;
 
 public class InputEventFX implements InputEvent {

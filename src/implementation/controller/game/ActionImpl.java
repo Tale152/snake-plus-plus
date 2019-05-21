@@ -1,6 +1,6 @@
-package implementation.controller.application;
+package implementation.controller.game;
 
-import design.controller.application.Action;
+import design.controller.game.Action;
 import design.model.game.Direction;
 import design.model.game.PlayerNumber;
 

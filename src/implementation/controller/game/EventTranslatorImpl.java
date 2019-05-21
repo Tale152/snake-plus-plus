@@ -1,12 +1,12 @@
-package implementation.controller.application;
+package implementation.controller.game;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import design.controller.application.Action;
-import design.controller.application.EventTranslator;
-import design.controller.application.InputEvent;
+import design.controller.game.Action;
+import design.controller.game.EventTranslator;
+import design.controller.game.InputEvent;
 
 public class EventTranslatorImpl implements EventTranslator {
 	
