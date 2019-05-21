@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import design.model.game.BodyPart;
 import design.model.game.Direction;
 import design.model.game.Effect;
-import design.model.game.Item;
 import design.model.game.Player;
 import design.model.game.PlayerNumber;
 import design.model.game.Properties;
 import design.model.game.Snake;
-import implementation.model.game.items.BodyPart;
-import implementation.model.game.items.ItemFactory;
+import implementation.model.game.items.BodyPartImpl;
 
 public class SnakeImpl implements Snake{
 
@@ -24,22 +23,27 @@ public class SnakeImpl implements Snake{
 	private List<BodyPart> bodyPart;
 	private BodyPart firstPart;
 	
-	//aggiungi point nel costruttore
 	public SnakeImpl(List<Point> point, PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, double speedMultiplier, long lastUpdate) {
 		this.player = new PlayerImpl(playerNumber, playerName);
-		this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier, lastUpdate);
+		this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier);
 		this.effects = new ArrayList<>();
 		this.isAlive = true;
 		this.bodyPart = new ArrayList<>(); 
 		
 		checkPoint(point);
 		for(int i = 0; i <= point.size() - 1; i++) {
-			this.firstPart = (BodyPart) ItemFactory.createBodyPart(point.get(i), this);
+			this.firstPart = new BodyPartImpl(point.get(i));
 			this.bodyPart.add(firstPart);
 		}
-		this.properties.getLength().lengthen(point.size() - 1); //update length properties, the beginning length is the number of point - 1 (the first is supposed to exist
+		this.properties.getLengthProperty().lengthen(point.size() - 1); //update length properties, the beginning length is the number of point - 1 (the first is supposed to exist
 	}
 	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public Player getPlayer() {
 		return this.player;
@@ -48,37 +52,6 @@ public class SnakeImpl implements Snake{
 	@Override
 	public Properties getProperties() {
 		return this.properties;
-	}
-
-	@Override
-	public List<Item> move(Point point) {
-		final int currentLength = this.properties.getLength().getLength();
-		final Point oldTail;
-		List<Item> differences = new ArrayList<>();
-		
-		//if Snake is longer than the size he supposed to be
-		if (this.bodyPart.size() > currentLength) {
-			while(this.bodyPart.size() != currentLength) {
-				differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
-				this.bodyPart.remove(this.bodyPart.size() - 1);
-			}
-		}
-		//calcola le nuove posizioni di ogni pezzo ma si salva la vecchia posizione della coda 
-		oldTail = new Point(this.bodyPart.get(this.bodyPart.size() - 1).getPoint().x, this.bodyPart.get(this.bodyPart.size() - 1).getPoint().y);
-		for(int i = this.bodyPart.size() - 1; i < 0; i--) {
-			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
-		}
-		
-		this.bodyPart.get(0).getPoint().move(point.x, point.y);
-		
-		//crea al massimo un nuovo pezzo assegnandogli le coordinate della vecchia coda
-		if(this.bodyPart.size() < currentLength) {
-			BodyPart b = (BodyPart) ItemFactory.createBodyPart(oldTail, this);
-			this.bodyPart.add(b);
-			differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
-		}
-		
-		return differences;
 	}
 
 	@Override
@@ -119,15 +92,15 @@ public class SnakeImpl implements Snake{
 			direction = determinateDirection(p1, p2);
 			Collections.reverse(this.bodyPart);
 		} else {
-			direction = determinateOppositeDirection(this.properties.getDirection().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
+			direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
 		}
-		this.properties.getDirection().forceDirection(direction);
+		this.properties.getDirectionProperty().forceDirection(direction);
 
 	}
 
 	@Override
-	public List<Item> getBodyParts() {
-		return new ArrayList<Item>(this.bodyPart);
+	public List<BodyPart> getBodyParts() {
+		return new ArrayList<BodyPart>(this.bodyPart);
 	}
 
 	private Direction determinateDirection(Point p1, Point p2) {
@@ -192,4 +165,36 @@ public class SnakeImpl implements Snake{
 	public String toString() {
 		return "Snake is alive: " + this.isAlive + "\n";
 	}
+	
+//LA MOVE È DA RIFARE
+	
+//	private List<Item> move(Point point) {
+//		final int currentLength = this.properties.getLengthProperty().getLength();
+//		final Point oldTail;
+//		List<Item> differences = new ArrayList<>();
+//		
+//		//if Snake is longer than the size he supposed to be
+//		if (this.bodyPart.size() > currentLength) {
+//			while(this.bodyPart.size() != currentLength) {
+//				differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
+//				this.bodyPart.remove(this.bodyPart.size() - 1);
+//			}
+//		}
+//		//calcola le nuove posizioni di ogni pezzo ma si salva la vecchia posizione della coda 
+//		oldTail = new Point(this.bodyPart.get(this.bodyPart.size() - 1).getPoint().x, this.bodyPart.get(this.bodyPart.size() - 1).getPoint().y);
+//		for(int i = this.bodyPart.size() - 1; i < 0; i--) {
+//			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
+//		}
+//		
+//		this.bodyPart.get(0).getPoint().move(point.x, point.y);
+//		
+//		//crea al massimo un nuovo pezzo assegnandogli le coordinate della vecchia coda
+//		if(this.bodyPart.size() < currentLength) {
+//			BodyPart b = (BodyPart) ItemFactory.createBodyPart(oldTail, this);
+//			this.bodyPart.add(b);
+//			differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
+//		}
+//		
+//		return differences;
+//	}
 }

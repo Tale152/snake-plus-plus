@@ -1,7 +1,7 @@
-package implementation.view;
+package implementation.view.game;
 
 import java.util.*;
-import design.view.*;
+import design.view.game.*;
 
 public class GameHudImpl implements GameHud{
 

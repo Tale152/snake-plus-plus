@@ -1,6 +1,6 @@
-package implementation.view;
+package implementation.view.game;
 
-import design.view.Sprite;
+import design.view.game.Sprite;
 import javafx.scene.image.Image;
 
 public class SpriteImpl implements Sprite {

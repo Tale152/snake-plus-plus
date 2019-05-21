@@ -2,14 +2,14 @@ package design.model.game;
 
 public interface Properties {
 	
-	public LengthProperty getLength();
+	public LengthProperty getLengthProperty();
 	
-	public DirectionProperty getDirection();
+	public DirectionProperty getDirectionProperty();
 	
-	public PickupProperty getPickup();
+	public PickupProperty getPickupProperty();
 	
-	public CollisionProperty getCollision();
+	public CollisionProperty getCollisionProperty();
 	
-	public SpeedProperty getSpeed();
+	public SpeedProperty getSpeedProperty();
 	
 }

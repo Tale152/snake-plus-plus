@@ -1,10 +1,11 @@
-package implementation.view;
+package implementation.view.game;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
-import design.view.*;
+import design.view.game.ResourcesLoader;
+import design.view.game.*;
 import javafx.scene.image.Image;
 
 public class ResourcesLoaderFromFile implements ResourcesLoader {

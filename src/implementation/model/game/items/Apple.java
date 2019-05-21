@@ -1,33 +1,35 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Apple extends ItemAbstract{
-	
-	private static final long serialVersionUID = -3089929506797978235L;
+public class Apple extends EffectAbstract{
 
-	protected Apple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
+	public Apple(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void instantaneousEffect(Snake target) {
+		//TODO 
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		//does nothing
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart() {
+		// TODO Auto-generated method stub
 		
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = -8622803427857684535L;
+	}
 
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				target.getProperties().getLength().lengthen(ItemFactory.LENGHT_INCREMENT);
-				target.getPlayer().addScore(ItemFactory.SCORE);
-			}
-
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() - 1);
-				target.getPlayer().reduceScore(target.getPlayer().getScore());
-			}
-
-		});
+	@Override
+	protected void behaviorOnLastingEffectEnd() {
+		// TODO Auto-generated method stub
 		
 	}
 }

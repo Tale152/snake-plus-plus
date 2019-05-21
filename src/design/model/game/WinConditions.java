@@ -1,11 +1,13 @@
 package design.model.game;
 
+import java.util.List;
+
 public interface WinConditions {
 	
-	public boolean checkSnakeLength();
+	public boolean checkSnakeLength(List<Snake> snakes);
 	
-	public boolean checkScore();
+	public boolean checkScore(List<Snake> snakes);
 	
-	public boolean checkTime();
+	public boolean checkTime(Long time);
 	
 }
