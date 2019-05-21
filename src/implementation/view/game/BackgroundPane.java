@@ -1,4 +1,4 @@
-package implementation.view;
+package implementation.view.game;
 
 import java.io.*;
 import javafx.beans.value.*;
