@@ -1,6 +1,6 @@
-package implementation.view;
+package implementation.view.game;
 
-import design.view.Background;
+import design.view.game.Background;
 import javafx.scene.image.Image;
 
 public class BackgroundImpl implements Background {

@@ -16,7 +16,7 @@ public interface Field {
 
 	public int getHeight();
 	
-	public Optional<List<? extends Collidable>> getCell(Point point);
+	public Optional<List<Collidable>> getCell(Point point);
 	
 	public List<Item> getItems();
 
@@ -27,8 +27,6 @@ public interface Field {
 	public List<Wall> getWalls();
 	
 	public boolean addWall(Wall wall) throws IllegalStateException;
-	
-	public boolean removeWall(Wall wall);
 	
 	public List<BodyPart> getBodyParts();
 	

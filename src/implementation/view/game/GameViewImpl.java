@@ -1,6 +1,6 @@
-package implementation.view;
+package implementation.view.game;
 
-import design.view.*;
+import design.view.game.*;
 import javafx.beans.value.*;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;

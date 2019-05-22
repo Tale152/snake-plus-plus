@@ -8,7 +8,7 @@ public interface GameRules {
 	
 	public LossConditions getLossConditions();
 	
-	public List<ItemRules> getItemRules();
+	public List<ItemRule> getItemRules();
 	
 	public long getInitialSnakeDelta();
 	

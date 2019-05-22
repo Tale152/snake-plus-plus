@@ -2,7 +2,7 @@ package design.model.game;
 
 import java.util.Optional;
 
-public interface ItemRules {
+public interface ItemRule {
 		
 	public Class<? extends Effect> getEffectClass();
 		
