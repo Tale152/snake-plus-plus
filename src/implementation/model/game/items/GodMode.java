@@ -8,31 +8,26 @@ public class GodMode extends EffectAbstract{
 
 	public GodMode(Optional<Long> dEffectDuration) {
 		super(dEffectDuration);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void instantaneousEffect(Snake target) {
-		// TODO Auto-generated method stub
-		
+		//does nothig
 	}
 
 	@Override
 	public void expirationEffect(Field field) {
-		// TODO Auto-generated method stub
-		
+		//does nothing
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectStart() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		snake.getProperties().getCollisionProperty().setInvincibility(true);
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectEnd() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getCollisionProperty().setInvincibility(false);
 	}
 	
 }

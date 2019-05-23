@@ -36,10 +36,6 @@ public class ItemFactory {
 		return new ItemImpl(field, point, GodMode.class, dExpire, dEffectDuration);
 	}
 	
-	public Item createIce(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
-		return new ItemImpl(field, point, Ice.class, dExpire, dEffectDuration);
-	}
-	
 	public Item createMagnet(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
 		return new ItemImpl(field, point, Magnet.class, dExpire, dEffectDuration);
 	}

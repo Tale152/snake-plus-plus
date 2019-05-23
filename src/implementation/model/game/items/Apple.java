@@ -6,14 +6,17 @@ import design.model.game.Snake;
 
 public class Apple extends EffectAbstract{
 
+	public final static int LENGTH_INCREMENT = 1;
+	public final static int SCORE_INCREMENT = 10;
+	
 	public Apple(Optional<Long> dEffectDuration) {
 		super(dEffectDuration);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void instantaneousEffect(Snake target) {
-		//TODO 
+		target.getProperties().getLengthProperty().lengthen(LENGTH_INCREMENT);
+		target.getPlayer().addScore(SCORE_INCREMENT);
 	}
 
 	@Override
@@ -22,14 +25,13 @@ public class Apple extends EffectAbstract{
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectStart() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		//does nothing
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectEnd() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getLengthProperty().shorten(snake.getProperties().getLengthProperty().getLength() - 1);
+		snake.getPlayer().reduceScore(snake.getPlayer().getScore());
 	}
 }

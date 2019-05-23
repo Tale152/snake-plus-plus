@@ -8,10 +8,12 @@ public abstract class EffectAbstract implements Effect {
 
 	private Optional<Long> dEffectDuration;
 	private Optional<Snake> attachedSnake;
+	private int counter;
 	
 	public EffectAbstract(Optional<Long> dEffectDuration) {
 		this.dEffectDuration = dEffectDuration;
 		attachedSnake = Optional.empty();
+		counter = 1;
 	}
 
 	@Override
@@ -31,25 +33,33 @@ public abstract class EffectAbstract implements Effect {
 	
 	@Override
 	public void run() {
-		behaviorOnLastingEffectStart();
+		if (!attachedSnake.isPresent()) {
+			throw new IllegalStateException();
+		}
+		behaviorOnLastingEffectStart(attachedSnake.get());
 		try {
 			Thread.sleep(this.getEffectDuration().get());
+			//TODO
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		attachedSnake.get().removeEffect(this);
-		behaviorOnLastingEffectEnd();
+		behaviorOnLastingEffectEnd(attachedSnake.get());
 	}
 	
 	@Override
 	public void incrementDuration(long duration) {
-		if (dEffectDuration.isPresent()) {
-			dEffectDuration = Optional.of(dEffectDuration.get() + duration);
-		}
+		++counter;
+		this.dEffectDuration = Optional.of(dEffectDuration.get() + duration);
 	}
 	
-	protected abstract void behaviorOnLastingEffectStart();
+	@Override
+	public int getComboCounter() {
+		return counter;
+	}
 	
-	protected abstract void behaviorOnLastingEffectEnd();
+	protected abstract void behaviorOnLastingEffectStart(Snake snake);
+	
+	protected abstract void behaviorOnLastingEffectEnd(Snake snake);
 
 }

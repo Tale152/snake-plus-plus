@@ -2,6 +2,7 @@ package implementation.model.game.items;
 
 import java.util.Optional;
 
+import design.model.game.Effect;
 import design.model.game.Field;
 import design.model.game.Snake;
 
@@ -9,31 +10,35 @@ public class ScoreLoss extends EffectAbstract{
 
 	public ScoreLoss(Optional<Long> dEffectDuration) {
 		super(dEffectDuration);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void instantaneousEffect(Snake target) {
-		// TODO Auto-generated method stub
-		
+		Optional<Effect> active = target.getEffects()
+									.stream()
+									.filter(e -> {return e.getClass().equals(this.getClass());})
+									.findFirst();
+		if (active.isPresent()) {
+			target.getPlayer().reduceScore(-Apple.SCORE_INCREMENT * (active.get().getComboCounter() + 1));
+		}
+		else {
+			target.getPlayer().reduceScore(-Apple.SCORE_INCREMENT);
+		}
 	}
 
 	@Override
 	public void expirationEffect(Field field) {
-		// TODO Auto-generated method stub
-		
+		// does nothing
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectStart() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		// does nothing
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectEnd() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		// does nothing
 	}
 
 }
