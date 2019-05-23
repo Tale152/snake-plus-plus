@@ -16,4 +16,6 @@ public interface Effect extends Runnable{
 	
 	public void incrementDuration(long duration);
 	
+	public int getComboCounter();
+	
 }
