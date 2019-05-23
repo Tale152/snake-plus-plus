@@ -9,31 +9,26 @@ public class Spring extends EffectAbstract{
 
 	public Spring(Optional<Long> dEffectDuration) {
 		super(dEffectDuration);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void instantaneousEffect(Snake target) {
-		// TODO Auto-generated method stub
-		
+		target.reverse();
 	}
 
 	@Override
 	public void expirationEffect(Field field) {
-		// TODO Auto-generated method stub
-		
+		//does nothing
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectStart() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		snake.getProperties().getCollisionProperty().setSpring(true);
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectEnd() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getCollisionProperty().setSpring(false);
 	}
 
 }
