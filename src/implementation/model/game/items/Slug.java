@@ -7,33 +7,32 @@ import design.model.game.Snake;
 
 public class Slug extends EffectAbstract{
 
+	private double delta;
+	
 	public Slug(Optional<Long> dEffectDuration) {
 		super(dEffectDuration);
-		// TODO Auto-generated constructor stub
+		delta = 0;
 	}
 
 	@Override
 	public void instantaneousEffect(Snake target) {
-		// TODO Auto-generated method stub
-		
+		//does nothing
 	}
 
 	@Override
 	public void expirationEffect(Field field) {
-		// TODO Auto-generated method stub
-		
+		//does nothing
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectStart() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		delta = (snake.getProperties().getSpeedProperty().getSpeedMultiplier() * Turbo.SPEED_MULTIPLICATOR) - snake.getProperties().getSpeedProperty().getSpeedMultiplier();
+		snake.getProperties().getSpeedProperty().applySpeedMultiplier(delta);
 	}
 
 	@Override
-	protected void behaviorOnLastingEffectEnd() {
-		// TODO Auto-generated method stub
-		
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getSpeedProperty().applySpeedMultiplier(-delta);
 	}
 
 }
