@@ -83,14 +83,12 @@ public class FieldImpl implements Field {
 	}
 
 	@Override
-	public Optional<List<Collidable>> getCell(Point point) {
+	public List<Collidable> getCell(Point point) {
 		List<Collidable> cellList = new ArrayList<Collidable>();
-		cellList.addAll(Arrays.asList(items.stream().filter(i -> {return i.getPoint().equals(point);}).toArray(Collidable[]::new)));
-		if (cellList.isEmpty()) {
-			return Optional.empty();
-		} else {
-			return Optional.of(cellList);
-		}
+		cellList.addAll(Arrays.asList(items.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
+		cellList.addAll(Arrays.asList(walls.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
+		cellList.addAll(Arrays.asList(bodyParts.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
+		return cellList;
 	}
 	
 	

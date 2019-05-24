@@ -16,7 +16,7 @@ public interface Field {
 
 	public int getHeight();
 	
-	public Optional<List<Collidable>> getCell(Point point);
+	public List<Collidable> getCell(Point point);
 	
 	public List<Item> getItems();
 
