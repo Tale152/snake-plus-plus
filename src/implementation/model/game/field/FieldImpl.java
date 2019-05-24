@@ -111,12 +111,6 @@ public class FieldImpl implements Field {
 	}
 
 	@Override
-	public void togglePause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<Wall> getWalls() {
 		return new ArrayList<Wall>(walls);
 	}

@@ -10,8 +10,6 @@ public interface Field {
 	
 	public List<Item> getEliminatedItems();
 	
-	public void togglePause();
-	
 	public int getWidth();
 
 	public int getHeight();
