@@ -1,59 +1,44 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
 
+import design.model.game.Effect;
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class ScoreLoss extends ItemAbstract{
+public class ScoreLoss extends EffectAbstract{
 
-	private static final long serialVersionUID = -2648725814031404622L;
+	public ScoreLoss(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+	}
 
-	protected ScoreLoss(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = -1799117345284556614L;
-			private int multiplier = 1;
-			private Snake targetSnake;
-			
-			@Override
-			public boolean incrementDuration(long time) {
-				if (targetSnake == null) {
-					throw new IllegalStateException();
-				}
-				multiplier *=2;
-				behaviorOnEffectStart(targetSnake);
-				return super.incrementDuration(time);
-			}
-			
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent()) {
-					if (target.getEffects().contains(this)) {
-						if (targetSnake == null) {
-							targetSnake = target;
-						}
-						target.getPlayer().reduceScore(ItemFactory.SCORE * multiplier);
-					}
-				}
-				else {
-					target.getPlayer().reduceScore(ItemFactory.SCORE);
-				}
-				
-			}
-			
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				/*This instance of effect will be removed from snake, so it's like resetting multiplier*/
-			}
-			
-			@Override 
-			public String toString() {
-				return super.toString() + "\n\tMultiplier: " + multiplier;
-			}
-			
-		});
+	@Override
+	public void instantaneousEffect(Snake target) {
+		Optional<Effect> active = target.getEffects()
+									.stream()
+									.filter(e -> {return e.getClass().equals(this.getClass());})
+									.findFirst();
+		if (active.isPresent()) {
+			target.getPlayer().reduceScore(-Apple.SCORE_INCREMENT * (active.get().getComboCounter() + 1));
+		}
+		else {
+			target.getPlayer().reduceScore(-Apple.SCORE_INCREMENT);
+		}
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		// does nothing
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		// does nothing
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		// does nothing
 	}
 
 }

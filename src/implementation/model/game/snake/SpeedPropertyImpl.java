@@ -6,15 +6,12 @@ public class SpeedPropertyImpl implements SpeedProperty {
 	
 	private long deltaT;
 	private double multiplier;
-	private long lastUpdate;
 	
-	public SpeedPropertyImpl(long deltaT, double speedMultiplier, long lastUpdate) {
+	public SpeedPropertyImpl(long deltaT, double speedMultiplier) {
 		checkDelta(deltaT);
 		this.deltaT = deltaT;
 		checkInitMultiplier(speedMultiplier);
 		this.multiplier = speedMultiplier;
-		checkLastUpdate(lastUpdate);
-		this.lastUpdate = lastUpdate;
 	}
 	
 	@Override
@@ -38,21 +35,6 @@ public class SpeedPropertyImpl implements SpeedProperty {
 	public double getSpeedMultiplier() {
 		return this.multiplier;
 	}
-
-	@Override
-	public long getLastUpdate() {
-		return this.lastUpdate;
-	}
-
-	@Override
-	public void setLastUpdate(long updateTime) {
-		this.lastUpdate = updateTime;
-	}
-
-	@Override
-	public long getNextUpdate() {
-		return this.lastUpdate + (long)(this.deltaT*this.multiplier);
-	}
 	
 	private void checkDelta(long deltaT) {
 		if(deltaT <= 0) {
@@ -72,17 +54,9 @@ public class SpeedPropertyImpl implements SpeedProperty {
 		}
 	}
 	
-	private void checkLastUpdate(long lastUpdate) {
-		if(lastUpdate < 0) {
-			throw new IllegalArgumentException();
-		}
-	}
-	
 	public String toString() {
-		return "Last update: " + this.lastUpdate + "\n"
-				+ "Multiplier: " + this.lastUpdate + "\n"
-				+ "Delta: " + this.deltaT + "\n"
-				+ "Next update: " + getNextUpdate() + "\n";
+		return "Multiplier: " + this.multiplier + "\n"
+				+ "Delta: " + this.deltaT + "\n";
 	}
 
 }

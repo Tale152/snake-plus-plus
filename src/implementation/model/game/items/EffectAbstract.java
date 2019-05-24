@@ -1,93 +1,65 @@
 package implementation.model.game.items;
 
-import java.io.Serializable;
 import java.util.Optional;
-import design.model.game.*;
-import implementation.model.game.initializers.SerializableOptional;
+import design.model.game.Effect;
+import design.model.game.Snake;
 
-public abstract class EffectAbstract implements Effect, Serializable {
+public abstract class EffectAbstract implements Effect {
 
-	private static final long serialVersionUID = 6357063406516445592L;
-	private SerializableOptional<Long> effectEndTime;
-	private final SerializableOptional<Long> expirationTime;
-	private final SerializableOptional<Long> effectDuration;
+	private Optional<Long> dEffectDuration;
+	private Optional<Snake> attachedSnake;
+	private int counter;
 	
-	public EffectAbstract( Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		if (expirationTime == null || effectDuration == null) {
-			throw new IllegalArgumentException();
-		}
-		this.effectEndTime = SerializableOptional.empty();
-		this.expirationTime = SerializableOptional.fromOptional(expirationTime);
-		this.effectDuration = SerializableOptional.fromOptional(effectDuration);
-	}
-	
-	@Override
-	public Optional<Long> getEffectEndTime() {
-		return effectEndTime.asOptional();
+	public EffectAbstract(Optional<Long> dEffectDuration) {
+		this.dEffectDuration = dEffectDuration;
+		attachedSnake = Optional.empty();
+		counter = 1;
 	}
 
 	@Override
-	public Optional<Long> getExpirationTime() {
-		return expirationTime.asOptional();
+	public void attachSnake(Snake snake) {
+		attachedSnake = Optional.of(snake);
 	}
 	
-	protected abstract void behaviorOnEffectStart(Snake target);
-
 	@Override
-	public void effectStart(Snake target, long collisionTime) {
-		if (effectDuration.asOptional().isPresent()) {
-			Optional<Effect> activeEffect = 
-					target
-						.getEffects()
-						.stream()
-						.filter(f -> {return this.getClass() == f.getClass();})
-						.findFirst();
-			if (activeEffect.isPresent()) {
-				activeEffect.get().incrementDuration(effectDuration.asOptional().get());
-			}
-			else {
-				effectEndTime = SerializableOptional.fromOptional(Optional.of(collisionTime + effectDuration.asOptional().get()));
-				target.addEffect(this);
-			}
-		}
-		behaviorOnEffectStart(target);
+	public Optional<Snake> getAttachedSnake(){
+		return attachedSnake;
 	}
 	
-	protected abstract void behaviorOnEffectEnd(Snake target);
+	@Override
+	public Optional<Long> getEffectDuration(){
+		return dEffectDuration;
+	}
 	
 	@Override
-	public void effectEnd(Snake target) {
-		if (effectEndTime.asOptional().isPresent()) {
-			behaviorOnEffectEnd(target);
-		}
-		else {
+	public void run() {
+		if (!attachedSnake.isPresent()) {
 			throw new IllegalStateException();
 		}
-	}
-	
-	@Override
-	public void expirationEffect(Field field){
-	  //TODO
-	}
-	
-	@Override
-	public boolean incrementDuration(long time) {
-		if (effectEndTime.asOptional().isPresent()) {
-			effectEndTime = SerializableOptional.fromOptional(Optional.of(effectEndTime.asOptional().get() + time));
-			return true;
+		behaviorOnLastingEffectStart(attachedSnake.get());
+		try {
+			Thread.sleep(this.getEffectDuration().get());
+			//TODO
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		return false;
+		attachedSnake.get().removeEffect(this);
+		behaviorOnLastingEffectEnd(attachedSnake.get());
 	}
 	
-	public String toString() {
-		String name = this.getClass().getName().replaceFirst(this.getClass().getPackage().getName() + ".", "");
-		String res = "Effect:\t" + name + "\n\tExpires at: ";
-		res += expirationTime.asOptional().isPresent() ? expirationTime.asOptional().get() : "NO";
-		res += "\n\tDuration: ";
-		res += effectDuration.asOptional().isPresent() ? effectDuration.asOptional().get() : "NO";
-		res += "\n\tEffect ends at: ";
-		res += effectEndTime.asOptional().isPresent() ? effectEndTime.asOptional().get() : "NO";
-		return res;
+	@Override
+	public void incrementDuration(long duration) {
+		++counter;
+		this.dEffectDuration = Optional.of(dEffectDuration.get() + duration);
 	}
+	
+	@Override
+	public int getComboCounter() {
+		return counter;
+	}
+	
+	protected abstract void behaviorOnLastingEffectStart(Snake snake);
+	
+	protected abstract void behaviorOnLastingEffectEnd(Snake snake);
 
 }

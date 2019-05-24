@@ -1,32 +1,54 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+import java.util.Random;
+
+import design.model.game.Direction;
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Beer extends ItemAbstract{
+public class Beer extends EffectAbstract{
 
-	private static final long serialVersionUID = 7408391164117282060L;
-
-	protected Beer(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = 1252509526232519943L;
-
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent()) {
-					target.getProperties().getDirection().setReverseDirection(true);
-				}
-			}
-			
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getDirection().setReverseDirection(false);
-			}
-			
-		});
+	public Beer(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
 	}
 
+	@Override
+	public void instantaneousEffect(Snake target) {
+		Direction direction = target.getProperties().getDirectionProperty().getDirection();
+		if (direction == Direction.UP || direction == Direction.DOWN) {
+			if (new Random().nextBoolean()) {
+				target.getProperties().getDirectionProperty().forceDirection(Direction.LEFT);
+			}
+			else {
+				target.getProperties().getDirectionProperty().forceDirection(Direction.RIGHT);
+			}
+		}
+		else {
+			if (new Random().nextBoolean()) {
+				target.getProperties().getDirectionProperty().forceDirection(Direction.UP);
+			}
+			else {
+				target.getProperties().getDirectionProperty().forceDirection(Direction.DOWN);
+			}
+		}
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		//does nothing
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		snake.getProperties().getDirectionProperty().setReverseDirection(true);
+		
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getDirectionProperty().setReverseDirection(false);
+	}
+
+	
 }

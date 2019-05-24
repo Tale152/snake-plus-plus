@@ -1,33 +1,37 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Apple extends ItemAbstract{
+public class Apple extends EffectAbstract{
+
+	public final static int LENGTH_INCREMENT = 1;
+	public final static int SCORE_INCREMENT = 10;
 	
-	private static final long serialVersionUID = -3089929506797978235L;
+	public Apple(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+	}
 
-	protected Apple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = -8622803427857684535L;
+	@Override
+	public void instantaneousEffect(Snake target) {
+		target.getProperties().getLengthProperty().lengthen(LENGTH_INCREMENT);
+		target.getPlayer().addScore(SCORE_INCREMENT);
+	}
 
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				target.getProperties().getLength().lengthen(ItemFactory.LENGHT_INCREMENT);
-				target.getPlayer().addScore(ItemFactory.SCORE);
-			}
+	@Override
+	public void expirationEffect(Field field) {
+		//does nothing
+	}
 
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getLength().shorten(target.getProperties().getLength().getLength() - 1);
-				target.getPlayer().reduceScore(target.getPlayer().getScore());
-			}
+	@Override
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		//does nothing
+	}
 
-		});
-		
+	@Override
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getLengthProperty().shorten(snake.getProperties().getLengthProperty().getLength() - 1);
+		snake.getPlayer().reduceScore(snake.getPlayer().getScore());
 	}
 }

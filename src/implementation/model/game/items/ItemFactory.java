@@ -2,72 +2,62 @@ package implementation.model.game.items;
 
 import java.awt.Point;
 import java.util.Optional;
+import design.model.game.Field;
 import design.model.game.Item;
-import design.model.game.Snake;
 
 public class ItemFactory {
-	
-	protected static int SCORE = 100;
-	protected static int LENGHT_INCREMENT = 1;
-	
-	public static Item createBodyPart(Point point, Snake owner) {
-		return new BodyPart(point, owner);
-	}
-	
-	public static Item createWall(Point point, Optional<Long> expirationTime) {
-		return new Wall(point, expirationTime);
-	}
-	
-	public static Item createApple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Apple(point, expirationTime, effectDuration);
-	}
-	
-	public static Item createBadApple(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new BadApple(point, expirationTime, effectDuration);
-	}
-	
-	public static Item createBeer(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Beer(point, expirationTime, effectDuration);
-	}
+	private final Field field;
 
-	public static Item createScoreEarning(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new ScoreEarning(point, expirationTime, effectDuration);
+	public ItemFactory(Field field) {
+		this.field = field;
 	}
 	
-	public static Item createScoreLoss(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new ScoreLoss(point, expirationTime, effectDuration);
+	public Item createApple(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, Apple.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createGodMode(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new GodMode(point, expirationTime, effectDuration);
+	public Item createBadApple(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, BadApple.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createGhostMode(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new GhostMode(point, expirationTime, effectDuration);
+	public Item createBeer(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, Beer.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createSpring(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Spring(point, expirationTime, effectDuration);
+	public Item createDoublePoints(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, DoublePoints.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createDoublePoints(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new DoublePoints(point, expirationTime, effectDuration);
+	public Item createGhostMode(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, GhostMode.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createMagnet(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Magnet(point, expirationTime, effectDuration);
+	public Item createGodMode(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, GodMode.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createTurbo(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Turbo(point, expirationTime, effectDuration);
+	public Item createMagnet(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, Magnet.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createSlug(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Slug(point, expirationTime, effectDuration);
+	public Item createScoreEarning(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, ScoreEarning.class, dExpire, dEffectDuration);
 	}
 	
-	public static Item createIce(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		return new Ice(point, expirationTime, effectDuration);
+	public Item createScoreLoss(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, ScoreLoss.class, dExpire, dEffectDuration);
+	}
+	
+	public Item createSlug(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, Slug.class, dExpire, dEffectDuration);
+	}
+	
+	public Item createSpring(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, Spring.class, dExpire, dEffectDuration);
+	}
+	
+	public Item createTurbo(Point point, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
+		return new ItemImpl(field, point, Turbo.class, dExpire, dEffectDuration);
 	}
 	
 }

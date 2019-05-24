@@ -1,35 +1,38 @@
 package implementation.model.game.items;
 
-import java.awt.Point;
 import java.util.Optional;
+
+import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Slug extends ItemAbstract{
+public class Slug extends EffectAbstract{
 
-	private static final long serialVersionUID = 7480298169975835312L;
-	private final static double DIVIDE = 0.5;
-	private double originalMultiplier;
+	private double delta;
 	
-	protected Slug(Point point, Optional<Long> expirationTime, Optional<Long> effectDuration) {
-		super(point);
-		setEffect(new EffectAbstract(expirationTime, effectDuration) {
-			
-			private static final long serialVersionUID = -2499782939669027472L;
+	public Slug(Optional<Long> dEffectDuration) {
+		super(dEffectDuration);
+		delta = 0;
+	}
 
-			@Override
-			protected void behaviorOnEffectStart(Snake target) {
-				if (effectDuration.isPresent() && target.getEffects().contains(this)) {
-					originalMultiplier = target.getProperties().getSpeed().getSpeedMultiplier();
-					target.getProperties().getSpeed().applySpeedMultiplier(-(originalMultiplier * DIVIDE)); 
-				}
-			}
-			
-			@Override
-			protected void behaviorOnEffectEnd(Snake target) {
-				target.getProperties().getSpeed().applySpeedMultiplier(originalMultiplier * DIVIDE);
-			}
-			
-		});
+	@Override
+	public void instantaneousEffect(Snake target) {
+		//does nothing
+	}
+
+	@Override
+	public void expirationEffect(Field field) {
+		//does nothing
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectStart(Snake snake) {
+		delta = (snake.getProperties().getSpeedProperty().getSpeedMultiplier() * Turbo.SPEED_MULTIPLICATOR) - snake.getProperties().getSpeedProperty().getSpeedMultiplier();
+		snake.getProperties().getSpeedProperty().applySpeedMultiplier(delta);
+	}
+
+	@Override
+	protected void behaviorOnLastingEffectEnd(Snake snake) {
+		snake.getProperties().getSpeedProperty().applySpeedMultiplier(-delta);
 	}
 
 }

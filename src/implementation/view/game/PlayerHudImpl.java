@@ -1,6 +1,6 @@
-package implementation.view;
+package implementation.view.game;
 
-import design.view.PlayerHud;
+import design.view.game.PlayerHud;
 
 public class PlayerHudImpl implements PlayerHud {
 

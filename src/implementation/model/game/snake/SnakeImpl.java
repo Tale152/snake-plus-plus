@@ -1,45 +1,68 @@
 package implementation.model.game.snake;
 
 import java.awt.Point;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import design.model.game.BodyPart;
+import design.model.game.Collidable;
 import design.model.game.Direction;
 import design.model.game.Effect;
-import design.model.game.Item;
+import design.model.game.Field;
 import design.model.game.Player;
 import design.model.game.PlayerNumber;
 import design.model.game.Properties;
 import design.model.game.Snake;
-import implementation.model.game.items.BodyPart;
-import implementation.model.game.items.ItemFactory;
+import implementation.model.game.items.BodyPartImpl;
 
 public class SnakeImpl implements Snake{
 
-	private Player player;
-	private Properties properties;
+	private final Player player;
+	private final Properties properties;
+	private final Field field;
 	private List<Effect> effects;
-	private boolean isAlive;
 	private List<BodyPart> bodyPart;
-	private BodyPart firstPart;
+	private boolean isAlive;
 	
-	//aggiungi point nel costruttore
-	public SnakeImpl(List<Point> point, PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, double speedMultiplier, long lastUpdate) {
+	public SnakeImpl(PlayerNumber playerNumber, String playerName, Direction direction, 
+			long deltaT, double speedMultiplier, Field field, List<Point> point) {
 		this.player = new PlayerImpl(playerNumber, playerName);
-		this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier, lastUpdate);
+		this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier);
 		this.effects = new ArrayList<>();
+		this.field = field;
+		this.effects = new ArrayList<>();
+		this.bodyPart = new ArrayList<>();
 		this.isAlive = true;
-		this.bodyPart = new ArrayList<>(); 
-		
-		checkPoint(point);
-		for(int i = 0; i <= point.size() - 1; i++) {
-			this.firstPart = (BodyPart) ItemFactory.createBodyPart(point.get(i), this);
-			this.bodyPart.add(firstPart);
+
+		for(int i = point.size() - 1; i >= 0; i--) {
+			insertNewHead(point.get(i));
 		}
-		this.properties.getLength().lengthen(point.size() - 1); //update length properties, the beginning length is the number of point - 1 (the first is supposed to exist
+		
+		properties.getLengthProperty().lengthen(point.size() - 1); 
 	}
 	
+	@Override
+	public void run() {
+		while(isAlive) {
+			try {
+				waitToMove();
+				Point next = obtainNextPoint();
+				handleCollisions(next);
+				move(next);
+				stampamiTutto();
+				reverse();
+				stampamiTutto();
+				
+			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
+					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}	
+	}
+
 	@Override
 	public Player getPlayer() {
 		return this.player;
@@ -50,40 +73,15 @@ public class SnakeImpl implements Snake{
 		return this.properties;
 	}
 
-	@Override
-	public List<Item> move(Point point) {
-		final int currentLength = this.properties.getLength().getLength();
-		final Point oldTail;
-		List<Item> differences = new ArrayList<>();
-		
-		//if Snake is longer than the size he supposed to be
-		if (this.bodyPart.size() > currentLength) {
-			while(this.bodyPart.size() != currentLength) {
-				differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
-				this.bodyPart.remove(this.bodyPart.size() - 1);
-			}
-		}
-		//calcola le nuove posizioni di ogni pezzo ma si salva la vecchia posizione della coda 
-		oldTail = new Point(this.bodyPart.get(this.bodyPart.size() - 1).getPoint().x, this.bodyPart.get(this.bodyPart.size() - 1).getPoint().y);
-		for(int i = this.bodyPart.size() - 1; i < 0; i--) {
-			this.bodyPart.get(i).getPoint().move(this.bodyPart.get(i-1).getPoint().x, this.bodyPart.get(i-1).getPoint().y);
-		}
-		
-		this.bodyPart.get(0).getPoint().move(point.x, point.y);
-		
-		//crea al massimo un nuovo pezzo assegnandogli le coordinate della vecchia coda
-		if(this.bodyPart.size() < currentLength) {
-			BodyPart b = (BodyPart) ItemFactory.createBodyPart(oldTail, this);
-			this.bodyPart.add(b);
-			differences.add(this.bodyPart.get(this.bodyPart.size() - 1));
-		}
-		
-		return differences;
-	}
-
+	//if the effect is already in snake's list of effect, I just increment the duration of the effect, otherwise I add it in the list
 	@Override
 	public void addEffect(Effect effect) {
-		this.effects.add(effect);
+		if(!this.effects.contains(effect)) {
+			this.effects.add(effect);
+			effect.run();
+		} else {
+			effect.incrementDuration(effect.getEffectDuration().get());
+		}
 	}
 
 	@Override
@@ -93,7 +91,7 @@ public class SnakeImpl implements Snake{
 
 	@Override
 	public List<Effect> getEffects() {
-		return new ArrayList<>(effects);
+		return new ArrayList<>(this.effects);
 	}
 
 	@Override
@@ -103,33 +101,46 @@ public class SnakeImpl implements Snake{
 
 	@Override
 	public void kill() {
-		this.isAlive = false;
+		this.isAlive = false;	
 	}
 
 	@Override
 	public void reverse() {
 		Direction direction;
-		if(this.bodyPart.size() > 1) {
-			//le coordinate della testa sono le coordinate della coda ecc
-			//inverte le coordinate dei pezzi 
-			//e poi setta la direzione dello snake 
-			Point p1 = this.bodyPart.get(this.bodyPart.size() - 2).getPoint();
-			Point p2 = this.bodyPart.get(this.bodyPart.size() - 1).getPoint();
-			//determino e setto la nuova direzione dello snake 
+		int snakeSize = this.bodyPart.size();
+		if(snakeSize > 1) {
+			Point p1 = this.bodyPart.get(snakeSize - 2).getPoint();
+			Point p2 = this.bodyPart.get(snakeSize - 1).getPoint();
 			direction = determinateDirection(p1, p2);
 			Collections.reverse(this.bodyPart);
 		} else {
-			direction = determinateOppositeDirection(this.properties.getDirection().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
+			direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
 		}
-		this.properties.getDirection().forceDirection(direction);
+		this.properties.getDirectionProperty().forceDirection(direction);
 
+		
 	}
 
 	@Override
-	public List<Item> getBodyParts() {
-		return new ArrayList<Item>(this.bodyPart);
+	public List<BodyPart> getBodyParts() {
+		return new ArrayList<>(this.bodyPart);
 	}
-
+	
+	//method that determinate the opposite direction of snake
+	private Direction determinateOppositeDirection(Direction d) {
+		Direction updatedDirection;	
+		
+		switch(d) {
+		case UP: updatedDirection = Direction.DOWN; break;
+		case DOWN: updatedDirection = Direction.UP; break;
+		case RIGHT: updatedDirection = Direction.LEFT; break;
+		case LEFT: updatedDirection = Direction.RIGHT; break;
+		default: throw new IllegalStateException();	
+		}
+		return updatedDirection;
+	}
+	
+	//used to determinate the direction of snake, it returns the direction of p1 based on the position of p2
 	private Direction determinateDirection(Point p1, Point p2) {
 		//if x are the same Snake is moving up or down
 		if(p1.x == p2.x) {
@@ -140,7 +151,7 @@ public class SnakeImpl implements Snake{
 					return Direction.UP;
 				}
 			} else {
-				if(p1.y - p2.y == 1) {
+				if(p1.y - p2.y == -1) {
 					return Direction.UP;
 				}else {
 					return Direction.DOWN;
@@ -150,46 +161,165 @@ public class SnakeImpl implements Snake{
 		
 		//in this case Snake is moving right or left
 		if(p1.y == p2.y) {
+			
 			if(p1.x > p2.x) {
 				if(p1.x - p2.x == 1) {
-					return Direction.LEFT;
-				}else {
 					return Direction.RIGHT;
+				}else {
+					return Direction.LEFT;
 				}
 			} else {
-				if(p1.x - p2.x == 1) {
-					return Direction.RIGHT;
-				}else {
+				if(p1.x - p2.x == -1) {
 					return Direction.LEFT;
+				}else {
+					return Direction.RIGHT;
 				}		
 			}
 		}
 		throw new IllegalStateException();
 	}
-	
-	
-	private Direction determinateOppositeDirection(Direction d) {
-		Direction updatedDirection;
-		
-		switch(d) {
-		case UP: updatedDirection = Direction.DOWN; break;
-		case DOWN: updatedDirection = Direction.UP; break;
-		case RIGHT: updatedDirection = Direction.LEFT; break;
-		case LEFT: updatedDirection = Direction.RIGHT; break;
-		default: throw new IllegalStateException();	
+
+	//method used to insert a new head and set all the bodypart's properties. Also used to initialize snake for the first time
+	private void insertNewHead(Point point) {
+		int size = this.bodyPart.size();
+		BodyPart p = new BodyPartImpl(point);
+		if(size == 0) {
+			p.setHead(true);
+			p.setTail(true);
+		} else if (size == 1) {
+			p.setHead(true);
+			this.bodyPart.get(0).setHead(false);;
+			bodyPartCombination(p);
+		} else {
+			p.setHead(true);
+			bodyPartCombination(p);
+			this.bodyPart.get(0).setHead(false);
+			this.bodyPart.get(0).setBody(true);
+			
 		}
-		
-		return updatedDirection;
+		this.bodyPart.add(0, p);
 	}
 	
-	
-	private void checkPoint(List<Point> point) {
-		if(point.size() < 0) {
-			throw new IllegalArgumentException(); 
+	//method that is used to remove the tail and set the new properties of the new tail
+	private void removeTail() {
+		if(this.bodyPart.size() > 1) {
+			int last = this.bodyPart.size() - 1;
+			BodyPart oldTail = this.bodyPart.remove(last);
+			last = last - 1;
+			this.bodyPart.get(last).setTail(true);
+			this.bodyPart.get(last).setBody(false);
+			switch(determinateDirection(oldTail.getPoint(), this.bodyPart.get(last).getPoint())) {
+				case UP : 
+					this.bodyPart.get(last).setCombinedOnTop(false); 
+					break;
+				case DOWN : 
+					this.bodyPart.get(last).setCombinedOnBottom(false); 
+					break;
+				case LEFT :
+					this.bodyPart.get(last).setCombinedOnLeft(false);
+					break;
+				case RIGHT : 
+					this.bodyPart.get(last).setCombinedOnRight(false); 
+					break;
+			}
 		}
 	}
 	
-	public String toString() {
-		return "Snake is alive: " + this.isAlive + "\n";
+	//Used to set bodyPart properties, I want to know where are the pieces near the bodypart in input
+	private void bodyPartCombination(BodyPart part) {
+		switch(determinateDirection(this.bodyPart.get(0).getPoint(), part.getPoint())) {
+		case UP : 
+			this.bodyPart.get(0).setCombinedOnBottom(true);
+			part.setCombinedOnTop(true);
+			break;
+		case DOWN : 
+			this.bodyPart.get(0).setCombinedOnTop(true);
+			part.setCombinedOnBottom(true);
+			break;
+		case LEFT :
+			this.bodyPart.get(0).setCombinedOnRight(true);
+			part.setCombinedOnLeft(true);
+			break;
+		case RIGHT :
+			this.bodyPart.get(0).setCombinedOnLeft(true);
+			part.setCombinedOnRight(true);
+			break;
+		}
+	}
+
+	//i can obtain the next point where snake is going to move
+	private Point obtainNextPoint() {
+		Point next = new Point();
+		Point head = bodyPart.get(0).getPoint();
+		switch(properties.getDirectionProperty().getDirection()) {
+			case UP: next = new Point(head.x, head.y - 1); break;
+			case DOWN: next = new Point(head.x, head.y + 1); break;
+			case LEFT: next = new Point(head.x - 1, head.y); break;
+			case RIGHT: next = new Point(head.x + 1, head.y); break;
+		}
+		if (next.x < 0) {
+			next = new Point(field.getWidth() - 1, next.y);
+		} 
+		else if (next.x >= field.getWidth()) {
+			next = new Point(0, next.y);
+		}
+		else if (next.y < 0) {
+			next = new Point(next.x, field.getHeight() -1);
+		}
+		else if (next.y >= field.getHeight()) {
+			next = new Point (next.x, 0);
+		}
+		return next;
+	}
+	
+	//the movement is just an insert of a new head, and I remove the tail until snake have the length he is supposed to have
+	private void move(Point next) {
+		insertNewHead(next);
+		while(this.bodyPart.size() > this.properties.getLengthProperty().getLength()){
+			removeTail();
+		}
+	}
+	
+	//snake havo to wait to move until it is his time
+	private synchronized void waitToMove() throws InterruptedException {
+		long startingTime = System.currentTimeMillis();		
+		long timeToWait = (long)(properties.getSpeedProperty().getDeltaT() * properties.getSpeedProperty().getSpeedMultiplier());					
+		while(true) {
+			wait(timeToWait);											
+			long deltaT = System.currentTimeMillis() - startingTime;	
+			if (deltaT >= timeToWait) {									
+				break;													
+			}
+			else {														
+				wait();													
+				startingTime = System.currentTimeMillis();				
+				timeToWait -= deltaT;									
+			}		
+		}
+	}
+	
+	//if in the cell where snake is going to move there are some collidable, call on collision on everyone of them
+	private void handleCollisions(Point next) throws NoSuchMethodException, SecurityException, InstantiationException, 
+				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Optional<List<Collidable>> cellContent = this.field.getCell(next);
+		if (cellContent.isPresent()) {
+			for (Collidable collidable : cellContent.get()) {
+				collidable.onCollision(this);
+			}
+		}
+	}
+	
+	//Useful method to test all the properties of every body part of snake
+	private void stampamiTutto() {
+		for(BodyPart b : this.bodyPart) {
+			System.out.println( "Punto: " + b.getPoint() + "\n" 
+					+ "Is Head: " + b.isHead() +  "\n"
+					+ "Is Tail: " + b.isTail() + "\n"
+					+ "Is Body: " + b.isBody() + "\n"
+					+ "Is connected on top: " + b.isCombinedOnTop() + "\n"
+					+ "Is connected on right: " + b.isCombinedOnRight() + "\n"
+					+ "Is connected on bottom: " + b.isCombinedOnBottom() + "\n"
+					+ "Is connected on left: " + b.isCombinedOnLeft() + "\n\n");
+		}
 	}
 }
