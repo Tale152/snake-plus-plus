@@ -52,9 +52,6 @@ public class SnakeImpl implements Snake{
 				Point next = obtainNextPoint();
 				handleCollisions(next);
 				move(next);
-				stampamiTutto();
-				reverse();
-				stampamiTutto();
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -198,12 +195,14 @@ public class SnakeImpl implements Snake{
 			
 		}
 		this.bodyPart.add(0, p);
+		this.field.addBodyPart(p);
 	}
 	
 	//method that is used to remove the tail and set the new properties of the new tail
 	private void removeTail() {
 		if(this.bodyPart.size() > 1) {
 			int last = this.bodyPart.size() - 1;
+			this.field.removeBodyPart(this.bodyPart.get(last));
 			BodyPart oldTail = this.bodyPart.remove(last);
 			last = last - 1;
 			this.bodyPart.get(last).setTail(true);
@@ -301,12 +300,27 @@ public class SnakeImpl implements Snake{
 	//if in the cell where snake is going to move there are some collidable, call on collision on everyone of them
 	private void handleCollisions(Point next) throws NoSuchMethodException, SecurityException, InstantiationException, 
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Optional<List<Collidable>> cellContent = this.field.getCell(next);
-		if (cellContent.isPresent()) {
-			for (Collidable collidable : cellContent.get()) {
-				collidable.onCollision(this);
-			}
+		List<Collidable> cellContent = this.field.getCell(next);
+		if(this.properties.getPickupProperty().getPickupRadius() > 1) {
+			//tell me what to do if the radius is more than 1
 		}
+		for (Collidable collidable : cellContent) {
+			collidable.onCollision(this);
+		}
+	}
+	
+	//this method will return all the item to collide
+	//i find them using get adjacentpoint, that returns all the cell i have to collide with
+	//the handle collision will collide with all the item i return here
+	private void getItemToCollide(Point nextHead) {
+		List<Point> cells = new ArrayList<>();
+		
+	}
+	
+	//this method will calculate all the cell that are adjacent at the cell in input, but just those that don't go outside of the border
+	private void getAdjacentPoint(Point point) {
+		List<Point> adjacentPoint = new ArrayList<>();
+		
 	}
 	
 	//Useful method to test all the properties of every body part of snake
