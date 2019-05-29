@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import design.model.game.BodyPart;
 import design.model.game.Collidable;
@@ -40,7 +39,6 @@ public class SnakeImpl implements Snake{
 		for(int i = point.size() - 1; i >= 0; i--) {
 			insertNewHead(point.get(i));
 		}
-		
 		properties.getLengthProperty().lengthen(point.size() - 1); 
 	}
 	
@@ -50,10 +48,11 @@ public class SnakeImpl implements Snake{
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
+				System.out.println("Lenght before " + this.bodyPart.size() + "\n");
 				handleCollisions(next);
 				move(next);
-				stampamiTutto();
-				Thread.sleep(3);
+				System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
+				Thread.sleep(3000);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -302,7 +301,6 @@ public class SnakeImpl implements Snake{
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		List<Collidable> cellContent = new ArrayList<>();
 		cellContent.addAll(getItemToCollide(next));
-		
 		for (Collidable collidable : cellContent) {
 			collidable.onCollision(this);
 		}
