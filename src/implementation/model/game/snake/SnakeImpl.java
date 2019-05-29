@@ -329,7 +329,9 @@ public class SnakeImpl implements Snake{
 		}
 		
 		for(Point c : cells) {
-			item.addAll(this.field.getCell(c));
+			for(int i = 0; i < this.field.getCell(c).size(); i++) {
+				item.add(this.field.getCell(c).get(i));
+			}
 		}
 		return item;
 	}
