@@ -26,6 +26,14 @@ public class FieldImpl implements Field {
 	
 	private List<Item> removedItems;
 	
+	public FieldImpl(Point dimensions) {
+		items = new ArrayList<Item>();
+		walls = new ArrayList<Wall>();
+		bodyParts = new ArrayList<BodyPart>();
+		this.width = (int) dimensions.getX();
+		this.height = (int) dimensions.getY();
+	}
+	
 	private boolean contains(Collidable item) {
 		Point coord = item.getPoint();
 		int x = (int) coord.getX();
@@ -88,15 +96,6 @@ public class FieldImpl implements Field {
 		cellList.addAll(Arrays.asList(walls.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
 		cellList.addAll(Arrays.asList(bodyParts.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
 		return cellList;
-	}
-	
-	
-	public FieldImpl(Point dimensions) {
-		items = new ArrayList<Item>();
-		walls = new ArrayList<Wall>();
-		bodyParts = new ArrayList<BodyPart>();
-		this.width = (int) dimensions.getX();
-		this.height = (int) dimensions.getY();
 	}
 
 	@Override
