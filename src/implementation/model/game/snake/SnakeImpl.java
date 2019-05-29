@@ -52,6 +52,8 @@ public class SnakeImpl implements Snake{
 				Point next = obtainNextPoint();
 				handleCollisions(next);
 				move(next);
+				stampamiTutto();
+				Thread.sleep(3);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -195,14 +197,12 @@ public class SnakeImpl implements Snake{
 			
 		}
 		this.bodyPart.add(0, p);
-		this.field.addBodyPart(p);
 	}
 	
 	//method that is used to remove the tail and set the new properties of the new tail
 	private void removeTail() {
 		if(this.bodyPart.size() > 1) {
 			int last = this.bodyPart.size() - 1;
-			this.field.removeBodyPart(this.bodyPart.get(last));
 			BodyPart oldTail = this.bodyPart.remove(last);
 			last = last - 1;
 			this.bodyPart.get(last).setTail(true);
@@ -300,10 +300,9 @@ public class SnakeImpl implements Snake{
 	//if in the cell where snake is going to move there are some collidable, call on collision on everyone of them
 	private void handleCollisions(Point next) throws NoSuchMethodException, SecurityException, InstantiationException, 
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		List<Collidable> cellContent = this.field.getCell(next);
-		if(this.properties.getPickupProperty().getPickupRadius() > 1) {
-			//tell me what to do if the radius is more than 1
-		}
+		List<Collidable> cellContent = new ArrayList<>();
+		cellContent.addAll(getItemToCollide(next));
+		
 		for (Collidable collidable : cellContent) {
 			collidable.onCollision(this);
 		}
@@ -312,15 +311,60 @@ public class SnakeImpl implements Snake{
 	//this method will return all the item to collide
 	//i find them using get adjacentpoint, that returns all the cell i have to collide with
 	//the handle collision will collide with all the item i return here
-	private void getItemToCollide(Point nextHead) {
+	private List<Collidable> getItemToCollide(Point point) {
 		List<Point> cells = new ArrayList<>();
+		List<Collidable> item = new ArrayList<>();
+		List<Point> tmp = new ArrayList<>();
 		
+		cells.add(point);
+		//aggiungo il primo punto e poi nel for calcolo tutti i punti attorno; nel caso
+		//al secondo giro calcolo tutti i punti attorno della lista, ma nel metodo sotto evito
+		//ddìi aggiungere i punti che sono già presenti
+		for(int i = 1; i < this.properties.getPickupProperty().getPickupRadius(); i++) {
+			for(Point c : cells) {
+				tmp.addAll(getAdjacentPoints(c));
+			}
+			cells.addAll(tmp);
+			tmp.clear();
+		}
+		
+		for(Point c : cells) {
+			item.addAll(this.field.getCell(c));
+		}
+		return item;
 	}
 	
-	//this method will calculate all the cell that are adjacent at the cell in input, but just those that don't go outside of the border
-	private void getAdjacentPoint(Point point) {
-		List<Point> adjacentPoint = new ArrayList<>();
-		
+	//this method calculates all the cell that are adjacent at the cell in input, but just those that don't go outside of the border
+	private List<Point> getAdjacentPoints(Point point) {
+		List<Point> adjacentPoints = new ArrayList<>();
+		if(Math.abs(point.x - (point.x + 1)) == 1) {
+			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
+			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
+			if(Math.abs(point.y - (point.y + 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y + 1));
+				addNotPresentPoint(adjacentPoints, new Point(point.x, point.y + 1));
+			}
+			if(Math.abs(point.y - (point.y - 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y - 1));
+				addNotPresentPoint(adjacentPoints, new Point(point.x, point.y - 1));
+			}
+		}
+		if(Math.abs(point.x - (point.x - 1)) == 1) {
+			addNotPresentPoint(adjacentPoints, new Point(point.x - 1, point.y));
+			if(Math.abs(point.y - (point.y + 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x - 1, point.y + 1));
+			}
+			if(Math.abs(point.y - (point.y - 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x - 1, point.y - 1));
+			}
+		}
+		return adjacentPoints;
+	}
+	
+	private void addNotPresentPoint(List<Point> list, Point point) {
+		if(!list.contains(point)) {
+			list.add(point);
+		}
 	}
 	
 	//Useful method to test all the properties of every body part of snake
