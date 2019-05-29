@@ -93,6 +93,8 @@ public class FieldImpl implements Field {
 	
 	public FieldImpl(Point dimensions) {
 		items = new ArrayList<Item>();
+		walls = new ArrayList<Wall>();
+		bodyParts = new ArrayList<BodyPart>();
 		this.width = (int) dimensions.getX();
 		this.height = (int) dimensions.getY();
 	}
