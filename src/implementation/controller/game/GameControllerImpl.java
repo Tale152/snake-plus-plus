@@ -1,6 +1,9 @@
 package implementation.controller.game;
 
 import java.awt.Point;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -8,26 +11,42 @@ import java.util.Random;
 import design.controller.game.Action;
 import design.controller.game.EventTranslator;
 import design.controller.game.GameController;
+import design.controller.game.GameLoader;
 import design.controller.game.InputEvent;
 import design.controller.game.ItemCounter;
 import design.model.game.BodyPart;
+import design.model.game.Direction;
 import design.model.game.DirectionProperty;
+import design.model.game.Field;
 import design.model.game.GameModel;
+import design.model.game.GameRules;
 import design.model.game.Item;
 import design.model.game.ItemRule;
 import design.model.game.LossConditions;
+import design.model.game.PlayerNumber;
 import design.model.game.Snake;
+import design.model.game.Wall;
 import design.model.game.WinConditions;
 import design.view.game.GameView;
 import design.view.game.ResourcesLoader;
+import implementation.controller.game.gameLoader.GameLoaderJSON;
+import implementation.model.game.GameModelImpl;
+import implementation.model.game.field.FieldImpl;
+import implementation.model.game.gameRules.GameRulesImpl;
+import implementation.model.game.gameRules.ItemRuleImpl;
+import implementation.model.game.gameRules.LossConditionsImpl;
+import implementation.model.game.gameRules.WinConditionsImpl;
+import implementation.model.game.items.Apple;
 import implementation.model.game.items.ItemFactory;
+import implementation.model.game.items.WallImpl;
+import implementation.model.game.snake.SnakeImpl;
 
 public class GameControllerImpl implements GameController {
 	
 	private final static String HEAD = "head_";
 	private final static String BODY = "body_";
 	private final static String TAIL = "tail_";
-	
+	private final static String WALL = "wall_";
 	
 	private final ItemCounter counter;
 	private final GameView gameView;
@@ -37,11 +56,52 @@ public class GameControllerImpl implements GameController {
 	private final ItemFactory itemFactory;
 	
 	
-	public GameControllerImpl(String stage, List<String> playerNames, GameView view, ResourcesLoader resources) {
+	public GameControllerImpl(String stage, List<String> playerNames, GameView view, ResourcesLoader resources) throws IOException {
+		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+//		gameModel = daButtare();
+		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		
+		this.itemFactory.createItem(new Point(2,1), Apple.class, Optional.empty(), Optional.empty());
 		
+		this.counter = new ItemCounterImpl(this.gameModel.getField(), this.gameModel.getGameRules());
+		this.gameView = view;
+		this.resources = resources;
+		this.controls = new EventTranslatorImpl();
+		initView();
 	}
+	
+//	private GameModel daButtare() {
+//		Field field = new FieldImpl(new Point(10,5));
+//		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 500, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,0)))));
+//		field.getSnakes().get(0).getProperties().getPickupProperty().setPickupRadius(2);
+//		field.addWall(new WallImpl(new Point(0,0)));
+//		field.addWall(new WallImpl(new Point(1,0)));
+//		field.addWall(new WallImpl(new Point(0,1)));
+//		
+//		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
+//		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
+//		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 1000, 0.7, 1, Optional.empty(), Optional.empty())));
+//		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
+//		return new GameModelImpl(field, gameRules);
+//	}
 
+	private void initView() {
+		for(Wall w: this.gameModel.getField().getWalls()) {
+			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
+			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
+		}
+		for(Item i: this.gameModel.getField().getItems()) {
+			this.gameView.getField().addItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
+		}
+		for(Snake s : this.gameModel.getField().getSnakes()) {
+			if(s.isAlive()) {
+				for(BodyPart b : s.getBodyParts()) {
+					this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void run() {
 		this.gameModel.getField().begin();
@@ -50,8 +110,13 @@ public class GameControllerImpl implements GameController {
 			spawnItems();
 			snakeView();
 			this.gameView.update();
+			try {
+				Thread.sleep(1000/60);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
-
 	}
 
 	@Override
@@ -77,7 +142,7 @@ public class GameControllerImpl implements GameController {
 		List<Item> deletedItems = this.gameModel.getField().getEliminatedItems();
 		for(Item i : deletedItems) {
 			this.counter.decrease(i.getEffectClass());
-			this.gameView.getField().removeItemSprite(i.getPoint(), this.resources.getItem(i.getClass().getSimpleName()));
+			this.gameView.getField().removeItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
 		}
 	}
 	
@@ -125,7 +190,7 @@ public class GameControllerImpl implements GameController {
 	}
 	
 	private String snakeSpriteName(BodyPart b, Snake snake) {
-		String s = "P" + snake.getPlayer().getPlayerNumber().ordinal() + 1;
+		String s = "P" + Integer.toString(snake.getPlayer().getPlayerNumber().ordinal() + 1) + "_";
 		if(b.isHead()) {
 			s += HEAD;
 		}
@@ -146,4 +211,22 @@ public class GameControllerImpl implements GameController {
 		return b ? "1" : "0";
 	}
 	
+	private String wallSpriteName(Wall wall, List<Wall> allWalls) {
+		String s = WALL;
+		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y - 1));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x + 1, wall.getPoint().y));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y + 1));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x - 1, wall.getPoint().y));
+		return s;
+		
+	}
+	
+	private String collide(Wall wall, List<Wall> allWalls, Point point) {
+		if(point.x < 0 || point.y < 0 || point.x >= this.gameModel.getField().getWidth() || point.y >= this.gameModel.getField().getHeight()) {
+			return "0";
+		}
+		return allWalls.stream().anyMatch(e -> {
+			return e.getPoint().equals(point);
+		}) ? "1" : "0";
+	}
 }

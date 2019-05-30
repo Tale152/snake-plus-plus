@@ -49,13 +49,8 @@ public class SnakeImpl implements Snake{
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
-				//System.out.println("Lenght before " + this.bodyPart.size() + "\n");
-				stampamiTutto();
 				handleCollisions(next);
 				move(next);
-				System.out.println(this.isAlive);
-				//System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
-				Thread.sleep(3000);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -352,7 +347,6 @@ public class SnakeImpl implements Snake{
 	private List<Point> getAdjacentPoints(Point point) {
 		List<Point> adjacentPoints = new ArrayList<>();
 		if(Math.abs(point.x - (point.x + 1)) == 1) {
-			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
 			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
 			if(Math.abs(point.y - (point.y + 1)) == 1) {
 				addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y + 1));
