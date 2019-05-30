@@ -2,14 +2,24 @@ package implementation.model.game.gameRules;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import design.model.game.Snake;
 import design.model.game.WinConditions;
 
 public class WinConditionsImpl implements WinConditions {
 
+	@JsonProperty("snakeLength")
 	private final Optional<Integer> snakeLength;
+	
+	@JsonProperty("scoreGoal")
 	private final Optional<Integer> scoreToReach;
+	
+	@JsonProperty("timeGoal")
 	private final Optional<Long> timeToReach;
+	
+	@JsonProperty("timeForward")
 	private final boolean timeGoesForward;
 	
 	public WinConditionsImpl(Optional<Integer> snakeLength, Optional<Integer> score, Optional<Long> time, boolean timeGoesForward) {
