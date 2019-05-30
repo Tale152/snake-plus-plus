@@ -8,6 +8,4 @@ public interface GameView {
 	
 	public void update();
 	
-	public void togglePause();
-	
 }

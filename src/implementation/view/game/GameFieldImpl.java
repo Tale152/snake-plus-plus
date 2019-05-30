@@ -7,12 +7,14 @@ import design.view.game.*;
 public class GameFieldImpl implements GameField {
 
 	private Background bg;
-	private final Map<Point, Sprite> spritesMap;
+	private final Map<Point, Sprite> itemMap;
+	private final Map<Point, Sprite> wallMap;
 	private final List<Map<Point, List<Sprite>>> snakeSprites;
 	
 	public GameFieldImpl(int nPlayer, ResourcesLoader loader) {
 		bg = loader.getFieldBackground();
-		spritesMap = new HashMap<>();
+		itemMap = new HashMap<>();
+		wallMap = new HashMap<>();
 		snakeSprites = new ArrayList<>();
 		for (int i = 0; i < nPlayer; ++i) {
 			snakeSprites.add(new HashMap<>());
@@ -26,28 +28,37 @@ public class GameFieldImpl implements GameField {
 
 	@Override
 	public Map<Point, Sprite> getItemSprites() {
-		return new HashMap<>(spritesMap);
+		return new HashMap<>(itemMap);
 	}
 
 	@Override
-	public Optional<Sprite> getItemCell(Point point) {
-		if (spritesMap.containsKey(point)) {
-			return Optional.of(spritesMap.get(point));
+	public List<Sprite> getCell(Point point) {
+		List<Sprite> res = new ArrayList<>();
+		if (itemMap.containsKey(point)) {
+			res.add(itemMap.get(point));
 		}
-		return Optional.empty();
+		if (wallMap.containsKey(point)) {
+			res.add(wallMap.get(point));
+		}
+		for (Map<Point, List<Sprite>> snake : snakeSprites) {
+			if (snake.containsKey(point)){
+				res.addAll(snake.get(point));
+			}
+		}
+		return res;
 	}
 
 	@Override
 	public void addItemSprite(Point point, Sprite sprite) {
-		if (!spritesMap.containsKey(point)) {
-			spritesMap.put(point, sprite);
+		if (!itemMap.containsKey(point)) {
+			itemMap.put(point, sprite);
 		}
 	}
 
 	@Override
 	public void removeItemSprite(Point point, Sprite sprite) {
-		if (spritesMap.containsKey(point)) {
-			spritesMap.remove(point);
+		if (itemMap.containsKey(point)) {
+			itemMap.remove(point);
 		}
 	}
 
@@ -67,6 +78,18 @@ public class GameFieldImpl implements GameField {
 	@Override
 	public void resetSnakeSprites(int playerNumber) {
 		snakeSprites.get(playerNumber).clear();
+	}
+
+	@Override
+	public void addWallSprite(Point point, Sprite sprite) {
+		if (!wallMap.containsKey(point)) {
+			wallMap.put(point, sprite);
+		}
+	}
+
+	@Override
+	public Map<Point, Sprite> getWallSprites() {
+		return new HashMap<>(wallMap);
 	}
 	
 }

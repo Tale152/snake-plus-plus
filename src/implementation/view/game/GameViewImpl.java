@@ -111,11 +111,6 @@ public class GameViewImpl implements GameView {
     				scoreSpacingY);
     	}
 	}
-
-	@Override
-	public void togglePause() {
-		// TODO implementare
-	}
 	
 	public Scene getScene() {
 		return scene;
@@ -128,6 +123,9 @@ public class GameViewImpl implements GameView {
     
     private void drawField(ResourcesLoader loader, GameField field, GraphicsContext fieldGC, double spriteLen, int nPlayer) {
     	for (Entry<Point, Sprite> entry : field.getItemSprites().entrySet()) {
+    		drawSprite(fieldGC, (Image) entry.getValue().getSprite(), entry.getKey(), spriteLen);
+    	}
+    	for (Entry<Point, Sprite> entry : field.getWallSprites().entrySet()) {
     		drawSprite(fieldGC, (Image) entry.getValue().getSprite(), entry.getKey(), spriteLen);
     	}
     	for (int i = 0; i < nPlayer; i++) {
