@@ -49,13 +49,8 @@ public class SnakeImpl implements Snake{
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
-				//System.out.println("Lenght before " + this.bodyPart.size() + "\n");
-				stampamiTutto();
 				handleCollisions(next);
 				move(next);
-				System.out.println(this.isAlive);
-				//System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
-				Thread.sleep(3000);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
