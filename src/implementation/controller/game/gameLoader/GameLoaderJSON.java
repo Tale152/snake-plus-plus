@@ -1,5 +1,6 @@
 package implementation.controller.game.gameLoader;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -10,17 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import design.controller.game.GameLoader;
+import design.model.game.Direction;
 import design.model.game.Field;
 import design.model.game.GameModel;
 import design.model.game.GameRules;
 import design.model.game.ItemRule;
 import design.model.game.LossConditions;
+import design.model.game.PlayerNumber;
+import design.model.game.Snake;
 import design.model.game.WinConditions;
 import implementation.model.game.GameModelImpl;
 import implementation.model.game.gameRules.GameRulesImpl;
@@ -28,6 +34,8 @@ import implementation.model.game.gameRules.ItemRuleImpl;
 import implementation.model.game.gameRules.LossConditionsImpl;
 import implementation.model.game.gameRules.WinConditionsImpl;
 import implementation.model.game.items.Apple;
+import implementation.model.game.items.Beer;
+import implementation.model.game.snake.SnakeImpl;
 
 public class GameLoaderJSON implements GameLoader {
 	
@@ -48,16 +56,35 @@ public class GameLoaderJSON implements GameLoader {
 		return json;
 	}
 	
-	
-	
 	public GameLoaderJSON(String stagePath, List<String> names) throws IOException {
 		objectMapper = new ObjectMapper();
+		
+		SimpleModule deserializerModule = new SimpleModule();
+		deserializerModule.addDeserializer(WinConditions.class, new WinConditionsDeserializer());
+		deserializerModule.addDeserializer(LossConditions.class, new LossConditionsDeserializer());
+		deserializerModule.addDeserializer(GameRules.class, new GameRulesDeserializer());
+		deserializerModule.addDeserializer(ItemRule.class, new ItemRuleDeserializer());
+		deserializerModule.addDeserializer(Field.class, new FieldDeserializer());
+		objectMapper.registerModule(deserializerModule);
+		
+		objectMapper.registerModule(new Jdk8Module());
+		
 		String json = readJSON(stagePath);
 		
 		JsonNode loader = objectMapper.readTree(json);
 		Field field = loader.get("field").traverse().readValueAs(Field.class);
 		
 		GameRules rules = loader.get("rules").traverse().readValueAs(GameRules.class);
+		
+		List<List<Point>> snakes = objectMapper.readValue(loader.get("snakes").traverse(), new TypeReference<List<List<Point>>>() {});
+		List<Direction> directions = objectMapper.readValue(loader.get("directions").traverse(), new TypeReference<List<Direction>>() {});
+		
+		for (int i = 0; i < names.size(); i++) {
+			String name = names.get(i);
+			List<Point> points = snakes.get(i);
+			Snake snake = new SnakeImpl(PlayerNumber.values()[i], name, directions.get(i), rules.getInitialSnakeDelta(), rules.getInitialSnakeMultiplier(), field, points);
+			field.addSnake(snake);
+		}
 		
 		this.gameModel = new GameModelImpl(field, rules);
 	}
@@ -89,17 +116,32 @@ public class GameLoaderJSON implements GameLoader {
 		
 		List<ItemRule> items = new ArrayList<ItemRule>();
 		items.add(new ItemRuleImpl(Apple.class, 1000, 1, 3, Optional.of(L*5), Optional.empty()));
+		items.add(new ItemRuleImpl(Beer.class, 1000, 1, 3, Optional.of(L*5), Optional.of(L)));
 		
 		GameRules rules = new GameRulesImpl(wc, lc, items, L, 1.0, true);
 		
 		ObjectMapper om = new ObjectMapper();
+		
+		SimpleModule deserializerModule = new SimpleModule();
+		deserializerModule.addDeserializer(WinConditions.class, new WinConditionsDeserializer());
+		deserializerModule.addDeserializer(LossConditions.class, new LossConditionsDeserializer());
+		deserializerModule.addDeserializer(GameRules.class, new GameRulesDeserializer());
+		deserializerModule.addDeserializer(ItemRule.class, new ItemRuleDeserializer());
+		om.registerModule(deserializerModule);
+		
 		om.registerModule(new Jdk8Module());
+		
 		om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		om.writeValue(new File("/tmp/rules.json"), rules);
 		om.writeValue(new File("/tmp/wc.json"), wc);
 		om.writeValue(new File("/tmp/lc.json"), lc);
 		
-		rules = om.readValue(new File("/tmp/rules.json"), GameRulesImpl.class);
+		om.writeValue(new File("/tmp/ir.json"), items.get(0));
+		om.readValue(new File("/tmp/ir.json"), ItemRule.class);
+		
+		rules = om.readValue(new File("/tmp/rules.json"), GameRules.class);
+		
+		om.writeValue(new File("/tmp/2rules.json"), rules);
 	}
 
 }

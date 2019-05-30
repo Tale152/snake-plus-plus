@@ -8,9 +8,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import design.model.game.Effect;
 import design.model.game.Field;
@@ -19,24 +17,7 @@ import implementation.model.game.field.FieldImpl;
 import implementation.model.game.items.ItemFactory;
 
 
-/*
-private Field loadField(JsonNode json) throws JsonParseException, JsonMappingException, IOException {
-		String map = json.get("map").asText();
-		List<String> lines = Arrays.asList(map.split("\n"));
-		
-		for (int y = 0; y < lines.size(); y++) {
-			String line = lines.get(y);
-			while (line.matches("#")) {
-				int x = line.indexOf('#');
-				field.addWall(new WallImpl(new Point(x, y)));
-				line = line.substring(x + 1);
-			}
-		}
-		
-		return field;
-	}
- */
-//FieldDeserializer is not to be serialized or deserialized. Serial field is unnecessary.
+//Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")
 class FieldDeserializer extends StdDeserializer<Field> {
 	
@@ -50,8 +31,6 @@ class FieldDeserializer extends StdDeserializer<Field> {
 	
 	public Field deserialize(JsonParser parser, DeserializationContext deserializer) throws IOException {
 		JsonNode node = parser.getCodec().readTree(parser);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new Jdk8Module());
 		
 		Point fieldSize = node.get("dimensions").traverse().readValueAs(Point.class);
 		Field f = new FieldImpl(fieldSize);
@@ -67,7 +46,7 @@ class FieldDeserializer extends StdDeserializer<Field> {
 		for (final JsonNode item : items) {
 			Point position = item.get("position").traverse().readValueAs(Point.class);
 			
-			Class<? extends Effect> effect = item.get("effect").traverse().readValueAs(new TypeReference<Effect>() {});
+			Class<? extends Effect> effect = item.get("effect").traverse().readValueAs(new TypeReference<Class<? extends Effect>>() {});
 			
 			//TODO: read Optionals instead of ternary
 			Optional<Long> itemDuration;
