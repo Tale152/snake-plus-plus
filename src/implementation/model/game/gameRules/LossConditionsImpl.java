@@ -2,13 +2,21 @@ package implementation.model.game.gameRules;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import design.model.game.LossConditions;
 import design.model.game.Snake;
 
 public class LossConditionsImpl implements LossConditions {
 
+	@JsonProperty("checkAllSnakesDied")
 	private final boolean checkAllSnakesDied;
+	
+	@JsonProperty("gameTime")
 	private Optional<Long> gameTime;
+	
+	@JsonProperty("timeForward")
 	private boolean timeGoesForward;
 	
 	public LossConditionsImpl(boolean checkAllSnakesDied, Optional<Long> gameTime, boolean timeGoesForward) {
