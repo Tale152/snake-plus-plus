@@ -11,6 +11,7 @@ import design.model.game.Collidable;
 import design.model.game.Direction;
 import design.model.game.Effect;
 import design.model.game.Field;
+import design.model.game.Item;
 import design.model.game.Player;
 import design.model.game.PlayerNumber;
 import design.model.game.Properties;
@@ -48,10 +49,12 @@ public class SnakeImpl implements Snake{
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
-				System.out.println("Lenght before " + this.bodyPart.size() + "\n");
+				//System.out.println("Lenght before " + this.bodyPart.size() + "\n");
+				stampamiTutto();
 				handleCollisions(next);
 				move(next);
-				System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
+				System.out.println(this.isAlive);
+				//System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
 				Thread.sleep(3000);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
@@ -196,12 +199,14 @@ public class SnakeImpl implements Snake{
 			
 		}
 		this.bodyPart.add(0, p);
+		this.field.addBodyPart(p);
 	}
 	
 	//method that is used to remove the tail and set the new properties of the new tail
 	private void removeTail() {
 		if(this.bodyPart.size() > 1) {
 			int last = this.bodyPart.size() - 1;
+			this.field.removeBodyPart(this.bodyPart.get(last));
 			BodyPart oldTail = this.bodyPart.remove(last);
 			last = last - 1;
 			this.bodyPart.get(last).setTail(true);
@@ -301,8 +306,13 @@ public class SnakeImpl implements Snake{
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		List<Collidable> cellContent = new ArrayList<>();
 		cellContent.addAll(getItemToCollide(next));
+		for(Collidable c : this.field.getCell(next)) {
+			c.onCollision(this);
+		}
 		for (Collidable collidable : cellContent) {
-			collidable.onCollision(this);
+			if(collidable instanceof Item) {
+				collidable.onCollision(this);
+			}
 		}
 	}
 	
@@ -327,10 +337,14 @@ public class SnakeImpl implements Snake{
 		}
 		
 		for(Point c : cells) {
+			//System.out.println("Get point: " + c.x + " " + c.y +"\n");
 			for(int i = 0; i < this.field.getCell(c).size(); i++) {
-				item.add(this.field.getCell(c).get(i));
+				if(!c.equals(point)) {
+					item.add(this.field.getCell(c).get(i));
+				}
 			}
 		}
+		
 		return item;
 	}
 	
