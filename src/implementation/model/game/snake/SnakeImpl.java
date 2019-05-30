@@ -5,13 +5,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import design.model.game.BodyPart;
 import design.model.game.Collidable;
 import design.model.game.Direction;
 import design.model.game.Effect;
 import design.model.game.Field;
+import design.model.game.Item;
 import design.model.game.Player;
 import design.model.game.PlayerNumber;
 import design.model.game.Properties;
@@ -40,7 +40,6 @@ public class SnakeImpl implements Snake{
 		for(int i = point.size() - 1; i >= 0; i--) {
 			insertNewHead(point.get(i));
 		}
-		
 		properties.getLengthProperty().lengthen(point.size() - 1); 
 	}
 	
@@ -50,11 +49,13 @@ public class SnakeImpl implements Snake{
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
+				//System.out.println("Lenght before " + this.bodyPart.size() + "\n");
+				stampamiTutto();
 				handleCollisions(next);
 				move(next);
-				stampamiTutto();
-				reverse();
-				stampamiTutto();
+				System.out.println(this.isAlive);
+				//System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
+				Thread.sleep(3000);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -198,12 +199,14 @@ public class SnakeImpl implements Snake{
 			
 		}
 		this.bodyPart.add(0, p);
+		this.field.addBodyPart(p);
 	}
 	
 	//method that is used to remove the tail and set the new properties of the new tail
 	private void removeTail() {
 		if(this.bodyPart.size() > 1) {
 			int last = this.bodyPart.size() - 1;
+			this.field.removeBodyPart(this.bodyPart.get(last));
 			BodyPart oldTail = this.bodyPart.remove(last);
 			last = last - 1;
 			this.bodyPart.get(last).setTail(true);
@@ -301,11 +304,80 @@ public class SnakeImpl implements Snake{
 	//if in the cell where snake is going to move there are some collidable, call on collision on everyone of them
 	private void handleCollisions(Point next) throws NoSuchMethodException, SecurityException, InstantiationException, 
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Optional<List<Collidable>> cellContent = this.field.getCell(next);
-		if (cellContent.isPresent()) {
-			for (Collidable collidable : cellContent.get()) {
+		List<Collidable> cellContent = new ArrayList<>();
+		cellContent.addAll(getItemToCollide(next));
+		for(Collidable c : this.field.getCell(next)) {
+			c.onCollision(this);
+		}
+		for (Collidable collidable : cellContent) {
+			if(collidable instanceof Item) {
 				collidable.onCollision(this);
 			}
+		}
+	}
+	
+	//this method will return all the item to collide
+	//i find them using get adjacentpoint, that returns all the cell i have to collide with
+	//the handle collision will collide with all the item i return here
+	private List<Collidable> getItemToCollide(Point point) {
+		List<Point> cells = new ArrayList<>();
+		List<Collidable> item = new ArrayList<>();
+		List<Point> tmp = new ArrayList<>();
+		
+		cells.add(point);
+		//aggiungo il primo punto e poi nel for calcolo tutti i punti attorno; nel caso
+		//al secondo giro calcolo tutti i punti attorno della lista, ma nel metodo sotto evito
+		//ddìi aggiungere i punti che sono già presenti
+		for(int i = 1; i < this.properties.getPickupProperty().getPickupRadius(); i++) {
+			for(Point c : cells) {
+				tmp.addAll(getAdjacentPoints(c));
+			}
+			cells.addAll(tmp);
+			tmp.clear();
+		}
+		
+		for(Point c : cells) {
+			//System.out.println("Get point: " + c.x + " " + c.y +"\n");
+			for(int i = 0; i < this.field.getCell(c).size(); i++) {
+				if(!c.equals(point)) {
+					item.add(this.field.getCell(c).get(i));
+				}
+			}
+		}
+		
+		return item;
+	}
+	
+	//this method calculates all the cell that are adjacent at the cell in input, but just those that don't go outside of the border
+	private List<Point> getAdjacentPoints(Point point) {
+		List<Point> adjacentPoints = new ArrayList<>();
+		if(Math.abs(point.x - (point.x + 1)) == 1) {
+			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
+			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
+			if(Math.abs(point.y - (point.y + 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y + 1));
+				addNotPresentPoint(adjacentPoints, new Point(point.x, point.y + 1));
+			}
+			if(Math.abs(point.y - (point.y - 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y - 1));
+				addNotPresentPoint(adjacentPoints, new Point(point.x, point.y - 1));
+			}
+		}
+		if(Math.abs(point.x - (point.x - 1)) == 1) {
+			addNotPresentPoint(adjacentPoints, new Point(point.x - 1, point.y));
+			if(Math.abs(point.y - (point.y + 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x - 1, point.y + 1));
+			}
+			if(Math.abs(point.y - (point.y - 1)) == 1) {
+				addNotPresentPoint(adjacentPoints, new Point(point.x - 1, point.y - 1));
+			}
+		}
+		return adjacentPoints;
+	}
+	
+	private void addNotPresentPoint(List<Point> list, Point point) {
+		if(!list.contains(point)) {
+			list.add(point);
 		}
 	}
 	

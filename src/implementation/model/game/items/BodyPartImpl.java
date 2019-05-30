@@ -49,7 +49,7 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 	}
 	
 	private void collision(Snake collider) {
-		if (!owner.getProperties().getCollisionProperty().getIntangibility()) {
+		if (!collider.getProperties().getCollisionProperty().getIntangibility()) {
 			CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
 			if (!colliderProperty.getIntangibility() && !colliderProperty.getInvincibility()) {
 				collider.kill();
