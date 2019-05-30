@@ -50,7 +50,7 @@ public class GameLoaderJSON implements GameLoader {
 	
 	
 	
-	public GameLoaderJSON(String stagePath) throws IOException {
+	public GameLoaderJSON(String stagePath, List<String> names) throws IOException {
 		objectMapper = new ObjectMapper();
 		String json = readJSON(stagePath);
 		
