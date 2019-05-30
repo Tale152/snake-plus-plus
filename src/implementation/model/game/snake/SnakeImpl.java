@@ -353,7 +353,6 @@ public class SnakeImpl implements Snake{
 		List<Point> adjacentPoints = new ArrayList<>();
 		if(Math.abs(point.x - (point.x + 1)) == 1) {
 			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
-			addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y));
 			if(Math.abs(point.y - (point.y + 1)) == 1) {
 				addNotPresentPoint(adjacentPoints, new Point(point.x + 1, point.y + 1));
 				addNotPresentPoint(adjacentPoints, new Point(point.x, point.y + 1));

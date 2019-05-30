@@ -1,6 +1,8 @@
 package implementation.controller.game;
 
 import java.awt.Point;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -8,6 +10,7 @@ import java.util.Random;
 import design.controller.game.Action;
 import design.controller.game.EventTranslator;
 import design.controller.game.GameController;
+import design.controller.game.GameLoader;
 import design.controller.game.InputEvent;
 import design.controller.game.ItemCounter;
 import design.model.game.BodyPart;
@@ -17,9 +20,11 @@ import design.model.game.Item;
 import design.model.game.ItemRule;
 import design.model.game.LossConditions;
 import design.model.game.Snake;
+import design.model.game.Wall;
 import design.model.game.WinConditions;
 import design.view.game.GameView;
 import design.view.game.ResourcesLoader;
+import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.model.game.items.ItemFactory;
 
 public class GameControllerImpl implements GameController {
@@ -27,7 +32,7 @@ public class GameControllerImpl implements GameController {
 	private final static String HEAD = "head_";
 	private final static String BODY = "body_";
 	private final static String TAIL = "tail_";
-	
+	private final static String WALL = "wall_";
 	
 	private final ItemCounter counter;
 	private final GameView gameView;
@@ -37,11 +42,21 @@ public class GameControllerImpl implements GameController {
 	private final ItemFactory itemFactory;
 	
 	
-	public GameControllerImpl(String stage, List<String> playerNames, GameView view, ResourcesLoader resources) {
+	public GameControllerImpl(String stage, List<String> playerNames, GameView view, ResourcesLoader resources) throws IOException {
+		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+		this.counter = new ItemCounterImpl(this.gameModel.getField(), this.gameModel.getGameRules());
+		this.gameView = view;
+		this.resources = resources;
+		this.controls = new EventTranslatorImpl();
 		
 		
 	}
 
+	private void initView() {
+		for(Wall w: this.gameModel.getField().getWalls()) {
+		}
+	}
+	
 	@Override
 	public void run() {
 		this.gameModel.getField().begin();
@@ -146,4 +161,22 @@ public class GameControllerImpl implements GameController {
 		return b ? "1" : "0";
 	}
 	
+	private String wallSpriteName(Wall wall, List<Wall> allWalls) {
+		String s = WALL;
+		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y - 1));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x + 1, wall.getPoint().y));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y + 1));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x - 1, wall.getPoint().y));
+		return s;
+		
+	}
+	
+	private String collide(Wall wall, List<Wall> allWalls, Point point) {
+		if(point.x < 0 || point.y < 0 || point.x >= this.gameModel.getField().getWidth() || point.y >= this.gameModel.getField().getHeight()) {
+			return "0";
+		}
+		return allWalls.stream().anyMatch(e -> {
+			return e.getPoint().equals(point);
+		}) ? "1" : "0";
+	}
 }
