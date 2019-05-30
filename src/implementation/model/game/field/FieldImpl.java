@@ -18,13 +18,24 @@ public class FieldImpl implements Field {
 	private int height;
 	
 	// TODO: maybe use Sets instead of Lists? order is irrelevant and stuff can't be repeated
-	private List<Item> items;
-	private List<Wall> walls;
-	private List<BodyPart> bodyParts;
+	final private List<Item> items;
+	final private List<Wall> walls;
+	final private List<BodyPart> bodyParts;
 	
-	private List<Snake> snakes;
+	final private List<Snake> snakes;
 	
-	private List<Item> removedItems;
+	final private List<Item> removedItems;
+	
+	public FieldImpl(Point dimensions) {
+		items = new ArrayList<Item>();
+		walls = new ArrayList<Wall>();
+		bodyParts = new ArrayList<BodyPart>();
+		snakes = new ArrayList<Snake>();
+		removedItems = new ArrayList<Item>();
+		
+		this.width = (int) dimensions.getX();
+		this.height = (int) dimensions.getY();
+	}
 	
 	private boolean contains(Collidable item) {
 		Point coord = item.getPoint();
@@ -88,13 +99,6 @@ public class FieldImpl implements Field {
 		cellList.addAll(Arrays.asList(walls.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
 		cellList.addAll(Arrays.asList(bodyParts.stream().filter(i -> i.getPoint().equals(point)).toArray(Collidable[]::new)));
 		return cellList;
-	}
-	
-	
-	public FieldImpl(Point dimensions) {
-		items = new ArrayList<Item>();
-		this.width = (int) dimensions.getX();
-		this.height = (int) dimensions.getY();
 	}
 
 	@Override
