@@ -6,11 +6,9 @@ import java.util.Optional;
 import design.controller.game.Action;
 import design.controller.game.EventTranslator;
 import design.controller.game.GameController;
-import design.controller.game.GameLoader;
 import design.controller.game.InputEvent;
 import design.controller.game.ItemCounter;
 import design.model.game.DirectionProperty;
-import design.model.game.Field;
 import design.model.game.GameModel;
 import design.model.game.Item;
 import design.model.game.ItemRule;
@@ -19,6 +17,7 @@ import design.model.game.Snake;
 import design.model.game.WinConditions;
 import design.view.game.GameView;
 import design.view.game.ResourcesLoader;
+import implementation.model.game.items.ItemFactory;
 
 public class GameControllerImpl implements GameController {
 	
@@ -27,6 +26,7 @@ public class GameControllerImpl implements GameController {
 	private final GameModel gameModel;
 	private final ResourcesLoader resources;
 	private final EventTranslator controls;
+	private final ItemFactory itemFactory;
 	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameView view, ResourcesLoader resources) {
