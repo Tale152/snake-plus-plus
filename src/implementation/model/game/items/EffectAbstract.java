@@ -37,11 +37,21 @@ public abstract class EffectAbstract implements Effect {
 			throw new IllegalStateException();
 		}
 		behaviorOnLastingEffectStart(attachedSnake.get());
-		try {
-			Thread.sleep(this.getEffectDuration().get());
-			//TODO
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		long activationTime = System.currentTimeMillis();
+		long timeToWait = this.getEffectDuration().get();
+		while (true) {
+			try {
+				Thread.sleep(timeToWait);
+				long enlapsedTime = System.currentTimeMillis() - activationTime;
+				if (enlapsedTime >= this.getEffectDuration().get()) {
+					break;
+				}
+				else {
+					timeToWait = this.getEffectDuration().get() - enlapsedTime;
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		attachedSnake.get().removeEffect(this);
 		behaviorOnLastingEffectEnd(attachedSnake.get());
