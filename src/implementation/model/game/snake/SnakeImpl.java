@@ -26,6 +26,7 @@ public class SnakeImpl implements Snake{
 	private List<Effect> effects;
 	private List<BodyPart> bodyPart;
 	private boolean isAlive;
+	private boolean hasMoved;
 	
 	public SnakeImpl(PlayerNumber playerNumber, String playerName, Direction direction, 
 			long deltaT, double speedMultiplier, Field field, List<Point> point) {
@@ -36,6 +37,7 @@ public class SnakeImpl implements Snake{
 		this.effects = new ArrayList<>();
 		this.bodyPart = new ArrayList<>();
 		this.isAlive = true;
+		this.hasMoved = false;
 
 		for(int i = point.size() - 1; i >= 0; i--) {
 			insertNewHead(point.get(i));
@@ -49,12 +51,10 @@ public class SnakeImpl implements Snake{
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
-				//System.out.println("Lenght before " + this.bodyPart.size() + "\n");
 				stampamiTutto();
 				handleCollisions(next);
 				move(next);
 				System.out.println(this.isAlive);
-				//System.out.println("Lenght after " +  this.bodyPart.size() + "\n");
 				Thread.sleep(3000);
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
@@ -79,6 +79,7 @@ public class SnakeImpl implements Snake{
 	public void addEffect(Effect effect) {
 		if(!this.effects.contains(effect)) {
 			this.effects.add(effect);
+			effect.attachSnake(this);
 			new Thread(effect).start();
 		} else {
 			effect.incrementDuration(effect.getEffectDuration().get());
@@ -139,6 +140,14 @@ public class SnakeImpl implements Snake{
 		default: throw new IllegalStateException();	
 		}
 		return updatedDirection;
+	}
+	
+	public boolean hasMoved() {
+		if(this.hasMoved) {
+			this.hasMoved = false;
+			return true;
+		}
+		return false;
 	}
 	
 	//used to determinate the direction of snake, it returns the direction of p1 based on the position of p2
@@ -281,6 +290,7 @@ public class SnakeImpl implements Snake{
 		while(this.bodyPart.size() > this.properties.getLengthProperty().getLength()){
 			removeTail();
 		}
+		this.hasMoved = true;
 	}
 	
 	//snake havo to wait to move until it is his time
@@ -344,7 +354,6 @@ public class SnakeImpl implements Snake{
 				}
 			}
 		}
-		
 		return item;
 	}
 	
