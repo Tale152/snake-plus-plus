@@ -9,7 +9,11 @@ public interface GameField {
 	
 	public Map<Point, Sprite> getItemSprites();
 	
-	public Optional<Sprite> getItemCell(Point point);
+	public List<Sprite> getCell(Point point);
+	
+	public void addWallSprite(Point point, Sprite sprite);
+	
+	public Map<Point, Sprite> getWallSprites();
 	
 	public void addItemSprite(Point point, Sprite sprite);
 	

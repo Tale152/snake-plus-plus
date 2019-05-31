@@ -17,6 +17,7 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 	
 	protected ItemImpl(Field field, Point point, Class<? extends Effect> effectClass, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
 		super(point);
+		field.addItem(this);
 		this.field = field;
 		this.effectClass = effectClass;
 		this.dExpire = dExpire;

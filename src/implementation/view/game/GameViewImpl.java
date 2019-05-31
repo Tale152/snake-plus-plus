@@ -1,6 +1,8 @@
 package implementation.view.game;
 
+import design.controller.game.GameController;
 import design.view.game.*;
+import implementation.controller.game.GameControllerImpl;
 import javafx.beans.value.*;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -15,6 +17,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -81,7 +85,11 @@ public class GameViewImpl implements GameView {
 	    root.getBackgroundGraphicsContext().setTextAlign(TextAlignment.CENTER);
 	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
     	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
-
+    	
+    	//TODO 
+    	GameController controller = new GameControllerImpl("", new ArrayList<String>(Arrays.asList("Viroli")), this, loader);
+    	Thread t  = new Thread(controller);
+    	t.start();
 	}
     
 	@Override
@@ -111,11 +119,6 @@ public class GameViewImpl implements GameView {
     				scoreSpacingY);
     	}
 	}
-
-	@Override
-	public void togglePause() {
-		// TODO implementare
-	}
 	
 	public Scene getScene() {
 		return scene;
@@ -128,6 +131,9 @@ public class GameViewImpl implements GameView {
     
     private void drawField(ResourcesLoader loader, GameField field, GraphicsContext fieldGC, double spriteLen, int nPlayer) {
     	for (Entry<Point, Sprite> entry : field.getItemSprites().entrySet()) {
+    		drawSprite(fieldGC, (Image) entry.getValue().getSprite(), entry.getKey(), spriteLen);
+    	}
+    	for (Entry<Point, Sprite> entry : field.getWallSprites().entrySet()) {
     		drawSprite(fieldGC, (Image) entry.getValue().getSprite(), entry.getKey(), spriteLen);
     	}
     	for (int i = 0; i < nPlayer; i++) {

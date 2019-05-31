@@ -10,11 +10,13 @@ public class ItemCounterImpl implements ItemCounter {
 		private final Class<? extends Effect> effectClass;
 		private int current;
 		private final int max;
+		private long lastSpawnAttempt;
 		
 		private Countable(Class<? extends Effect> effectClass, int max) {
 			this.effectClass = effectClass;
 			current = 0;
 			this.max = max;
+			lastSpawnAttempt = System.currentTimeMillis();
 		}
 		
 	}
@@ -69,6 +71,17 @@ public class ItemCounterImpl implements ItemCounter {
 	public boolean isMax(Class<? extends Effect> effect) {
 		Countable elem = getElement(effect).get();
 		return elem.current >= elem.max;
+	}
+
+	@Override
+	public long getLastSpawnAttempt(Class<? extends Effect> effect) {
+		Countable elem = getElement(effect).get();
+		return elem.lastSpawnAttempt;
+	}
+
+	@Override
+	public void setLastSpawnAttempt(Class<? extends Effect> effect, long time) {
+		getElement(effect).get().lastSpawnAttempt = time;
 	}
 
 }
