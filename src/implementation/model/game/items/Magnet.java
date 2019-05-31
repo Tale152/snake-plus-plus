@@ -6,7 +6,7 @@ import design.model.game.Snake;
 
 public class Magnet extends EffectAbstract{
 
-	public final static int MAGNET_RADIOUS_MULTIPLIER = 1;
+	public final static int MAGNET_RADIOUS_MULTIPLIER = 2;
 	
 	
 	public Magnet(Optional<Long> dEffectDuration) {

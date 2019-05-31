@@ -37,7 +37,10 @@ import implementation.model.game.gameRules.ItemRuleImpl;
 import implementation.model.game.gameRules.LossConditionsImpl;
 import implementation.model.game.gameRules.WinConditionsImpl;
 import implementation.model.game.items.Apple;
+import implementation.model.game.items.BadApple;
 import implementation.model.game.items.ItemFactory;
+import implementation.model.game.items.Magnet;
+import implementation.model.game.items.Turbo;
 import implementation.model.game.items.WallImpl;
 import implementation.model.game.snake.SnakeImpl;
 
@@ -55,6 +58,8 @@ public class GameControllerImpl implements GameController {
 	private final EventTranslator controls;
 	private final ItemFactory itemFactory;
 	
+	private long gameTime;
+	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameView view, ResourcesLoader resources) throws IOException {
 		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
@@ -62,6 +67,7 @@ public class GameControllerImpl implements GameController {
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		
 		this.itemFactory.createItem(new Point(2,1), Apple.class, Optional.empty(), Optional.empty());
+		//this.itemFactory.createItem(new Point(4,0), Magnet.class, Optional.empty(), Optional.of(3000L));
 		
 		this.counter = new ItemCounterImpl(this.gameModel.getField(), this.gameModel.getGameRules());
 		this.gameView = view;
@@ -80,12 +86,24 @@ public class GameControllerImpl implements GameController {
 //		
 //		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
 //		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
-//		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 1000, 0.7, 1, Optional.empty(), Optional.empty())));
-//		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
+//		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 1000, 1, 5, Optional.empty(), Optional.empty()),
+//				new ItemRuleImpl(Magnet.class, 1000, 0.3, 1, Optional.empty(), Optional.of(3000L)),
+//				new ItemRuleImpl(BadApple.class, 500, 0.7, 3, Optional.empty(), Optional.empty())));
+//		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, false);
 //		return new GameModelImpl(field, gameRules);
 //	}
+	
+	private String getTimeFormat() {
+		return Long.toString(gameTime / 1000L);
+	}
 
 	private void initView() {
+		if (gameModel.getGameRules().isTimeGoingForward()) {
+			gameTime = 0;
+		} else {
+			//TODO quanto?????
+			gameTime = 42000;
+		}
 		for(Wall w: this.gameModel.getField().getWalls()) {
 			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
 			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
@@ -93,13 +111,18 @@ public class GameControllerImpl implements GameController {
 		for(Item i: this.gameModel.getField().getItems()) {
 			this.gameView.getField().addItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
 		}
+		int i = 0;
 		for(Snake s : this.gameModel.getField().getSnakes()) {
 			if(s.isAlive()) {
 				for(BodyPart b : s.getBodyParts()) {
 					this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
 				}
+				gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
+				gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
 			}
+			++i;
 		}
+		gameView.getHUD().setTime(getTimeFormat());
 	}
 	
 	@Override
@@ -111,7 +134,14 @@ public class GameControllerImpl implements GameController {
 			snakeView();
 			this.gameView.update();
 			try {
+				long timeBeforeSleep = System.currentTimeMillis();
 				Thread.sleep(1000/60);
+				if (gameModel.getGameRules().isTimeGoingForward()) {
+					gameTime += System.currentTimeMillis() - timeBeforeSleep;
+				} else {
+					gameTime -= System.currentTimeMillis() - timeBeforeSleep;
+				}
+				gameView.getHUD().setTime(getTimeFormat());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -152,7 +182,7 @@ public class GameControllerImpl implements GameController {
 			if(!this.counter.isMax(rule.getEffectClass())) {
 				if(time - this.counter.getLastSpawnAttempt(rule.getEffectClass()) >= rule.getSpawnDelta()) {
 					this.counter.setLastSpawnAttempt(rule.getEffectClass(), time);
-					if(Math.random() >= rule.getSpawnChance()) {
+					if(Math.random() <= rule.getSpawnChance()) {
 						Point p = getRandomPoint();
 						this.itemFactory.createItem(p, rule.getEffectClass(), rule.getItemDuration(), rule.getEffectDuration());
 						this.counter.increase(rule.getEffectClass());
@@ -180,11 +210,16 @@ public class GameControllerImpl implements GameController {
 	private void snakeView() {
 		List<Snake> snakes = this.gameModel.getField().getSnakes();
 		this.gameView.getField().resetSnakeSprites(snakes.size());
+		int i = 0;
 		for(Snake s : snakes) {
 			if(s.isAlive()) {
 				for(BodyPart b : s.getBodyParts()) {
 					this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
 				}
+				gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
+			}
+			else {
+				gameView.getHUD().getPlayerHUDs().get(i).setAlive(false);
 			}
 		}
 	}
