@@ -22,4 +22,6 @@ public interface Snake extends Runnable{
 	
 	public List<BodyPart> getBodyParts();
 	
+	public boolean hasMoved();
+	
 }
