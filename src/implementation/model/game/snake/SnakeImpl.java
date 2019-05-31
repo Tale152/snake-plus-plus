@@ -79,7 +79,7 @@ public class SnakeImpl implements Snake{
 	public void addEffect(Effect effect) {
 		if(!this.effects.contains(effect)) {
 			this.effects.add(effect);
-			effect.run();
+			new Thread(effect).start();
 		} else {
 			effect.incrementDuration(effect.getEffectDuration().get());
 		}
