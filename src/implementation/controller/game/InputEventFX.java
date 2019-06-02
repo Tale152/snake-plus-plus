@@ -25,8 +25,35 @@ public class InputEventFX implements InputEvent {
 		return key;
 	}
 	
+	public int hashCode() {
+		//TODO: Return a proper hashcode
+		return getInput().hashCode();
+	}
+
+	public boolean equals(InputEvent input) {
+		boolean isKeyEqual = input.getInput().contentEquals(getInput());
+
+		boolean isDeviceTypeEqual = input.getDeviceType().equals(getDeviceType());
+
+		boolean isDeviceIdEqual = false;
+		if (getDeviceID().isPresent() && input.getDeviceID().isPresent()) {
+			isDeviceIdEqual = getDeviceID().get().equals(input.getDeviceID().get());
+		} else if (!getDeviceID().isPresent() && !input.getDeviceID().isPresent()) {
+			isDeviceIdEqual = true;
+		}
+		return  isKeyEqual && isDeviceIdEqual && isDeviceTypeEqual;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o.getClass().equals(this.getClass()) && this.equals((InputEvent) o);
+	}
+
 	public InputEventFX(KeyEvent e) {
 		this.key = e.getText();
 	}
 
+	public InputEventFX(String k) {
+		this.key = k;
+	}
 }
