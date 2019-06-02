@@ -7,12 +7,13 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	
 	private Direction direction;
 	private boolean reversed;
+	private boolean canChangeDirection;
 	
 	public DirectionPropertyImpl(Direction direction) {
 		checkDirection(direction);
 		this.direction = direction;
 		this.reversed = false;
-		
+		this.canChangeDirection = true;
 	}
 	
 	@Override
@@ -29,12 +30,14 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	@Override
 	public boolean setDirection(Direction direction) {
 		checkDirection(direction);
-		switch(direction) {
-			case UP: if(!this.direction.equals(Direction.DOWN) && !this.reversed) { 
-							this.direction = direction;
-						} else if(!this.direction.equals(Direction.UP) && this.reversed){
-							this.direction = reversedDirection(direction);
-						}	
+		if(canChangeDirection) {
+			this.canChangeDirection = false;
+			switch(direction) {
+			case UP: if(!this.direction.equals(Direction.DOWN) && !this.reversed) {
+						this.direction = direction;
+					} else if(!this.direction.equals(Direction.UP) && this.reversed){
+						this.direction = reversedDirection(direction);
+					}	
 			break;
 			case DOWN: if(!this.direction.equals(Direction.UP) && !this.reversed) { 
 								this.direction = direction; 
@@ -55,9 +58,10 @@ public class DirectionPropertyImpl implements DirectionProperty{
 							}
 			break;
 			default: throw new IllegalStateException();
-		
+			}
 		}
-		return true;
+		this.canChangeDirection = true;
+		return this.canChangeDirection;
 	}
 
 	@Override

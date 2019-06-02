@@ -59,14 +59,14 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 		long timeToWait = dExpire.get();								//e quanto tempo devo aspettare
 		while(true) {
 			wait(timeToWait);											//aspetto o un notify o il tempo 
-			long deltaT = System.currentTimeMillis() - startingTime;	//quanto tempo è passato da quando mi ero addormentato
-			if (deltaT >= timeToWait) {									//è effettivamente passato il tempo necessario
-				break;													//adiòs
+			long deltaT = System.currentTimeMillis() - startingTime;	//quanto tempo ï¿½ passato da quando mi ero addormentato
+			if (deltaT >= timeToWait) {									//ï¿½ effettivamente passato il tempo necessario
+				break;													//adiï¿½s
 			}
 			else {														//prima che io scadessi mi hanno mandato il notify, ergo hanno chiesto di entrare in pausa
-				wait();													//quindi aspetto che mi diano segnale che la pausa è finita
-				startingTime = System.currentTimeMillis();				//affinchè il confronto di prima funzioni questo momento è il nuovo starting time
-				timeToWait -= deltaT;									//e il tempo da aspettare quindi cala del tempo già passato prima
+				wait();													//quindi aspetto che mi diano segnale che la pausa ï¿½ finita
+				startingTime = System.currentTimeMillis();				//affinchï¿½ il confronto di prima funzioni questo momento ï¿½ il nuovo starting time
+				timeToWait -= deltaT;									//e il tempo da aspettare quindi cala del tempo giï¿½ passato prima
 			}		
 		}
 	}

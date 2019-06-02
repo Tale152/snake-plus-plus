@@ -3,7 +3,6 @@ package implementation.model.game.snake;
 import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import design.model.game.BodyPart;
@@ -47,12 +46,20 @@ public class SnakeImpl implements Snake{
 	
 	@Override
 	public void run() {
+		int i = 0;
 		while(isAlive) {
 			try {
 				waitToMove();
 				Point next = obtainNextPoint();
 				handleCollisions(next);
 				move(next);
+				stampamiTutto();
+				if(i == 1) {
+					reverse();
+					System.out.println("\n\n REVERSE!! \n\n");
+				}
+				Thread.sleep(1000);
+				i++;
 
 				
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
@@ -109,16 +116,20 @@ public class SnakeImpl implements Snake{
 		Direction direction;
 		int snakeSize = this.bodyPart.size();
 		if(snakeSize > 1) {
-			Point p1 = this.bodyPart.get(snakeSize - 2).getPoint();
-			Point p2 = this.bodyPart.get(snakeSize - 1).getPoint();
+			Point p1 = this.bodyPart.get(snakeSize - 1).getPoint();
+			Point p2 = this.bodyPart.get(snakeSize - 2).getPoint();
 			direction = determinateDirection(p1, p2);
-			Collections.reverse(this.bodyPart);
+			List<BodyPart> tmp = new ArrayList<>();
+			tmp.addAll(this.bodyPart);
+			this.bodyPart.clear();
+			for(int i = 0; i <= tmp.size() - 1; i++) {
+				this.field.removeBodyPart(tmp.get(i));
+				insertNewHead(tmp.get(i).getPoint());
+			}
 		} else {
 			direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
 		}
-		this.properties.getDirectionProperty().forceDirection(direction);
-
-		
+		this.properties.getDirectionProperty().forceDirection(direction);	
 	}
 
 	@Override
@@ -260,23 +271,23 @@ public class SnakeImpl implements Snake{
 	//i can obtain the next point where snake is going to move
 	private Point obtainNextPoint() {
 		Point next = new Point();
-		Point head = bodyPart.get(0).getPoint();
-		switch(properties.getDirectionProperty().getDirection()) {
+		Point head = this.bodyPart.get(0).getPoint();
+		switch(this.properties.getDirectionProperty().getDirection()) {
 			case UP: next = new Point(head.x, head.y - 1); break;
 			case DOWN: next = new Point(head.x, head.y + 1); break;
 			case LEFT: next = new Point(head.x - 1, head.y); break;
 			case RIGHT: next = new Point(head.x + 1, head.y); break;
 		}
 		if (next.x < 0) {
-			next = new Point(field.getWidth() - 1, next.y);
+			next = new Point(this.field.getWidth() - 1, next.y);
 		} 
-		else if (next.x >= field.getWidth()) {
+		else if (next.x >= this.field.getWidth()) {
 			next = new Point(0, next.y);
 		}
 		else if (next.y < 0) {
-			next = new Point(next.x, field.getHeight() -1);
+			next = new Point(next.x, this.field.getHeight() -1);
 		}
-		else if (next.y >= field.getHeight()) {
+		else if (next.y >= this.field.getHeight()) {
 			next = new Point (next.x, 0);
 		}
 		return next;
@@ -291,7 +302,7 @@ public class SnakeImpl implements Snake{
 		this.hasMoved = true;
 	}
 	
-	//snake havo to wait to move until it is his time
+	//snake hav2 to wait to move until it is his time
 	private synchronized void waitToMove() throws InterruptedException {
 		long startingTime = System.currentTimeMillis();		
 		long timeToWait = (long)(properties.getSpeedProperty().getDeltaT() * properties.getSpeedProperty().getSpeedMultiplier());					
@@ -397,7 +408,8 @@ public class SnakeImpl implements Snake{
 					+ "Is connected on top: " + b.isCombinedOnTop() + "\n"
 					+ "Is connected on right: " + b.isCombinedOnRight() + "\n"
 					+ "Is connected on bottom: " + b.isCombinedOnBottom() + "\n"
-					+ "Is connected on left: " + b.isCombinedOnLeft() + "\n\n");
+					+ "Is connected on left: " + b.isCombinedOnLeft() + "\n"
+					+ "Snake direction: " + this.properties.getDirectionProperty().getDirection() + "\n\n");
 		}
 	}
 }

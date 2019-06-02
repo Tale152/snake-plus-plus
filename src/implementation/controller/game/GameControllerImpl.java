@@ -75,7 +75,7 @@ public class GameControllerImpl implements GameController {
 		this.resources = resources;
 		this.controls = new EventTranslatorImpl();
 		initView();
-		/*gameView.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+		gameView.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent arg0) {
 				switch (arg0.getCode()) {
@@ -85,7 +85,7 @@ public class GameControllerImpl implements GameController {
 				case RIGHT : gameModel.getField().getSnakes().get(0).getProperties().getDirectionProperty().setDirection(Direction.RIGHT); break;
 			}
 
-		}});*/
+		}});
 		
 	}
 	
