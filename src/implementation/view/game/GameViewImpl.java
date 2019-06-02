@@ -3,12 +3,14 @@ package implementation.view.game;
 import design.controller.game.GameController;
 import design.view.game.*;
 import implementation.controller.game.GameControllerImpl;
+import implementation.controller.game.InputEventFX;
 import javafx.beans.value.*;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -88,6 +90,9 @@ public class GameViewImpl implements GameView {
     	
     	//TODO 
     	GameController controller = new GameControllerImpl("", new ArrayList<String>(Arrays.asList("Viroli")), this, loader);
+    	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+    		controller.playerInput(new InputEventFX(key));
+    	});
     	Thread t  = new Thread(controller);
     	t.start();
 	}
