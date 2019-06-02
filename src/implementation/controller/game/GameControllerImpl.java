@@ -63,8 +63,8 @@ public class GameControllerImpl implements GameController {
 	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-//		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
-		gameModel = daButtare();
+		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+//		gameModel = daButtare();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		
 		this.itemFactory.createItem(new Point(2,1), Apple.class, Optional.empty(), Optional.empty());
@@ -75,7 +75,7 @@ public class GameControllerImpl implements GameController {
 		this.resources = resources;
 		this.controls = new EventTranslatorImpl();
 		initView();
-		gameView.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+		/*gameView.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent arg0) {
 				switch (arg0.getCode()) {
@@ -85,11 +85,11 @@ public class GameControllerImpl implements GameController {
 				case RIGHT : gameModel.getField().getSnakes().get(0).getProperties().getDirectionProperty().setDirection(Direction.RIGHT); break;
 			}
 
-		}});
+		}});*/
 		
 	}
 	
-	private GameModel daButtare() {
+	/*private GameModel daButtare() {
 		Field field = new FieldImpl(new Point(30,20));
 		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 100, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,3)))));
 		//field.getSnakes().get(0).getProperties().getPickupProperty().setPickupRadius(2);
@@ -103,7 +103,7 @@ public class GameControllerImpl implements GameController {
 				new ItemRuleImpl(Spring.class, 1000, 1.0, 1, Optional.empty(), Optional.empty())));
 		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
 		return new GameModelImpl(field, gameRules);
-	}
+	}*/
 	
 	private String getTimeFormat() {
 		return Long.toString(gameTime / 1000L);
