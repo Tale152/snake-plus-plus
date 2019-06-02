@@ -138,8 +138,8 @@ public class GameViewImpl implements GameView {
     	}
     	for (int i = 0; i < nPlayer; i++) {
     		for (Entry<Point, List<Sprite>> entry : field.getSnakeSprites(i).entrySet()) {
-    			for (Sprite sprite : entry.getValue()) {
-    				drawSprite(fieldGC, (Image) sprite.getSprite(), entry.getKey(), spriteLen);
+    			for (int j = entry.getValue().size() - 1; 0 <= j; j--) {
+    				drawSprite(fieldGC, (Image) entry.getValue().get(j).getSprite(), entry.getKey(), spriteLen);
     			}
     		}
     	}

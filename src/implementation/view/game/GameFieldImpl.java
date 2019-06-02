@@ -77,9 +77,7 @@ public class GameFieldImpl implements GameField {
 
 	@Override
 	public void resetSnakeSprites(int playerNumber) {
-		for (int i = 0; i < playerNumber; i++) {
-			snakeSprites.get(i).clear();
-		}
+		snakeSprites.get(playerNumber).clear();
 	}
 
 	@Override
