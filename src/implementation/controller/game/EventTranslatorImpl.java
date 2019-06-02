@@ -7,6 +7,8 @@ import java.util.Optional;
 import design.controller.game.Action;
 import design.controller.game.EventTranslator;
 import design.controller.game.InputEvent;
+import design.model.game.Direction;
+import design.model.game.PlayerNumber;
 
 public class EventTranslatorImpl implements EventTranslator {
 	
@@ -64,6 +66,11 @@ public class EventTranslatorImpl implements EventTranslator {
 	
 	public EventTranslatorImpl() {
 		bindings = new HashMap<InputEvent,Action>();
+		// Default bindings. TODO: read from file
+		setBinding(new InputEventFX("w"), new ActionImpl(PlayerNumber.PLAYER1, Direction.UP));
+		setBinding(new InputEventFX("s"), new ActionImpl(PlayerNumber.PLAYER1, Direction.DOWN));
+		setBinding(new InputEventFX("a"), new ActionImpl(PlayerNumber.PLAYER1, Direction.LEFT));
+		setBinding(new InputEventFX("d"), new ActionImpl(PlayerNumber.PLAYER1, Direction.RIGHT));
 	}
 
 }
