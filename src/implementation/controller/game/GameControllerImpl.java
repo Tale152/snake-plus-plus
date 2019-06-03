@@ -1,15 +1,10 @@
 package implementation.controller.game;
 
 import java.awt.Point;
-import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import javax.swing.JFrame;
 
 import design.controller.game.Action;
 import design.controller.game.EventTranslator;
@@ -64,7 +59,7 @@ public class GameControllerImpl implements GameController {
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
 		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
-//		gameModel = daButtare();
+		//gameModel = daButtare();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		
 		this.itemFactory.createItem(new Point(2,1), Apple.class, Optional.empty(), Optional.empty());
@@ -74,25 +69,13 @@ public class GameControllerImpl implements GameController {
 		this.gameView = view;
 		this.resources = resources;
 		this.controls = new EventTranslatorImpl();
-		initView();
-		gameView.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent arg0) {
-				switch (arg0.getCode()) {
-				case UP : gameModel.getField().getSnakes().get(0).getProperties().getDirectionProperty().setDirection(Direction.UP); break;
-				case DOWN : gameModel.getField().getSnakes().get(0).getProperties().getDirectionProperty().setDirection(Direction.DOWN); break;
-				case LEFT : gameModel.getField().getSnakes().get(0).getProperties().getDirectionProperty().setDirection(Direction.LEFT); break;
-				case RIGHT : gameModel.getField().getSnakes().get(0).getProperties().getDirectionProperty().setDirection(Direction.RIGHT); break;
-			}
-
-		}});
-		
+		initView();	
 	}
 	
 	/*private GameModel daButtare() {
 		Field field = new FieldImpl(new Point(30,20));
 		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 100, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,3)))));
-		//field.getSnakes().get(0).getProperties().getPickupProperty().setPickupRadius(2);
+		field.getSnakes().get(0).getProperties().getPickupProperty().setPickupRadius(3);
 		//field.addWall(new WallImpl(new Point(0,0)));
 		//field.addWall(new WallImpl(new Point(1,0)));
 		//field.addWall(new WallImpl(new Point(0,1)));
@@ -100,7 +83,7 @@ public class GameControllerImpl implements GameController {
 		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
 		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
 		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 1000, 1, 5, Optional.empty(), Optional.empty()),
-				new ItemRuleImpl(Spring.class, 1000, 1.0, 1, Optional.empty(), Optional.empty())));
+				new ItemRuleImpl(Spring.class, 100, 1.0, 300, Optional.of(5000L), Optional.empty())));
 		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
 		return new GameModelImpl(field, gameRules);
 	}*/
