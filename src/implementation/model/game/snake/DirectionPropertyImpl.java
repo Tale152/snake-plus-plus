@@ -60,10 +60,13 @@ public class DirectionPropertyImpl implements DirectionProperty{
 			default: throw new IllegalStateException();
 			}
 		}
-		this.canChangeDirection = true;
 		return this.canChangeDirection;
 	}
 
+	public void allowChangeDirection() {
+		this.canChangeDirection = true;
+	}
+	
 	@Override
 	public void setReverseDirection(boolean reverse) {
 		this.reversed = reverse;

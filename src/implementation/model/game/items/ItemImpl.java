@@ -17,6 +17,9 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 	
 	protected ItemImpl(Field field, Point point, Class<? extends Effect> effectClass, Optional<Long> dExpire, Optional<Long> dEffectDuration) {
 		super(point);
+		if(dExpire == null) {
+			System.out.println("CAAZOOOOOO \n\n");
+		}
 		field.addItem(this);
 		this.field = field;
 		this.effectClass = effectClass;
@@ -27,6 +30,9 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 
 	@Override
 	public void onCollision(Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if(!collider.getProperties().getCollisionProperty().getIntangibility()) {
+			eaten = true;
+		}
 		Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
 		Effect effect = constructor.newInstance(dEffectDuration);
 		effect.instantaneousEffect(collider);
@@ -40,7 +46,7 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 	public void run() {
 		if (dExpire.isPresent()) {
 			try {
-				keepAlive();
+				Thread.sleep(dExpire.get());
 				if (!eaten) {
 					field.removeItem(this);
 					Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
@@ -53,28 +59,7 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 			}
 		}
 	}
-	
-	private synchronized void keepAlive() throws InterruptedException {
-		long startingTime = System.currentTimeMillis();					//mi segno il momento in cui son partito
-		long timeToWait = dExpire.get();								//e quanto tempo devo aspettare
-		while(true) {
-			wait(timeToWait);											//aspetto o un notify o il tempo 
-			long deltaT = System.currentTimeMillis() - startingTime;	//quanto tempo � passato da quando mi ero addormentato
-			if (deltaT >= timeToWait) {									//� effettivamente passato il tempo necessario
-				break;													//adi�s
-			}
-			else {														//prima che io scadessi mi hanno mandato il notify, ergo hanno chiesto di entrare in pausa
-				wait();													//quindi aspetto che mi diano segnale che la pausa � finita
-				startingTime = System.currentTimeMillis();				//affinch� il confronto di prima funzioni questo momento � il nuovo starting time
-				timeToWait -= deltaT;									//e il tempo da aspettare quindi cala del tempo gi� passato prima
-			}		
-		}
-	}
 
-	@Override
-	public void setEaten() {
-		eaten = true;
-	}
 
 	@Override
 	public Class<? extends Effect> getEffectClass() {

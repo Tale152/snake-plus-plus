@@ -46,22 +46,12 @@ public class SnakeImpl implements Snake{
 	
 	@Override
 	public void run() {
-		int i = 0;
 		while(isAlive) {
 			try {
 				waitToMove();
-				Point next = obtainNextPoint();
-				handleCollisions(next);
-				move(next);
-				stampamiTutto();
-				if(i == 1) {
-					reverse();
-					System.out.println("\n\n REVERSE!! \n\n");
-				}
-				Thread.sleep(1000);
-				i++;
-
-				
+				handleCollisions(obtainNextPoint());
+				move(obtainNextPoint());
+				this.properties.getDirectionProperty().allowChangeDirection();
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
