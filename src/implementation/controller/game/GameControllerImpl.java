@@ -2,6 +2,8 @@ package implementation.controller.game;
 
 import java.awt.Point;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -58,8 +60,8 @@ public class GameControllerImpl implements GameController {
 	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
-		//gameModel = daButtare();
+		//this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+		gameModel = daButtare();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		
 		this.itemFactory.createItem(new Point(2,1), Apple.class, Optional.empty(), Optional.empty());
@@ -72,21 +74,26 @@ public class GameControllerImpl implements GameController {
 		initView();	
 	}
 	
-	/*private GameModel daButtare() {
+	private GameModel daButtare() {
 		Field field = new FieldImpl(new Point(30,20));
 		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 100, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,3)))));
-		field.getSnakes().get(0).getProperties().getPickupProperty().setPickupRadius(3);
-		//field.addWall(new WallImpl(new Point(0,0)));
-		//field.addWall(new WallImpl(new Point(1,0)));
-		//field.addWall(new WallImpl(new Point(0,1)));
+//		field.addWall(new WallImpl(new Point(0,0)));
+//		field.addWall(new WallImpl(new Point(0,1)));
+//		field.addWall(new WallImpl(new Point(0,2)));
+//		field.addWall(new WallImpl(new Point(1,0)));
+//		field.addWall(new WallImpl(new Point(1,1)));
+//		field.addWall(new WallImpl(new Point(1,2)));
+//		field.addWall(new WallImpl(new Point(2,0)));
+//		field.addWall(new WallImpl(new Point(2,1)));
+//		field.addWall(new WallImpl(new Point(2,2)));
 		
 		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
 		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
 		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 1000, 1, 5, Optional.empty(), Optional.empty()),
-				new ItemRuleImpl(Spring.class, 100, 1.0, 300, Optional.of(5000L), Optional.empty())));
+				new ItemRuleImpl(Spring.class, 100, 1.0, 3, Optional.empty(), Optional.of(5000L))));
 		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
 		return new GameModelImpl(field, gameRules);
-	}*/
+	}
 	
 	private String getTimeFormat() {
 		return Long.toString(gameTime / 1000L);

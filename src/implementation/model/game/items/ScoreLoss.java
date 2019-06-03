@@ -19,10 +19,10 @@ public class ScoreLoss extends EffectAbstract{
 									.filter(e -> {return e.getClass().equals(this.getClass());})
 									.findFirst();
 		if (active.isPresent()) {
-			target.getPlayer().reduceScore(-Apple.SCORE_INCREMENT * (active.get().getComboCounter() + 1));
+			target.getPlayer().reduceScore(Apple.SCORE_INCREMENT * (active.get().getComboCounter() + 1));
 		}
 		else {
-			target.getPlayer().reduceScore(-Apple.SCORE_INCREMENT);
+			target.getPlayer().reduceScore(Apple.SCORE_INCREMENT);
 		}
 	}
 
