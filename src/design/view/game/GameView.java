@@ -6,6 +6,8 @@ public interface GameView {
 	
 	public GameField getField();
 	
-	public void update();
+	public void startRendering();
+	
+	public void stopRendering();
 	
 }

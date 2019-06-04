@@ -89,8 +89,8 @@ public class GameControllerImpl implements GameController {
 		
 		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
 		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
-		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 1000, 1, 5, Optional.empty(), Optional.empty()),
-				new ItemRuleImpl(Spring.class, 100, 1.0, 3, Optional.empty(), Optional.of(5000L))));
+		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 100, 1, 100, Optional.of(2000L), Optional.empty()),
+				new ItemRuleImpl(Spring.class, 100, 1.0, 1, Optional.empty(), Optional.of(5000L))));
 		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
 		return new GameModelImpl(field, gameRules);
 	}
@@ -130,11 +130,11 @@ public class GameControllerImpl implements GameController {
 	@Override
 	public void run() {
 		this.gameModel.getField().begin();
+		this.gameView.startRendering();
 		while(!isGameEnded()) {
 			updateDeletedItems();
 			spawnItems();
 			snakeView();
-			this.gameView.update();
 			try {
 				long timeBeforeSleep = System.currentTimeMillis();
 				Thread.sleep(1000/60);
@@ -149,6 +149,7 @@ public class GameControllerImpl implements GameController {
 				System.exit(1);
 			}
 		}
+		this.gameView.stopRendering();
 	}
 
 	@Override

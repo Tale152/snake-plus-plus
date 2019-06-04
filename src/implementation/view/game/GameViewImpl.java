@@ -4,7 +4,9 @@ import design.controller.game.GameController;
 import design.view.game.*;
 import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.InputEventFX;
+import javafx.animation.AnimationTimer;
 import javafx.beans.value.*;
+import javafx.concurrent.Task;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -50,6 +52,8 @@ public class GameViewImpl implements GameView {
 	private Font timeFont;
 	private Font playerFont;
 	
+	private final AnimationTimer animationTimer;
+	
     public GameViewImpl(int nPlayer, ResourcesLoader loader, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
 		this.loader = loader;
 		this.nPlayer = nPlayer;
@@ -63,7 +67,6 @@ public class GameViewImpl implements GameView {
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
 				timeLabelX = root.getWidth() / 2; 
 				playerSpacingX = root.getWidth() / (nPlayer + 1);
-				update();
 			}
 		});
 	    root.heightProperty().addListener(new ChangeListener<Object>() {
@@ -76,7 +79,6 @@ public class GameViewImpl implements GameView {
 						root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
 				playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
 						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
-				update();
 			}
 		});
 	    
@@ -88,6 +90,26 @@ public class GameViewImpl implements GameView {
 	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
     	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
     	
+    	animationTimer = new AnimationTimer()
+	    {
+	        public void handle(long currentNanoTime)
+	        {
+	        	drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
+    			drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
+    	    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayer);
+    			root.getBackgroundGraphicsContext().setFont(timeFont);
+    	    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
+    	    	root.getBackgroundGraphicsContext().setFont(playerFont);
+    	    	for (int i = 0; i < nPlayer; i++) {
+    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
+    	    				(playerSpacingX * i) + playerSpacingX,
+    	    				namesSpacingY);
+    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
+    	    				(playerSpacingX * i) + playerSpacingX,
+    	    				scoreSpacingY);
+    	    	}
+	        }
+	    };
     	//TODO 
     	GameController controller = new GameControllerImpl("", new ArrayList<String>(Arrays.asList("Viroli")), this, loader);
     	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
@@ -108,21 +130,13 @@ public class GameViewImpl implements GameView {
 	}
 
 	@Override
-	public void update() {
-		drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
-		drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
-    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayer);
-		root.getBackgroundGraphicsContext().setFont(timeFont);
-    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
-    	root.getBackgroundGraphicsContext().setFont(playerFont);
-    	for (int i = 0; i < nPlayer; i++) {
-    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
-    				(playerSpacingX * i) + playerSpacingX,
-    				namesSpacingY);
-    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
-    				(playerSpacingX * i) + playerSpacingX,
-    				scoreSpacingY);
-    	}
+	public void startRendering() {
+		animationTimer.start();
+	}
+	
+	@Override
+	public void stopRendering() {
+		animationTimer.stop();
 	}
 	
 	public Scene getScene() {

@@ -22,17 +22,17 @@ public class GameFieldImpl implements GameField {
 	}
 
 	@Override
-	public Background getBackground() {
+	public synchronized Background getBackground() {
 		return bg;
 	}
 
 	@Override
-	public Map<Point, Sprite> getItemSprites() {
+	public synchronized Map<Point, Sprite> getItemSprites() {
 		return new HashMap<>(itemMap);
 	}
 
 	@Override
-	public List<Sprite> getCell(Point point) {
+	public synchronized List<Sprite> getCell(Point point) {
 		List<Sprite> res = new ArrayList<>();
 		if (itemMap.containsKey(point)) {
 			res.add(itemMap.get(point));
@@ -49,26 +49,26 @@ public class GameFieldImpl implements GameField {
 	}
 
 	@Override
-	public void addItemSprite(Point point, Sprite sprite) {
+	public synchronized void addItemSprite(Point point, Sprite sprite) {
 		if (!itemMap.containsKey(point)) {
 			itemMap.put(point, sprite);
 		}
 	}
 
 	@Override
-	public void removeItemSprite(Point point, Sprite sprite) {
+	public synchronized void removeItemSprite(Point point, Sprite sprite) {
 		if (itemMap.containsKey(point)) {
 			itemMap.remove(point);
 		}
 	}
 
 	@Override
-	public Map<Point, List<Sprite>> getSnakeSprites(int playerNumber) {
+	public synchronized Map<Point, List<Sprite>> getSnakeSprites(int playerNumber) {
 		return new HashMap<>(snakeSprites.get(playerNumber));
 	}
 
 	@Override
-	public void addBodyPart(int playerNumber, Point point, Sprite sprite) {
+	public synchronized void addBodyPart(int playerNumber, Point point, Sprite sprite) {
 		if (!snakeSprites.get(playerNumber).containsKey(point)) {
 			snakeSprites.get(playerNumber).put(point, new ArrayList<>());
 		}
@@ -76,19 +76,19 @@ public class GameFieldImpl implements GameField {
 	}
 
 	@Override
-	public void resetSnakeSprites(int playerNumber) {
+	public synchronized void resetSnakeSprites(int playerNumber) {
 		snakeSprites.get(playerNumber).clear();
 	}
 
 	@Override
-	public void addWallSprite(Point point, Sprite sprite) {
+	public synchronized void addWallSprite(Point point, Sprite sprite) {
 		if (!wallMap.containsKey(point)) {
 			wallMap.put(point, sprite);
 		}
 	}
 
 	@Override
-	public Map<Point, Sprite> getWallSprites() {
+	public synchronized Map<Point, Sprite> getWallSprites() {
 		return new HashMap<>(wallMap);
 	}	
 }
