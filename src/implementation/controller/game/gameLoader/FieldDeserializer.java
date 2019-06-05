@@ -8,18 +8,19 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import design.model.game.Effect;
 import design.model.game.Field;
-import design.model.game.Wall;
 import implementation.model.game.field.FieldImpl;
 import implementation.model.game.items.ItemFactory;
+import implementation.model.game.items.WallImpl;
 
 
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")
-class FieldDeserializer extends StdDeserializer<Field> {
+public class FieldDeserializer extends StdDeserializer<Field> {
 	
 	public FieldDeserializer() {
 		this(null);
@@ -30,21 +31,22 @@ class FieldDeserializer extends StdDeserializer<Field> {
 	}
 	
 	public Field deserialize(JsonParser parser, DeserializationContext deserializer) throws IOException {
-		JsonNode node = parser.getCodec().readTree(parser);
+		ObjectMapper om = new ObjectMapper();
+		JsonNode node = deserializer.readValue(parser, JsonNode.class);
 		
-		Point fieldSize = node.get("dimensions").traverse().readValueAs(Point.class);
+		Point fieldSize = om.readValue(node.get("dimensions").traverse(), Point.class);
 		Field f = new FieldImpl(fieldSize);
 		ItemFactory itemFactory = new ItemFactory(f);
 		
 		JsonNode walls = node.get("walls");
 		for (final JsonNode wall : walls) {
-			f.addWall(wall.traverse().readValueAs(Wall.class));
+			f.addWall(om.readValue(wall.traverse(), WallImpl.class));
 		}
 		
 		JsonNode items = node.get("items");
 		
 		for (final JsonNode item : items) {
-			Point position = item.get("position").traverse().readValueAs(Point.class);
+			Point position = om.readValue(item.get("position").traverse(), Point.class);
 			
 			Class<? extends Effect> effect = item.get("effect").traverse().readValueAs(new TypeReference<Class<? extends Effect>>() {});
 			

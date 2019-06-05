@@ -32,10 +32,9 @@ class GameRulesDeserializer extends StdDeserializer<GameRules> {
 	}
 
 	@Override
-	public GameRules deserialize(JsonParser parser, DeserializationContext arg1)
+	public GameRules deserialize(JsonParser parser, DeserializationContext deserializer)
 			throws IOException, JsonProcessingException {
-		/*JsonNode node = mapper.readTree(parser);*/
-		JsonNode node = parser.getCodec().readTree(parser);
+		JsonNode node = deserializer.readValue(parser, JsonNode.class);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule deserializerModule = new SimpleModule();
 		deserializerModule.addDeserializer(ItemRule.class, new ItemRuleDeserializer());

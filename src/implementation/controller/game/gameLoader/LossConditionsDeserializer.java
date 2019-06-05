@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import design.model.game.LossConditions;
@@ -27,11 +26,9 @@ class LossConditionsDeserializer extends StdDeserializer<LossConditions> {
 	}
 
 	@Override
-	public LossConditions deserialize(JsonParser parser, DeserializationContext arg1)
+	public LossConditions deserialize(JsonParser parser, DeserializationContext deserializer)
 			throws IOException, JsonProcessingException {
-		//JsonNode node = parser.getCodec().readTree(parser);
-		ObjectMapper om = new ObjectMapper();
-		JsonNode node = om.readTree(parser);
+		JsonNode node = deserializer.readValue(parser, JsonNode.class);
 		
 		boolean checkAllSnakesDied = node.get("checkAllSnakesDied").asBoolean();
 		boolean timeForward = node.get("timeForward").asBoolean();

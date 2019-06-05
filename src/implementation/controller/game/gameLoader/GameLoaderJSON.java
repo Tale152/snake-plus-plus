@@ -1,13 +1,12 @@
 package implementation.controller.game.gameLoader;
 
 import java.awt.Point;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,9 +71,10 @@ public class GameLoaderJSON implements GameLoader {
 		String json = readJSON(stagePath);
 		
 		JsonNode loader = objectMapper.readTree(json);
-		Field field = loader.get("field").traverse().readValueAs(Field.class);
+		//Field field = loader.get("field").traverse().readValueAs(Field.class);
+		Field field = objectMapper.readValue(loader.get("field").traverse(), Field.class);
 		
-		GameRules rules = loader.get("rules").traverse().readValueAs(GameRules.class);
+		GameRules rules = objectMapper.readValue(loader.get("rules").traverse(), GameRules.class);
 		
 		List<List<Point>> snakes = objectMapper.readValue(loader.get("snakes").traverse(), new TypeReference<List<List<Point>>>() {});
 		List<Direction> directions = objectMapper.readValue(loader.get("directions").traverse(), new TypeReference<List<Direction>>() {});
@@ -91,27 +91,12 @@ public class GameLoaderJSON implements GameLoader {
 	
 	
 	public static void main(String arg[]) throws IOException {
-		String line;
-		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
-		
-		System.out.print("Snake length to win: ");
-		line = stdin.readLine();
-		Optional<Integer> length = Optional.ofNullable(line.length() > 0 ? Integer.parseInt(line) : null);
-		
-		System.out.print("Score to reach: ");
-		line = stdin.readLine();
-		Optional<Integer> score = Optional.ofNullable(line.length() > 0 ? Integer.parseInt(line) : null);
-		
-		System.out.print("Time to reach: ");
-		line = stdin.readLine();
-		Optional<Long> time = Optional.ofNullable(line.length() > 0 ? Long.parseLong(line) : null);
-		
-		System.out.print("Time goes forward? ");
-		line = stdin.readLine();
-		boolean forward = line.length() > 0 ? Boolean.valueOf(line) : true;
+		Optional<Integer> length = Optional.ofNullable(10);
+		Optional<Integer> score = Optional.ofNullable(null);
+		Optional<Long> time = Optional.ofNullable(null);
+		boolean forward = true;
 		
 		WinConditions wc = new WinConditionsImpl(length, score, time, forward);
-		
 		LossConditions lc = new LossConditionsImpl(true, Optional.of(L*24*3600), true);
 		
 		List<ItemRule> items = new ArrayList<ItemRule>();
@@ -142,6 +127,8 @@ public class GameLoaderJSON implements GameLoader {
 		rules = om.readValue(new File("/tmp/rules.json"), GameRules.class);
 		
 		om.writeValue(new File("/tmp/2rules.json"), rules);
+		
+		om.writeValue(new File("/tmp/directions.json"), Arrays.asList(Direction.RIGHT));
 	}
 
 }

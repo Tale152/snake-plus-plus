@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import design.model.game.WinConditions;
@@ -26,12 +25,11 @@ class WinConditionsDeserializer extends StdDeserializer<WinConditions> {
 	}
 
 	@Override
-	public WinConditions deserialize(JsonParser parser, DeserializationContext arg1)
+	public WinConditions deserialize(JsonParser parser, DeserializationContext deserializer)
 			throws IOException, JsonProcessingException {
 		// TODO: properly read optionals
 		//JsonNode node = parser.getCodec().readTree(parser);
-		ObjectMapper om = new ObjectMapper();
-		JsonNode node = om.readTree(parser);
+		JsonNode node = deserializer.readValue(parser, JsonNode.class);
 		
 		Optional<Integer> snakeLength = node.get("snakeLength").isIntegralNumber() ? Optional.of(node.get("snakeLength").asInt()) : Optional.empty();
 		Optional<Integer> scoreGoal = node.get("scoreGoal").isIntegralNumber() ? Optional.of(node.get("scoreGoal").asInt()) : Optional.empty();

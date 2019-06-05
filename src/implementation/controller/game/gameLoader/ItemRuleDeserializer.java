@@ -29,10 +29,10 @@ class ItemRuleDeserializer extends StdDeserializer<ItemRule> {
 	}
 
 	@Override
-	public ItemRule deserialize(JsonParser parser, DeserializationContext arg1)
+	public ItemRule deserialize(JsonParser parser, DeserializationContext deserializer)
 			throws IOException, JsonProcessingException {
+		JsonNode node = deserializer.readValue(parser, JsonNode.class);
 		ObjectMapper om = new ObjectMapper();
-		JsonNode node = om.readTree(parser);
 		
 		Class<? extends Effect> effect = om.readValue(node.get("effectClass").traverse(), new TypeReference<Class<? extends Effect>>() {});
 		long spawnDelta = node.get("spawnDelta").asLong();
