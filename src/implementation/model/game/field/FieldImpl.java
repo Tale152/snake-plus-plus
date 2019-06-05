@@ -2,8 +2,14 @@ package implementation.model.game.field;
 
 import java.awt.Point;
 import java.util.*;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import design.model.game.*;
 
+import implementation.controller.game.gameLoader.*;
+
+@JsonDeserialize(using = FieldDeserializer.class)
 public class FieldImpl implements Field {
 	
 	private int width;

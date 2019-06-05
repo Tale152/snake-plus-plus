@@ -2,8 +2,13 @@ package implementation.model.game.items;
 
 import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
-import design.model.game.*;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import design.model.game.*;
+import implementation.controller.game.gameLoader.WallDeserializer;
+
+@JsonDeserialize(using = WallDeserializer.class)
 public class WallImpl extends CollidableAbstract implements Wall{
 
 	public WallImpl(Point point) {
