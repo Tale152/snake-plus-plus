@@ -35,7 +35,6 @@ public class GameViewImpl implements GameView {
 	private final GameHud hud;
 	private final GameField field;
 	private final double hudPercentage;
-	private final Scene scene;
 	private final ResourcesLoader loader;
   
 	private BackgroundPane root;
@@ -50,14 +49,13 @@ public class GameViewImpl implements GameView {
 	
 	private final AnimationTimer animationTimer;
 	
-    public GameViewImpl(String levelPath, List<String> playerNames, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
-		//TODO recuperare il path per il loader dal global
-    	this.loader = new ResourcesLoaderFromFile("Res" + File.separator + "Resources" + File.separator + "TestPack", nCellWidth, nCellHeight);
+    public GameViewImpl(Scene scene, String levelPath, String resourcesPath, List<String> playerNames, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
+    	this.loader = new ResourcesLoaderFromFile(resourcesPath, nCellWidth, nCellHeight);
 		this.hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
 	    hud = new GameHudImpl(playerNames.size(), loader);
 		field = new GameFieldImpl(playerNames.size(), loader);
 		root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
-		scene = new Scene(root);
+		scene.setRoot(root);
 	    root.widthProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
@@ -132,10 +130,6 @@ public class GameViewImpl implements GameView {
 	@Override
 	public void stopRendering() {
 		animationTimer.stop();
-	}
-	
-	public Scene getScene() {
-		return scene;
 	}
 	
 	private void drawBg(GraphicsContext gc, Canvas canvas, Image bg) {
