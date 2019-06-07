@@ -1,0 +1,42 @@
+{
+	"field": {
+		"dimensions": {"x":30.0,"y":20.0},
+		"walls": [
+			{"point":{"x":0.0,"y":8.0}},
+			{"point":{"x":0.0,"y":9.0}},
+			{"point":{"x":0.0,"y":10.0}},
+			{"point":{"x":0.0,"y":11.0}},
+			{"point":{"x":1.0,"y":11.0}},
+			{"point":{"x":0.0,"y":12.0}},
+			{"point":{"x":1.0,"y":12.0}}
+		],
+		"items" : [
+		]
+	},
+	"rules": {
+		"initialSnakeDelta": 333,
+		"initialSnakeMultiplier": 1.0,
+		"timeGoingForward": true,
+		"itemRules": [
+			{"effectClass":"implementation.model.game.items.Apple","spawnDelta":1000,"spawnChance":1.0,"max":3,"itemDuration":null,"effectDuration":null},
+			{"effectClass":"implementation.model.game.items.Beer","spawnDelta":1000,"spawnChance":1.0,"max":3,"itemDuration":null,"effectDuration":1000}
+		],
+		"winConditions":  {"snakeLength":10,"scoreGoal":null,"timeGoal":null,"timeForward":true},
+		"lossConditions": {"checkAllSnakesDied":true,"gameTime":864000000000000,"timeForward":true}
+	},
+	"snakes": [
+		[
+			{"x":15.0,"y":10.0},
+			{"x":14.0,"y":10.0},
+			{"x":13.0,"y":10.0},
+			{"x":12.0,"y":10.0},
+			{"x":11.0,"y":10.0}
+		]
+	],
+	"directions": [
+		"RIGHT"
+	],
+	"names": [
+		"LASERPE"
+	]
+}
