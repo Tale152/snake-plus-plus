@@ -6,7 +6,6 @@ import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.InputEventFX;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.*;
-import javafx.concurrent.Task;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -21,8 +20,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -37,7 +34,6 @@ public class GameViewImpl implements GameView {
 	
 	private final GameHud hud;
 	private final GameField field;
-	private final int nPlayer;
 	private final double hudPercentage;
 	private final Scene scene;
 	private final ResourcesLoader loader;
@@ -54,19 +50,19 @@ public class GameViewImpl implements GameView {
 	
 	private final AnimationTimer animationTimer;
 	
-    public GameViewImpl(int nPlayer, ResourcesLoader loader, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
-		this.loader = loader;
-		this.nPlayer = nPlayer;
+    public GameViewImpl(String levelPath, List<String> playerNames, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
+		//TODO recuperare il path per il loader dal global
+    	this.loader = new ResourcesLoaderFromFile("Res" + File.separator + "Resources" + File.separator + "TestPack", nCellWidth, nCellHeight);
 		this.hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
-	    hud = new GameHudImpl(nPlayer, loader);
-		field = new GameFieldImpl(nPlayer, loader);
+	    hud = new GameHudImpl(playerNames.size(), loader);
+		field = new GameFieldImpl(playerNames.size(), loader);
 		root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
 		scene = new Scene(root);
 	    root.widthProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
 				timeLabelX = root.getWidth() / 2; 
-				playerSpacingX = root.getWidth() / (nPlayer + 1);
+				playerSpacingX = root.getWidth() / (playerNames.size() + 1);
 			}
 		});
 	    root.heightProperty().addListener(new ChangeListener<Object>() {
@@ -96,11 +92,11 @@ public class GameViewImpl implements GameView {
 	        {
 	        	drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
     			drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
-    	    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayer);
+    	    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), playerNames.size());
     			root.getBackgroundGraphicsContext().setFont(timeFont);
     	    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
     	    	root.getBackgroundGraphicsContext().setFont(playerFont);
-    	    	for (int i = 0; i < nPlayer; i++) {
+    	    	for (int i = 0; i < playerNames.size(); i++) {
     	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
     	    				(playerSpacingX * i) + playerSpacingX,
     	    				namesSpacingY);
@@ -110,8 +106,7 @@ public class GameViewImpl implements GameView {
     	    	}
 	        }
 	    };
-    	//TODO 
-    	GameController controller = new GameControllerImpl("", new ArrayList<String>(Arrays.asList("Viroli")), this, loader);
+    	GameController controller = new GameControllerImpl(levelPath, playerNames, this, loader);
     	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
     		controller.playerInput(new InputEventFX(key));
     	});

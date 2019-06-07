@@ -2,40 +2,13 @@ package implementation.controller.game;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
-import design.controller.game.Action;
-import design.controller.game.EventTranslator;
-import design.controller.game.GameController;
-import design.controller.game.InputEvent;
-import design.controller.game.ItemCounter;
-import design.model.game.BodyPart;
-import design.model.game.Direction;
-import design.model.game.DirectionProperty;
-import design.model.game.Field;
-import design.model.game.GameModel;
-import design.model.game.GameRules;
-import design.model.game.Item;
-import design.model.game.ItemRule;
-import design.model.game.LossConditions;
-import design.model.game.PlayerNumber;
-import design.model.game.Snake;
-import design.model.game.Wall;
-import design.model.game.WinConditions;
+import design.controller.game.*;
+import design.model.game.*;
 import design.view.game.ResourcesLoader;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
-import implementation.model.game.GameModelImpl;
-import implementation.model.game.field.FieldImpl;
-import implementation.model.game.gameRules.GameRulesImpl;
-import implementation.model.game.gameRules.ItemRuleImpl;
-import implementation.model.game.gameRules.LossConditionsImpl;
-import implementation.model.game.gameRules.WinConditionsImpl;
 import implementation.model.game.items.*;
-import implementation.model.game.snake.SnakeImpl;
 import implementation.view.game.GameViewImpl;
 
 public class GameControllerImpl implements GameController {
@@ -56,14 +29,10 @@ public class GameControllerImpl implements GameController {
 	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-		stage = "res/stages/1.json";
+		//stage = "res/stages/1.json";
 		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
 		//gameModel = daButtare();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
-		
-		this.itemFactory.createItem(new Point(2,1), Apple.class, Optional.empty(), Optional.empty());
-		//this.itemFactory.createItem(new Point(4,0), Magnet.class, Optional.empty(), Optional.of(3000L));
-		
 		this.counter = new ItemCounterImpl(this.gameModel.getField(), this.gameModel.getGameRules());
 		this.gameView = view;
 		this.resources = resources;
@@ -71,11 +40,11 @@ public class GameControllerImpl implements GameController {
 		initView();	
 	}
 	
-	//*
-	private GameModel daButtare() {
-	
-		Field field = new FieldImpl(new Point(30,20));
-		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 100, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,3)))));
+
+//	private GameModel daButtare() {
+//	
+//		Field field = new FieldImpl(new Point(30,20));
+//		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 100, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,3)))));
 //		field.addWall(new WallImpl(new Point(0,0)));
 //		field.addWall(new WallImpl(new Point(0,1)));
 //		field.addWall(new WallImpl(new Point(0,2)));
@@ -85,14 +54,14 @@ public class GameControllerImpl implements GameController {
 //		field.addWall(new WallImpl(new Point(2,0)));
 //		field.addWall(new WallImpl(new Point(2,1)));
 //		field.addWall(new WallImpl(new Point(2,2)));
-		
-		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
-		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
-		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 100, 1, 100, Optional.of(2000L), Optional.empty()),
-				new ItemRuleImpl(Spring.class, 100, 1.0, 1, Optional.empty(), Optional.of(5000L))));
-		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
-		return new GameModelImpl(field, gameRules);
-	}//*/
+//		
+//		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
+//		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
+//		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 100, 1, 100, Optional.of(2000L), Optional.empty()),
+//				new ItemRuleImpl(Spring.class, 100, 1.0, 1, Optional.empty(), Optional.of(5000L))));
+//		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
+//		return new GameModelImpl(field, gameRules);
+//	}
 	
 	private String getTimeFormat() {
 		return Long.toString(gameTime / 1000L);
