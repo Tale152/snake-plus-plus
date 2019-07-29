@@ -103,7 +103,7 @@ public class GameLoaderJSON implements GameLoader {
 		items.add(new ItemRuleImpl(Apple.class, 1000, 1, 3, Optional.of(L*5), Optional.empty()));
 		items.add(new ItemRuleImpl(Beer.class, 1000, 1, 3, Optional.of(L*5), Optional.of(L)));
 		
-		GameRules rules = new GameRulesImpl(wc, lc, items, L, 1.0, true);
+		GameRules rules = new GameRulesImpl(wc, lc, items, L, 1.0, 0, true);
 		
 		ObjectMapper om = new ObjectMapper();
 		

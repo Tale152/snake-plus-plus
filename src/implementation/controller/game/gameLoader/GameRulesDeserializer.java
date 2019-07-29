@@ -45,11 +45,12 @@ class GameRulesDeserializer extends StdDeserializer<GameRules> {
 		long initialSnakeDelta = node.get("initialSnakeDelta").asLong();
 		double initialSnakeMultiplier = node.get("initialSnakeMultiplier").asDouble();
 		boolean timeForward = node.get("timeGoingForward").asBoolean();
+		long initialTime = node.get("initialTime").asLong();
 		List<ItemRule> itemRules = mapper.readValue(node.get("itemRules").traverse(), new TypeReference<List<ItemRule>>() {});
 		LossConditions lc = mapper.readValue(node.get("lossConditions").traverse(), LossConditions.class);
 		WinConditions wc = mapper.readValue(node.get("winConditions").traverse(), WinConditions.class);
 
-		return new GameRulesImpl(wc, lc, itemRules, initialSnakeDelta, initialSnakeMultiplier, timeForward);
+		return new GameRulesImpl(wc, lc, itemRules, initialSnakeDelta, initialSnakeMultiplier, initialTime, timeForward);
 	}
 
 }
