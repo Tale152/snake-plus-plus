@@ -13,6 +13,8 @@ import implementation.view.game.GameViewImpl;
 
 public class GameControllerImpl implements GameController {
 	
+	private final static long CONTROLLER_REFRESH_RATE = 1000/60;
+	
 	private final static String HEAD = "head_";
 	private final static String BODY = "body_";
 	private final static String TAIL = "tail_";
@@ -24,12 +26,16 @@ public class GameControllerImpl implements GameController {
 	private final ResourcesLoader resources;
 	private final EventTranslator controls;
 	private final ItemFactory itemFactory;
+	private final WinConditions win;
+	private final LossConditions loss;
 	
 	private long gameTime;
 	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+		gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+		win = gameModel.getGameRules().getWinConditions();
+		loss = gameModel.getGameRules().getLossConditions();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		this.counter = new ItemCounterImpl(this.gameModel.getField(), this.gameModel.getGameRules());
 		this.gameView = view;
@@ -38,57 +44,58 @@ public class GameControllerImpl implements GameController {
 		initView();	
 	}
 	
-	@Override
-	public void run() {
-		this.gameModel.getField().begin();
-		this.gameView.startRendering();
-		while(!isGameEnded()) {
-			updateDeletedItems();
-			spawnItems();
-			snakeView();
-			try {
-				long timeBeforeSleep = System.currentTimeMillis();
-				Thread.sleep(1000/60);
-				if (gameModel.getGameRules().isTimeGoingForward()) {
-					gameTime += System.currentTimeMillis() - timeBeforeSleep;
-				} else {
-					gameTime -= System.currentTimeMillis() - timeBeforeSleep;
-				}
-				gameView.getHUD().setTime(getTimeFormat());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-		}
-		this.gameView.stopRendering();
-	}
-
-	@Override
-	public void playerInput(InputEvent input) {
-		Optional<Action> action = controls.getEventBinding(input);
-		if (action.isPresent()) {
-			Snake target = gameModel.getField().getSnakes().get(action.get().getPlayerNumber().ordinal());
-			DirectionProperty direction = target.getProperties().getDirectionProperty();
-			direction.setDirection(action.get().getDirection());
-		}
+	private void initView() {
+		initTime();
+		initWallSprites();
+		initItemSprites();
+		initSnakeSpritesAndHUD();
 	}
 	
-	private String getTimeFormat() {
+	private void initTime() {
+		gameTime = gameModel.getGameRules().getInitialTime();
+		gameView.getHUD().setTime(convertGameTime());
+	}
+	
+	private String convertGameTime() {
 		long minutes = TimeUnit.MILLISECONDS.toMinutes(gameTime);
 		  long seconds = TimeUnit.MILLISECONDS.toSeconds(gameTime) - (60 * minutes);
 		  long milliseconds = gameTime - (TimeUnit.MILLISECONDS.toSeconds(gameTime) * 1000);
 		  return minutes + ":" + seconds + ":" + milliseconds;
 	}
-
-	private void initView() {
-		gameTime = gameModel.getGameRules().getInitialTime();
-		gameView.getHUD().setTime(getTimeFormat());
-		deliverAllWallsSpriteToView();
-		deliverAllItemsSpriteToView();
-		deliverAllSnakesGraphicToView();
+	
+	private void initWallSprites() {
+		for(Wall w: this.gameModel.getField().getWalls()) {
+			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
+			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
+		}
 	}
 	
-	private void deliverAllSnakesGraphicToView() {
+	private String wallSpriteName(Wall wall, List<Wall> allWalls) {
+		String s = WALL;
+		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y - 1));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x + 1, wall.getPoint().y));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y + 1));
+		s += collide(wall, allWalls, new Point(wall.getPoint().x - 1, wall.getPoint().y));
+		return s;
+		
+	}
+	
+	private String collide(Wall wall, List<Wall> allWalls, Point point) {
+		if(point.x < 0 || point.y < 0 || point.x >= this.gameModel.getField().getWidth() || point.y >= this.gameModel.getField().getHeight()) {
+			return "0";
+		}
+		return allWalls.stream().anyMatch(e -> {
+			return e.getPoint().equals(point);
+		}) ? "1" : "0";
+	}
+	
+	private void initItemSprites() {
+		for(Item i: this.gameModel.getField().getItems()) {
+			this.gameView.getField().addItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
+		}
+	}
+	
+	private void initSnakeSpritesAndHUD() {
 		int i = 0;
 		for(Snake s : this.gameModel.getField().getSnakes()) {
 			if(s.isAlive()) {
@@ -102,22 +109,42 @@ public class GameControllerImpl implements GameController {
 		}
 	}
 	
-	private void deliverAllWallsSpriteToView() {
-		for(Wall w: this.gameModel.getField().getWalls()) {
-			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
-			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
+	private String snakeSpriteName(BodyPart b, Snake snake) {
+		String s = "P" + Integer.toString(snake.getPlayer().getPlayerNumber().ordinal() + 1) + "_";
+		if(b.isHead()) {
+			s += HEAD;
+		}
+		if(b.isBody()) {
+			s += BODY;
+		}
+		if(b.isTail()) {
+			s += TAIL;
+		}
+		if(b.isHead() && b.isTail()) {
+			return s += snake.getProperties().getDirectionProperty().getDirection();
+		} else {
+			return s += isCombined(b.isCombinedOnTop()) + isCombined(b.isCombinedOnRight()) + isCombined(b.isCombinedOnBottom()) + isCombined(b.isCombinedOnLeft());
 		}
 	}
 	
-	private void deliverAllItemsSpriteToView() {
-		for(Item i: this.gameModel.getField().getItems()) {
-			this.gameView.getField().addItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
+	private String isCombined(boolean b) {
+		return b ? "1" : "0";
+	}
+	
+	@Override
+	public void run() {
+		this.gameModel.getField().begin();
+		this.gameView.startRendering();
+		while(!isGameEnded()) {
+			updateDeletedItems();
+			spawnItems();
+			updateSnakes();
+			waitAndUpdateTime();
 		}
+		this.gameView.stopRendering();
 	}
 	
 	private boolean isGameEnded() {
-		WinConditions win = this.gameModel.getGameRules().getWinConditions();
-		LossConditions loss = this.gameModel.getGameRules().getLossConditions();
 		List<Snake> snakes = this.gameModel.getField().getSnakes();
 		return loss.checkSnakes(snakes) || loss.checkTime(gameTime) ||
 				win.checkScore(snakes) || win.checkSnakeLength(snakes) || win.checkTime(gameTime);
@@ -147,7 +174,7 @@ public class GameControllerImpl implements GameController {
 			}
 		}
 	}
-
+	
 	private Point getRandomPoint() {
 		int height = this.gameModel.getField().getHeight();
 		int width = this.gameModel.getField().getWidth();
@@ -162,7 +189,7 @@ public class GameControllerImpl implements GameController {
 		return p;
 	}
 	
-	private void snakeView() {
+	private void updateSnakes() {
 		List<Snake> snakes = this.gameModel.getField().getSnakes();
 		int i = 0;
 		for(Snake s : snakes) {
@@ -174,52 +201,37 @@ public class GameControllerImpl implements GameController {
 						gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
 					}
 				}
-			}
-			else {
+			} else {
 				this.gameView.getField().resetSnakeSprites(i);
 				gameView.getHUD().getPlayerHUDs().get(i).setAlive(false);
 				}
 			}
 		}
 	
-	private String snakeSpriteName(BodyPart b, Snake snake) {
-		String s = "P" + Integer.toString(snake.getPlayer().getPlayerNumber().ordinal() + 1) + "_";
-		if(b.isHead()) {
-			s += HEAD;
-		}
-		if(b.isBody()) {
-			s += BODY;
-		}
-		if(b.isTail()) {
-			s += TAIL;
-		}
-		if(b.isHead() && b.isTail()) {
-			return s += snake.getProperties().getDirectionProperty().getDirection();
-		} else {
-			return s += isCombined(b.isCombinedOnTop()) + isCombined(b.isCombinedOnRight()) + isCombined(b.isCombinedOnBottom()) + isCombined(b.isCombinedOnLeft());
+	private void waitAndUpdateTime() {
+		try {
+			long timeBeforeSleep = System.currentTimeMillis();
+			Thread.sleep(CONTROLLER_REFRESH_RATE);
+			if (gameModel.getGameRules().isTimeGoingForward()) {
+				gameTime += System.currentTimeMillis() - timeBeforeSleep;
+			} else {
+				gameTime -= System.currentTimeMillis() - timeBeforeSleep;
+			}
+			gameView.getHUD().setTime(convertGameTime());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
-	
-	private String isCombined(boolean b) {
-		return b ? "1" : "0";
-	}
-	
-	private String wallSpriteName(Wall wall, List<Wall> allWalls) {
-		String s = WALL;
-		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y - 1));
-		s += collide(wall, allWalls, new Point(wall.getPoint().x + 1, wall.getPoint().y));
-		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y + 1));
-		s += collide(wall, allWalls, new Point(wall.getPoint().x - 1, wall.getPoint().y));
-		return s;
-		
-	}
-	
-	private String collide(Wall wall, List<Wall> allWalls, Point point) {
-		if(point.x < 0 || point.y < 0 || point.x >= this.gameModel.getField().getWidth() || point.y >= this.gameModel.getField().getHeight()) {
-			return "0";
+
+	@Override
+	public void playerInput(InputEvent input) {
+		Optional<Action> action = controls.getEventBinding(input);
+		if (action.isPresent()) {
+			Snake target = gameModel.getField().getSnakes().get(action.get().getPlayerNumber().ordinal());
+			DirectionProperty direction = target.getProperties().getDirectionProperty();
+			direction.setDirection(action.get().getDirection());
 		}
-		return allWalls.stream().anyMatch(e -> {
-			return e.getPoint().equals(point);
-		}) ? "1" : "0";
 	}
+
 }
