@@ -99,9 +99,11 @@ public class GameControllerImpl implements GameController {
 		int i = 0;
 		for(Snake s : this.gameModel.getField().getSnakes()) {
 			if(s.isAlive()) {
+				gameView.getField().initNewSnakeMap(i);
 				for(BodyPart b : s.getBodyParts()) {
 					this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
 				}
+				gameView.getField().endNewSnakeMap(i);
 				gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
 				gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
 			}
@@ -195,14 +197,16 @@ public class GameControllerImpl implements GameController {
 		for(Snake s : snakes) {
 			if(s.isAlive()) {
 				if (s.hasMoved()) {
-					this.gameView.getField().resetSnakeSprites(i);
+					this.gameView.getField().initNewSnakeMap(i);
 					for(BodyPart b : s.getBodyParts()) {
 						this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
 						gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
 					}
+					this.gameView.getField().endNewSnakeMap(i);
 				}
 			} else {
-				this.gameView.getField().resetSnakeSprites(i);
+				this.gameView.getField().initNewSnakeMap(i);
+				this.gameView.getField().endNewSnakeMap(i);
 				gameView.getHUD().getPlayerHUDs().get(i).setAlive(false);
 				}
 			}
