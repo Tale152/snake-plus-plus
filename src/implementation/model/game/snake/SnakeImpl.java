@@ -26,6 +26,9 @@ public class SnakeImpl implements Snake{
 	private List<BodyPart> bodyPart;
 	private boolean isAlive;
 	private boolean hasMoved;
+	private Direction nextDirection;
+	private Direction currentDirection;
+	private boolean hasReversed;
 	
 	public SnakeImpl(PlayerNumber playerNumber, String playerName, Direction direction, 
 			long deltaT, double speedMultiplier, Field field, List<Point> point) {
@@ -37,6 +40,7 @@ public class SnakeImpl implements Snake{
 		this.bodyPart = new ArrayList<>();
 		this.isAlive = true;
 		this.hasMoved = false;
+		this.hasReversed = false;
 
 		for(int i = point.size() - 1; i >= 0; i--) {
 			insertNewHead(point.get(i));
@@ -49,8 +53,24 @@ public class SnakeImpl implements Snake{
 		while(isAlive) {
 			try {
 				waitToMove();
+				this.currentDirection = this.properties.getDirectionProperty().getDirection();
 				handleCollisions(obtainNextPoint());
-				move(obtainNextPoint());
+				this.nextDirection = this.properties.getDirectionProperty().getDirection();
+				if (this.hasReversed) {
+					this.properties.getDirectionProperty().forceDirection(this.currentDirection);
+					reverse();
+					move(obtainNextPoint());
+					this.properties.getDirectionProperty().forceDirection(this.nextDirection);
+					reverse();
+					this.hasReversed = false;
+				} else if(!this.currentDirection.equals(this.nextDirection)) {
+					this.properties.getDirectionProperty().forceDirection(this.currentDirection);
+					move(obtainNextPoint());
+					this.properties.getDirectionProperty().forceDirection(this.nextDirection);
+				} else {
+					move(obtainNextPoint());
+				}
+				
 				this.properties.getDirectionProperty().allowChangeDirection();
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -120,6 +140,7 @@ public class SnakeImpl implements Snake{
 			direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
 		}
 		this.properties.getDirectionProperty().forceDirection(direction);	
+		this.hasReversed = true;
 	}
 
 	@Override
