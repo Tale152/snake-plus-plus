@@ -14,6 +14,8 @@ public interface GameRules {
 	
 	public double getInitialSnakeMultiplier();
 	
+	public long getInitialTime();
+	
 	public boolean isTimeGoingForward();
 	
 }

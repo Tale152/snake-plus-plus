@@ -29,9 +29,7 @@ public class GameControllerImpl implements GameController {
 	
 	
 	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-		//stage = "res/stages/1.json";
 		this.gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
-		//gameModel = daButtare();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
 		this.counter = new ItemCounterImpl(this.gameModel.getField(), this.gameModel.getGameRules());
 		this.gameView = view;
@@ -40,40 +38,12 @@ public class GameControllerImpl implements GameController {
 		initView();	
 	}
 	
-
-//	private GameModel daButtare() {
-//	
-//		Field field = new FieldImpl(new Point(30,20));
-//		field.addSnake(new SnakeImpl(PlayerNumber.PLAYER1, "Viroli", Direction.LEFT, 100, 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(7,3)))));
-//		field.addWall(new WallImpl(new Point(0,0)));
-//		field.addWall(new WallImpl(new Point(0,1)));
-//		field.addWall(new WallImpl(new Point(0,2)));
-//		field.addWall(new WallImpl(new Point(1,0)));
-//		field.addWall(new WallImpl(new Point(1,1)));
-//		field.addWall(new WallImpl(new Point(1,2)));
-//		field.addWall(new WallImpl(new Point(2,0)));
-//		field.addWall(new WallImpl(new Point(2,1)));
-//		field.addWall(new WallImpl(new Point(2,2)));
-//		
-//		WinConditions win = new WinConditionsImpl(Optional.empty(), Optional.empty(), Optional.empty(), true);
-//		LossConditions loss = new LossConditionsImpl(true, Optional.empty(), true);
-//		List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(new ItemRuleImpl(Apple.class, 100, 1, 100, Optional.of(2000L), Optional.empty()),
-//				new ItemRuleImpl(Spring.class, 100, 1.0, 1, Optional.empty(), Optional.of(5000L))));
-//		GameRules gameRules = new GameRulesImpl(win, loss, itemRules, 1000, 1, true);
-//		return new GameModelImpl(field, gameRules);
-//	}
-	
 	private String getTimeFormat() {
 		return Long.toString(gameTime / 1000L);
 	}
 
 	private void initView() {
-		if (gameModel.getGameRules().isTimeGoingForward()) {
-			gameTime = 0;
-		} else {
-			//TODO quanto?????
-			gameTime = 42000;
-		}
+		gameTime = gameModel.getGameRules().getInitialTime();
 		for(Wall w: this.gameModel.getField().getWalls()) {
 			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
 			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));

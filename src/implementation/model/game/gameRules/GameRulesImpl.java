@@ -15,15 +15,17 @@ public class GameRulesImpl implements GameRules {
 	private final List<ItemRule> itemRules;
 	private final long initialSnakeDelta;
 	private final double initialSnakeMultiplier;
+	private final long initialTime;
 	private final boolean timeGoingForward;
 	
 	public GameRulesImpl(WinConditions win, LossConditions loss, List<ItemRule> itemRules, 
-			long initialSnakeDelta, double initialSnakeMultiplier, boolean timeGoingForward) {
+			long initialSnakeDelta, double initialSnakeMultiplier, long initialTime, boolean timeGoingForward) {
 		this.win = win;
 		this.loss = loss;
 		this.itemRules = itemRules;
 		this.initialSnakeDelta = initialSnakeDelta;
 		this.initialSnakeMultiplier = initialSnakeMultiplier;
+		this.initialTime = initialTime;
 		this.timeGoingForward = timeGoingForward;
 	}
 	
@@ -52,6 +54,11 @@ public class GameRulesImpl implements GameRules {
 		return initialSnakeMultiplier;
 	}
 
+	@Override
+	public long getInitialTime() {
+		return initialTime;
+	}
+	
 	@Override
 	public boolean isTimeGoingForward() {
 		return timeGoingForward;

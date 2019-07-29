@@ -48,7 +48,6 @@ public class GameViewImpl implements GameView {
 	private Font playerFont;
 	
 	private final AnimationTimer animationTimer;
-	private final GameController gameController;
 	
     public GameViewImpl(Scene scene, String levelPath, String resourcesPath, List<String> playerNames, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
     	loader = new ResourcesLoaderFromFile(resourcesPath, nCellWidth, nCellHeight);
@@ -57,7 +56,7 @@ public class GameViewImpl implements GameView {
 		field = new GameFieldImpl(playerNames.size(), loader);
 		root = initRoot(scene, playerNames.size(), nCellWidth, nCellHeight);
     	animationTimer = initAnimationTimer(playerNames.size());
-    	gameController = initGameController(scene, levelPath, playerNames);
+    	initGameController(scene, levelPath, playerNames);
 	}
     
 	@Override
@@ -135,14 +134,13 @@ public class GameViewImpl implements GameView {
 	    return root;
     }
     
-    private GameController initGameController(Scene scene, String levelPath, List<String> playerNames) throws IOException {
+    private void initGameController(Scene scene, String levelPath, List<String> playerNames) throws IOException {
     	GameController controller = new GameControllerImpl(levelPath, playerNames, this, loader);
     	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
     		controller.playerInput(new InputEventFX(key));
     	});
     	Thread t  = new Thread(controller);
     	t.start();
-    	return controller;
     }
 	
 	private void drawBg(GraphicsContext gc, Canvas canvas, Image bg) {
