@@ -17,6 +17,7 @@
 		"initialSnakeDelta": 333,
 		"initialSnakeMultiplier": 1.0,
 		"timeGoingForward": true,
+		"initialTime": 0,
 		"itemRules": [
 			{"effectClass":"implementation.model.game.items.Apple","spawnDelta":1000,"spawnChance":1.0,"max":3,"itemDuration":null,"effectDuration":null},
 			{"effectClass":"implementation.model.game.items.Beer","spawnDelta":1000,"spawnChance":1.0,"max":3,"itemDuration":null,"effectDuration":1000}
