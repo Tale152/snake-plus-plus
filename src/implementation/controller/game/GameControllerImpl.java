@@ -59,8 +59,7 @@ public class GameControllerImpl implements GameController {
 	private String convertGameTime() {
 		long minutes = TimeUnit.MILLISECONDS.toMinutes(gameTime);
 		  long seconds = TimeUnit.MILLISECONDS.toSeconds(gameTime) - (60 * minutes);
-		  long milliseconds = gameTime - (TimeUnit.MILLISECONDS.toSeconds(gameTime) * 1000);
-		  return minutes + ":" + seconds + ":" + milliseconds;
+		  return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
 	}
 	
 	private void initWallSprites() {
