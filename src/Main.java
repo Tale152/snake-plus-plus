@@ -1,10 +1,7 @@
 import java.io.File;
 import java.util.Arrays;
-
-import design.view.game.ResourcesLoader;
 import implementation.controller.application.SettingsControllerImpl;
 import implementation.view.game.GameViewImpl;
-import implementation.view.game.ResourcesLoaderFromFile;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -27,8 +24,6 @@ public class Main extends Application{
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-//      Scene scene = new Scene(new BorderPane());
-//      GameViewImpl gw = new GameViewImpl(1, rl, 30, 20);
 	  new SettingsControllerImpl();
       GameViewImpl gw = new GameViewImpl(scene, "res/stages/classic/1.json", PATH, Arrays.asList("LASERPE"), NCELLWIDTH, NCELLHEIGHT);
       primaryStage.setScene(scene);

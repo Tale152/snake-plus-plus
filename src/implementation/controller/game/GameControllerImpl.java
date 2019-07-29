@@ -3,7 +3,7 @@ package implementation.controller.game;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.*;
-
+import java.util.concurrent.TimeUnit;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
@@ -38,33 +38,6 @@ public class GameControllerImpl implements GameController {
 		initView();	
 	}
 	
-	private String getTimeFormat() {
-		return Long.toString(gameTime / 1000L);
-	}
-
-	private void initView() {
-		gameTime = gameModel.getGameRules().getInitialTime();
-		for(Wall w: this.gameModel.getField().getWalls()) {
-			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
-			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
-		}
-		for(Item i: this.gameModel.getField().getItems()) {
-			this.gameView.getField().addItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
-		}
-		int i = 0;
-		for(Snake s : this.gameModel.getField().getSnakes()) {
-			if(s.isAlive()) {
-				for(BodyPart b : s.getBodyParts()) {
-					this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
-				}
-				gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
-				gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
-			}
-			++i;
-		}
-		gameView.getHUD().setTime(getTimeFormat());
-	}
-	
 	@Override
 	public void run() {
 		this.gameModel.getField().begin();
@@ -97,6 +70,48 @@ public class GameControllerImpl implements GameController {
 			Snake target = gameModel.getField().getSnakes().get(action.get().getPlayerNumber().ordinal());
 			DirectionProperty direction = target.getProperties().getDirectionProperty();
 			direction.setDirection(action.get().getDirection());
+		}
+	}
+	
+	private String getTimeFormat() {
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(gameTime);
+		  long seconds = TimeUnit.MILLISECONDS.toSeconds(gameTime) - (60 * minutes);
+		  long milliseconds = gameTime - (TimeUnit.MILLISECONDS.toSeconds(gameTime) * 1000);
+		  return minutes + ":" + seconds + ":" + milliseconds;
+	}
+
+	private void initView() {
+		gameTime = gameModel.getGameRules().getInitialTime();
+		gameView.getHUD().setTime(getTimeFormat());
+		deliverAllWallsSpriteToView();
+		deliverAllItemsSpriteToView();
+		deliverAllSnakesGraphicToView();
+	}
+	
+	private void deliverAllSnakesGraphicToView() {
+		int i = 0;
+		for(Snake s : this.gameModel.getField().getSnakes()) {
+			if(s.isAlive()) {
+				for(BodyPart b : s.getBodyParts()) {
+					this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
+				}
+				gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
+				gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
+			}
+			++i;
+		}
+	}
+	
+	private void deliverAllWallsSpriteToView() {
+		for(Wall w: this.gameModel.getField().getWalls()) {
+			String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
+			this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
+		}
+	}
+	
+	private void deliverAllItemsSpriteToView() {
+		for(Item i: this.gameModel.getField().getItems()) {
+			this.gameView.getField().addItemSprite(i.getPoint(), this.resources.getItem(i.getEffectClass().getSimpleName()));
 		}
 	}
 	
