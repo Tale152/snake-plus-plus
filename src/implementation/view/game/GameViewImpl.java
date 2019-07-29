@@ -48,68 +48,16 @@ public class GameViewImpl implements GameView {
 	private Font playerFont;
 	
 	private final AnimationTimer animationTimer;
+	private final GameController gameController;
 	
     public GameViewImpl(Scene scene, String levelPath, String resourcesPath, List<String> playerNames, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
-    	this.loader = new ResourcesLoaderFromFile(resourcesPath, nCellWidth, nCellHeight);
-		this.hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
+    	loader = new ResourcesLoaderFromFile(resourcesPath, nCellWidth, nCellHeight);
+		hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
 	    hud = new GameHudImpl(playerNames.size(), loader);
 		field = new GameFieldImpl(playerNames.size(), loader);
-		root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
-		scene.setRoot(root);
-	    root.widthProperty().addListener(new ChangeListener<Object>() {
-			@Override
-			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				timeLabelX = root.getWidth() / 2; 
-				playerSpacingX = root.getWidth() / (playerNames.size() + 1);
-			}
-		});
-	    root.heightProperty().addListener(new ChangeListener<Object>() {
-			@Override
-			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				labelY = (root.getHeight() * hudPercentage) / 2;
-				scoreSpacingY = root.getHeight() - (root.getHeight() * hudPercentage) / 3;
-				namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 3) * 2);
-				timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-						root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
-				playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
-			}
-		});
-	    
-	    timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-				root.getWidth() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
-	    playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
-	    root.getBackgroundGraphicsContext().setTextAlign(TextAlignment.CENTER);
-	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
-    	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
-    	
-    	animationTimer = new AnimationTimer()
-	    {
-	        public void handle(long currentNanoTime)
-	        {
-	        	drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
-    			drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
-    	    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), playerNames.size());
-    			root.getBackgroundGraphicsContext().setFont(timeFont);
-    	    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
-    	    	root.getBackgroundGraphicsContext().setFont(playerFont);
-    	    	for (int i = 0; i < playerNames.size(); i++) {
-    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
-    	    				(playerSpacingX * i) + playerSpacingX,
-    	    				namesSpacingY);
-    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
-    	    				(playerSpacingX * i) + playerSpacingX,
-    	    				scoreSpacingY);
-    	    	}
-	        }
-	    };
-    	GameController controller = new GameControllerImpl(levelPath, playerNames, this, loader);
-    	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-    		controller.playerInput(new InputEventFX(key));
-    	});
-    	Thread t  = new Thread(controller);
-    	t.start();
+		root = initRoot(scene, playerNames.size(), nCellWidth, nCellHeight);
+    	animationTimer = initAnimationTimer(playerNames.size());
+    	gameController = initGameController(scene, levelPath, playerNames);
 	}
     
 	@Override
@@ -131,6 +79,71 @@ public class GameViewImpl implements GameView {
 	public void stopRendering() {
 		animationTimer.stop();
 	}
+	
+	private AnimationTimer initAnimationTimer(int nPlayers) {
+    	return new AnimationTimer()
+	    {
+	        public void handle(long currentNanoTime)
+	        {
+	        	drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
+    			drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
+    	    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayers);
+    			root.getBackgroundGraphicsContext().setFont(timeFont);
+    	    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
+    	    	root.getBackgroundGraphicsContext().setFont(playerFont);
+    	    	for (int i = 0; i < nPlayers; i++) {
+    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
+    	    				(playerSpacingX * i) + playerSpacingX,
+    	    				namesSpacingY);
+    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
+    	    				(playerSpacingX * i) + playerSpacingX,
+    	    				scoreSpacingY);
+    	    	}
+	        }
+	    };
+    }
+	
+	private BackgroundPane initRoot(Scene scene, int nPlayers, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
+    	BackgroundPane root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
+		scene.setRoot(root);
+	    root.widthProperty().addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+				timeLabelX = root.getWidth() / 2; 
+				playerSpacingX = root.getWidth() / (nPlayers + 1);
+			}
+		});
+	    root.heightProperty().addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+				labelY = (root.getHeight() * hudPercentage) / 2;
+				scoreSpacingY = root.getHeight() - (root.getHeight() * hudPercentage) / 3;
+				namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 3) * 2);
+				timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+						root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
+				playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
+			}
+		});
+	    timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+				root.getWidth() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
+	    playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
+	    root.getBackgroundGraphicsContext().setTextAlign(TextAlignment.CENTER);
+	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
+    	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
+	    return root;
+    }
+    
+    private GameController initGameController(Scene scene, String levelPath, List<String> playerNames) throws IOException {
+    	GameController controller = new GameControllerImpl(levelPath, playerNames, this, loader);
+    	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+    		controller.playerInput(new InputEventFX(key));
+    	});
+    	Thread t  = new Thread(controller);
+    	t.start();
+    	return controller;
+    }
 	
 	private void drawBg(GraphicsContext gc, Canvas canvas, Image bg) {
     	gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
