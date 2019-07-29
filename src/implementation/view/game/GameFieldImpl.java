@@ -9,15 +9,18 @@ public class GameFieldImpl implements GameField {
 	private Background bg;
 	private final Map<Point, Sprite> itemMap;
 	private final Map<Point, Sprite> wallMap;
-	private final List<Map<Point, List<Sprite>>> snakeSprites;
+	private final List<Map<Point, List<Sprite>>> loadingSnakeSprites;
+	private final List<Map<Point, List<Sprite>>> actualSnakeSprites;
 	
 	public GameFieldImpl(int nPlayer, ResourcesLoader loader) {
 		bg = loader.getFieldBackground();
 		itemMap = new HashMap<>();
 		wallMap = new HashMap<>();
-		snakeSprites = new ArrayList<>();
+		actualSnakeSprites = new ArrayList<>();
+		loadingSnakeSprites = new ArrayList<>();
 		for (int i = 0; i < nPlayer; ++i) {
-			snakeSprites.add(new HashMap<>());
+			actualSnakeSprites.add(new HashMap<>());
+			loadingSnakeSprites.add(new HashMap<>());
 		}
 	}
 
@@ -40,7 +43,7 @@ public class GameFieldImpl implements GameField {
 		if (wallMap.containsKey(point)) {
 			res.add(wallMap.get(point));
 		}
-		for (Map<Point, List<Sprite>> snake : snakeSprites) {
+		for (Map<Point, List<Sprite>> snake : actualSnakeSprites) {
 			if (snake.containsKey(point)){
 				res.addAll(snake.get(point));
 			}
@@ -64,20 +67,25 @@ public class GameFieldImpl implements GameField {
 
 	@Override
 	public synchronized Map<Point, List<Sprite>> getSnakeSprites(int playerNumber) {
-		return new HashMap<>(snakeSprites.get(playerNumber));
+		return new HashMap<>(actualSnakeSprites.get(playerNumber));
 	}
 
+	@Override
+	public void initNewSnakeMap(int playerNumber) {
+		loadingSnakeSprites.set(playerNumber, new HashMap<>());
+	}	
+	
 	@Override
 	public synchronized void addBodyPart(int playerNumber, Point point, Sprite sprite) {
-		if (!snakeSprites.get(playerNumber).containsKey(point)) {
-			snakeSprites.get(playerNumber).put(point, new ArrayList<>());
+		if (!loadingSnakeSprites.get(playerNumber).containsKey(point)) {
+			loadingSnakeSprites.get(playerNumber).put(point, new ArrayList<>());
 		}
-		snakeSprites.get(playerNumber).get(point).add(sprite);
+		loadingSnakeSprites.get(playerNumber).get(point).add(sprite);
 	}
-
+	
 	@Override
-	public synchronized void resetSnakeSprites(int playerNumber) {
-		snakeSprites.get(playerNumber).clear();
+	public void endNewSnakeMap(int playerNumber) {
+		actualSnakeSprites.set(playerNumber, loadingSnakeSprites.get(playerNumber));
 	}
 
 	@Override
@@ -90,5 +98,6 @@ public class GameFieldImpl implements GameField {
 	@Override
 	public synchronized Map<Point, Sprite> getWallSprites() {
 		return new HashMap<>(wallMap);
-	}	
+	}
+	
 }

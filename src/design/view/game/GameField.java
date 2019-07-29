@@ -21,8 +21,10 @@ public interface GameField {
 	
 	public Map<Point, List<Sprite>> getSnakeSprites(int playerNumber);
 	
+	public void initNewSnakeMap(int playerNumber);
+	
 	public void addBodyPart(int playerNumber, Point point, Sprite sprite);
 	
-	public void resetSnakeSprites(int playerNumber);
+	public void endNewSnakeMap(int playerNumber);
 	
 }
