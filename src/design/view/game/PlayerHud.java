@@ -14,4 +14,10 @@ public interface PlayerHud {
 	
 	public void setAlive(boolean alive);
 	
+	public void setSnakeSprite(Sprite sprite);
+	
+	public void addEffectSprite(Sprite sprite);
+	
+	public void resetEffectSpriteList();
+	
 }
