@@ -196,6 +196,7 @@ public class GameControllerImpl implements GameController {
 		for(Snake s : snakes) {
 			if(s.isAlive()) {
 				if (s.hasMoved()) {
+					System.out.println("updating at " + gameTime + " head at " + s.getBodyParts().get(0).getPoint());
 					this.gameView.getField().initNewSnakeMap(i);
 					for(BodyPart b : s.getBodyParts()) {
 						this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
