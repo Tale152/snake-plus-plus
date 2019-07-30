@@ -66,4 +66,14 @@ public class PlayerHudImpl implements PlayerHud {
 		effectSprites.clear();
 	}
 
+	@Override
+	public List<Sprite> getSpriteList() {
+		List<Sprite> res = new ArrayList<Sprite>();
+		if (playerSprite != null) {
+			res.add(playerSprite);
+		}
+		res.addAll(effectSprites);
+		return res;
+	}
+
 }

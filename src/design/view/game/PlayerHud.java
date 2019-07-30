@@ -1,5 +1,7 @@
 package design.view.game;
 
+import java.util.List;
+
 public interface PlayerHud {
 
 	public String getName();
@@ -19,5 +21,7 @@ public interface PlayerHud {
 	public void addEffectSprite(Sprite sprite);
 	
 	public void resetEffectSpriteList();
+	
+	public List<Sprite> getSpriteList();
 	
 }
