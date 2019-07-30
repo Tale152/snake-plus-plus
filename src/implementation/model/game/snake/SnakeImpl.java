@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import design.model.game.BodyPart;
 import design.model.game.Collidable;
@@ -92,12 +93,13 @@ public class SnakeImpl implements Snake{
 	//if the effect is already in snake's list of effect, I just increment the duration of the effect, otherwise I add it in the list
 	@Override
 	public void addEffect(Effect effect) {
-		if(!this.effects.contains(effect)) {
+		Optional<Effect> activeEffect = effects.stream().filter(e -> e.getClass() == effect.getClass()).findFirst();
+		if(!activeEffect.isPresent()) {
 			this.effects.add(effect);
 			effect.attachSnake(this);
 			new Thread(effect).start();
 		} else {
-			effect.incrementDuration(effect.getEffectDuration().get());
+			activeEffect.get().incrementDuration(effect.getEffectDuration().get());
 		}
 	}
 
