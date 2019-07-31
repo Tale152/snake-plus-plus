@@ -10,4 +10,8 @@ public interface SpeedProperty {
 	
 	public double getSpeedMultiplier();
 	
+	public void applyLenghtSpeedValue(double val);
+	
+	public double getLenghtSpeedValue();
+	
 }

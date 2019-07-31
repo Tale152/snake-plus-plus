@@ -4,14 +4,19 @@ import design.model.game.SpeedProperty;
 
 public class SpeedPropertyImpl implements SpeedProperty {
 	
+	private static final double DEFAULTLENGHTMULTIPLIER = 0;
+	
 	private long deltaT;
 	private double multiplier;
+	private double lenghtValue;
+
 	
 	public SpeedPropertyImpl(long deltaT, double speedMultiplier) {
 		checkDelta(deltaT);
 		this.deltaT = deltaT;
-		checkInitMultiplier(speedMultiplier);
+		checkMultiplier(speedMultiplier);
 		this.multiplier = speedMultiplier;
+		this.lenghtValue = DEFAULTLENGHTMULTIPLIER;
 	}
 	
 	@Override
@@ -42,21 +47,24 @@ public class SpeedPropertyImpl implements SpeedProperty {
 		}
 	}
 	
-	private void checkInitMultiplier(double multiplier) {
-		if(multiplier < 0) {
-			throw new IllegalArgumentException();
-		}
-	}
-	
 	private void checkMultiplier(double multiplier) {
 		if(multiplier < 0) {
 			throw new IllegalStateException();
 		}
 	}
 	
+	@Override
+	public void applyLenghtSpeedValue(double val) {
+		this.lenghtValue = val;
+	}
+
+	@Override
+	public double getLenghtSpeedValue() {
+		return this.lenghtValue;
+	}
+	
 	public String toString() {
 		return "Multiplier: " + this.multiplier + "\n"
 				+ "Delta: " + this.deltaT + "\n";
 	}
-
 }
