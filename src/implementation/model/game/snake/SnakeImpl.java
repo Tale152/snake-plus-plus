@@ -19,7 +19,9 @@ import design.model.game.Snake;
 import implementation.model.game.items.BodyPartImpl;
 
 public class SnakeImpl implements Snake{
-
+	
+	private final static int SPEEDWITHLENGHTMUL = 2;
+	
 	private final Player player;
 	private final Properties properties;
 	private final Field field;
@@ -93,7 +95,7 @@ public class SnakeImpl implements Snake{
 	//if the effect is already in snake's list of effect, I just increment the duration of the effect, otherwise I add it in the list
 	@Override
 	public void addEffect(Effect effect) {
-		Optional<Effect> activeEffect = effects.stream().filter(e -> e.getClass() == effect.getClass()).findFirst();
+		Optional<Effect> activeEffect = this.effects.stream().filter(e -> e.getClass() == effect.getClass()).findFirst();
 		if(!activeEffect.isPresent()) {
 			this.effects.add(effect);
 			effect.attachSnake(this);
@@ -308,6 +310,7 @@ public class SnakeImpl implements Snake{
 	
 	//the movement is just an insert of a new head, and I remove the tail until snake have the length he is supposed to have
 	private void move(Point next) {
+		changeSpeedWithLenght();	
 		insertNewHead(next);
 		while(this.bodyPart.size() > this.properties.getLengthProperty().getLength()){
 			removeTail();
@@ -315,10 +318,10 @@ public class SnakeImpl implements Snake{
 		this.hasMoved = true;
 	}
 	
-	//snake hav2 to wait to move until it is his time
+	//snake have to wait to move until it is his time
 	private synchronized void waitToMove() throws InterruptedException {
 		long startingTime = System.currentTimeMillis();		
-		long timeToWait = (long)(properties.getSpeedProperty().getDeltaT() * properties.getSpeedProperty().getSpeedMultiplier());					
+		long timeToWait = (long)((properties.getSpeedProperty().getDeltaT() + this.properties.getSpeedProperty().getLenghtSpeedValue()) * properties.getSpeedProperty().getSpeedMultiplier());					
 		while(true) {
 			wait(timeToWait);											
 			long deltaT = System.currentTimeMillis() - startingTime;	
@@ -411,6 +414,21 @@ public class SnakeImpl implements Snake{
 		}
 	}
 	
+	//method to change the speed proportional to the length of snake
+	private double changeSpeedWithLenght() {
+		int val;
+		
+		if(this.properties.getLengthProperty().getLength() == 1) {
+			val = 0;
+		} else if(this.properties.getLengthProperty().getLength() >= this.bodyPart.size()){
+			val = - this.getProperties().getLengthProperty().getLength() * SPEEDWITHLENGHTMUL;
+		} else {
+			val = this.getProperties().getLengthProperty().getLength() * SPEEDWITHLENGHTMUL;
+		}
+		this.properties.getSpeedProperty().applyLenghtSpeedValue(val);
+		return val;
+	}
+
 	//Useful method to test all the properties of every body part of snake
 	private void stampamiTutto() {
 		for(BodyPart b : this.bodyPart) {
