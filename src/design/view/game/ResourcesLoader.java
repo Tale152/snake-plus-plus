@@ -12,5 +12,7 @@ public interface ResourcesLoader {
 	
 	public Background getHudBackground();
 	
+	public Sprite getDeadPlayerIndicator();
+	
 }
 

@@ -28,7 +28,7 @@ public class Main extends Application{
   @Override
   public void start(Stage primaryStage) throws Exception {
 	  new SettingsControllerImpl();
-	  List<String> playerNames = new ArrayList<>(Arrays.asList("Ale", "Eli"));
+	  List<String> playerNames = new ArrayList<>(Arrays.asList("Ale", "Orla"));
 	  String levelPath = "res/stages/classic/1.json";
 	  GameLoader gl = new GameLoaderJSON(levelPath, playerNames);
       GameViewImpl gw = new GameViewImpl(scene, levelPath, PATH, playerNames, 

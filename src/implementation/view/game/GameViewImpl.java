@@ -174,6 +174,12 @@ public class GameViewImpl implements GameView {
     				(playerSpacingX * i) + playerSpacingX,
     				scoreSpacingY);
     		drawPlayerHeadAndActiveItems(i);
+    		if (!hud.getPlayerHUDs().get(i).isAlive()) {
+    			Double deadDim = root.getHeight() * hudPercentage;
+    			root.getBackgroundGraphicsContext().drawImage((Image)loader.getDeadPlayerIndicator().getSprite(),
+    					(playerSpacingX * i) + playerSpacingX - (deadDim / 2), root.getHeight() - deadDim, 
+    					deadDim, deadDim);
+    		}
     	}
 	}
     

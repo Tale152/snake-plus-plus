@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
-import design.view.game.ResourcesLoader;
+
 import design.view.game.*;
 import javafx.scene.image.Image;
 
@@ -21,12 +21,14 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 	//background names
 	private final static String BACKGROUND_FIELD = "Field.png";
 	private final static String BACKGROUND_HUD = "Hud.png";
+	private final static String DEAD_PLAYER = "Dead_signal.png";
 	
 	private final List<Sprite> items = new ArrayList<>();
 	private final List<Sprite> walls = new ArrayList<>(); 
 	private final List<Sprite> bodyParts = new ArrayList<>();
 	private final Background fieldBg;
 	private final Background hudBg;
+	private final Sprite deadPlayer;
 	
 	public ResourcesLoaderFromFile(String path, double nCellsWidth, double nCellsHeight) throws FileNotFoundException, IOException {
 		
@@ -41,6 +43,8 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 		String bgPath = path + File.separator + BACKGROUNDS_DIRECTORY + File.separator;
 		fieldBg = readBackground(bgPath + BACKGROUND_FIELD, spriteSize * nCellsWidth, fieldHeight);
 		hudBg = readBackground(bgPath + BACKGROUND_HUD, SCREEN_SIZE.getWidth(), SCREEN_SIZE.getHeight());
+		deadPlayer = new SpriteImpl(DEAD_PLAYER.replaceFirst("[.][^.]+$", ""), 
+				new Image(new FileInputStream(bgPath + DEAD_PLAYER))) ;
 	}
 	
 	@Override
@@ -98,6 +102,11 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 		File file = new File(path);
 		FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
 		return new BackgroundImpl(new Image(fis, width, height, false, false), width, height);
+	}
+
+	@Override
+	public Sprite getDeadPlayerIndicator() {
+		return deadPlayer;
 	}
 
 }
