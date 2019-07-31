@@ -193,31 +193,31 @@ public class GameControllerImpl implements GameController {
 	
 	private void updateSnakes() {
 		List<Snake> snakes = this.gameModel.getField().getSnakes();
-		int i = 0;
 		for(Snake s : snakes) {
+			int nPlayer = s.getPlayer().getPlayerNumber().ordinal();
 			if(s.isAlive()) {
 				if (s.hasMoved()) {
-					this.gameView.getField().initNewSnakeMap(i);
+					this.gameView.getField().initNewSnakeMap(nPlayer);
 					for(BodyPart b : s.getBodyParts()) {
 						this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(), this.resources.getBodyPart(snakeSpriteName(b, s)));
-						gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
+						gameView.getHUD().getPlayerHUDs().get(nPlayer).setScore(Integer.toString(s.getPlayer().getScore()));
 					}
-					this.gameView.getField().endNewSnakeMap(i);
+					this.gameView.getField().endNewSnakeMap(nPlayer);
 				}
-				gameView.getHUD().getPlayerHUDs().get(i).newEffectSpriteList();
+				gameView.getHUD().getPlayerHUDs().get(nPlayer).newEffectSpriteList();
 				for (Effect effect : s.getEffects()) {
-					gameView.getHUD().getPlayerHUDs().get(i).addEffectSprite(resources.getItem(effect.getClass().getSimpleName()));
+					gameView.getHUD().getPlayerHUDs().get(nPlayer).addEffectSprite(resources.getItem(effect.getClass().getSimpleName()));
 				}
-				gameView.getHUD().getPlayerHUDs().get(i).endEffectSpriteList();
-			} else {
-				gameView.getHUD().getPlayerHUDs().get(i).newEffectSpriteList();
-				gameView.getHUD().getPlayerHUDs().get(i).endEffectSpriteList();
-				this.gameView.getField().initNewSnakeMap(i);
-				this.gameView.getField().endNewSnakeMap(i);
-				gameView.getHUD().getPlayerHUDs().get(i).setAlive(false);
+				gameView.getHUD().getPlayerHUDs().get(nPlayer).endEffectSpriteList();
+			} 
+			else {
+				gameView.getHUD().getPlayerHUDs().get(nPlayer).newEffectSpriteList();
+				gameView.getHUD().getPlayerHUDs().get(nPlayer).endEffectSpriteList();
+				this.gameView.getField().initNewSnakeMap(nPlayer);
+				this.gameView.getField().endNewSnakeMap(nPlayer);
+				gameView.getHUD().getPlayerHUDs().get(nPlayer).setAlive(false);
 				}
 			}
-			++i;
 		}
 	
 	private void waitAndUpdateTime() {

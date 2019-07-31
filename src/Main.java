@@ -28,8 +28,8 @@ public class Main extends Application{
   @Override
   public void start(Stage primaryStage) throws Exception {
 	  new SettingsControllerImpl();
-	  List<String> playerNames = new ArrayList<>(Arrays.asList("Ale"));
-	  String levelPath = "res/stages/classic/HightPoints5MinHard.json";
+	  List<String> playerNames = new ArrayList<>(Arrays.asList("Ale", "Eli"));
+	  String levelPath = "res/stages/classic/1.json";
 	  GameLoader gl = new GameLoaderJSON(levelPath, playerNames);
       GameViewImpl gw = new GameViewImpl(scene, levelPath, PATH, playerNames, 
     		  gl.getGameModel().getField().getWidth(), gl.getGameModel().getField().getHeight());
