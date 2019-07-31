@@ -61,7 +61,6 @@ public abstract class EffectAbstract implements Effect {
 	public void incrementDuration(long duration) {
 		++counter;
 		this.dEffectDuration = Optional.of(dEffectDuration.get() + duration);
-		System.out.println("counter=" + counter + " new duration=" + dEffectDuration);
 	}
 	
 	@Override

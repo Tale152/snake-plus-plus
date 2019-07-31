@@ -43,6 +43,8 @@ public class GameViewImpl implements GameView {
 	private double playerSpacingX = 0;
 	private double scoreSpacingY = 0;
 	private double namesSpacingY = 0;
+	private double hudSpritesSpacingY = 0;
+	private double hudSpritesDimension = 0;
 	
 	private Font timeFont;
 	private Font playerFont;
@@ -87,17 +89,7 @@ public class GameViewImpl implements GameView {
 	        	drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
     			drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
     	    	drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayers);
-    			root.getBackgroundGraphicsContext().setFont(timeFont);
-    	    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
-    	    	root.getBackgroundGraphicsContext().setFont(playerFont);
-    	    	for (int i = 0; i < nPlayers; i++) {
-    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
-    	    				(playerSpacingX * i) + playerSpacingX,
-    	    				namesSpacingY);
-    	    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
-    	    				(playerSpacingX * i) + playerSpacingX,
-    	    				scoreSpacingY);
-    	    	}
+    			drawHud(nPlayers);
 	        }
 	    };
     }
@@ -116,18 +108,20 @@ public class GameViewImpl implements GameView {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
 				labelY = (root.getHeight() * hudPercentage) / 2;
-				scoreSpacingY = root.getHeight() - (root.getHeight() * hudPercentage) / 3;
-				namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 3) * 2);
+				scoreSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 2.5);
+				namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 4);
+				hudSpritesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 1.5);
+				hudSpritesDimension = ((root.getHeight() * hudPercentage)) / 4;
 				timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
 						root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
 				playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
+						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
 			}
 		});
 	    timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
 				root.getWidth() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
 	    playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 2);
+				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
 	    root.getBackgroundGraphicsContext().setTextAlign(TextAlignment.CENTER);
 	    root.getBackgroundGraphicsContext().setTextBaseline(VPos.CENTER);
     	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
@@ -166,6 +160,34 @@ public class GameViewImpl implements GameView {
     
     private void drawSprite(GraphicsContext fieldGC, Image sprite, Point point, double spriteLen) {
     	fieldGC.drawImage(sprite, point.x * spriteLen, point.y * spriteLen, spriteLen, spriteLen);
+    }
+    
+    private void drawHud(int nPlayers) {
+		root.getBackgroundGraphicsContext().setFont(timeFont);
+    	root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
+    	root.getBackgroundGraphicsContext().setFont(playerFont);
+    	for (int i = 0; i < nPlayers; i++) {
+    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getName(), 
+    				(playerSpacingX * i) + playerSpacingX,
+    				namesSpacingY);
+    		root.getBackgroundGraphicsContext().fillText(hud.getPlayerHUDs().get(i).getScore(), 
+    				(playerSpacingX * i) + playerSpacingX,
+    				scoreSpacingY);
+    		drawPlayerHeadAndActiveItems(i);
+    	}
+	}
+    
+    private void drawPlayerHeadAndActiveItems(int nPlayer) {
+    	List<Sprite> spriteList = hud.getPlayerHUDs().get(nPlayer).getSpriteList();
+    	double totalSpaceSprites = ((spriteList.size() * hudSpritesDimension) + ((hudSpritesDimension * 0.25) * (spriteList.size() - 1)));
+    	double leftCorner = (playerSpacingX * nPlayer) + playerSpacingX - (totalSpaceSprites/2);
+    	int i = 0;
+    	for (Sprite sprite : spriteList) {
+    		double xSpacing = leftCorner + (hudSpritesDimension * 1.25 * i);
+    		root.getBackgroundGraphicsContext().drawImage((Image)sprite.getSprite(), xSpacing, hudSpritesSpacingY, 
+    				hudSpritesDimension, hudSpritesDimension);
+    		++i;
+    	}
     }
     
     private double calculateHudPercentage(int nCellWidth, int nCellHeight) {

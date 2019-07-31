@@ -28,10 +28,10 @@ public class Main extends Application{
   @Override
   public void start(Stage primaryStage) throws Exception {
 	  new SettingsControllerImpl();
-	  List<String> playerNames = new ArrayList<>(Arrays.asList("LA SERPE"));
+	  List<String> playerNames = new ArrayList<>(Arrays.asList("Ale"));
 	  String levelPath = "res/stages/classic/HightPoints5MinHard.json";
 	  GameLoader gl = new GameLoaderJSON(levelPath, playerNames);
-      GameViewImpl gw = new GameViewImpl(scene, levelPath, PATH, Arrays.asList("LASERPE"), 
+      GameViewImpl gw = new GameViewImpl(scene, levelPath, PATH, playerNames, 
     		  gl.getGameModel().getField().getWidth(), gl.getGameModel().getField().getHeight());
       primaryStage.setScene(scene);
       primaryStage.setMaximized(true);

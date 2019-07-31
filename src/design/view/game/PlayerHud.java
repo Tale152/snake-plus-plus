@@ -18,9 +18,11 @@ public interface PlayerHud {
 	
 	public void setSnakeSprite(Sprite sprite);
 	
+	public void newEffectSpriteList();
+	
 	public void addEffectSprite(Sprite sprite);
 	
-	public void resetEffectSpriteList();
+	public void endEffectSpriteList();
 	
 	public List<Sprite> getSpriteList();
 	

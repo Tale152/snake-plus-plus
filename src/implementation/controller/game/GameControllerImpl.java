@@ -105,6 +105,7 @@ public class GameControllerImpl implements GameController {
 				gameView.getField().endNewSnakeMap(i);
 				gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
 				gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
+				gameView.getHUD().getPlayerHUDs().get(i).setSnakeSprite(resources.getBodyPart("P" + (i + 1) + "_head_tail_DOWN"));
 			}
 			++i;
 		}
@@ -203,12 +204,20 @@ public class GameControllerImpl implements GameController {
 					}
 					this.gameView.getField().endNewSnakeMap(i);
 				}
+				gameView.getHUD().getPlayerHUDs().get(i).newEffectSpriteList();
+				for (Effect effect : s.getEffects()) {
+					gameView.getHUD().getPlayerHUDs().get(i).addEffectSprite(resources.getItem(effect.getClass().getSimpleName()));
+				}
+				gameView.getHUD().getPlayerHUDs().get(i).endEffectSpriteList();
 			} else {
+				gameView.getHUD().getPlayerHUDs().get(i).newEffectSpriteList();
+				gameView.getHUD().getPlayerHUDs().get(i).endEffectSpriteList();
 				this.gameView.getField().initNewSnakeMap(i);
 				this.gameView.getField().endNewSnakeMap(i);
 				gameView.getHUD().getPlayerHUDs().get(i).setAlive(false);
 				}
 			}
+			++i;
 		}
 	
 	private void waitAndUpdateTime() {

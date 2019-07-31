@@ -11,14 +11,16 @@ public class PlayerHudImpl implements PlayerHud {
 	private String name;
 	private String score;
 	private boolean alive;
-	private final List<Sprite> effectSprites;
+	private final List<Sprite> actualSprites;
+	private final List<Sprite> currentSprites;
 	private Sprite playerSprite;
 	
 	public PlayerHudImpl() {
 		name = "";
 		score = "";
 		alive = true;
-		effectSprites = new ArrayList<>();
+		actualSprites = new ArrayList<>();
+		currentSprites = new ArrayList<>();
 	}
 	
 	@Override
@@ -58,12 +60,7 @@ public class PlayerHudImpl implements PlayerHud {
 
 	@Override
 	public void addEffectSprite(Sprite sprite) {
-		effectSprites.add(sprite);
-	}
-
-	@Override
-	public void resetEffectSpriteList() {
-		effectSprites.clear();
+		currentSprites.add(sprite);
 	}
 
 	@Override
@@ -72,8 +69,19 @@ public class PlayerHudImpl implements PlayerHud {
 		if (playerSprite != null) {
 			res.add(playerSprite);
 		}
-		res.addAll(effectSprites);
+		res.addAll(actualSprites);
 		return res;
+	}
+
+	@Override
+	public void newEffectSpriteList() {
+		currentSprites.clear();
+	}
+
+	@Override
+	public void endEffectSpriteList() {
+		actualSprites.clear();
+		actualSprites.addAll(currentSprites);
 	}
 
 }
