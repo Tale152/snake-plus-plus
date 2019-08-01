@@ -13,4 +13,9 @@ public interface DirectionProperty {
 	public boolean forceDirection(Direction direction);
 	
 	public void allowChangeDirection();
+	
+	public boolean hasNextValidDirection();
+	
+	public Direction getNextValidDirection();
+	
 }

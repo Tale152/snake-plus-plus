@@ -53,9 +53,14 @@ public class SnakeImpl implements Snake{
 	
 	@Override
 	public void run() {
+		boolean lastMovementSettedNextDirection = false;
 		while(isAlive) {
 			try {
 				waitToMove();
+				if (lastMovementSettedNextDirection) {
+					this.getProperties().getDirectionProperty().forceDirection(
+							this.getProperties().getDirectionProperty().getNextValidDirection());
+				}
 				this.currentDirection = this.properties.getDirectionProperty().getDirection();
 				handleCollisions(obtainNextPoint());
 				this.nextDirection = this.properties.getDirectionProperty().getDirection();
@@ -73,8 +78,13 @@ public class SnakeImpl implements Snake{
 				} else {
 					move(obtainNextPoint());
 				}
-				
-				this.properties.getDirectionProperty().allowChangeDirection();
+				if (this.getProperties().getDirectionProperty().hasNextValidDirection()) {
+					lastMovementSettedNextDirection = true;
+				}
+				else {
+					this.properties.getDirectionProperty().allowChangeDirection();
+					lastMovementSettedNextDirection = false;
+				}
 			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
 					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();

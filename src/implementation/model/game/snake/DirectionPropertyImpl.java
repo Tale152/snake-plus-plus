@@ -1,11 +1,14 @@
 package implementation.model.game.snake;
 
+import java.util.Optional;
+
 import design.model.game.Direction;
 import design.model.game.DirectionProperty;
 
 public class DirectionPropertyImpl implements DirectionProperty{
 	
 	private Direction direction;
+	private Optional<Direction> nextInputedDirection;
 	private boolean reversed;
 	private boolean canChangeDirection;
 	
@@ -14,6 +17,7 @@ public class DirectionPropertyImpl implements DirectionProperty{
 		this.direction = direction;
 		this.reversed = false;
 		this.canChangeDirection = true;
+		nextInputedDirection = Optional.empty();
 	}
 	
 	@Override
@@ -32,17 +36,23 @@ public class DirectionPropertyImpl implements DirectionProperty{
 		checkDirection(direction);
 		if(canChangeDirection) {
 			this.canChangeDirection = false;
-			directionCase(direction);
+			this.direction = directionCase(direction);
+		} else if (!nextInputedDirection.isPresent()) {
+			Direction nextPossibleDirection = directionCase(direction);
+			if (nextPossibleDirection != this.direction) {
+				nextInputedDirection = Optional.of(nextPossibleDirection);
+			}
 		}
 		return this.canChangeDirection;
 	}
 	
-	private void directionCase(Direction inputDirection) {
+	private Direction directionCase(Direction inputDirection) {
 		if(!this.direction.equals(reversedDirection(inputDirection)) && !this.reversed) { 
-			this.direction = inputDirection; 
+			return inputDirection; 
 		} else if(!this.direction.equals(inputDirection) && this.reversed){
-			this.direction = reversedDirection(inputDirection);
+			return reversedDirection(inputDirection);
 		}
+		return this.direction;
 	}
 
 	public void allowChangeDirection() {
@@ -84,6 +94,21 @@ public class DirectionPropertyImpl implements DirectionProperty{
 	public String toString() {
 		return "Current direction: " + this.direction.name() + "\n" 
 				+ "Reversed status: " + this.reversed + "\n";
+	}
+
+	@Override
+	public boolean hasNextValidDirection() {
+		return nextInputedDirection.isPresent();
+	}
+
+	@Override
+	public Direction getNextValidDirection() {
+		if (nextInputedDirection.isPresent()){
+			Direction result = nextInputedDirection.get();
+			nextInputedDirection = Optional.empty();
+			return result;
+		}
+		return direction;
 	}
 
 }
