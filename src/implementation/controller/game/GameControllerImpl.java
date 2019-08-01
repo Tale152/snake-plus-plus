@@ -14,6 +14,7 @@ import implementation.view.game.GameViewImpl;
 public class GameControllerImpl implements GameController {
 	
 	private final static long CONTROLLER_REFRESH_RATE = 1000/60;
+	private final static long MINIMUM_SPAWN_DISTANCE = 2;
 	
 	private final static String HEAD = "head_";
 	private final static String BODY = "body_";
@@ -184,11 +185,41 @@ public class GameControllerImpl implements GameController {
 		Random random = new Random();
 		while(true) {
 			p = new Point(random.nextInt(width), random.nextInt(height));
-			if(this.gameModel.getField().getCell(p).isEmpty()) {
+			if(this.gameModel.getField().getCell(p).isEmpty() &&
+					!checkRandomPointToSnakeCloseness(p)) {
 				break;
 			}
 		}
 		return p;
+	}
+	
+	/**
+	 * Returns true if the random generated points is inside a range in front of any of the currently alive snakes
+	 * @param point
+	 * @return
+	 */
+	private boolean checkRandomPointToSnakeCloseness(Point point) {
+		for (Snake snake : gameModel.getField().getSnakes()) {
+			if (snake.isAlive() && checkIntoNextTwoCells(snake, point)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if the random generated points is inside a range in front of given snake
+	 * @param point
+	 * @return
+	 */
+	private boolean checkIntoNextTwoCells(Snake snake, Point point) {
+		switch(snake.getProperties().getDirectionProperty().getDirection()) {
+			case LEFT:
+			case RIGHT:	return Math.abs(snake.getBodyParts().get(0).getPoint().getX() - point.getX()) <= MINIMUM_SPAWN_DISTANCE;
+			case UP:
+			case DOWN:return Math.abs(snake.getBodyParts().get(0).getPoint().getY() - point.getY()) <= MINIMUM_SPAWN_DISTANCE;
+			default: return true;
+		}
 	}
 	
 	private void updateSnakes() {
