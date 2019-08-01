@@ -32,35 +32,17 @@ public class DirectionPropertyImpl implements DirectionProperty{
 		checkDirection(direction);
 		if(canChangeDirection) {
 			this.canChangeDirection = false;
-			switch(direction) {
-			case UP: if(!this.direction.equals(Direction.DOWN) && !this.reversed) {
-						this.direction = direction;
-					} else if(!this.direction.equals(Direction.UP) && this.reversed){
-						this.direction = reversedDirection(direction);
-					}	
-			break;
-			case DOWN: if(!this.direction.equals(Direction.UP) && !this.reversed) { 
-								this.direction = direction; 
-							} else if(!this.direction.equals(Direction.DOWN) && this.reversed){
-								this.direction = reversedDirection(direction);
-							} 
-			break;
-			case LEFT: if(!this.direction.equals(Direction.RIGHT) && !this.reversed) { 
-								this.direction = direction; 
-							} else if(!this.direction.equals(Direction.LEFT) && this.reversed) {
-								this.direction = reversedDirection(direction);
-							}
-			break;
-			case RIGHT: if(!this.direction.equals(Direction.LEFT) && !this.reversed) { 
-								this.direction = direction; 
-							} else if(!this.direction.equals(Direction.RIGHT) && this.reversed){
-								this.direction = reversedDirection(direction);
-							}
-			break;
-			default: throw new IllegalStateException();
-			}
+			directionCase(direction);
 		}
 		return this.canChangeDirection;
+	}
+	
+	private void directionCase(Direction inputDirection) {
+		if(!this.direction.equals(reversedDirection(inputDirection)) && !this.reversed) { 
+			this.direction = inputDirection; 
+		} else if(!this.direction.equals(inputDirection) && this.reversed){
+			this.direction = reversedDirection(inputDirection);
+		}
 	}
 
 	public void allowChangeDirection() {
