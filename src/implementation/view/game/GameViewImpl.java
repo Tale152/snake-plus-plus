@@ -59,6 +59,8 @@ public class GameViewImpl implements GameView {
 		root = initRoot(scene, playerNames.size(), nCellWidth, nCellHeight);
     	animationTimer = initAnimationTimer(playerNames.size());
     	initGameController(scene, levelPath, playerNames);
+    	setWidthProperties(playerNames.size());
+    	setHeightProperies();
 	}
     
 	@Override
@@ -100,22 +102,13 @@ public class GameViewImpl implements GameView {
 	    root.widthProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				timeLabelX = root.getWidth() / 2; 
-				playerSpacingX = root.getWidth() / (nPlayers + 1);
+				setWidthProperties(nPlayers);
 			}
 		});
 	    root.heightProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-				labelY = (root.getHeight() * hudPercentage) / 2;
-				scoreSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 2.5);
-				namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 4);
-				hudSpritesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 1.5);
-				hudSpritesDimension = ((root.getHeight() * hudPercentage)) / 4;
-				timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-						root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
-				playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
-						root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
+				setHeightProperies();
 			}
 		});
 	    timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
@@ -127,6 +120,23 @@ public class GameViewImpl implements GameView {
     	root.getBackgroundGraphicsContext().setFill(Color.BLACK);
 	    return root;
     }
+	
+	private void setWidthProperties(int nPlayers) {
+		timeLabelX = root.getWidth() / 2; 
+		playerSpacingX = root.getWidth() / (nPlayers + 1);
+	}
+	
+	private void setHeightProperies() {
+		labelY = (root.getHeight() * hudPercentage) / 2;
+		scoreSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 2.5);
+		namesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 4);
+		hudSpritesSpacingY = root.getHeight() - (((root.getHeight() * hudPercentage) / 5) * 1.5);
+		hudSpritesDimension = ((root.getHeight() * hudPercentage)) / 4;
+		timeFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+				root.getHeight() * hudPercentage * TIME_HEIGHT_PERCENTAGE);
+		playerFont = new Font(root.getBackgroundGraphicsContext().getFont().getName(), 
+				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
+	}
     
     private void initGameController(Scene scene, String levelPath, List<String> playerNames) throws IOException {
     	GameController controller = new GameControllerImpl(levelPath, playerNames, this, loader);
