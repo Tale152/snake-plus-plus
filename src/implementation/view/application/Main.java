@@ -20,6 +20,7 @@ public class Main extends Application{
   @Override
   public void start(Stage primaryStage) throws Exception {
 	  
+	  primaryStage.setOnCloseRequest(e -> {System.exit(0);});
 	  try {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
 			scene = new Scene(root, 800, 600);
