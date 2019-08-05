@@ -8,6 +8,4 @@ public interface MainMenuController {
 	
 	public void goToLevelMode();
 	
-	public void goToSettings();
-	
 }
