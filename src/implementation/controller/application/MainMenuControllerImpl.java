@@ -27,16 +27,18 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	@FXML private Label snakeppLabel;
 	@FXML private AnchorPane root;
 	
+	//default skin pack that can be change
+	private String skinPackPath = "res" + File.separator + "resources" + File.separator + "TestPack";
+	
 	@FXML
 	public void goToClassicMode() throws IOException {
-		String PATH = "res" + File.separator + "resources" + File.separator + "TestPack";
 		new SettingsControllerImpl();
 		List<String> playerNames = new ArrayList<>(Arrays.asList("Ale"));
 		String levelPath = "res/stages/classic/HightPoints5MinMedium.json";
 		GameLoader gl;
 		gl = new GameLoaderJSON(levelPath, playerNames);
 		@SuppressWarnings("unused")
-		GameViewImpl gw = new GameViewImpl(Main.getScene(), levelPath, PATH, playerNames, 
+		GameViewImpl gw = new GameViewImpl(Main.getScene(), levelPath, this.skinPackPath, playerNames, 
 	    		gl.getGameModel().getField().getWidth(), gl.getGameModel().getField().getHeight());
 	}
 	
@@ -44,7 +46,17 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	public void goToLevelMode() {
 		
 	}
-
+	
+	@FXML
+	public void selectDefaultStickerPack(){
+		this.skinPackPath = "res" + File.separator + "resources" + File.separator + "TestPack";
+	}
+	
+	@FXML
+	public void selectSkinPack1(){
+		this.skinPackPath = "res" + File.separator + "resources" + File.separator + "Pack1";
+	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		root.heightProperty().addListener(new ChangeListener<Object>() {
