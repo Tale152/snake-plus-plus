@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 
 public class MainMenuControllerImpl implements MainMenuController, Initializable {
@@ -26,13 +27,19 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	@FXML private Button level;
 	@FXML private Label snakeppLabel;
 	@FXML private AnchorPane root;
+	@FXML private MenuItem pack1;
+	@FXML private MenuItem defaultPack;
 	
 	//default skin pack that can be change
-	private String skinPackPath = "res" + File.separator + "resources" + File.separator + "TestPack";
+	private String skinPackPath;
 	
 	@FXML
 	public void goToClassicMode() throws IOException {
 		new SettingsControllerImpl();
+		//funziona solo così, con isEmpty va in nullPointer, idk
+		if(this.skinPackPath == null) {
+			selectDefaultSkinPack();
+		}
 		List<String> playerNames = new ArrayList<>(Arrays.asList("Ale"));
 		String levelPath = "res/stages/classic/HightPoints5MinMedium.json";
 		GameLoader gl;
@@ -48,13 +55,15 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	}
 	
 	@FXML
-	public void selectDefaultStickerPack(){
-		this.skinPackPath = "res" + File.separator + "resources" + File.separator + "TestPack";
+	public void selectDefaultSkinPack(){
+		String defaultName = this.defaultPack.getText();
+		this.skinPackPath = "res" + File.separator + "resources" + File.separator + defaultName.replaceAll("\\s", "");
 	}
 	
 	@FXML
 	public void selectSkinPack1(){
-		this.skinPackPath = "res" + File.separator + "resources" + File.separator + "Pack1";
+		String pack1Name = this.pack1.getText();
+		this.skinPackPath = "res" + File.separator + "resources" + File.separator + pack1Name.replaceAll("\\s", "");
 	}
 	
 	@Override

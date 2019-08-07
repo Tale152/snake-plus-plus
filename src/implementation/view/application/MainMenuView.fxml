@@ -52,20 +52,20 @@
          </children>
       </GridPane>
       <Label fx:id="snakeppLabel" alignment="CENTER" layoutX="242.0" layoutY="53.0" prefHeight="201.0" prefWidth="516.0" text="Snake++" textAlignment="CENTER" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <GridPane layoutX="371.0" layoutY="222.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0">
+      <GridPane layoutX="1.0" layoutY="222.0" prefHeight="50.0" prefWidth="1000.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="250.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="487.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="487.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="10.0" prefWidth="485.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <MenuButton mnemonicParsing="false" prefHeight="38.0" prefWidth="333.0" text="Skin Packs" GridPane.columnIndex="1">
+            <MenuButton mnemonicParsing="false" prefHeight="38.0" prefWidth="335.0" text="Skin Packs" GridPane.columnIndex="1">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#selectDefaultStickerPack" text="Default" />
-                <MenuItem mnemonicParsing="false" onAction="#selectSkinPack1" text="Skin Pack 1" />
+                <MenuItem fx:id="defaultPack" mnemonicParsing="false" onAction="#selectDefaultSkinPack" text="Default Pack" />
+                <MenuItem fx:id="pack1" mnemonicParsing="false" onAction="#selectSkinPack1" text="Red Pack" />
                   <MenuItem disable="true" mnemonicParsing="false" text="Coming soon..." />
               </items>
             </MenuButton>
