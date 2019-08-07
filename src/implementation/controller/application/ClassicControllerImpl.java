@@ -38,6 +38,7 @@ public class ClassicControllerImpl implements ClassicController {
 	private int selected = 0;
 	private int previous = 0;
 	private int players = 1;
+	private String skinPackPath;
 	
 	@FXML
 	private Text levelDescription;
@@ -63,7 +64,6 @@ public class ClassicControllerImpl implements ClassicController {
 	public ClassicControllerImpl() throws IOException {
 		levels = new ArrayList<>();
 		for (File file : new File(levelsPath).listFiles()) {
-			//String levelPath = levelsPath + File.separator + file;
 			String levelPath = file.getPath();
 			System.out.println(levelPath);
 			List<String> playerNames = new ArrayList<>(Arrays.asList("Ale")); //TODO: remove this heresy
@@ -92,7 +92,6 @@ public class ClassicControllerImpl implements ClassicController {
 		preview.heightProperty().bind(previewContainer.heightProperty());
 		gc = preview.getGraphicsContext2D();
 		
-		refreshLevel();
 		refreshPlayers();
 	}
 	
@@ -115,7 +114,7 @@ public class ClassicControllerImpl implements ClassicController {
 		buttons.get(selected).setDisable(true);
 		
 		level = levels.get(selected).getValue();
-		resources = new ResourcesLoaderFromFile(PATH, level.getGameModel().getField().getWidth(), level.getGameModel().getField().getHeight());
+		resources = new ResourcesLoaderFromFile(skinPackPath, level.getGameModel().getField().getWidth(), level.getGameModel().getField().getHeight());
 		
 		String text = level.getLevelDescription();
 		levelDescription.setText(text);
@@ -173,7 +172,18 @@ public class ClassicControllerImpl implements ClassicController {
 		GameLoader gl = levels.get(selected).getValue();
 		String levelPath = levels.get(selected).getKey();
 		List<String> playerNames = names.subList(0, players);
-		new GameViewImpl(Main.getScene(), levelPath, PATH, playerNames, 
+		new GameViewImpl(Main.getScene(), levelPath, this.skinPackPath, playerNames, 
 	    		gl.getGameModel().getField().getWidth(), gl.getGameModel().getField().getHeight());
+	}
+
+	@Override
+	public void setSkinPackPath(String path) {
+		skinPackPath = path;
+		try {
+			refreshLevel();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

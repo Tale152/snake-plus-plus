@@ -9,4 +9,5 @@ public interface ClassicController {
 	public void removePlayer();
 	public void addPlayer();
 	public void startSelectedLevel() throws IOException;
+	public void setSkinPackPath(String path);
 }
