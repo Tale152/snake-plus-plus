@@ -12,6 +12,8 @@ import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
 
 public class MainMenuControllerImpl implements MainMenuController {
 
@@ -20,12 +22,8 @@ public class MainMenuControllerImpl implements MainMenuController {
 	@FXML
 	public void goToClassicMode() throws IOException {
 		new SettingsControllerImpl();
-		List<String> playerNames = new ArrayList<>(Arrays.asList("Ale"));
-		String levelPath = "res/stages/classic/HightPoints5MinMedium.json";
-		GameLoader gl;
-		gl = new GameLoaderJSON(levelPath, playerNames);
-		GameViewImpl gw = new GameViewImpl(Main.getScene(), levelPath, PATH, playerNames, 
-	    		gl.getGameModel().getField().getWidth(), gl.getGameModel().getField().getHeight());
+		BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("/implementation/view/application/ClassicView.fxml"));
+		Main.getScene().setRoot(root);
 	}
 	
 	@FXML
