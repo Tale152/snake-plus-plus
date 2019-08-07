@@ -38,9 +38,13 @@ import implementation.model.game.snake.SnakeImpl;
 
 public class GameLoaderJSON implements GameLoader {
 	
-	private GameModel gameModel;
+	private final GameModel gameModel;
 	
-	private ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
+	
+	private final String name;
+	
+	private final String description;
 	
 	private static long L = (long) 10e9;
 
@@ -87,6 +91,9 @@ public class GameLoaderJSON implements GameLoader {
 		}
 		
 		this.gameModel = new GameModelImpl(field, rules);
+		
+		this.name = loader.get("name").asText();
+		this.description = loader.get("description").asText();
 	}
 	
 	
@@ -129,6 +136,17 @@ public class GameLoaderJSON implements GameLoader {
 		om.writeValue(new File("/tmp/2rules.json"), rules);
 		
 		om.writeValue(new File("/tmp/directions.json"), Arrays.asList(Direction.RIGHT));
+	}
+
+	@Override
+	public String getLevelName() {
+		return name;
+	}
+
+	@Override
+	public String getLevelDescription() {
+		// TODO Auto-generated method stub
+		return description;
 	}
 
 }
