@@ -15,12 +15,14 @@ import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
 import implementation.view.game.ResourcesLoaderFromFile;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -123,15 +125,25 @@ public class ClassicControllerImpl implements ClassicController {
 		List<ItemRule> items = level.getGameModel().getGameRules().getItemRules();
 		
 		for (ItemRule item : items) {
-			itemList.getChildren().add(new ImageView((Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite()));
+			ImageView imv = new ImageView((Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite());
+			double freq = 1000.0 * item.getSpawnChance() / (double) item.getSpawnDelta();
+			String tooltip = String.format("Spawn chance per second: %d%%\nMaximum amount on screen: %d", (int) (freq * 100), item.getMax());
+			Tooltip.install(imv, new Tooltip(tooltip));
+			itemList.getChildren().add(imv);
 		}
 		
-		gc.clearRect(0, 0, preview.getWidth(), preview.getHeight());
-		gc.setLineWidth(3);
-		gc.setFill(Color.DARKGREEN);
-		gc.setStroke(Color.AQUA);
-		gc.fillText(level.getLevelName(), 100, 100);
-		gc.strokeRect(9.5, 9.5, preview.getWidth() - 20, preview.getHeight() - 20);
+		Platform.runLater(new Runnable() {
+			@Override public void run() {
+				gc.clearRect(0, 0, preview.getWidth(), preview.getHeight());
+				gc.setLineWidth(3);
+				gc.setFill(Color.DARKGREEN);
+				gc.setStroke(Color.AQUA);
+				gc.fillText(level.getLevelName(), 100, 100);
+				gc.strokeRect(9.5, 9.5, preview.getWidth() - 20, preview.getHeight() - 20);
+			}
+		});
+		
+		
 		
 		previous = selected;
 	}
