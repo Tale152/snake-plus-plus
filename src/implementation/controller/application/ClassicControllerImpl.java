@@ -65,7 +65,6 @@ public class ClassicControllerImpl implements ClassicController {
 		levels = new ArrayList<>();
 		for (File file : new File(levelsPath).listFiles()) {
 			String levelPath = file.getPath();
-			System.out.println(levelPath);
 			List<String> playerNames = new ArrayList<>(Arrays.asList("Ale")); //TODO: remove this heresy
 			levels.add(new Pair<String, GameLoader>(levelPath, new GameLoaderJSON(levelPath, playerNames)));
 		}
