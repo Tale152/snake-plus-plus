@@ -20,7 +20,9 @@ import implementation.model.game.items.BodyPartImpl;
 
 public class SnakeImpl implements Snake{
 	
-	private final static int SPEEDWITHLENGHTMUL = 2;
+	private final static int SPEEDWITHLENGHTMUL = 1;
+	private final static long MAXTIMETOWAIT = 400;
+	private final static long MINTIMETOWAIT = 40;
 	
 	private final Player player;
 	private final Properties properties;
@@ -50,7 +52,8 @@ public class SnakeImpl implements Snake{
 		}
 		properties.getLengthProperty().lengthen(point.size() - 1); 
 	}
-	
+
+
 	@Override
 	public void run() {
 		boolean lastMovementSettedNextDirection = false;
@@ -331,7 +334,15 @@ public class SnakeImpl implements Snake{
 	//snake have to wait to move until it is his time
 	private synchronized void waitToMove() throws InterruptedException {
 		long startingTime = System.currentTimeMillis();		
-		long timeToWait = (long)((properties.getSpeedProperty().getDeltaT() + this.properties.getSpeedProperty().getLenghtSpeedValue()) * properties.getSpeedProperty().getSpeedMultiplier());					
+		long timeToWait = (long)((properties.getSpeedProperty().getDeltaT() + this.properties.getSpeedProperty().getLenghtSpeedValue()) * 
+				properties.getSpeedProperty().getSpeedMultiplier());	
+		//timeToWait must be a value between max and min, snake can not go faster or slower
+		if (timeToWait > MAXTIMETOWAIT) {
+			timeToWait = MAXTIMETOWAIT;
+		} else if(timeToWait < MINTIMETOWAIT) {
+			timeToWait = MINTIMETOWAIT;
+		}
+		System.out.println(timeToWait + "\n");
 		while(true) {
 			wait(timeToWait);											
 			long deltaT = System.currentTimeMillis() - startingTime;	
@@ -352,7 +363,17 @@ public class SnakeImpl implements Snake{
 		List<Collidable> cellContent = new ArrayList<>();
 		cellContent.addAll(getItemToCollide(next));
 		for(Collidable c : this.field.getCell(next)) {
-			c.onCollision(this);
+			//if in the next cell there is snake's tail, he has to collide only if the tail is going to stay in the same cell
+			//in the next movement, and this happen only if snake's supposed length is bigger than snake's actual length on the screen
+			if (c instanceof BodyPart && c.getPoint().equals(this.bodyPart.get(this.bodyPart.size() - 1).getPoint())) {
+				if (this.properties.getLengthProperty().getLength() > this.bodyPart.size()) {
+					c.onCollision(this);
+				}
+			} else {
+				//if it is not a body part you have to collide with it in any case 
+				c.onCollision(this);
+			}
+			
 		}
 		for (Collidable collidable : cellContent) {
 			if(collidable instanceof Item) {
@@ -452,5 +473,6 @@ public class SnakeImpl implements Snake{
 					+ "Is connected on left: " + b.isCombinedOnLeft() + "\n"
 					+ "Snake direction: " + this.properties.getDirectionProperty().getDirection() + "\n\n");
 		}
-	}
+	} 
+	
 }
