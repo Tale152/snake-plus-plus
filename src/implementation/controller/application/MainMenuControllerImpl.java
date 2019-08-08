@@ -6,18 +6,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.Map.Entry;
 
 import design.controller.application.ClassicController;
 import design.controller.application.MainMenuController;
-<<<<<<< HEAD
+
 import design.view.game.Sprite;
 import implementation.view.application.Main;
 import implementation.view.game.SpriteImpl;
-=======
+
 import implementation.view.application.Main;
->>>>>>> master
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -40,7 +42,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	
 	//default skin pack that can be change
 	private String skinPackPath;
-	private final ArrayList<String> itemButtonList = new ArrayList<>();
+	private final Map<String, String> itemButtonMap = new HashMap<>();
 	
 	@FXML
 	public void goToClassicMode() throws IOException {
@@ -56,30 +58,23 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 		
 	}
 	
-//	@FXML
-//	public void selectDefaultSkinPack(){
-//		String defaultName = this.defaultPack.getText();
-//		this.skinPackPath = "res" + File.separator + "resources" + File.separator + defaultName.replaceAll("\\s", "");
-//	}
-//	
-//	@FXML
-//	public void selectSkinPack1(){
-//		String pack1Name = this.pack1.getText();
-//		this.skinPackPath = "res" + File.separator + "resources" + File.separator + pack1Name.replaceAll("\\s", "");
-//	}
-	
-	
-	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
 		final File folder = new File("res" + File.separator + "resources");
 		listFiles(folder);
-		
-		
-		for(String s : this.itemButtonList) {
-			this.skinPacks.getItems().add(new MenuItem(s));
-		}
+        
+		for(Entry<String, String> s : this.itemButtonMap.entrySet()) {
+			MenuItem m = new MenuItem(s.getValue());
+			EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+	            public void handle(ActionEvent e) { 
+	            	skinPackPath = s.getKey();
+	            	skinPacks.setText(m.getText());
+	            } 
+	        }; 
+			m.setOnAction(event);
+			this.skinPacks.getItems().add(m);
+		}	
 		
 		root.heightProperty().addListener(new ChangeListener<Object>() {
 
@@ -91,17 +86,12 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 			}
 			
 		});
-		
-
-		selectDefaultSkinPack();
-
-
 	}
 	
 	private void listFiles(final File folder) {
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
-	        	this.itemButtonList.add(fileEntry.getName().replace("_", " "));
+	        	this.itemButtonMap.put(fileEntry.getAbsolutePath(), fileEntry.getName().replace("_", " "));
 	        }
 	    }
 	}
