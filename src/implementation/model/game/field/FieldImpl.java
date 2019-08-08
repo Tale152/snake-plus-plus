@@ -179,4 +179,9 @@ public class FieldImpl implements Field {
 		}
 		return snakes.add(snake);
 	}
+
+	@Override
+	public Snake removeSnake(int i) {
+		return snakes.remove(i);
+	}
 }
