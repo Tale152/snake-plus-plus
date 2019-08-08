@@ -143,7 +143,8 @@ public class GameControllerImpl implements GameController {
 		this.gameView.stopRendering();
 	}
 	
-	private boolean isGameEnded() {
+	@Override
+	public boolean isGameEnded() {
 		List<Snake> snakes = this.gameModel.getField().getSnakes();
 		return loss.checkSnakes(snakes) || loss.checkTime(gameTime) ||
 				win.checkScore(snakes) || win.checkSnakeLength(snakes) || win.checkTime(gameTime);

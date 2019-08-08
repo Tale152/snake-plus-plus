@@ -2,6 +2,8 @@ package design.controller.game;
 
 public interface GameController extends Runnable{
 	
-	void playerInput(InputEvent input);
+	public void playerInput(InputEvent input);
+	
+	public boolean isGameEnded();
 	
 }
