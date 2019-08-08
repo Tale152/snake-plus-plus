@@ -342,7 +342,6 @@ public class SnakeImpl implements Snake{
 		} else if(timeToWait < MINTIMETOWAIT) {
 			timeToWait = MINTIMETOWAIT;
 		}
-		System.out.println(timeToWait + "\n");
 		while(true) {
 			wait(timeToWait);											
 			long deltaT = System.currentTimeMillis() - startingTime;	

@@ -33,7 +33,8 @@ import javafx.scene.layout.AnchorPane;
 
 public class MainMenuControllerImpl implements MainMenuController, Initializable {
 
-	private static double TEXT_PERCENTAGE = 0.4;
+	private final static String DEFAULT_PACK = "Default Pack";
+	private final static double TEXT_PERCENTAGE = 0.4;
 	@FXML private Button classic;
 	@FXML private Button level;
 	@FXML private Label snakeppLabel;
@@ -63,18 +64,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 		
 		final File folder = new File("res" + File.separator + "resources");
 		listFiles(folder);
-        
-		for(Entry<String, String> s : this.itemButtonMap.entrySet()) {
-			MenuItem m = new MenuItem(s.getValue());
-			EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
-	            public void handle(ActionEvent e) { 
-	            	skinPackPath = s.getKey();
-	            	skinPacks.setText(m.getText());
-	            } 
-	        }; 
-			m.setOnAction(event);
-			this.skinPacks.getItems().add(m);
-		}	
+        initializeMenuItem();
 		
 		root.heightProperty().addListener(new ChangeListener<Object>() {
 
@@ -91,9 +81,30 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	private void listFiles(final File folder) {
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
-	        	this.itemButtonMap.put(fileEntry.getAbsolutePath(), fileEntry.getName().replace("_", " "));
+	        	this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getAbsolutePath());
 	        }
 	    }
+	    
+	    if (this.itemButtonMap.containsKey(DEFAULT_PACK)){
+	    	this.skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);	
+	    } else {
+	    	System.out.println("There are no default skin pack");
+	    	System.exit(1);
+	    } 
+	}
+	
+	private void initializeMenuItem() {
+		for(String s : this.itemButtonMap.keySet()) {
+			MenuItem m = new MenuItem(s);
+			EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+	            public void handle(ActionEvent e) { 
+	            	skinPackPath = itemButtonMap.get(s);
+	            	skinPacks.setText(m.getText());
+	            } 
+	        }; 
+			m.setOnAction(event);
+			this.skinPacks.getItems().add(m);
+		}	
 	}
 	
 	private void changeFontSize(Labeled labeled, double percentage) {
