@@ -11,6 +11,9 @@ import java.util.Optional;
 import org.junit.Test;
 
 import implementation.model.game.field.FieldImpl;
+import implementation.model.game.items.Apple;
+import implementation.model.game.items.BadApple;
+import implementation.model.game.items.Beer;
 import implementation.model.game.items.ItemFactory;
 import design.model.game.Field;
 import design.model.game.Item;
@@ -79,6 +82,7 @@ public class FieldTest {
 	@Test
 	public void testAddItems() {
 		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
 		Item item;
 		try{
 			field.addItem(null);
@@ -88,21 +92,21 @@ public class FieldTest {
             fail("wrong exception");
         }
 		try{
-			item = ItemFactory.createApple(new Point(10,0), Optional.empty(), Optional.empty());
+			item = itemFactory.createItem(new Point(10,0), Apple.class, Optional.empty(), Optional.empty());
 			field.addItem(item);
             fail("Item's coord can not be out of boundaries");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalStateException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		
-		item = ItemFactory.createApple(new Point(5,5), Optional.empty(), Optional.empty());
+		item = itemFactory.createItem(new Point(5,5), Apple.class, Optional.empty(), Optional.empty());
 		field.addItem(item);
 		assertEquals(field.getItems().get(0), item);
 		field.addItem(item);
 		assertEquals(field.getItems().size(), 1);
 		
-		Item beer = ItemFactory.createBeer(new Point(5,5), Optional.empty(), Optional.empty());
+		Item beer = itemFactory.createItem(new Point(5,6), Beer.class, Optional.empty(), Optional.empty());
 		field.addItem(beer);
 		assertEquals(field.getItems().size(), 2);
 		assertTrue(field.getItems().contains(item));
@@ -112,7 +116,7 @@ public class FieldTest {
 	@Test
 	public void testGetCell() {
 		Field field = new FieldImpl(new Point(10,10));
-		Item item = ItemFactory.createApple(new Point(1,1), Optional.empty(), Optional.empty());
+		ItemFactory itemFactory = new ItemFactory(field);
 		try{
 			field.getCell(null);
             fail("point can not be null");
@@ -127,21 +131,19 @@ public class FieldTest {
         } catch (Exception e){
             fail("wrong exception");
         }
+		assertEquals(0, field.getCell(new Point(1,1)).size());
+		Item item = itemFactory.createItem(new Point(1,1), Beer.class, Optional.empty(), Optional.empty());
+		assertEquals(1, field.getCell(new Point(1,1)).size());
+		assertTrue(field.getCell(new Point(1,1)).contains(item));
 		
-		assertEquals(Optional.empty(), field.getCell(new Point(1,1)));
-		field.addItem(item);
-		assertEquals(1, field.getCell(new Point(1,1)).get().size());
-		assertTrue(field.getCell(new Point(1,1)).get().contains(item));
+		Item beer = itemFactory.createItem(new Point(1,1), Beer.class, Optional.empty(), Optional.empty());
+		assertEquals(2, field.getCell(new Point(1,1)).size());
+		assertTrue(field.getCell(new Point(1,1)).contains(item));
+		assertTrue(field.getCell(new Point(1,1)).contains(beer));
 		
-		Item beer = ItemFactory.createBeer(new Point(1,1), Optional.empty(), Optional.empty());
-		field.addItem(beer);
-		assertEquals(2, field.getCell(new Point(1,1)).get().size());
-		assertTrue(field.getCell(new Point(1,1)).get().contains(item));
-		assertTrue(field.getCell(new Point(1,1)).get().contains(beer));
-		
-		Item badApple = ItemFactory.createBadApple(new Point(2,2), Optional.empty(), Optional.empty());
-		field.addItem(badApple);
-		assertEquals(2, field.getCell(new Point(1,1)).get().size());
+		Item badApple = itemFactory.createItem(new Point(2,2), BadApple.class, Optional.empty(), Optional.empty());
+		assertEquals(2, field.getCell(new Point(1,1)).size());
+		assertTrue(field.getCell(new Point(2,2)).contains(badApple));
 		
 		assertTrue(field.getCell(new Point(1,1)) != field.getCell(new Point(1,1)));
 	}
@@ -156,8 +158,8 @@ public class FieldTest {
         } catch (Exception e){
             fail("wrong exception");
         }
-
-		Item item = ItemFactory.createApple(new Point(1,1), Optional.empty(), Optional.empty());
+		ItemFactory itemFactory = new ItemFactory(field);
+		Item item = itemFactory.createItem(new Point(1,1), Apple.class, Optional.empty(), Optional.empty());
 		
 		field.addItem(item);
 		assertEquals(1, field.getItems().size());
@@ -170,12 +172,13 @@ public class FieldTest {
 	@Test
 	public void testGetItem() {
 		Field field = new FieldImpl(new Point(10,10));
-		Item item = ItemFactory.createApple(new Point(1,1), Optional.empty(), Optional.empty());
+		ItemFactory itemFactory = new ItemFactory(field);
+		Item item = itemFactory.createItem(new Point(1,1), Apple.class, Optional.empty(), Optional.empty());
 		
 		field.addItem(item);
 		assertTrue(field.getItems().contains(item));
 		
-		Item badApple = ItemFactory.createBadApple(new Point(2,2), Optional.empty(), Optional.empty());
+		Item badApple = itemFactory.createItem(new Point(2,2), BadApple.class, Optional.empty(), Optional.empty());
 		field.addItem(badApple);
 		assertEquals(2, field.getItems().size());
 		assertTrue(field.getItems().contains(badApple));

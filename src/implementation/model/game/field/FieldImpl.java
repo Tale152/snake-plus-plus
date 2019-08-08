@@ -28,6 +28,9 @@ public class FieldImpl implements Field {
 	private boolean begun;
 
 	public FieldImpl(Point dimensions) {
+		if (dimensions.x <= 0 || dimensions.y <= 0) {
+			throw new IllegalArgumentException();
+		}
 		items = Collections.synchronizedList(new ArrayList<Item>());
 		walls = Collections.synchronizedList(new ArrayList<Wall>());
 		bodyParts = Collections.synchronizedList(new ArrayList<BodyPart>());
@@ -86,6 +89,9 @@ public class FieldImpl implements Field {
 
 	@Override
 	public synchronized boolean removeItem(Item item) {
+		if (item == null) {
+			throw new NullPointerException();
+		}
 		if (items.remove(item)) {
 			removedItems.add(item);
 			return true;
@@ -107,6 +113,12 @@ public class FieldImpl implements Field {
 
 	@Override
 	public synchronized List<Collidable> getCell(Point point) {
+		if (point == null) {
+			throw new NullPointerException();
+		}
+		if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+			throw new IllegalArgumentException();
+		}
 		List<Collidable> cellList = new ArrayList<Collidable>();
 		items.stream().filter(i -> i.getPoint().equals(point)).forEach(Item -> cellList.add(Item));
 		walls.stream().filter(i -> i.getPoint().equals(point)).forEach(Wall -> cellList.add(Wall));
