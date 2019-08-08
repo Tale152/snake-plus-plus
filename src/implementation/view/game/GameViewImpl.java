@@ -1,6 +1,8 @@
 package implementation.view.game;
 
 import design.controller.game.GameController;
+import design.model.game.GameModel;
+import design.model.game.Snake;
 import design.view.game.*;
 import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.InputEventFX;
@@ -20,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -51,14 +54,18 @@ public class GameViewImpl implements GameView {
 	
 	private final AnimationTimer animationTimer;
 	
-    public GameViewImpl(Scene scene, String levelPath, String resourcesPath, List<String> playerNames, int nCellWidth, int nCellHeight) throws FileNotFoundException, IOException {
-    	loader = new ResourcesLoaderFromFile(resourcesPath, nCellWidth, nCellHeight);
-		hudPercentage = calculateHudPercentage(nCellWidth, nCellHeight);
+    public GameViewImpl(Scene scene, String resourcesPath, GameModel gameModel) throws FileNotFoundException, IOException {
+    	List<String> playerNames = new ArrayList<>();
+    	for (Snake s : gameModel.getField().getSnakes()) {
+    		playerNames.add(s.getPlayer().getName());
+    	}
+    	loader = new ResourcesLoaderFromFile(resourcesPath, gameModel.getField().getWidth(), gameModel.getField().getHeight());
+		hudPercentage = calculateHudPercentage(gameModel.getField().getWidth(), gameModel.getField().getHeight());
 	    hud = new GameHudImpl(playerNames.size(), loader);
 		field = new GameFieldImpl(playerNames.size(), loader);
-		root = initRoot(scene, playerNames.size(), nCellWidth, nCellHeight);
+		root = initRoot(scene, playerNames.size(), gameModel.getField().getWidth(), gameModel.getField().getHeight());
     	animationTimer = initAnimationTimer(playerNames.size());
-    	initGameController(scene, levelPath, playerNames);
+    	initGameController(scene, gameModel);
     	setWidthProperties(playerNames.size());
     	setHeightProperies();
 	}
@@ -138,8 +145,8 @@ public class GameViewImpl implements GameView {
 				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
 	}
     
-    private void initGameController(Scene scene, String levelPath, List<String> playerNames) throws IOException {
-    	GameController controller = new GameControllerImpl(levelPath, playerNames, this, loader);
+    private void initGameController(Scene scene, GameModel gameModel) throws IOException {
+    	GameController controller = new GameControllerImpl(gameModel, this, loader);
     	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
     		controller.playerInput(new InputEventFX(key));
     	});

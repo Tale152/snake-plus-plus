@@ -50,7 +50,7 @@ public class InputEventFX implements InputEvent {
 	}
 
 	public InputEventFX(KeyEvent e) {
-		this.key = e.getText();
+		this.key = e.getCode().toString();
 	}
 
 	public InputEventFX(String k) {

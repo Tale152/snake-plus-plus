@@ -9,9 +9,13 @@ import java.util.*;
 
 import design.controller.application.ClassicController;
 import design.controller.application.MainMenuController;
+<<<<<<< HEAD
 import design.view.game.Sprite;
 import implementation.view.application.Main;
 import implementation.view.game.SpriteImpl;
+=======
+import implementation.view.application.Main;
+>>>>>>> master
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -88,7 +92,9 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 			
 		});
 		
-//		selectDefaultSkinPack();
+
+		selectDefaultSkinPack();
+
 
 	}
 	

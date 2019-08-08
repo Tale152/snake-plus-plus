@@ -6,4 +6,8 @@ public interface GameLoader {
 	
 	public GameModel getGameModel();
 	
+	public String getLevelName();
+	
+	public String getLevelDescription();
+	
 }

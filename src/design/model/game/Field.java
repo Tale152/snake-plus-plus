@@ -35,4 +35,6 @@ public interface Field {
 	
 	public boolean addSnake(Snake snake);
 	
+	public Snake removeSnake(int i);
+	
 }

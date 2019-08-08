@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
-import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.model.game.items.*;
 import implementation.view.game.GameViewImpl;
 
@@ -33,8 +32,8 @@ public class GameControllerImpl implements GameController {
 	private long gameTime;
 	
 	
-	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-		gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+	public GameControllerImpl(GameModel gameModel, GameViewImpl view, ResourcesLoader resources) throws IOException {
+		this.gameModel = gameModel;
 		win = gameModel.getGameRules().getWinConditions();
 		loss = gameModel.getGameRules().getLossConditions();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
@@ -70,7 +69,7 @@ public class GameControllerImpl implements GameController {
 		}
 	}
 	
-	private String wallSpriteName(Wall wall, List<Wall> allWalls) {
+	public static String wallSpriteName(Wall wall, List<Wall> allWalls) {
 		String s = WALL;
 		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y - 1));
 		s += collide(wall, allWalls, new Point(wall.getPoint().x + 1, wall.getPoint().y));
@@ -80,10 +79,7 @@ public class GameControllerImpl implements GameController {
 		
 	}
 	
-	private String collide(Wall wall, List<Wall> allWalls, Point point) {
-		if(point.x < 0 || point.y < 0 || point.x >= this.gameModel.getField().getWidth() || point.y >= this.gameModel.getField().getHeight()) {
-			return "0";
-		}
+	private static String collide(Wall wall, List<Wall> allWalls, Point point) {
 		return allWalls.stream().anyMatch(e -> {
 			return e.getPoint().equals(point);
 		}) ? "1" : "0";
@@ -147,7 +143,8 @@ public class GameControllerImpl implements GameController {
 		this.gameView.stopRendering();
 	}
 	
-	private boolean isGameEnded() {
+	@Override
+	public boolean isGameEnded() {
 		List<Snake> snakes = this.gameModel.getField().getSnakes();
 		return loss.checkSnakes(snakes) || loss.checkTime(gameTime) ||
 				win.checkScore(snakes) || win.checkSnakeLength(snakes) || win.checkTime(gameTime);

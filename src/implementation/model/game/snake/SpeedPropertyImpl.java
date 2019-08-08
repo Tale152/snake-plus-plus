@@ -32,7 +32,9 @@ public class SpeedPropertyImpl implements SpeedProperty {
 
 	@Override
 	public void applySpeedMultiplier(double mul) {
-		checkMultiplier(this.multiplier + mul);
+		if (this.multiplier + mul < 0 ) {
+			throw new IllegalStateException();
+		};
 		this.multiplier += mul;	
 	}
 
@@ -49,7 +51,7 @@ public class SpeedPropertyImpl implements SpeedProperty {
 	
 	private void checkMultiplier(double multiplier) {
 		if(multiplier < 0) {
-			throw new IllegalStateException();
+			throw new IllegalArgumentException();
 		}
 	}
 	

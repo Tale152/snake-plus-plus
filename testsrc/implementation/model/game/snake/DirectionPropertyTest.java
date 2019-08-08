@@ -15,10 +15,12 @@ public class DirectionPropertyTest {
 		if (!direction.getDirection().equals(current)) {
 			return false;
 		}
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
 		direction.setDirection(opposite);
 		if (!direction.getDirection().equals(current)) {
 			return false;
 		}
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
 		direction.setDirection(possible1);
 		if (!direction.getDirection().equals(possible1)) {
 			return false;
@@ -38,10 +40,14 @@ public class DirectionPropertyTest {
 		if (!direction.getDirection().equals(current)) {
 			return false;
 		}
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+		direction.setReverseDirection(true);
 		direction.setDirection(current);
 		if (!direction.getDirection().equals(current)) {
 			return false;
 		}
+		direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+		direction.setReverseDirection(true);
 		direction.setDirection(possible1);
 		if (!direction.getDirection().equals(possible2)) {
 			return false;

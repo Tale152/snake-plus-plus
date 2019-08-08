@@ -27,16 +27,17 @@ public class SnakeComponentsFactoryForTest {
 		return new CollisionPropertyImpl();
 	}
 	
-	public static SpeedProperty createSpeedProperty(long delta, double speedMultiplier, long lastUpdate) {
-		return new SpeedPropertyImpl(delta, speedMultiplier, lastUpdate);
+	public static SpeedProperty createSpeedProperty(long delta, double speedMultiplier) {
+		return new SpeedPropertyImpl(delta, speedMultiplier);
 	}
 	
 	public static Properties createProperties() {
-		return new PropertiesImpl(Direction.DOWN, 1000L, 1, 0);
+		return new PropertiesImpl(Direction.DOWN, 1000L, 1);
 	}
 	
-	public static Snake createSnake(List<Point> initialPoints, PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, double speedMultiplier, long lastUpdate ) {
-		return new SnakeImpl(initialPoints, playerNumber, playerName, direction, deltaT, speedMultiplier, lastUpdate);
+	public static Snake createSnake(PlayerNumber playerNumber, String playerName, Direction direction, long deltaT, 
+			double speedMultiplier, Field field, List<Point> spawn) {
+		return new SnakeImpl(playerNumber, playerName, direction, deltaT, speedMultiplier, field, spawn);
 	}
 }
 
