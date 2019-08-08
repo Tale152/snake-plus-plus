@@ -10,4 +10,6 @@ public interface GameLoader {
 	
 	public String getLevelDescription();
 	
+	public int getMaxPlayers();
+	
 }

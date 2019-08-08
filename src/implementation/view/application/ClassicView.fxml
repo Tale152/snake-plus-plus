@@ -22,9 +22,9 @@
             <HBox fx:id="itemList" alignment="BOTTOM_CENTER" style="-fx-border-width: 2; -fx-border-color: #000000;" BorderPane.alignment="CENTER" />
             <HBox alignment="CENTER" spacing="16.0">
                <children>
-                  <Button onMouseClicked="#removePlayer" text="-" />
+                  <Button fx:id="removePlayerButton" onMouseClicked="#removePlayer" text="-" />
                   <Text fx:id="playersText" strokeType="OUTSIDE" strokeWidth="0.0" text="Players: " />
-                  <Button onMouseClicked="#addPlayer" text="+" />
+                  <Button fx:id="addPlayerButton" onMouseClicked="#addPlayer" text="+" />
                </children>
             </HBox>
          </children>

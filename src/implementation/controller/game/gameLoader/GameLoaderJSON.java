@@ -46,6 +46,8 @@ public class GameLoaderJSON implements GameLoader {
 	
 	private final String description;
 	
+	private final int maxPlayers;
+	
 	private static long L = (long) 10e9;
 
 	@Override
@@ -83,7 +85,7 @@ public class GameLoaderJSON implements GameLoader {
 		List<List<Point>> snakes = objectMapper.readValue(loader.get("snakes").traverse(), new TypeReference<List<List<Point>>>() {});
 		List<Direction> directions = objectMapper.readValue(loader.get("directions").traverse(), new TypeReference<List<Direction>>() {});
 		
-		for (int i = 0; i < names.size(); i++) {
+		for (int i = 0; i < snakes.size(); i++) {
 			String name = names.get(i);
 			List<Point> points = snakes.get(i);
 			Snake snake = new SnakeImpl(PlayerNumber.values()[i], name, directions.get(i), rules.getInitialSnakeDelta(), rules.getInitialSnakeMultiplier(), field, points);
@@ -91,6 +93,8 @@ public class GameLoaderJSON implements GameLoader {
 		}
 		
 		this.gameModel = new GameModelImpl(field, rules);
+		
+		this.maxPlayers = snakes.size();
 		
 		this.name = loader.get("name").asText();
 		this.description = loader.get("description").asText();
@@ -147,6 +151,11 @@ public class GameLoaderJSON implements GameLoader {
 	public String getLevelDescription() {
 		// TODO Auto-generated method stub
 		return description;
+	}
+	
+	@Override
+	public int getMaxPlayers() {
+		return maxPlayers;
 	}
 
 }

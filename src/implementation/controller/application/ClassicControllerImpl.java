@@ -56,6 +56,10 @@ public class ClassicControllerImpl implements ClassicController {
 	@FXML
 	private Button nextButton;
 	@FXML
+	private Button addPlayerButton;
+	@FXML
+	private Button removePlayerButton;
+	@FXML
 	private HBox itemList;
 	@FXML
 	private HBox levelButtons;
@@ -65,12 +69,11 @@ public class ClassicControllerImpl implements ClassicController {
 	
 	public ClassicControllerImpl() throws IOException {
 		levels = new ArrayList<>();
+		names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
 		for (File file : new File(levelsPath).listFiles()) {
 			String levelPath = file.getPath();
-			List<String> playerNames = new ArrayList<>(Arrays.asList("Ale")); //TODO: remove this heresy
-			levels.add(new Pair<String, GameLoader>(levelPath, new GameLoaderJSON(levelPath, playerNames)));
+			levels.add(new Pair<String, GameLoader>(levelPath, new GameLoaderJSON(levelPath, names)));
 		}
-		names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
 	}
 	
 	public void initialize() throws FileNotFoundException, IOException {
@@ -150,7 +153,20 @@ public class ClassicControllerImpl implements ClassicController {
 	
 	private void refreshPlayers() {
 		
-		this.players = Math.max(Math.min(this.players, 4), 1);
+		int maxPlayers = levels.get(selected).getValue().getMaxPlayers();
+		this.players = Math.max(Math.min(this.players, maxPlayers), 1);
+		
+		if (this.players == 1) {
+			removePlayerButton.setDisable(true);
+		} else {
+			removePlayerButton.setDisable(false);
+		}
+		if (this.players == maxPlayers) {
+			addPlayerButton.setDisable(true);
+		} else {
+			addPlayerButton.setDisable(false);
+		}
+		
 		playersText.setText("Players: " + this.players);
 	}
 	
@@ -158,12 +174,14 @@ public class ClassicControllerImpl implements ClassicController {
 	public void selectPrev() throws FileNotFoundException, IOException {
 		this.selected -= 1;
 		refreshLevel();
+		refreshPlayers();
 	}
 	
 	@FXML
 	public void selectNext() throws FileNotFoundException, IOException {
 		this.selected += 1;
 		refreshLevel();
+		refreshPlayers();
 	}
 	
 	@FXML
