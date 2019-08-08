@@ -70,7 +70,7 @@ public class GameControllerImpl implements GameController {
 		}
 	}
 	
-	private String wallSpriteName(Wall wall, List<Wall> allWalls) {
+	public static String wallSpriteName(Wall wall, List<Wall> allWalls) {
 		String s = WALL;
 		s += collide(wall, allWalls, new Point(wall.getPoint().x, wall.getPoint().y - 1));
 		s += collide(wall, allWalls, new Point(wall.getPoint().x + 1, wall.getPoint().y));
@@ -80,10 +80,7 @@ public class GameControllerImpl implements GameController {
 		
 	}
 	
-	private String collide(Wall wall, List<Wall> allWalls, Point point) {
-		if(point.x < 0 || point.y < 0 || point.x >= this.gameModel.getField().getWidth() || point.y >= this.gameModel.getField().getHeight()) {
-			return "0";
-		}
+	private static String collide(Wall wall, List<Wall> allWalls, Point point) {
 		return allWalls.stream().anyMatch(e -> {
 			return e.getPoint().equals(point);
 		}) ? "1" : "0";
