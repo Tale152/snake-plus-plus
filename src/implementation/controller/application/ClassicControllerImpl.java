@@ -183,8 +183,7 @@ public class ClassicControllerImpl implements ClassicController {
 		GameLoader gl = levels.get(selected).getValue();
 		String levelPath = levels.get(selected).getKey();
 		List<String> playerNames = names.subList(0, players);
-		new GameViewImpl(Main.getScene(), levelPath, this.skinPackPath, playerNames, 
-	    		gl.getGameModel().getField().getWidth(), gl.getGameModel().getField().getHeight());
+		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
 	}
 
 	@Override

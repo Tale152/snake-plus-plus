@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
-import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.model.game.items.*;
 import implementation.view.game.GameViewImpl;
 
@@ -33,8 +32,8 @@ public class GameControllerImpl implements GameController {
 	private long gameTime;
 	
 	
-	public GameControllerImpl(String stage, List<String> playerNames, GameViewImpl view, ResourcesLoader resources) throws IOException {
-		gameModel = new GameLoaderJSON(stage, playerNames).getGameModel();
+	public GameControllerImpl(GameModel gameModel, GameViewImpl view, ResourcesLoader resources) throws IOException {
+		this.gameModel = gameModel;
 		win = gameModel.getGameRules().getWinConditions();
 		loss = gameModel.getGameRules().getLossConditions();
 		this.itemFactory = new ItemFactory(this.gameModel.getField());
