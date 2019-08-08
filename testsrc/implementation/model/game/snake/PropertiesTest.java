@@ -9,10 +9,10 @@ public class PropertiesTest {
 	@Test
 	public void testProperties() {
 		Properties properties = SnakeComponentsFactoryForTest.createProperties();
-		assertTrue(properties.getCollision() != null);
-		assertTrue(properties.getDirection() != null);
-		assertTrue(properties.getLength() != null);
-		assertTrue(properties.getPickup() != null);
-		assertTrue(properties.getSpeed() != null);
+		assertTrue(properties.getCollisionProperty() != null);
+		assertTrue(properties.getDirectionProperty() != null);
+		assertTrue(properties.getLengthProperty() != null);
+		assertTrue(properties.getPickupProperty() != null);
+		assertTrue(properties.getSpeedProperty() != null);
 	}
 }

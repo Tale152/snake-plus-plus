@@ -14,35 +14,28 @@ public class SpeedPropertyTest {
 	public void testSpeedProperty() {
 		SpeedProperty speed;
 		try{
-			speed = SnakeComponentsFactoryForTest.createSpeedProperty(0, 1, 0);
+			speed = SnakeComponentsFactoryForTest.createSpeedProperty(0, 1);
             fail("delta cannot be zero while initializing");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		try{
-			speed = SnakeComponentsFactoryForTest.createSpeedProperty(-1, 1, 0);
+			speed = SnakeComponentsFactoryForTest.createSpeedProperty(-1, 1);
             fail("delta cannot be negative while initializing");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception");
         }
 		try{
-			speed = SnakeComponentsFactoryForTest.createSpeedProperty(100, -1, 0);
+			speed = SnakeComponentsFactoryForTest.createSpeedProperty(100, -1);
             fail("multiplier cannot be negative while initializing");
         } catch (IllegalArgumentException e){
         } catch (Exception e){
             fail("wrong exception");
         }
-		try{
-			speed = SnakeComponentsFactoryForTest.createSpeedProperty(100, 1, -1);
-            fail("last update cannot be negative initializing");
-        } catch (IllegalArgumentException e){
-        } catch (Exception e){
-            fail("wrong exception");
-        }
 		
-		speed = SnakeComponentsFactoryForTest.createSpeedProperty(900L, 1, 0L);
+		speed = SnakeComponentsFactoryForTest.createSpeedProperty(900L, 1);
 		assertEquals(speed.getDeltaT(), 900L);
 		speed.setDeltaT(1000L);
 		assertEquals(speed.getDeltaT(), 1000L);
@@ -73,14 +66,6 @@ public class SpeedPropertyTest {
         } catch (Exception e){
             fail("wrong exception");
         }
-		
-		speed.applySpeedMultiplier(1.5);
-		assertEquals(speed.getLastUpdate(), 0L);
-		assertEquals(speed.getNextUpdate(), 1500L);
-		speed.applySpeedMultiplier(0.5);
-		assertEquals(speed.getNextUpdate(), 2000L);
-		speed.setLastUpdate(2000L);
-		assertEquals(speed.getNextUpdate(), 4000L);
 		
 	}
 }
