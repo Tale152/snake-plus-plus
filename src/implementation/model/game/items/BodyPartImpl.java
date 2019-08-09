@@ -9,7 +9,6 @@ import design.model.game.Snake;
 
 public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 
-	private final Snake owner;
 	private boolean head;
 	private boolean body;
 	private boolean tail;
@@ -17,6 +16,7 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 	private boolean bottom;
 	private boolean left;
 	private boolean right;
+	private Snake owner;
 
 	public BodyPartImpl(Point point, Snake owner) {
 		super(point);
@@ -36,33 +36,12 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 	@Override
 	public void onCollision(Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (collider == owner) {
-			interlacement();
-		}
-		else {
-			collision(collider);
-		}
-	}
-
-	private void interlacement() {
-		CollisionProperty property = owner.getProperties().getCollisionProperty();
-		if (!property.getIntangibility() && !property.getInvincibility()) {
-			owner.kill();
-		}
-	}
-	
-	private void collision(Snake collider) {
 		if (!collider.getProperties().getCollisionProperty().getIntangibility()) {
 			CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
 			if (!colliderProperty.getIntangibility() && !colliderProperty.getInvincibility()) {
 				collider.kill();
 			}
 		}
-	}
-	
-	@Override
-	public Snake getOwner() {
-		return owner;
 	}
 
 	@Override
@@ -133,6 +112,11 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 	@Override
 	public void setCombinedOnRight(boolean combined) {
 		right = combined;
+	}
+
+	@Override
+	public Snake getOwner() {
+		return owner;
 	}
 
 }
