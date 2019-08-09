@@ -1,8 +1,6 @@
 package design.model.game;
 
 public interface BodyPart extends Collidable {
-
-	public Snake getOwner();
 	
 	public boolean isHead();
 	

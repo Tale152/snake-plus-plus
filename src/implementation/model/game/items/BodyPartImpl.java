@@ -9,7 +9,6 @@ import design.model.game.Snake;
 
 public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 
-	private final Snake owner;
 	private boolean head;
 	private boolean body;
 	private boolean tail;
@@ -27,39 +26,17 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 		bottom = false;
 		left = false;
 		right = false;
-		owner = null;
 	}
 	
 	@Override
 	public void onCollision(Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (collider == owner) {
-			interlacement();
-		}
-		else {
-			collision(collider);
-		}
-	}
-
-	private void interlacement() {
-		CollisionProperty property = owner.getProperties().getCollisionProperty();
-		if (!property.getIntangibility() && !property.getInvincibility()) {
-			owner.kill();
-		}
-	}
-	
-	private void collision(Snake collider) {
 		if (!collider.getProperties().getCollisionProperty().getIntangibility()) {
 			CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
 			if (!colliderProperty.getIntangibility() && !colliderProperty.getInvincibility()) {
 				collider.kill();
 			}
 		}
-	}
-	
-	@Override
-	public Snake getOwner() {
-		return owner;
 	}
 
 	@Override
