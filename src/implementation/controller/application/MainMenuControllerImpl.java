@@ -41,7 +41,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 	@FXML private AnchorPane root;
 	@FXML private MenuButton skinPacks;
 	
-	//default skin pack that can be change
+
 	private String skinPackPath;
 	private final Map<String, String> itemButtonMap = new HashMap<>();
 	
@@ -78,21 +78,32 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 		});
 	}
 	
+	//this method read all the directory in the current directory that are put in a map
+	//with the path and the name. The first directory is a random pack, used if the default pack
+	//does not exist. If there are any directory in the folder, the game will stop running.
 	private void listFiles(final File folder) {
+		String randomPack = "";
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
 	        	this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getAbsolutePath());
+	        	if(randomPack.isEmpty()) {
+	        		randomPack = fileEntry.getAbsolutePath();
+	        	}
 	        }
-	    }
-	    
-	    if (this.itemButtonMap.containsKey(DEFAULT_PACK)){
+	    }  
+	    if(this.itemButtonMap.isEmpty()) {
+	    	System.out.println("There are no skin packs");
+	    	System.exit(1);
+	    } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)){
 	    	this.skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);	
 	    } else {
-	    	System.out.println("There are no default skin pack");
-	    	System.exit(1);
+	    	this.skinPackPath = randomPack;
 	    } 
 	}
 	
+	//this method initialize all the menu item in the menu button
+	//the name of an item is the name of the directory where there is the skin
+	//and when you select a skin the name of the menu button has the name of the skin selected
 	private void initializeMenuItem() {
 		for(String s : this.itemButtonMap.keySet()) {
 			MenuItem m = new MenuItem(s);
