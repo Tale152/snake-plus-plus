@@ -226,7 +226,7 @@ public class ClassicControllerImpl implements ClassicController {
 	public void startSelectedLevel() throws FileNotFoundException, IOException {
 		GameLoader gl = levels.get(selected).getValue();
 		for (int i = players; i < levels.get(selected).getValue().getMaxPlayers(); i++) {
-			gl.getGameModel().getField().removeSnake(i);
+			gl.getGameModel().getField().removeSnake(players);
 		}
 		
 		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
