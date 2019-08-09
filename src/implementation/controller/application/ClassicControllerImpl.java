@@ -9,13 +9,16 @@ import java.util.List;
 
 import design.controller.application.ClassicController;
 import design.controller.game.GameLoader;
+import design.model.game.Field;
 import design.model.game.ItemRule;
+import design.model.game.Wall;
 import design.view.game.ResourcesLoader;
+import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
 import implementation.view.game.ResourcesLoaderFromFile;
-import javafx.application.Platform;
+import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -27,7 +30,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
@@ -41,6 +43,7 @@ public class ClassicControllerImpl implements ClassicController {
 	private int previous = 0;
 	private int players = 1;
 	private String skinPackPath;
+	ResourcesLoader resources;
 	
 	@FXML
 	private Text levelDescription;
@@ -102,7 +105,6 @@ public class ClassicControllerImpl implements ClassicController {
 	
 	private void refreshLevel() throws FileNotFoundException, IOException {
 		int nLevels = levels.size();
-		ResourcesLoader resources;
 		GameLoader level;
 		
 		ObservableList<Node> buttons = levelButtons.getChildren();
@@ -121,35 +123,58 @@ public class ClassicControllerImpl implements ClassicController {
 		level = levels.get(selected).getValue();
 		resources = new ResourcesLoaderFromFile(skinPackPath, level.getGameModel().getField().getWidth(), level.getGameModel().getField().getHeight());
 		
+		refreshItemList(level);
+		
 		String text = level.getLevelDescription();
 		levelDescription.setText(text);
-		//levelTitle.setText(level.getLevelName() + "\n");
 		
+		new AnimationTimer() {
+			int f = 0;
+			@Override
+			public void handle(long now) {
+				f++;
+				drawPreview(preview, level.getGameModel().getField());
+				if (f >= 2) {
+					this.stop();
+				}
+			}
+		}.start();
+		
+		previous = selected;
+	}
+	
+	private void refreshItemList(GameLoader level) {
 		itemList.getChildren().clear();
 		List<ItemRule> items = level.getGameModel().getGameRules().getItemRules();
 		
 		for (ItemRule item : items) {
-			ImageView imv = new ImageView((Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite());
+			Image sprite = (Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite();
+			ImageView imv = new ImageView(sprite);
+			imv.setPreserveRatio(true);
+			imv.setFitHeight(32); // TODO: remove magic number
 			double freq = 1000.0 * item.getSpawnChance() / (double) item.getSpawnDelta();
 			String tooltip = String.format("Spawn chance per second: %d%%\nMaximum amount on screen: %d", (int) (freq * 100), item.getMax());
 			Tooltip.install(imv, new Tooltip(tooltip));
 			itemList.getChildren().add(imv);
 		}
+	}
+	
+	private void drawPreview(Canvas canvas, Field field) {
+		List<Wall> walls = field.getWalls();
+		int spriteSize = (int) Math.min(canvas.getWidth() / field.getWidth(), canvas.getHeight() / field.getHeight());
+		int x0 = (int) (canvas.getWidth() - spriteSize * field.getWidth()) / 2;
+		int y0 = (int) (canvas.getHeight() - spriteSize * field.getHeight()) / 2;
 		
-		Platform.runLater(new Runnable() {
-			@Override public void run() {
-				gc.clearRect(0, 0, preview.getWidth(), preview.getHeight());
-				gc.setLineWidth(3);
-				gc.setFill(Color.DARKGREEN);
-				gc.setStroke(Color.AQUA);
-				gc.fillText(level.getLevelName(), 100, 100);
-				gc.strokeRect(9.5, 9.5, preview.getWidth() - 20, preview.getHeight() - 20);
-			}
-		});
+		gc.drawImage((Image) resources.getFieldBackground().getBackground(), 0, 0, canvas.getWidth(), canvas.getHeight());
 		
-		
-		
-		previous = selected;
+		for (Wall wall : walls) {
+			String wName = GameControllerImpl.wallSpriteName(wall, walls);
+			Image wallSprite = (Image) resources.getWall(wName).getSprite();
+			double x = wall.getPoint().getX();
+			double y = wall.getPoint().getY();
+			
+			gc.drawImage(wallSprite, x0 + x * spriteSize, y0 + y * spriteSize, spriteSize, spriteSize);
+		}
 	}
 	
 	private void refreshPlayers() {
@@ -200,6 +225,9 @@ public class ClassicControllerImpl implements ClassicController {
 	@FXML
 	public void startSelectedLevel() throws FileNotFoundException, IOException {
 		GameLoader gl = levels.get(selected).getValue();
+		for (int i = players; i < levels.get(selected).getValue().getMaxPlayers(); i++) {
+			gl.getGameModel().getField().removeSnake(i);
+		}
 		
 		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
 	}
