@@ -229,7 +229,7 @@ public class SnakeImpl implements Snake{
 	//method used to insert a new head and set all the bodypart's properties. Also used to initialize snake for the first time
 	private void insertNewHead(Point point) {
 		int size = this.bodyPart.size();
-		BodyPart p = new BodyPartImpl(point);
+		BodyPart p = new BodyPartImpl(point, this);
 		if(size == 0) {
 			p.setHead(true);
 			p.setTail(true);
