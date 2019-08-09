@@ -86,6 +86,7 @@ public class ClassicControllerImpl implements ClassicController {
 				selected = n;
 				try {
 					refreshLevel();
+					refreshPlayers();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -199,8 +200,6 @@ public class ClassicControllerImpl implements ClassicController {
 	@FXML
 	public void startSelectedLevel() throws FileNotFoundException, IOException {
 		GameLoader gl = levels.get(selected).getValue();
-		String levelPath = levels.get(selected).getKey();
-		List<String> playerNames = names.subList(0, players);
 		
 		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
 	}
