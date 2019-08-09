@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.field.FieldImpl;
 
 public class BeerTest {
 
@@ -15,32 +16,57 @@ public class BeerTest {
 	
 	@Test
 	public void testInstantaneousEffect() {
-		beer = ItemFactory.createBeer(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertFalse(testSnake.getProperties().getDirection().getReverseDirection());
-		beer.onCollision(testSnake, 0);
-		assertFalse(testSnake.getProperties().getDirection().getReverseDirection());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		beer = itemFactory.createItem(pointZero, Beer.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
+		AppleTest.collide(beer, testSnake);
+		assertTrue(testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.UP) || 
+				testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.DOWN));
+		
+		assertFalse(testSnake.getProperties().getDirectionProperty().getReverseDirection());
 	}
 	
-	/*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
+	@Test
+	public void testInstantaneousEffectOnGhost() {
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		beer = itemFactory.createItem(pointZero, Beer.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		Direction current = testSnake.getProperties().getDirectionProperty().getDirection();
+		AppleTest.collide(beer, testSnake);
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), current);
+		assertFalse(testSnake.getProperties().getDirectionProperty().getReverseDirection());
+	}
 	
+	@SuppressWarnings("deprecation")
 	@Test 
 	public void testLastingEffect() {
-		beer = ItemFactory.createBeer(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertFalse(testSnake.getProperties().getDirection().getReverseDirection());
-		beer.onCollision(testSnake, 1000L);
-		assertTrue(testSnake.getProperties().getDirection().getReverseDirection());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		beer = itemFactory.createItem(pointZero, Beer.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertFalse(testSnake.getProperties().getDirectionProperty().getReverseDirection());
+		AppleTest.collide(beer, testSnake);
+		assertFalse(Direction.RIGHT.equals(testSnake.getProperties().getDirectionProperty().getDirection()));
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
-		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
-		beer = ItemFactory.createBeer(pointZero, Optional.empty(), Optional.of(250L));
-		beer.onCollision(testSnake, 1050L);
-		assertTrue(testSnake.getProperties().getDirection().getReverseDirection());
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(10L));
+		beer = itemFactory.createItem(pointZero, Beer.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(beer, testSnake);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertFalse(testSnake.getProperties().getDirection().getReverseDirection());
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(20L));
+		assertTrue(testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.RIGHT) ||
+				testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.LEFT));
+		Thread t = new Thread(testSnake);
+		t.start();
+		while(true) {
+			if (!testSnake.getProperties().getDirectionProperty().getReverseDirection()) {
+				t.stop();
+				break;
+			}
+		}
+		
 	}
 	
 }
