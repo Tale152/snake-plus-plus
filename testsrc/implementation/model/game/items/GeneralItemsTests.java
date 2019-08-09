@@ -7,131 +7,110 @@ import java.util.*;
 
 import org.junit.Test;
 
+import design.model.game.Effect;
 import design.model.game.Item;
 import design.model.game.Snake;
+import implementation.model.game.field.FieldImpl;
 
 public class GeneralItemsTests {
 	
-	List<String> classesList = new ArrayList<>(Arrays.asList(
-			"Apple",
-			"BadApple",
-			"Beer",
-			"DoublePoints",
-			"GhostMode",
-			"GodMode",
-			"Ice",
-			"Magnet",
-			"ScoreEarning",
-			"ScoreLoss",
-			"Slug",
-			//"Spring", TODO does not work because reverse into snake does not work
-			"Turbo"
+	List<Class<? extends Effect>> classesList = new ArrayList<>(Arrays.asList(
+			Apple.class,
+			BadApple.class,
+			Beer.class,
+			DoublePoints.class,
+			GhostMode.class,
+			GodMode.class,
+			Magnet.class,
+			ScoreEarning.class,
+			ScoreLoss.class,
+			Slug.class,
+			Spring.class,
+			Turbo.class
 			)) ;
-	private Item item;
-	private String itemFactoryPath = "implementation.model.game.items.ItemFactory";
 	
 	@Test
 	public void testInit() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		
-		for (String s : classesList) {
-			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
-			
-			try{
-	            item = (Item)method.invoke(null, null, Optional.empty(), Optional.empty());
-	            fail(s + "'s point cannot be null");
+		ItemFactory itemFactory = new ItemFactory(new FieldImpl(new Point(classesList.size(),1)));
+		for (int i = 0; i < classesList.size(); ++i) {
+			try {
+				itemFactory.createItem(null, classesList.get(i), Optional.empty(), Optional.empty());
+			} catch (NullPointerException e){
 	        } catch (Exception e){
-	        	if (!(e.getCause() instanceof IllegalArgumentException)) {
-	        		fail("wrong exception thrown at " + s);
-	        	}
+	            fail("wrong exception");
 	        }
-			
-			try{
-				item = (Item)method.invoke(null, new Point(0,0), null, Optional.empty());
-	            fail(s + "'s expiration time cannot be null");
+			try {
+				itemFactory.createItem(new Point(i,0), classesList.get(i), null, Optional.empty());
+			} catch (NullPointerException e){
 	        } catch (Exception e){
-	        	if (!(e.getCause() instanceof IllegalArgumentException)) {
-	        		fail("wrong exception thrown at " + s);
-	        	}
+	            fail("wrong exception");
 	        }
-			
-			try{
-				item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), null);
-				fail(s + "'s effect duration cannot be null");
+			try {
+				itemFactory.createItem(new Point(i,0), classesList.get(i), Optional.empty(), null);
+			} catch (NullPointerException e){
 	        } catch (Exception e){
-	        	if (!(e.getCause() instanceof IllegalArgumentException)) {
-	        		fail("wrong exception thrown at " + s);
-	        	}
+	            fail("wrong exception");
 	        }
-			
-			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.empty());
-			assertTrue(item.getPoint().equals(new Point(0,0)));
-			assertTrue(item.getDuration().equals(Optional.empty()));
-			
-			item = (Item)method.invoke(null, new Point(0,0), Optional.of (100L), Optional.empty());
-			assertTrue(item.getDuration().equals(Optional.of(100L)));
 		}
-
 	}
 	
 	@Test
 	public void testInstantaneousEffect() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Snake testSnake;
-		for (String s : classesList) {
-			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
-			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.empty());
-			testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-			item.onCollision(testSnake, 0L);
-			if(testSnake.getEffects().size()!=0) {
-				fail("failed at " + s);
+		for (int i = 0; i < classesList.size(); ++i) {
+			FieldImpl field = new FieldImpl(new Point(classesList.size(),1));
+			ItemFactory itemFactory = new ItemFactory(field);
+			Item item = itemFactory.createItem(new Point(i,0), classesList.get(i), Optional.empty(), Optional.empty());
+			Snake snake = SnakeFactoryForTests.baseSnake(Arrays.asList(new Point(0,0)), field);
+			AppleTest.collide(item, snake);
+			if (snake.getEffects().size() != 0) {
+				fail("failed at " + classesList.get(i).getSimpleName());
 			}
 		}
 	}
 	
 	@Test
 	public void testLastingEffect() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Snake testSnake;
-		for (String s : classesList) {
-			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
-			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(100L));
-			testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-			item.onCollision(testSnake, 0L);
-			if(testSnake.getEffects().size()!=1) {
-				fail("failed effect association at " + s);
+		for (int i = 0; i < classesList.size(); ++i) {
+			FieldImpl field = new FieldImpl(new Point(classesList.size(),1));
+			ItemFactory itemFactory = new ItemFactory(field);
+			Item item = itemFactory.createItem(new Point(i,0), classesList.get(i), Optional.empty(), Optional.of(100L));
+			Snake snake = SnakeFactoryForTests.baseSnake(Arrays.asList(new Point(0,0)), field);
+			AppleTest.collide(item, snake);
+			if (snake.getEffects().size() != 1) {
+				fail("first effect attachment failed at " + classesList.get(i).getSimpleName());
 			}
-			if (!testSnake.getEffects().get(0).getEffectEndTime().equals(Optional.of(100L))) {
-				fail("failed first time registration at " + s);
+			assertEquals(Optional.of(100L),snake.getEffects().get(0).getEffectDuration());
+			item = itemFactory.createItem(new Point(i,0), classesList.get(i), Optional.empty(), Optional.of(100L));
+			AppleTest.collide(item, snake);
+			if (snake.getEffects().size() != 1) {
+				fail("second effect attachment failed at " + classesList.get(i).getSimpleName());
 			}
-			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(200L));
-			item.onCollision(testSnake, 0L);
-			if(testSnake.getEffects().size()!=1) {
-				fail("failed second effect association at " + s);
-			}
-			if (!testSnake.getEffects().get(0).getEffectEndTime().equals(Optional.of(300L))) {
-				fail("failed second time registration at " + s);
-			}
+			assertEquals(Optional.of(200L),snake.getEffects().get(0).getEffectDuration());
 		}
 	}
 	
 	@Test
 	public void testOnGhost() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Snake testSnake;
-		classesList.remove("GhostMode");
-		for (String s : classesList) {
-			Method method = Class.forName(itemFactoryPath).getMethod("create" + s, Point.class, Optional.class, Optional.class);  
-			item = (Item)method.invoke(null, new Point(0,0), Optional.empty(), Optional.of(100L));
-			testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-			item.onCollision(testSnake, 0L);
-			if(testSnake.getEffects().size()!=0) {
-				fail("failed effect association at " + s);
+		classesList.remove(GhostMode.class);
+		for (int i = 0; i < classesList.size(); ++i) {
+			FieldImpl field = new FieldImpl(new Point(classesList.size(),1));
+			ItemFactory itemFactory = new ItemFactory(field);
+			Item item = itemFactory.createItem(new Point(i,0), classesList.get(i), Optional.empty(), Optional.of(100L));
+			Snake snake = SnakeFactoryForTests.ghostSnake(Arrays.asList(new Point(0,0)), field);
+			AppleTest.collide(item, snake);
+			if (snake.getEffects().size() != 0) {
+				fail("effect attachment failed at " + classesList.get(i).getSimpleName());
 			}
 		}
-		
-		item = ItemFactory.createGhostMode(new Point(0,0), Optional.empty(), Optional.of(100L));
-		testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		item.onCollision(testSnake, 0L);
-		assertEquals(testSnake.getEffects().size(), 1);
-		
-		classesList.add("GhostMode");
+		classesList.add(GhostMode.class);
+		FieldImpl field = new FieldImpl(new Point(classesList.size(),1));
+		ItemFactory itemFactory = new ItemFactory(field);
+		Item item = itemFactory.createItem(new Point(0,0), GhostMode.class, Optional.empty(), Optional.of(100L));
+		Snake snake = SnakeFactoryForTests.ghostSnake(Arrays.asList(new Point(0,0)), field);
+		AppleTest.collide(item, snake);
+		if (snake.getEffects().size() != 1) {
+			fail("effect attachment failed at GhostMode");
+		}
 	}
 	
 }
