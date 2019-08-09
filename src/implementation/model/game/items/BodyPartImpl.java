@@ -18,8 +18,11 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 	private boolean left;
 	private boolean right;
 
-	public BodyPartImpl(Point point) {
+	public BodyPartImpl(Point point, Snake owner) {
 		super(point);
+		if (owner == null) {
+			throw new NullPointerException();
+		}
 		head = false;
 		body = false;
 		tail = false;
@@ -27,7 +30,7 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 		bottom = false;
 		left = false;
 		right = false;
-		owner = null;
+		this.owner = owner;
 	}
 	
 	@Override
