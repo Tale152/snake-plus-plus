@@ -133,12 +133,12 @@ public class ClassicControllerImpl implements ClassicController {
 			@Override
 			public void handle(long now) {
 				f++;
-				drawPreview(preview, level.getGameModel().getField());
 				if (f >= 2) {
+					drawPreview(preview, level.getGameModel().getField());
 					this.stop();
 				}
 			}
-		}.start();
+		}.start(); // First frame is discarded; this ensures there will be two
 		
 		previous = selected;
 	}
