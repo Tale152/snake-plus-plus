@@ -1,8 +1,6 @@
 package design.model.game;
 
 public interface BodyPart extends Collidable {
-
-	public Snake getOwner();
 	
 	public boolean isHead();
 	
@@ -31,5 +29,7 @@ public interface BodyPart extends Collidable {
 	public boolean isCombinedOnRight();
 	
 	public void setCombinedOnRight(boolean combined);
+	
+	public Snake getOwner();
 	
 }

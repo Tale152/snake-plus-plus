@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.field.FieldImpl;
 
 public class BadAppleTest {
 
@@ -15,53 +16,62 @@ public class BadAppleTest {
 	
 	@Test
 	public void testInstantaneousEffect() {
-		badApple = ItemFactory.createBadApple(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
 		testSnake.getPlayer().addScore(100);
-		testSnake.getProperties().getLength().lengthen(5);
+		testSnake.getProperties().getLengthProperty().lengthen(5);
 		assertEquals(testSnake.getPlayer().getScore(), 100);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 6);
-		badApple.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 3);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 6);
+		AppleTest.collide(badApple, testSnake);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 3);
 		assertEquals(testSnake.getPlayer().getScore(), 50);
 	}
 	
 	@Test
 	public void testInstantaneousEffectOnGhost() {
-		badApple = ItemFactory.createBadApple(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
 		testSnake.getPlayer().addScore(100);
-		testSnake.getProperties().getLength().lengthen(5);
+		testSnake.getProperties().getLengthProperty().lengthen(5);
 		assertEquals(testSnake.getPlayer().getScore(), 100);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 6);
-		badApple.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 6);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 6);
+		AppleTest.collide(badApple, testSnake);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 6);
 		assertEquals(testSnake.getPlayer().getScore(), 100);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test 
 	public void testLastingEffect() {
-		badApple = ItemFactory.createBadApple(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		testSnake.getPlayer().addScore(1000);
-		testSnake.getProperties().getLength().lengthen(7);
-		assertEquals(testSnake.getPlayer().getScore(), 1000);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 8);
-		badApple.onCollision(testSnake, 1000L);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 4);
-		assertEquals(testSnake.getPlayer().getScore(), 500);
-		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
-		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
-		badApple = ItemFactory.createBadApple(pointZero, Optional.empty(), Optional.of(250L));
-		badApple.onCollision(testSnake, 1050L);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 2);
-		assertEquals(testSnake.getPlayer().getScore(), 250);
-		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertEquals(testSnake.getPlayer().getScore(), 250);
-		assertEquals(testSnake.getProperties().getLength().getLength(), 6);
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		testSnake.getPlayer().addScore(100);
+		assertEquals(testSnake.getPlayer().getScore(), 100);
+		testSnake.getProperties().getLengthProperty().lengthen(5);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 6);
+		AppleTest.collide(badApple, testSnake);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 3);
+		assertEquals(testSnake.getPlayer().getScore(), 50);
+		badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(badApple, testSnake);
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 2);
+		assertEquals(testSnake.getPlayer().getScore(), 25);
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			Thread.sleep(30L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 6);
+		assertEquals(testSnake.getPlayer().getScore(), 25);
 	}
 	
 }

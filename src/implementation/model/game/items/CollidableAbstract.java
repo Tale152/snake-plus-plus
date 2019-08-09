@@ -8,6 +8,9 @@ public abstract class CollidableAbstract implements Collidable {
 	private Point point;
 	
 	public CollidableAbstract(Point point) {
+		if (point == null) {
+			throw new NullPointerException();
+		}
 		this.point = point;
 	}
 	
