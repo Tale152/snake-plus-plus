@@ -68,10 +68,7 @@ public class SnakeImpl implements Snake{
 				handleCollisions(obtainNextPoint());
 				this.nextDirection = this.properties.getDirectionProperty().getDirection();
 				if (this.hasReversed) {
-					this.properties.getDirectionProperty().forceDirection(this.currentDirection);
-					reverse();
 					move(obtainNextPoint());
-					this.properties.getDirectionProperty().forceDirection(this.nextDirection);
 					reverse();
 					this.hasReversed = false;
 				} else if(!this.currentDirection.equals(this.nextDirection)) {
@@ -81,6 +78,7 @@ public class SnakeImpl implements Snake{
 				} else {
 					move(obtainNextPoint());
 				}
+				
 				if (this.getProperties().getDirectionProperty().hasNextValidDirection()) {
 					lastMovementSettedNextDirection = true;
 				}
@@ -140,23 +138,25 @@ public class SnakeImpl implements Snake{
 
 	@Override
 	public void reverse() {
-		Direction direction;
-		int snakeSize = this.bodyPart.size();
-		if(snakeSize > 1) {
-			Point p1 = this.bodyPart.get(snakeSize - 1).getPoint();
-			Point p2 = this.bodyPart.get(snakeSize - 2).getPoint();
-			direction = determinateDirection(p1, p2);
-			List<BodyPart> tmp = new ArrayList<>();
-			tmp.addAll(this.bodyPart);
-			this.bodyPart.clear();
-			for(int i = 0; i <= tmp.size() - 1; i++) {
-				this.field.removeBodyPart(tmp.get(i));
-				insertNewHead(tmp.get(i).getPoint());
+		if (hasReversed) {
+			Direction direction;
+			int snakeSize = this.bodyPart.size();
+			if(snakeSize > 1) {
+				Point p1 = this.bodyPart.get(snakeSize - 1).getPoint();
+				Point p2 = this.bodyPart.get(snakeSize - 2).getPoint();
+				direction = determinateDirection(p1, p2);
+				List<BodyPart> tmp = new ArrayList<>();
+				tmp.addAll(this.bodyPart);
+				this.bodyPart.clear();
+				for(int i = 0; i <= tmp.size() - 1; i++) {
+					this.field.removeBodyPart(tmp.get(i));
+					insertNewHead(tmp.get(i).getPoint());
+				}
+			} else {
+				direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
 			}
-		} else {
-			direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
+			this.properties.getDirectionProperty().forceDirection(direction);	
 		}
-		this.properties.getDirectionProperty().forceDirection(direction);	
 		this.hasReversed = true;
 	}
 
@@ -342,7 +342,6 @@ public class SnakeImpl implements Snake{
 		} else if(timeToWait < MINTIMETOWAIT) {
 			timeToWait = MINTIMETOWAIT;
 		}
-		System.out.println(timeToWait + "\n");
 		while(true) {
 			wait(timeToWait);											
 			long deltaT = System.currentTimeMillis() - startingTime;	
@@ -461,7 +460,7 @@ public class SnakeImpl implements Snake{
 	}
 
 	//Useful method to test all the properties of every body part of snake
-	private void stampamiTutto() {
+	private void printBodyPartProperties() {
 		for(BodyPart b : this.bodyPart) {
 			System.out.println( "Punto: " + b.getPoint() + "\n" 
 					+ "Is Head: " + b.isHead() +  "\n"
