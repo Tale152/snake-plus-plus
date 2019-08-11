@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.field.FieldImpl;
 
 public class DoublePointsTest {
 
@@ -15,32 +16,47 @@ public class DoublePointsTest {
 	
 	@Test
 	public void testInstantaneousEffect() {
-		doublePoints = ItemFactory.createDoublePoints(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
-		doublePoints.onCollision(testSnake, 0);
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
+		assertEquals(testSnake.getPlayer().getScore(), 0);
+		AppleTest.collide(doublePoints, testSnake);
+		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
+		assertEquals(testSnake.getPlayer().getScore(), 0);
 	}
 	
 	/*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
 	
+	@SuppressWarnings("deprecation")
 	@Test 
 	public void testLastingEffect() {
-		doublePoints = ItemFactory.createDoublePoints(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
-		doublePoints.onCollision(testSnake, 1000L);
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2);
+		
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertEquals(testSnake.getPlayer().getScore(), 0);
+		AppleTest.collide(doublePoints, testSnake);
+		assertEquals(testSnake.getPlayer().getScore(), 0);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
-		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
-		doublePoints = ItemFactory.createDoublePoints(pointZero, Optional.empty(), Optional.of(250L));
-		doublePoints.onCollision(testSnake, 1050L);
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2);
-		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(10L));
+		doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(doublePoints, testSnake);
+		assertEquals(testSnake.getPlayer().getScore(), 0);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(20L));
+		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
+		Thread t = new Thread(testSnake);
+		t.start();
+		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2.0);
+		try {
+			Thread.sleep(30L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
 	}
 	
 }
