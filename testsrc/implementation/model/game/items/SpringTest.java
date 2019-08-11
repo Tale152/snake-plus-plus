@@ -8,80 +8,93 @@ import java.awt.Point;
 import java.util.*;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.field.FieldImpl;
 
 public class SpringTest {
 	
 	private Item spring;
-	private Point pointZero = new Point(0,0);
+	private Point pointZero = new Point(2,0);
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testInstantaneousEffect() {
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		spring.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.LEFT);
-		assertTrue(testSnake.getEffects().isEmpty());
-		assertFalse(testSnake.getProperties().getCollision().getSpring());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		spring = itemFactory.createItem(pointZero, Spring.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0))), field);
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
+		AppleTest.collide(spring, testSnake);
 		
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.empty());
-		testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0), new Point(0,1))));
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		spring.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.DOWN);
-		assertEquals(testSnake.getBodyParts().get(0).getPoint(), new Point(0,1));
-		assertEquals(testSnake.getBodyParts().get(1).getPoint(), new Point(0,0));
-		assertEquals(testSnake.getBodyParts().get(2).getPoint(), new Point(1,0));
-		assertTrue(testSnake.getEffects().isEmpty());
-		assertFalse(testSnake.getProperties().getCollision().getSpring());
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			while(testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.RIGHT)) {
+				Thread.sleep(10L);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), Direction.LEFT);
+		assertTrue(testSnake.getBodyParts().get(1).getPoint().getX() - testSnake.getBodyParts().get(0).getPoint().getX() <= 1);
+		assertTrue(testSnake.getBodyParts().get(0).getPoint().equals(new Point(1,0)));
+		assertTrue(testSnake.getBodyParts().get(1).getPoint().equals(new Point(2,0)));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testInstantaneousEffectOnGhost() {
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		spring.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		assertTrue(testSnake.getEffects().isEmpty());
-		assertFalse(testSnake.getProperties().getCollision().getSpring());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		spring = itemFactory.createItem(pointZero, Spring.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0))), field);
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
+		AppleTest.collide(spring, testSnake);
 		
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.empty());
-		testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0), new Point(0,1))));
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		spring.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		assertEquals(testSnake.getBodyParts().get(0).getPoint(), new Point(1,0));
-		assertEquals(testSnake.getBodyParts().get(1).getPoint(), new Point(0,0));
-		assertEquals(testSnake.getBodyParts().get(2).getPoint(), new Point(0,1));
-		assertTrue(testSnake.getEffects().isEmpty());
-		assertFalse(testSnake.getProperties().getCollision().getSpring());
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			while(testSnake.getBodyParts().get(0).getPoint().equals(new Point(1,0))) {
+				Thread.sleep(10L);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
+		assertTrue(testSnake.getBodyParts().get(0).getPoint().equals(new Point(2,0)));
+		assertTrue(testSnake.getBodyParts().get(1).getPoint().equals(new Point(1,0)));
 	}
 	
+	
+	@SuppressWarnings("deprecation")
 	@Test 
 	public void testLastingEffect() {
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		spring.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.LEFT);
-		assertEquals(testSnake.getEffects().size(), 1);
-		assertTrue(testSnake.getProperties().getCollision().getSpring());
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertFalse(testSnake.getProperties().getCollision().getSpring());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		spring = itemFactory.createItem(pointZero, Spring.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0))), field);
+		assertEquals(testSnake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
 		
-		spring = ItemFactory.createSpring(pointZero, Optional.empty(), Optional.of(100L));
-		testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(1,0), new Point(0,0), new Point(0,1))));
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.RIGHT);
-		spring.onCollision(testSnake, 0);
-		assertEquals(testSnake.getProperties().getDirection().getDirection(), Direction.DOWN);
-		assertEquals(testSnake.getBodyParts().get(0).getPoint(), new Point(0,1));
-		assertEquals(testSnake.getBodyParts().get(1).getPoint(), new Point(0,0));
-		assertEquals(testSnake.getBodyParts().get(2).getPoint(), new Point(1,0));
-		assertEquals(testSnake.getEffects().size(), 1);
-		assertTrue(testSnake.getProperties().getCollision().getSpring());
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertFalse(testSnake.getProperties().getCollision().getSpring());
-	}
+		AppleTest.collide(spring, testSnake);
+		assertEquals(testSnake.getEffects().size(),1);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(10L));
+		
+		spring = itemFactory.createItem(pointZero, Spring.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(spring, testSnake);
+		assertEquals(testSnake.getEffects().size(),1);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(20L));
 	
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			Thread.sleep(10L);
+			assertTrue(testSnake.getProperties().getCollisionProperty().getSpring());
+			Thread.sleep(20L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertFalse(testSnake.getProperties().getCollisionProperty().getSpring());	
+	}	
 }
