@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.field.FieldImpl;
 
 public class SlugTest {
 
@@ -15,34 +16,50 @@ public class SlugTest {
 	
 	@Test
 	public void testInstantaneousEffect() {
-		slug = ItemFactory.createSlug(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
-		slug.onCollision(testSnake, 0);
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		slug = itemFactory.createItem(pointZero, Slug.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);
+		AppleTest.collide(slug, testSnake);
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);
 	}
 	
 	/*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
 	
-	@Test 
+	@SuppressWarnings("deprecation")
+	@Test
 	public void testLastingEffect() {
-		slug = ItemFactory.createSlug(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
-		slug.onCollision(testSnake, 1000L);
-		assertTrue((baseSpeedMul*0.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		slug = itemFactory.createItem(pointZero, Slug.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);
+	
+		AppleTest.collide(slug, testSnake);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
-		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
-		slug = ItemFactory.createSlug(pointZero, Optional.empty(), Optional.of(250L));
-		slug.onCollision(testSnake, 1050L);
-		assertTrue((baseSpeedMul*0.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
-		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(10L));
+		
+		slug = itemFactory.createItem(pointZero, Slug.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(slug, testSnake);		
+		assertEquals(testSnake.getPlayer().getScore(), 0);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(20L));
+
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			Thread.sleep(10L);
+			assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 2.0);
+			Thread.sleep(20L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);		
 	}
+	
+	
+	
+	
 	
 }
