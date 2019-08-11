@@ -59,13 +59,17 @@ public class BeerTest {
 		assertTrue(testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.RIGHT) ||
 				testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.LEFT));
 		Thread t = new Thread(testSnake);
+		assertFalse(testSnake.getProperties().getDirectionProperty().getReverseDirection());
 		t.start();
-		while(true) {
-			if (!testSnake.getProperties().getDirectionProperty().getReverseDirection()) {
-				t.stop();
-				break;
-			}
+		try {
+			Thread.sleep(10L);
+			assertTrue(testSnake.getProperties().getDirectionProperty().getReverseDirection());
+			Thread.sleep(20L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		t.stop();
+		assertFalse(testSnake.getProperties().getDirectionProperty().getReverseDirection());
 		
 	}
 	
