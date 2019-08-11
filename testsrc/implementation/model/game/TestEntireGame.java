@@ -35,7 +35,6 @@ public class TestEntireGame {
 		new GeneralItemsTests().testLastingEffect();
 		new GeneralItemsTests().testOnGhost();
 		new BodyPartTest().testInitBodyPart();
-		new BodyPartTest().testAllCollisions();
 		new WallTest().testInitWall();
 		new WallTest().testCollision();
 		new AppleTest().testInstantaneousEffect();
@@ -45,6 +44,7 @@ public class TestEntireGame {
 		new BadAppleTest().testInstantaneousEffectOnGhost();
 		new BadAppleTest().testLastingEffect();
 		new BeerTest().testInstantaneousEffect();
+		new BeerTest().testInstantaneousEffectOnGhost();
 		new BeerTest().testLastingEffect();
 		new DoublePointsTest().testInstantaneousEffect();
 		new DoublePointsTest().testLastingEffect();
@@ -52,16 +52,12 @@ public class TestEntireGame {
 		new GhostModeTest().testLastingEffect();
 		new GodModeTest().testInstantaneousEffect();
 		new GodModeTest().testLastingEffect();
-		new IceTest().testInstantaneousEffect();
-		new IceTest().testLastingEffect();
 		new MagnetTest().testInstantaneousEffect();
 		new MagnetTest().testLastingEffect();
 		new ScoreEarningTest().testInstantaneousEffect();
 		new ScoreEarningTest().testInstantaneousEffectOnGhost();
-		new ScoreEarningTest().testLastingEffect();
 		new ScoreLossTest().testInstantaneousEffect();
 		new ScoreLossTest().testInstantaneousEffectOnGhost();
-		new ScoreLossTest().testLastingEffect();
 		new SlugTest().testInstantaneousEffect();
 		new SlugTest().testLastingEffect(); 
 		new SpringTest().testInstantaneousEffect();
