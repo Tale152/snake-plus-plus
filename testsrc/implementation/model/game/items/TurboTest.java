@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.field.FieldImpl;
 
 public class TurboTest {
 
@@ -15,34 +16,46 @@ public class TurboTest {
 	
 	@Test
 	public void testInstantaneousEffect() {
-		turbo = ItemFactory.createTurbo(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
-		turbo.onCollision(testSnake, 0);
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		turbo = itemFactory.createItem(pointZero, Turbo.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);
+		AppleTest.collide(turbo, testSnake);
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);
 	}
 	
 	/*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
 	
-	@Test 
+	@SuppressWarnings("deprecation")
+	@Test
 	public void testLastingEffect() {
-		turbo = ItemFactory.createTurbo(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		double baseSpeedMul = testSnake.getProperties().getSpeed().getSpeedMultiplier();
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
-		turbo.onCollision(testSnake, 1000L);
-		assertTrue((baseSpeedMul*1.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		turbo = itemFactory.createItem(pointZero, Turbo.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);
+	
+		AppleTest.collide(turbo, testSnake);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
-		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
-		turbo = ItemFactory.createTurbo(pointZero, Optional.empty(), Optional.of(250L));
-		turbo.onCollision(testSnake, 1050L);
-		assertTrue((baseSpeedMul*1.5) == testSnake.getProperties().getSpeed().getSpeedMultiplier());
-		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertTrue(baseSpeedMul == testSnake.getProperties().getSpeed().getSpeedMultiplier());
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(10L));
+		
+		turbo = itemFactory.createItem(pointZero, Turbo.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(turbo, testSnake);		
+		assertEquals(testSnake.getPlayer().getScore(), 0);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(20L));
+
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			Thread.sleep(10L);
+			assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 0.5);
+			Thread.sleep(20L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertTrue(testSnake.getProperties().getSpeedProperty().getSpeedMultiplier() == 1.0);		
 	}
 	
 }
