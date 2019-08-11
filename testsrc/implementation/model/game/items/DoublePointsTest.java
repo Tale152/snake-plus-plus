@@ -49,9 +49,10 @@ public class DoublePointsTest {
 		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
 		Thread t = new Thread(testSnake);
 		t.start();
-		assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2.0);
 		try {
-			Thread.sleep(30L);
+			Thread.sleep(10L);
+			assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2.0);
+			Thread.sleep(20L);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

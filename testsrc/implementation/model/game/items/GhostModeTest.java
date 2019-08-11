@@ -11,8 +11,10 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+import design.model.game.Field;
 import design.model.game.Item;
 import design.model.game.Snake;
+import implementation.model.game.field.FieldImpl;
 
 public class GhostModeTest {
 	
@@ -21,29 +23,39 @@ public class GhostModeTest {
 	
 	@Test
 	public void testInstantaneousEffect() {
-		ghost = ItemFactory.createGhostMode(pointZero, Optional.empty(), Optional.empty());
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
-		ghost.onCollision(testSnake, 0);
-		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		ghost = itemFactory.createItem(pointZero, GhostMode.class, Optional.empty(), Optional.empty());
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		assertFalse(testSnake.getProperties().getCollisionProperty().getIntangibility());
+		AppleTest.collide(ghost, testSnake);
+		assertFalse(testSnake.getProperties().getCollisionProperty().getIntangibility());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test 
 	public void testLastingEffect() {
-		ghost = ItemFactory.createGhostMode(pointZero, Optional.empty(), Optional.of(100L));
-		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))));
-		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
-		ghost.onCollision(testSnake, 1000L);
-		assertTrue(testSnake.getProperties().getCollision().getIntangibility());
+		Field field = new FieldImpl(new Point(10,10));
+		ItemFactory itemFactory = new ItemFactory(field);
+		ghost = itemFactory.createItem(pointZero, GhostMode.class, Optional.empty(), Optional.of(10L));
+		Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+		AppleTest.collide(ghost, testSnake);
 		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1100L));
-		assertFalse(testSnake.getEffects().get(0).getExpirationTime().isPresent());
-		ghost = ItemFactory.createGhostMode(pointZero, Optional.empty(), Optional.of(250L));
-		ghost.onCollision(testSnake, 1050L);
-		assertTrue(testSnake.getProperties().getCollision().getIntangibility());
-		assertEquals(testSnake.getEffects().size(),1);
-		assertEquals(testSnake.getEffects().get(0).getEffectEndTime(), Optional.of(1350L));
-		testSnake.getEffects().get(0).effectEnd(testSnake);
-		assertFalse(testSnake.getProperties().getCollision().getIntangibility());
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(10L));
+		ghost = itemFactory.createItem(pointZero, GhostMode.class, Optional.empty(), Optional.of(10L));
+		AppleTest.collide(ghost, testSnake);
+		assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(20L));
+		assertFalse(testSnake.getProperties().getCollisionProperty().getIntangibility());
+		Thread t = new Thread(testSnake);
+		t.start();
+		try {
+			Thread.sleep(10L);
+			assertTrue(testSnake.getProperties().getCollisionProperty().getIntangibility());
+			Thread.sleep(20L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t.stop();
+		assertFalse(testSnake.getProperties().getCollisionProperty().getIntangibility());
 	}
 }
