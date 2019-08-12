@@ -59,7 +59,6 @@ public class BeerTest {
 		assertTrue(testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.RIGHT) ||
 				testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.LEFT));
 		Thread t = new Thread(testSnake);
-		assertFalse(testSnake.getProperties().getDirectionProperty().getReverseDirection());
 		t.start();
 		try {
 			Thread.sleep(10L);
