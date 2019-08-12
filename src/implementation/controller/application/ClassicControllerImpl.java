@@ -240,6 +240,7 @@ public class ClassicControllerImpl implements ClassicController {
 				Path.THEMES + Path.GAME_THEMES_PREFIX + Integer.toString(randomInt) + Path.GAME_THEMES_TYPE
 				).toURI().toString()); 
 		Main.mediaPlayer = new MediaPlayer(media);
+		Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 		Main.mediaPlayer.play();
 		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
 	}

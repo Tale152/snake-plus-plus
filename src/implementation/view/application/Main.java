@@ -33,6 +33,7 @@ public class Main extends Application{
   public void start(Stage primaryStage) throws Exception {
 	  Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
       mediaPlayer = new MediaPlayer(media); 
+      mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
       mediaPlayer.play();
 	  primaryStage.setOnCloseRequest(e -> {System.exit(0);});
 	  try {
