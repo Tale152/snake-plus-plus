@@ -10,6 +10,9 @@ public class GameModelImpl implements GameModel {
 	private final GameRules gameRules;
 	
 	public GameModelImpl(Field field, GameRules gameRules) {
+		if (field == null || gameRules == null) {
+			throw new NullPointerException();
+		}
 		this.field = field;
 		this.gameRules = gameRules;
 	}
