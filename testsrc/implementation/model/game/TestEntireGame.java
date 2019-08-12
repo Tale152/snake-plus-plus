@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 import implementation.model.game.field.FieldTest;
+import implementation.model.game.gameRules.GameRulesTest;
 import implementation.model.game.gameRules.ItemRuleTest;
 import implementation.model.game.gameRules.LossConditionsTest;
 import implementation.model.game.gameRules.WinConditionsTest;
@@ -104,4 +105,17 @@ public class TestEntireGame {
 		new GameModelTest().testGetField();
 		new GameModelTest().testGetGameRules();
 	}
+	
+	@Test
+	public void testGameRules() {
+	  new GameRulesTest().testInit();
+	  new GameRulesTest().testGetWinConditions();
+	  new GameRulesTest().testGetLossConditions();
+	  new GameRulesTest().testGetItemRules();
+	  new GameRulesTest().testGetInitialSnakeDelta();
+	  new GameRulesTest().testGetInitialSnakeMultiplier();
+	  new GameRulesTest().testGetInitialTime();
+	  new GameRulesTest().testIsTimeGoingForward();
+	}
+	
 }
