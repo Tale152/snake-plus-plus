@@ -17,12 +17,14 @@ public class LossConditionsTest {
 	public void testInit() {
 		try {
 			loss = new LossConditionsImpl(false, null, false);
+			fail("NullPointerException expected");
 		} catch (NullPointerException e){
 		} catch (Exception e ) {
 			fail("Wrong exception");
 		}
 		try {
 			loss = new LossConditionsImpl(false, Optional.of(-1L), false);
+			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e){
 		} catch (Exception e ) {
 			fail("Wrong exception");

@@ -17,6 +17,7 @@ public class WinConditionsTest {
 			boolean timeGoesForward, Class<? extends Exception> expectedException) {
 		try {
 			win = new WinConditionsImpl(snakeLength, score, time, timeGoesForward);
+			fail(expectedException.getSimpleName() + " expected");
 		} catch (Exception e) {
 			if (!e.getClass().equals(expectedException)){
 				e.printStackTrace();
