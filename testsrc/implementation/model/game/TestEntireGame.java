@@ -4,7 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 import implementation.model.game.field.FieldTest;
-import implementation.model.game.initializers.InitialGameStateTest;
+import implementation.model.game.gameRules.ItemRuleTest;
+import implementation.model.game.gameRules.LossConditionsTest;
+import implementation.model.game.gameRules.WinConditionsTest;
 import implementation.model.game.items.*;
 import implementation.model.game.snake.*;
 
@@ -77,11 +79,29 @@ public class TestEntireGame {
 	}
 	
 	@Test
-	public void testInitialGameState() {
-		new InitialGameStateTest().testInit();
-		new InitialGameStateTest().testGetFieldItems();
-		new InitialGameStateTest().testGetFieldSize();
-		new InitialGameStateTest().testGetInitialPlayerState();
+	public void testWinConditions() {
+		new WinConditionsTest().testInit();
+		new WinConditionsTest().testLengthConditions();
+		new WinConditionsTest().testScoreConditions();
+		new WinConditionsTest().testTimeConditions();
 	}
 	
+	@Test
+	public void testLossConditions() {
+		new LossConditionsTest().testInit();
+		new LossConditionsTest().testAllSnakeDiedContitions();
+		new LossConditionsTest().testTimeConditions();
+	}
+	
+	@Test
+	public void testItemRule() {
+		new ItemRuleTest().testInit();
+	}
+	
+	@Test
+	public void testGameModel() {
+		new GameModelTest().testInit();
+		new GameModelTest().testGetField();
+		new GameModelTest().testGetGameRules();
+	}
 }

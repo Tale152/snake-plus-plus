@@ -32,7 +32,7 @@ public class LossConditionsTest {
 	}
 	
 	@Test
-	public void checkAllSnakeDiedContitions() {
+	public void testAllSnakeDiedContitions() {
 		loss = new LossConditionsImpl(true, Optional.empty(), true);
 		Field field = new FieldImpl(new Point(100,100));
 		List<Snake> snakes = new ArrayList<>();
@@ -49,7 +49,7 @@ public class LossConditionsTest {
 	}
 	
 	@Test
-	public void checkTimeConditions() {
+	public void testTimeConditions() {
 		long time = 10L;
 		loss = new LossConditionsImpl(false, Optional.of(time), true);
 		for (long i = 0; i < time; ++i) {
