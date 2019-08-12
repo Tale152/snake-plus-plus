@@ -20,4 +20,9 @@ public final class Path {
 	//public static final String PROGRESS = "";
 	
 	public static final String THEMES = RES + SEP + "soundtrack" + SEP;
+	
+	public static final String GAME_THEMES_PREFIX = "Game_Theme_";
+	
+	public static final String GAME_THEMES_TYPE = ".mp3";
+	
 }
