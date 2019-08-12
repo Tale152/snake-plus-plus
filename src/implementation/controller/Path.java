@@ -18,4 +18,6 @@ public final class Path {
 	//classic folder
 	public static final String CLASSIC  = RES + SEP + "stages" + SEP + "classic" + SEP;
 	//public static final String PROGRESS = "";
+	
+	public static final String THEMES = RES + SEP + "soundtrack" + SEP;
 }
