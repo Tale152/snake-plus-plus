@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import design.controller.application.ClassicController;
 import design.controller.game.GameLoader;
@@ -13,6 +14,7 @@ import design.model.game.Field;
 import design.model.game.ItemRule;
 import design.model.game.Wall;
 import design.view.game.ResourcesLoader;
+import implementation.controller.Path;
 import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.view.application.Main;
@@ -30,6 +32,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
@@ -228,7 +232,15 @@ public class ClassicControllerImpl implements ClassicController {
 		for (int i = players; i < levels.get(selected).getValue().getMaxPlayers(); i++) {
 			gl.getGameModel().getField().removeSnake(players);
 		}
-		
+		Main.mediaPlayer.stop();
+		int nFile = new File(Path.THEMES).listFiles().length;
+		Random randomGenerator = new Random();
+		int randomInt = randomGenerator.nextInt(nFile-1);
+		Media media = new Media(new File(
+				Path.THEMES + Path.GAME_THEMES_PREFIX + Integer.toString(randomInt) + Path.GAME_THEMES_TYPE
+				).toURI().toString()); 
+		Main.mediaPlayer = new MediaPlayer(media);
+		Main.mediaPlayer.play();
 		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
 	}
 
