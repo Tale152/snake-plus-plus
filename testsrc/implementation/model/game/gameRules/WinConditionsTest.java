@@ -55,22 +55,23 @@ public class WinConditionsTest {
 		}
 	}
 	
-	@Test
-	public void testScoreConditions() {
-		win = new WinConditionsImpl(Optional.empty(), Optional.of(10), Optional.empty(), true);
-		Field field = new FieldImpl(new Point(100,100));
-		Snake snake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
-		List<Snake> snakeList = new ArrayList<Snake>(Arrays.asList(snake));
-		int scoreToReach = 10;
-		for (int i = 1; i <= scoreToReach; ++i) {
-			snake.getPlayer().addScore(1);
-			if (i < scoreToReach) {
-				assertFalse(win.checkScore(snakeList));
-			} else {
-				assertTrue(win.checkScore(snakeList));
-			}
-		}
-	}
+  @Test
+  public void testScoreConditions() {
+    win = new WinConditionsImpl(Optional.empty(), Optional.of(10), Optional.empty(), true);
+    Field field = new FieldImpl(new Point(100,100));
+    Snake snake = SnakeFactoryForTests.baseSnake(
+        new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+    List<Snake> snakeList = new ArrayList<Snake>(Arrays.asList(snake));
+    int scoreToReach = 10;
+    for (int i = 1; i <= scoreToReach; ++i) {
+      snake.getPlayer().addScore(1);
+      if (i < scoreToReach) {
+        assertFalse(win.checkScore(snakeList));
+      } else {
+        assertTrue(win.checkScore(snakeList));
+      }
+    }
+  }
 	
 	@Test
 	public void testTimeConditions() {
