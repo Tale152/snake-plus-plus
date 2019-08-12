@@ -1,0 +1,5 @@
+When snake eats a bad apple, his lenght will be decreased 
+and some point are subtract to the score.
+If the bad apple has a lasting effect, the snake's lenght is going
+to be decreased only until the effect ends. Then, the lenght
+and the score will be increase, like nothing ever happened.

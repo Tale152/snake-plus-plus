@@ -1,0 +1,5 @@
+When snake collides with the score loss item, 
+you will get some points that are going to be subtract
+to your score. 
+If you pick up more of then in a short amount of time,
+the points subtract will be more, so watch out!

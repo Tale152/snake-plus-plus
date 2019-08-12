@@ -1,0 +1,8 @@
+When snake eat a turbo item, his speed
+will be increased and he will go faster until
+the effect ends.  
+If you pick up more of them, the speed is going
+to be increased more, until you won't see him. 
+Do not eat too much of them!
+When the effect ends snake will have the normal 
+speed again. 
