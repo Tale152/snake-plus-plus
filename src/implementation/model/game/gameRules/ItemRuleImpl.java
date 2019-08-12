@@ -13,8 +13,25 @@ public class ItemRuleImpl implements ItemRule {
 	private final Optional<Long> itemDuration;
 	private final Optional<Long> effectDuration;
 	
+	private void checkArguments(Class<? extends Effect> effectClass, long spawnDelta, double spawnChance, 
+			int max, Optional<Long> itemDuration, Optional<Long> effectDuration) {
+		if (effectClass == null || itemDuration == null || effectDuration == null) {
+			throw new NullPointerException();
+		}
+		if (spawnDelta <= 0L || spawnChance <= 0 || max <= 0) {
+			throw new IllegalArgumentException();
+		}
+		if (itemDuration.isPresent() && itemDuration.get() <= 0) {
+			throw new IllegalArgumentException();
+		}
+		if (effectDuration.isPresent() && effectDuration.get() <= 0) {
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	public ItemRuleImpl(Class<? extends Effect> effectClass, long spawnDelta, double spawnChance, 
 			int max, Optional<Long> itemDuration, Optional<Long> effectDuration) {
+		checkArguments(effectClass, spawnDelta, spawnChance, max, itemDuration, effectDuration);
 		this.effectClass = effectClass;
 		this.spawnDelta = spawnDelta;
 		this.spawnChance = spawnChance;
