@@ -43,7 +43,7 @@ public final class Path {
     /**
      * Prefix of every music file used while playing.
      */
-    public static final String GAME_THEMES_PREFIX = "Game_Theme_";
+    public static final String GAME_THEMES_PREFIX = "Game_theme_";
 
     /**
      * Type of musical files used in this application.
