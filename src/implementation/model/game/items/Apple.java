@@ -5,7 +5,6 @@ import design.model.game.Field;
 import design.model.game.Snake;
 
 /**
- * An Apple it's one of the basic effect into Snake. <p>
  * Instantaneous effect: increments size and score to a snake. <p>
  * Lasting effect: when lasting effect ends returns Snake's size to 
  * one and set's it's score to zero.
