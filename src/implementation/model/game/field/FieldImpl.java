@@ -123,7 +123,7 @@ public class FieldImpl implements Field {
             throw new NullPointerException();
         }
         if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
-            throw new IllegalArgumentException();
+            return new ArrayList<Collidable>();
         }
         List<Collidable> cellList = new ArrayList<Collidable>();
         items.stream().filter(i -> i.getPoint().equals(point)).forEach(Item -> cellList.add(Item));
