@@ -15,20 +15,19 @@ import implementation.model.game.items.WallImpl;
 
 @SuppressWarnings("serial")
 public class WallDeserializer extends StdDeserializer<Wall> {
-	
-	public WallDeserializer() {
-		this(null);
-	}
 
-	public WallDeserializer(Class<?> vc) {
-		super(vc);
-		// TODO Auto-generated constructor stub
-	}
+    public WallDeserializer() {
+        this(null);
+    }
 
-	@Override
-	public Wall deserialize(JsonParser parser, DeserializationContext deserializer) throws IOException, JsonProcessingException {
-		ObjectMapper om = new ObjectMapper();
-		return new WallImpl(om.readValue(deserializer.readValue(parser, JsonNode.class).get("point").traverse(), Point.class));
-	}
+    public WallDeserializer(Class<?> vc) {
+        super(vc);
+    }
+
+    @Override
+    public final Wall deserialize(final JsonParser parser, final DeserializationContext deserializer) throws IOException, JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+        return new WallImpl(om.readValue(deserializer.readValue(parser, JsonNode.class).get("point").traverse(), Point.class));
+    }
 
 }

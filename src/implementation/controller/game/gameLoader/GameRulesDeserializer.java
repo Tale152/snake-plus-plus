@@ -21,36 +21,35 @@ import implementation.model.game.gameRules.GameRulesImpl;
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")
 class GameRulesDeserializer extends StdDeserializer<GameRules> {
-	
-	protected GameRulesDeserializer() {
-		this(null);
-	}
 
-	protected GameRulesDeserializer(Class<?> vc) {
-		super(vc);
-		// TODO Auto-generated constructor stub
-	}
+    protected GameRulesDeserializer() {
+        this(null);
+    }
 
-	@Override
-	public GameRules deserialize(JsonParser parser, DeserializationContext deserializer)
-			throws IOException, JsonProcessingException {
-		JsonNode node = deserializer.readValue(parser, JsonNode.class);
-		ObjectMapper mapper = new ObjectMapper();
-		SimpleModule deserializerModule = new SimpleModule();
-		deserializerModule.addDeserializer(ItemRule.class, new ItemRuleDeserializer());
-		deserializerModule.addDeserializer(WinConditions.class, new WinConditionsDeserializer());
-		deserializerModule.addDeserializer(LossConditions.class, new LossConditionsDeserializer());
-		mapper.registerModules(deserializerModule);
-		
-		long initialSnakeDelta = node.get("initialSnakeDelta").asLong();
-		double initialSnakeMultiplier = node.get("initialSnakeMultiplier").asDouble();
-		boolean timeForward = node.get("timeGoingForward").asBoolean();
-		long initialTime = node.get("initialTime").asLong();
-		List<ItemRule> itemRules = mapper.readValue(node.get("itemRules").traverse(), new TypeReference<List<ItemRule>>() {});
-		LossConditions lc = mapper.readValue(node.get("lossConditions").traverse(), LossConditions.class);
-		WinConditions wc = mapper.readValue(node.get("winConditions").traverse(), WinConditions.class);
+    protected GameRulesDeserializer(final Class<?> vc) {
+        super(vc);
+        // TODO Auto-generated constructor stub
+    }
 
-		return new GameRulesImpl(wc, lc, itemRules, initialSnakeDelta, initialSnakeMultiplier, initialTime, timeForward);
-	}
+    @Override
+    public final GameRules deserialize(final JsonParser parser, final DeserializationContext deserializer)
+            throws IOException, JsonProcessingException {
+        JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule deserializerModule = new SimpleModule();
+        deserializerModule.addDeserializer(ItemRule.class, new ItemRuleDeserializer());
+        deserializerModule.addDeserializer(WinConditions.class, new WinConditionsDeserializer());
+        deserializerModule.addDeserializer(LossConditions.class, new LossConditionsDeserializer());
+        mapper.registerModules(deserializerModule);
+        long initialSnakeDelta = node.get("initialSnakeDelta").asLong();
+        double initialSnakeMultiplier = node.get("initialSnakeMultiplier").asDouble();
+        boolean timeForward = node.get("timeGoingForward").asBoolean();
+        long initialTime = node.get("initialTime").asLong();
+        List<ItemRule> itemRules = mapper.readValue(node.get("itemRules").traverse(), new TypeReference<List<ItemRule>>() { });
+        LossConditions lc = mapper.readValue(node.get("lossConditions").traverse(), LossConditions.class);
+        WinConditions wc = mapper.readValue(node.get("winConditions").traverse(), WinConditions.class);
+
+        return new GameRulesImpl(wc, lc, itemRules, initialSnakeDelta, initialSnakeMultiplier, initialTime, timeForward);
+    }
 
 }
