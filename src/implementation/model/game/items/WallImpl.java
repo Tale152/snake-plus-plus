@@ -5,25 +5,32 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import design.model.game.*;
+import design.model.game.Snake;
+import design.model.game.Wall;
 import implementation.controller.game.gameLoader.WallDeserializer;
 
+/**
+ * @see Wall
+ * @author Alessandro Talmi
+ */
 @JsonDeserialize(using = WallDeserializer.class)
-public class WallImpl extends CollidableAbstract implements Wall{
+public class WallImpl extends CollidableAbstract implements Wall {
 
-	public WallImpl(Point point) {
-		super(point);
-	}
+    /**
+     * @param point where will be placed into the field
+     */
+    public WallImpl(final Point point) {
+        super(point);
+    }
 
-	@Override
-	public void onCollision(Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (collider.getProperties().getCollisionProperty().getSpring()) {
-			collider.reverse();
-		}
-		else if (!collider.getProperties().getCollisionProperty().getIntangibility() &&
-				!collider.getProperties().getCollisionProperty().getInvincibility()) {
-			collider.kill();
-		}
-	}
+    @Override
+    public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        if (collider.getProperties().getCollisionProperty().getSpring()) {
+            collider.reverse();
+        } else if (!collider.getProperties().getCollisionProperty().getIntangibility() 
+                && !collider.getProperties().getCollisionProperty().getInvincibility()) {
+            collider.kill();
+        }
+    }
 }
