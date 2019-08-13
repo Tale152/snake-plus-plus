@@ -1,9 +1,23 @@
 package design.view.game;
 
+/**
+ * A sprite is an abstract idea representing the graphical resources
+ * that will be displayed trying to isolate View implementation 
+ * from used API to better suit MVC philosophy.
+ * @author Alessandro Talmi
+ * @author Elisa Tronetti
+ * @author Nicola Orlando
+ */
 public interface Sprite {
-	
-	public String getName();
-	
-	public Object getSprite();
-	
+
+    /**
+     * @return Sprite's name
+     */
+    String getName();
+
+    /**
+     * @return the actual object used to print, depending on used API
+     */
+    Object getSprite();
+
 }
