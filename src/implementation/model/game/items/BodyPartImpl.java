@@ -7,6 +7,10 @@ import design.model.game.BodyPart;
 import design.model.game.CollisionProperty;
 import design.model.game.Snake;
 
+/**
+ * @see BodyPart
+ * @author Alessandro Talmi
+ */
 public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 
     private boolean head;
@@ -18,6 +22,10 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
     private boolean right;
     private final Snake owner;
 
+    /**
+     * @param point where this body part is relative to the field
+     * @param owner Snake that owns this bodypart
+     */
     public BodyPartImpl(final Point point, final Snake owner) {
         super(point);
         if (owner == null) {
@@ -34,7 +42,7 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
     }
 
     @Override
-    public void onCollision(Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
+    public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (!collider.getProperties().getCollisionProperty().getIntangibility()) {
             CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
@@ -45,77 +53,77 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
     }
 
     @Override
-    public boolean isHead() {
+    public final boolean isHead() {
         return head;
     }
 
     @Override
-    public void setHead(boolean head) {
+    public final void setHead(final boolean head) {
         this.head = head;
     }
 
     @Override
-    public boolean isBody() {
+    public final boolean isBody() {
         return body;
     }
 
     @Override
-    public void setBody(boolean body) {
+    public final void setBody(final boolean body) {
         this.body = body;
     }
 
     @Override
-    public boolean isTail() {
+    public final boolean isTail() {
         return tail;
     }
 
     @Override
-    public void setTail(boolean tail) {
+    public final void setTail(final boolean tail) {
         this.tail = tail;
     }
 
     @Override
-    public boolean isCombinedOnTop() {
+    public final boolean isCombinedOnTop() {
         return top;
     }
 
     @Override
-    public void setCombinedOnTop(boolean combined) {
+    public final void setCombinedOnTop(final boolean combined) {
         top = combined;
     }
 
     @Override
-    public boolean isCombinedOnBottom() {
+    public final boolean isCombinedOnBottom() {
         return bottom;
     }
 
     @Override
-    public void setCombinedOnBottom(boolean combined) {
+    public final void setCombinedOnBottom(final boolean combined) {
         bottom = combined;
     }
 
     @Override
-    public boolean isCombinedOnLeft() {
+    public final boolean isCombinedOnLeft() {
         return left;
     }
 
     @Override
-    public void setCombinedOnLeft(boolean combined) {
+    public final void setCombinedOnLeft(final boolean combined) {
         left = combined;
     }
 
     @Override
-    public boolean isCombinedOnRight() {
+    public final boolean isCombinedOnRight() {
         return right;
     }
 
     @Override
-    public void setCombinedOnRight(boolean combined) {
+    public final void setCombinedOnRight(final boolean combined) {
         right = combined;
     }
 
     @Override
-    public Snake getOwner() {
+    public final Snake getOwner() {
         return owner;
     }
 
