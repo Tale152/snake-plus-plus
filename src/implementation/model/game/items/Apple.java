@@ -9,15 +9,17 @@ import design.model.game.Snake;
  * Lasting effect: when lasting effect ends returns Snake's size to 
  * one and set's it's score to zero.
  * @author Alessandro Talmi
- *
  */
 public final class Apple extends EffectAbstract {
 
     /**
      * how much a snake size will be increased interacting with an Apple.
      */
-    private final int LENGTH_INCREMENT = 1;
-    private final int SCORE_INCREMENT = 10;
+    public static final int LENGTH_INCREMENT = 1;
+    /**
+     * how much a snake's score will be increased interacting with an Apple.
+     */
+    public static final int SCORE_INCREMENT = 10;
 
     /**
      * @param dEffectDuration how long this effect's lasting effect will last,

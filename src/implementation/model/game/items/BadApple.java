@@ -13,7 +13,10 @@ import design.model.game.Snake;
  */
 public final class BadApple extends EffectAbstract {
 
-    private final int SHORTEN_DENOMINATOR = 2;
+    /**
+     * How much the snake size will be divided.
+     */
+    public static final int SHORTEN_DENOMINATOR = 2;
 
     /**
      * @param dEffectDuration how long this effect's lasting effect will last,
