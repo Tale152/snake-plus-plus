@@ -200,6 +200,9 @@ public class FieldImpl implements Field {
 
     @Override
     public final Snake removeSnake(final int i) {
+        for (BodyPart b : snakes.get(i).getBodyParts()) {
+            removeBodyPart(b);
+        }
         return snakes.remove(i);
     }
 }
