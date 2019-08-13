@@ -233,16 +233,16 @@ public class ClassicControllerImpl implements ClassicController {
 		for (int i = players; i < levels.get(selected).getValue().getMaxPlayers(); i++) {
 			gl.getGameModel().getField().removeSnake(players);
 		}
-		Main.mediaPlayer.stop();
+		Main.getMediaPlayer().stop();
 		int nFile = new File(Path.THEMES).listFiles().length;
 		Random randomGenerator = new Random();
 		int randomInt = randomGenerator.nextInt(nFile-1);
 		Media media = new Media(new File(
 				Path.THEMES + Path.GAME_THEMES_PREFIX + Integer.toString(randomInt) + Path.GAME_THEMES_TYPE
 				).toURI().toString()); 
-		Main.mediaPlayer = new MediaPlayer(media);
-		Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-		Main.mediaPlayer.play();
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer.play();
 		GameController gameController = 
 				new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel()).getGameController();
 		
