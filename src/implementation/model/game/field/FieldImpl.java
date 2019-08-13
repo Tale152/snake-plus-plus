@@ -1,199 +1,205 @@
 package implementation.model.game.field;
 
 import java.awt.Point;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import design.model.game.*;
-
-import implementation.controller.game.gameLoader.*;
+import design.model.game.BodyPart;
+import design.model.game.Collidable;
+import design.model.game.Field;
+import design.model.game.Item;
+import design.model.game.Snake;
+import design.model.game.Wall;
+import implementation.controller.game.gameLoader.FieldDeserializer;
 
 @JsonDeserialize(using = FieldDeserializer.class)
 public class FieldImpl implements Field {
-	
-	private int width;
-	private int height;
-	
-	// TODO: maybe use Sets instead of Lists? order is irrelevant and stuff can't be repeated
-	final private List<Item> items;
-	final private List<Wall> walls;
-	final private List<BodyPart> bodyParts;
-	
-	final private List<Snake> snakes;
-	final private List<Thread> threads;
-	
-	final private List<Item> removedItems;
-	
-	private boolean begun;
 
-	public FieldImpl(Point dimensions) {
-		if (dimensions.x <= 0 || dimensions.y <= 0) {
-			throw new IllegalArgumentException();
-		}
-		items = Collections.synchronizedList(new ArrayList<Item>());
-		walls = Collections.synchronizedList(new ArrayList<Wall>());
-		bodyParts = Collections.synchronizedList(new ArrayList<BodyPart>());
-		snakes = Collections.synchronizedList(new ArrayList<Snake>());
-		removedItems = Collections.synchronizedList(new ArrayList<Item>());
-		threads = Collections.synchronizedList(new ArrayList<Thread>());
-		
-		begun = false;
-		
-		this.width = (int) dimensions.getX();
-		this.height = (int) dimensions.getY();
-	}
-	
-	private synchronized boolean contains(Collidable item) {
-		Point coord = item.getPoint();
-		int x = (int) coord.getX();
-		int y = (int) coord.getY();
-		if (x >= 0 && x < this.width && y >= 0 && y <= this.height) {
-			return true;
-		}
-		return false;
-	}
-	
-	private synchronized boolean isCollidableAddable(Collidable item, List<? extends Collidable> list) {
-		if (list.contains(item)) {
-			return false;
-		} else {
-			if (this.contains(item)) {
-				return true;
-			} else {
-				throw new IllegalStateException();
-			}
-		}
-	}
-	
-	private synchronized void addThread(Runnable runnable) {
-		Thread thread = new Thread(runnable);
-		thread.start();
-		threads.add(thread);
-	}
+    private int width;
+    private int height;
 
-	@Override
-	public synchronized int getWidth() {
-		return width;
-	}
+    // TODO: maybe use Sets instead of Lists? order is irrelevant and stuff can't be repeated
+    private final List<Item> items;
+    private final List<Wall> walls;
+    private final List<BodyPart> bodyParts;
 
-	@Override
-	public synchronized int getHeight() {
-		return height;
-	}
+    private final List<Snake> snakes;
+    private final List<Thread> threads;
 
-	@Override
-	public synchronized List<Item> getItems() {
-		return new ArrayList<Item>(items);
-	}
+    private final List<Item> removedItems;
 
-	@Override
-	public synchronized boolean removeItem(Item item) {
-		if (item == null) {
-			throw new NullPointerException();
-		}
-		if (items.remove(item)) {
-			removedItems.add(item);
-			return true;
-		}
-		return false;
-	}
+    private boolean begun;
 
-	@Override
-	public synchronized boolean addItem(Item item) throws IllegalStateException {
-		if (this.isCollidableAddable(item, items)) {
-			items.add(item);
-			if (begun) {
-				addThread(item);
-			}
-			return true;
-		}
-		return false;
-	}
+    public FieldImpl(final Point dimensions) {
+        if (dimensions.x <= 0 || dimensions.y <= 0) {
+            throw new IllegalArgumentException();
+        }
+        items = Collections.synchronizedList(new ArrayList<Item>());
+        walls = Collections.synchronizedList(new ArrayList<Wall>());
+        bodyParts = Collections.synchronizedList(new ArrayList<BodyPart>());
+        snakes = Collections.synchronizedList(new ArrayList<Snake>());
+        removedItems = Collections.synchronizedList(new ArrayList<Item>());
+        threads = Collections.synchronizedList(new ArrayList<Thread>());
 
-	@Override
-	public synchronized List<Collidable> getCell(Point point) {
-		if (point == null) {
-			throw new NullPointerException();
-		}
-		if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
-			throw new IllegalArgumentException();
-		}
-		List<Collidable> cellList = new ArrayList<Collidable>();
-		items.stream().filter(i -> i.getPoint().equals(point)).forEach(Item -> cellList.add(Item));
-		walls.stream().filter(i -> i.getPoint().equals(point)).forEach(Wall -> cellList.add(Wall));
-		bodyParts.stream().filter(i -> i.getPoint().equals(point)).forEach(BodyPart -> cellList.add(BodyPart));
-		return cellList;
-	}
+        begun = false;
 
-	@Override
-	public synchronized void begin() {
-		for (Snake snake : snakes) {
-			addThread(snake);
-		}
-		
-		for (Item item : items) {
-			addThread(item);
-		}
-		
-		begun = true;
-	}
+        this.width = (int) dimensions.getX();
+        this.height = (int) dimensions.getY();
+    }
 
-	@Override
-	public synchronized List<Item> getEliminatedItems() {
-		List<Item> returnedList = new ArrayList<Item>(removedItems);
-		removedItems.clear();
-		return returnedList;
-	}
+    private synchronized boolean contains(final Collidable item) {
+        Point coord = item.getPoint();
+        int x = (int) coord.getX();
+        int y = (int) coord.getY();
+        if (x >= 0 && x < this.width && y >= 0 && y <= this.height) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public synchronized List<Wall> getWalls() {
-		return new ArrayList<Wall>(walls);
-	}
+    private synchronized boolean isCollidableAddable(final Collidable item, final List<? extends Collidable> list) {
+        if (list.contains(item)) {
+            return false;
+        } else {
+            if (this.contains(item)) {
+                return true;
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+    }
 
-	@Override
-	public synchronized boolean addWall(Wall wall) throws IllegalStateException {
-		if (this.isCollidableAddable(wall, walls)) {
-			walls.add(wall);
-			return true;
-		}
-		return false;
-	}
+    private synchronized void addThread(final Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.start();
+        threads.add(thread);
+    }
 
-	@Override
-	public synchronized List<BodyPart> getBodyParts() {
-		return new ArrayList<BodyPart>(bodyParts);
-	}
+    @Override
+    public final synchronized int getWidth() {
+        return width;
+    }
 
-	@Override
-	public synchronized boolean addBodyPart(BodyPart bodyPart) throws IllegalStateException {
-		if (this.isCollidableAddable(bodyPart, bodyParts)) {
-			bodyParts.add(bodyPart);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public final synchronized int getHeight() {
+        return height;
+    }
 
-	@Override
-	public synchronized boolean removeBodyPart(BodyPart bodyPart) {
-		return bodyParts.remove(bodyPart);
-	}
+    @Override
+    public final synchronized List<Item> getItems() {
+        return new ArrayList<Item>(items);
+    }
 
-	@Override
-	public synchronized List<Snake> getSnakes() {
-		return new ArrayList<Snake>(snakes);
-	}
+    @Override
+    public final synchronized boolean removeItem(final Item item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+        if (items.remove(item)) {
+            removedItems.add(item);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public synchronized boolean addSnake(Snake snake) {
-		if (snakes.contains(snake)) {
-			return false;
-		}
-		return snakes.add(snake);
-	}
+    @Override
+    public final synchronized boolean addItem(final Item item) throws IllegalStateException {
+        if (this.isCollidableAddable(item, items)) {
+            items.add(item);
+            if (begun) {
+                addThread(item);
+            }
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public Snake removeSnake(int i) {
-		return snakes.remove(i);
-	}
+    @Override
+    public final synchronized List<Collidable> getCell(final Point point) {
+        if (point == null) {
+            throw new NullPointerException();
+        }
+        if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
+            throw new IllegalArgumentException();
+        }
+        List<Collidable> cellList = new ArrayList<Collidable>();
+        items.stream().filter(i -> i.getPoint().equals(point)).forEach(Item -> cellList.add(Item));
+        walls.stream().filter(i -> i.getPoint().equals(point)).forEach(Wall -> cellList.add(Wall));
+        bodyParts.stream().filter(i -> i.getPoint().equals(point)).forEach(BodyPart -> cellList.add(BodyPart));
+        return cellList;
+    }
+
+    @Override
+    public final synchronized void begin() {
+        for (Snake snake : snakes) {
+            addThread(snake);
+        }
+
+        for (Item item : items) {
+            addThread(item);
+        }
+
+        begun = true;
+    }
+
+    @Override
+    public final synchronized List<Item> getEliminatedItems() {
+        List<Item> returnedList = new ArrayList<Item>(removedItems);
+        removedItems.clear();
+        return returnedList;
+    }
+
+    @Override
+    public final synchronized List<Wall> getWalls() {
+        return new ArrayList<Wall>(walls);
+    }
+
+    @Override
+    public final synchronized boolean addWall(final Wall wall) throws IllegalStateException {
+        if (this.isCollidableAddable(wall, walls)) {
+            walls.add(wall);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public final synchronized List<BodyPart> getBodyParts() {
+        return new ArrayList<BodyPart>(bodyParts);
+    }
+
+    @Override
+    public final synchronized boolean addBodyPart(final BodyPart bodyPart) throws IllegalStateException {
+        if (this.isCollidableAddable(bodyPart, bodyParts)) {
+            bodyParts.add(bodyPart);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public final synchronized boolean removeBodyPart(final BodyPart bodyPart) {
+        return bodyParts.remove(bodyPart);
+    }
+
+    @Override
+    public final synchronized List<Snake> getSnakes() {
+        return new ArrayList<Snake>(snakes);
+    }
+
+    @Override
+    public final synchronized boolean addSnake(final Snake snake) {
+        if (snakes.contains(snake)) {
+            return false;
+        }
+        return snakes.add(snake);
+    }
+
+    @Override
+    public final Snake removeSnake(final int i) {
+        return snakes.remove(i);
+    }
 }
