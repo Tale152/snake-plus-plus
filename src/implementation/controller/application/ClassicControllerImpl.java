@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import design.controller.application.ClassicController;
+import design.controller.game.GameController;
 import design.controller.game.GameLoader;
 import design.model.game.Field;
 import design.model.game.ItemRule;
@@ -242,7 +243,9 @@ public class ClassicControllerImpl implements ClassicController {
 		Main.mediaPlayer = new MediaPlayer(media);
 		Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 		Main.mediaPlayer.play();
-		new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel());
+		GameController gameController = 
+				new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel()).getGameController();
+		
 	}
 
 	@Override

@@ -53,6 +53,7 @@ public class GameViewImpl implements GameView {
 	private Font playerFont;
 	
 	private final AnimationTimer animationTimer;
+	private final GameController gameController;
 	
     public GameViewImpl(Scene scene, String resourcesPath, GameModel gameModel) throws FileNotFoundException, IOException {
     	List<String> playerNames = new ArrayList<>();
@@ -65,7 +66,7 @@ public class GameViewImpl implements GameView {
 		field = new GameFieldImpl(playerNames.size(), loader);
 		root = initRoot(scene, playerNames.size(), gameModel.getField().getWidth(), gameModel.getField().getHeight());
     	animationTimer = initAnimationTimer(playerNames.size());
-    	initGameController(scene, gameModel);
+    	gameController = initGameController(scene, gameModel);
     	setWidthProperties(playerNames.size());
     	setHeightProperies();
 	}
@@ -145,13 +146,14 @@ public class GameViewImpl implements GameView {
 				root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
 	}
     
-    private void initGameController(Scene scene, GameModel gameModel) throws IOException {
+    private GameController initGameController(Scene scene, GameModel gameModel) throws IOException {
     	GameController controller = new GameControllerImpl(gameModel, this, loader);
     	scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
     		controller.playerInput(new InputEventFX(key));
     	});
     	Thread t  = new Thread(controller);
     	t.start();
+    	return controller;
     }
 	
 	private void drawBg(GraphicsContext gc, Canvas canvas, Image bg) {
@@ -230,6 +232,11 @@ public class GameViewImpl implements GameView {
 			}
 		}
 		return percentage;
+	}
+
+	@Override
+	public GameController getGameController() {
+		return gameController;
 	}
 
 }

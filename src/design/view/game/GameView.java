@@ -1,5 +1,7 @@
 package design.view.game;
 
+import design.controller.game.GameController;
+
 public interface GameView {
 
 	public GameHud getHUD();
@@ -9,5 +11,7 @@ public interface GameView {
 	public void startRendering();
 	
 	public void stopRendering();
+	
+	public GameController getGameController();
 	
 }
