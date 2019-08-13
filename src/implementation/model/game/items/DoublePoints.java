@@ -40,8 +40,8 @@ public final class DoublePoints extends EffectAbstract {
     }
 
     @Override
-    protected void behaviorOnLastingEffectEnd(Snake snake) {
+    protected void behaviorOnLastingEffectEnd(final Snake snake) {
         snake.getPlayer().applyScoreMultiplier(snake.getPlayer().getScoreMultiplier() / MULTIPLIER);
     }
-    
+
 }

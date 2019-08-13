@@ -4,30 +4,39 @@ import java.util.Optional;
 import design.model.game.Field;
 import design.model.game.Snake;
 
-public class GhostMode extends EffectAbstract{
+/**
+ * Instant effect: nothing.<p>
+ * Lasting effect: makes snake intangible.
+ * @author Alessandro Talmi
+ */
+public class GhostMode extends EffectAbstract {
 
-	public GhostMode(Optional<Long> dEffectDuration) {
-		super(dEffectDuration);
-	}
+    /**
+     * @param dEffectDuration how long this effect's lasting effect will last,
+     * empty if no effect duration
+     */
+    public GhostMode(final Optional<Long> dEffectDuration) {
+        super(dEffectDuration);
+    }
 
-	@Override
-	public void instantaneousEffect(Snake target) {
-		//does nothing
-	}
+    @Override
+    public void instantaneousEffect(final Snake target) {
+        //does nothing
+    }
 
-	@Override
-	public void expirationEffect(Field field) {
-		//does nothing
-	}
+    @Override
+    public void expirationEffect(final Field field) {
+        //does nothing
+    }
 
-	@Override
-	protected void behaviorOnLastingEffectStart(Snake snake) {
-		snake.getProperties().getCollisionProperty().setIntangibility(true);
-	}
+    @Override
+    protected final void behaviorOnLastingEffectStart(final Snake snake) {
+        snake.getProperties().getCollisionProperty().setIntangibility(true);
+    }
 
-	@Override
-	protected void behaviorOnLastingEffectEnd(Snake snake) {
-		snake.getProperties().getCollisionProperty().setIntangibility(false);
-	}
-	
+    @Override
+    protected final void behaviorOnLastingEffectEnd(final Snake snake) {
+        snake.getProperties().getCollisionProperty().setIntangibility(false);
+    }
+
 }
