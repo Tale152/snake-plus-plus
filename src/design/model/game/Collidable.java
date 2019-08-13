@@ -16,12 +16,12 @@ public interface Collidable {
     /**
     * Specifies what happens when a snake collides with this collidable.
     * @param collider the snake that collides with this collidable
-    * @throws NoSuchMethodException la
-    * @throws SecurityException la
-    * @throws InstantiationException la
-    * @throws IllegalAccessException la
-    * @throws IllegalArgumentException la
-    * @throws InvocationTargetException la
+    * @throws NoSuchMethodException if not valid Effect class inside
+    * @throws SecurityException if not valid Effect class inside
+    * @throws InstantiationException if not valid Effect class inside
+    * @throws IllegalAccessException if not valid Effect class inside
+    * @throws IllegalArgumentException if not valid Effect class inside
+    * @throws InvocationTargetException if not valid Effect class inside
     */
     void onCollision(Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
