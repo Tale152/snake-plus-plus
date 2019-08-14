@@ -11,6 +11,7 @@ import java.util.Optional;
  * @author Nicola Orlando
  */
 public interface EventTranslator {
+
 /**
  * Sets an action to be performed when the corresponding input is received.
  * @param e The physical input event.
@@ -62,6 +63,5 @@ public interface EventTranslator {
  * @param e The input received.
  * @return The action to be performed.
  */
-    Optional<Action> translateInput(InputEvent e);
 
 }

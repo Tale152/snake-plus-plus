@@ -1,0 +1,3 @@
+When snake eats a slug, his speed will be decreased until the effect ends. 
+If you pick up more of them, the speed is going to be decreased more, and more, and more...
+When the effect ends snake will have the normal speed again. 

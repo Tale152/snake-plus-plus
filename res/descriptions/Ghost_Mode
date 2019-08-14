@@ -1,0 +1,3 @@
+When snake collides with the ghost mode item, he is going to be like an actual ghost until the effect ends. 
+He can not eat anything, he can not collide with walls, with his own body and with other snake's body.
+A ghost!
