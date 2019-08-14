@@ -4,10 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface ClassicController {
-	public void selectPrev() throws FileNotFoundException, IOException;
-	public void selectNext() throws FileNotFoundException, IOException;
-	public void removePlayer();
-	public void addPlayer();
-	public void startSelectedLevel() throws IOException;
-	public void setSkinPackPath(String path);
+    void selectPrev() throws FileNotFoundException, IOException;
+    void selectNext() throws FileNotFoundException, IOException;
+    void removePlayer();
+    void addPlayer();
+    void startSelectedLevel() throws IOException;
+    void setSkinPackPath(String path);
 }

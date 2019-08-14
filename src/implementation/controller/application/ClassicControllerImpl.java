@@ -73,7 +73,7 @@ public class ClassicControllerImpl implements ClassicController {
     private HBox levelButtons;
     @FXML
     private Text playersText;
-    
+
     private static MediaPlayer mediaPlayer;
 
     public ClassicControllerImpl() throws IOException {
