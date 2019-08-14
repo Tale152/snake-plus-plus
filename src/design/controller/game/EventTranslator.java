@@ -63,5 +63,5 @@ public interface EventTranslator {
  * @param e The input received.
  * @return The action to be performed.
  */
-
+    Optional<Action> translateInput(InputEvent e);
 }

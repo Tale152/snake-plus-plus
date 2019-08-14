@@ -8,32 +8,7 @@ package design.model.game;
  * @author Nicola Orlando
  *
  */
-public interface Player {
 
-/**
- * @return the player number, which can be player1, player2...
- */
-    PlayerNumber getPlayerNumber();
-
-/**
- * @return the player name
- */
-    String getName();
-
-/**
- * @param score it is the number of points to add to the player score
- */
-    void addScore(int score);
-
-/**
- * @param score it is the number of point to subtract to the player score
- */
-=======
- * A set of properties regarding the player behind snake, this includes his name and score.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
- */
 public interface Player {
 
     /**

@@ -2,10 +2,10 @@ package design.view.game;
 
 public interface Background {
 
-    public Object getBackground();
+    Object getBackground();
 
-    public double getWidth();
+    double getWidth();
 
-    public double getHeight();
+    double getHeight();
 
 }

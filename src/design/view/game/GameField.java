@@ -4,27 +4,27 @@ import java.awt.Point;
 import java.util.*;
 
 public interface GameField {
-	
-	public Background getBackground();
-	
-	public Map<Point, Sprite> getItemSprites();
-	
-	public List<Sprite> getCell(Point point);
-	
-	public void addWallSprite(Point point, Sprite sprite);
-	
-	public Map<Point, Sprite> getWallSprites();
-	
-	public void addItemSprite(Point point, Sprite sprite);
-	
-	public void removeItemSprite(Point point, Sprite sprite);
-	
-	public Map<Point, List<Sprite>> getSnakeSprites(int playerNumber);
-	
-	public void initNewSnakeMap(int playerNumber);
-	
-	public void addBodyPart(int playerNumber, Point point, Sprite sprite);
-	
-	public void endNewSnakeMap(int playerNumber);
-	
+
+    Background getBackground();
+
+    Map<Point, Sprite> getItemSprites();
+
+    List<Sprite> getCell(Point point);
+
+    void addWallSprite(Point point, Sprite sprite);
+
+    Map<Point, Sprite> getWallSprites();
+
+    void addItemSprite(Point point, Sprite sprite);
+
+    void removeItemSprite(Point point, Sprite sprite);
+
+    Map<Point, List<Sprite>> getSnakeSprites(int playerNumber);
+
+    void initNewSnakeMap(int playerNumber);
+
+    void addBodyPart(int playerNumber, Point point, Sprite sprite);
+
+    void endNewSnakeMap(int playerNumber);
+
 }
