@@ -79,12 +79,13 @@ public class DescriptionControllerImpl implements Initializable {
                 
                 try {
                   FileInputStream inputStream = new FileInputStream(PATH_ITEMS + m.getText().replace(" ", "") + ".png");
-                  Image item = new Image(inputStream);
+                  Image item = new Image(inputStream, 100, 100, true, true);
                   ImageView itemImage = new ImageView(item);
+                  itemImage.setPreserveRatio(true);
                   imageSpot.getChildren().clear();
                   imageSpot.getChildren().add(itemImage);
-                  itemImage.setPreserveRatio(true);
-                 
+                  itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
+                  itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
      
 
                 } catch (FileNotFoundException e1) {
