@@ -8,60 +8,74 @@ import design.model.game.ItemRule;
 import design.model.game.LossConditions;
 import design.model.game.WinConditions;
 
+/**
+ * @see GameRules
+ * @author Alessandro Talmi
+ */
 public class GameRulesImpl implements GameRules {
 
-	private final WinConditions win;
-	private final LossConditions loss;
-	private final List<ItemRule> itemRules;
-	private final long initialSnakeDelta;
-	private final double initialSnakeMultiplier;
-	private final long initialTime;
-	private final boolean timeGoingForward;
-	
-	public GameRulesImpl(WinConditions win, LossConditions loss, List<ItemRule> itemRules, 
-			long initialSnakeDelta, double initialSnakeMultiplier, long initialTime, boolean timeGoingForward) {
-		this.win = win;
-		this.loss = loss;
-		this.itemRules = itemRules;
-		this.initialSnakeDelta = initialSnakeDelta;
-		this.initialSnakeMultiplier = initialSnakeMultiplier;
-		this.initialTime = initialTime;
-		this.timeGoingForward = timeGoingForward;
-	}
-	
-	@Override
-	public WinConditions getWinConditions() {
-		return win;
-	}
+    private final WinConditions win;
+    private final LossConditions loss;
+    private final List<ItemRule> itemRules;
+    private final long initialSnakeDelta;
+    private final double initialSnakeMultiplier;
+    private final long initialTime;
+    private final boolean timeGoingForward;
 
-	@Override
-	public LossConditions getLossConditions() {
-		return loss;
-	}
+    /**
+     * @param win this game rule's win conditions
+     * @param loss this game rules's loss conditions
+     * @param itemRules this game rules's list of item rules
+     * @param initialSnakeDelta how much initial snake delta (milliseconds) will be
+     * @param initialSnakeMultiplier mow much initial snake score multiplier will be
+     * @param initialTime starting game time (milliseconds)
+     * @param timeGoingForward whether or not time goes forward or backward
+     */
+    public GameRulesImpl(final WinConditions win, final LossConditions loss, final List<ItemRule> itemRules, 
+            final long initialSnakeDelta, final double initialSnakeMultiplier, 
+            final long initialTime, final boolean timeGoingForward) {
+        this.win = win;
+        this.loss = loss;
+        this.itemRules = itemRules;
+        this.initialSnakeDelta = initialSnakeDelta;
+        this.initialSnakeMultiplier = initialSnakeMultiplier;
+        this.initialTime = initialTime;
+        this.timeGoingForward = timeGoingForward;
+    }
 
-	@Override
-	public List<ItemRule> getItemRules() {
-		return new ArrayList<>(itemRules);
-	}
+    @Override
+    public final WinConditions getWinConditions() {
+        return win;
+    }
 
-	@Override
-	public long getInitialSnakeDelta() {
-		return initialSnakeDelta;
-	}
+    @Override
+    public final LossConditions getLossConditions() {
+        return loss;
+    }
 
-	@Override
-	public double getInitialSnakeMultiplier() {
-		return initialSnakeMultiplier;
-	}
+    @Override
+    public final List<ItemRule> getItemRules() {
+        return new ArrayList<>(itemRules);
+    }
 
-	@Override
-	public long getInitialTime() {
-		return initialTime;
-	}
-	
-	@Override
-	public boolean isTimeGoingForward() {
-		return timeGoingForward;
-	}
+    @Override
+    public final long getInitialSnakeDelta() {
+        return initialSnakeDelta;
+    }
+
+    @Override
+    public final double getInitialSnakeMultiplier() {
+        return initialSnakeMultiplier;
+    }
+
+    @Override
+    public final long getInitialTime() {
+        return initialTime;
+    }
+
+    @Override
+    public final boolean isTimeGoingForward() {
+        return timeGoingForward;
+    }
 
 }

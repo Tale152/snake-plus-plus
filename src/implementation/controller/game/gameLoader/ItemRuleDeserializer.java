@@ -18,30 +18,27 @@ import implementation.model.game.gameRules.ItemRuleImpl;
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")
 class ItemRuleDeserializer extends StdDeserializer<ItemRule> {
-	
-	protected ItemRuleDeserializer() {
-		this(null);
-	}
 
-	protected ItemRuleDeserializer(Class<?> vc) {
-		super(vc);
-		// TODO Auto-generated constructor stub
-	}
+    protected ItemRuleDeserializer() {
+        this(null);
+    }
 
-	@Override
-	public ItemRule deserialize(JsonParser parser, DeserializationContext deserializer)
-			throws IOException, JsonProcessingException {
-		JsonNode node = deserializer.readValue(parser, JsonNode.class);
-		ObjectMapper om = new ObjectMapper();
-		
-		Class<? extends Effect> effect = om.readValue(node.get("effectClass").traverse(), new TypeReference<Class<? extends Effect>>() {});
-		long spawnDelta = node.get("spawnDelta").asLong();
-		double spawnChance = node.get("spawnChance").asDouble();
-		int maximum = node.get("max").asInt();
-		Optional<Long> itemDuration = node.get("itemDuration").isIntegralNumber() ? Optional.of(node.get("itemDuration").asLong()) : Optional.empty();
-		Optional<Long> effectDuration = node.get("effectDuration").isIntegralNumber() ? Optional.of(node.get("effectDuration").asLong()) : Optional.empty();
-		
-		return new ItemRuleImpl(effect, spawnDelta, spawnChance, maximum, itemDuration, effectDuration);
-	}
+    protected ItemRuleDeserializer(final Class<?> vc) {
+        super(vc);
+    }
+
+    @Override
+    public ItemRule deserialize(final JsonParser parser, final DeserializationContext deserializer)
+            throws IOException, JsonProcessingException {
+        JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        ObjectMapper om = new ObjectMapper();
+        Class<? extends Effect> effect = om.readValue(node.get("effectClass").traverse(), new TypeReference<Class<? extends Effect>>() { });
+        long spawnDelta = node.get("spawnDelta").asLong();
+        double spawnChance = node.get("spawnChance").asDouble();
+        int maximum = node.get("max").asInt();
+        Optional<Long> itemDuration = node.get("itemDuration").isIntegralNumber() ? Optional.of(node.get("itemDuration").asLong()) : Optional.empty();
+        Optional<Long> effectDuration = node.get("effectDuration").isIntegralNumber() ? Optional.of(node.get("effectDuration").asLong()) : Optional.empty();
+        return new ItemRuleImpl(effect, spawnDelta, spawnChance, maximum, itemDuration, effectDuration);
+    }
 
 }

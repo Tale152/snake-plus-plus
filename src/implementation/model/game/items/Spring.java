@@ -5,30 +5,39 @@ import java.util.Optional;
 import design.model.game.Field;
 import design.model.game.Snake;
 
-public class Spring extends EffectAbstract{
+/**
+ * Instant effect: reverses snake. <p>
+ * Lasting effect: reverses snake every time it collides with a wall.
+ * @author Alessandro Talmi
+ */
+public class Spring extends EffectAbstract {
 
-	public Spring(Optional<Long> dEffectDuration) {
-		super(dEffectDuration);
-	}
+    /**
+     * @param dEffectDuration how long this effect's lasting effect will last,
+     * empty if no effect duration
+     */
+    public Spring(final Optional<Long> dEffectDuration) {
+        super(dEffectDuration);
+    }
 
-	@Override
-	public void instantaneousEffect(Snake target) {
-		target.reverse();
-	}
+    @Override
+    public final void instantaneousEffect(final Snake target) {
+        target.reverse();
+    }
 
-	@Override
-	public void expirationEffect(Field field) {
-		//does nothing
-	}
+    @Override
+    public void expirationEffect(final Field field) {
+        //does nothing
+    }
 
-	@Override
-	protected void behaviorOnLastingEffectStart(Snake snake) {
-		snake.getProperties().getCollisionProperty().setSpring(true);
-	}
+    @Override
+    protected final void behaviorOnLastingEffectStart(final Snake snake) {
+        snake.getProperties().getCollisionProperty().setSpring(true);
+    }
 
-	@Override
-	protected void behaviorOnLastingEffectEnd(Snake snake) {
-		snake.getProperties().getCollisionProperty().setSpring(false);
-	}
+    @Override
+    protected final void behaviorOnLastingEffectEnd(final Snake snake) {
+        snake.getProperties().getCollisionProperty().setSpring(false);
+    }
 
 }

@@ -4,27 +4,35 @@ import design.model.game.Field;
 import design.model.game.GameModel;
 import design.model.game.GameRules;
 
+/**
+ * @see GameModel
+ * @author Alessandro Talmi
+ */
 public class GameModelImpl implements GameModel {
 
-	private final Field field;
-	private final GameRules gameRules;
-	
-	public GameModelImpl(Field field, GameRules gameRules) {
-		if (field == null || gameRules == null) {
-			throw new NullPointerException();
-		}
-		this.field = field;
-		this.gameRules = gameRules;
-	}
-	
-	@Override
-	public Field getField() {
-		return field;
-	}
+    private final Field field;
+    private final GameRules gameRules;
 
-	@Override
-	public GameRules getGameRules() {
-		return gameRules;
-	}
+    /**
+     * @param field were the game will play
+     * @param gameRules to apply to the game
+     */
+    public GameModelImpl(final Field field, final GameRules gameRules) {
+        if (field == null || gameRules == null) {
+            throw new NullPointerException();
+        }
+        this.field = field;
+        this.gameRules = gameRules;
+    }
+
+    @Override
+    public final Field getField() {
+        return field;
+    }
+
+    @Override
+    public final GameRules getGameRules() {
+        return gameRules;
+    }
 
 }

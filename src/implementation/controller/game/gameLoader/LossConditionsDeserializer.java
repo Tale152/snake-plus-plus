@@ -15,26 +15,22 @@ import implementation.model.game.gameRules.LossConditionsImpl;
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")
 class LossConditionsDeserializer extends StdDeserializer<LossConditions> {
-	
-	protected LossConditionsDeserializer() {
-		this(null);
-	}
+    protected LossConditionsDeserializer() {
+        this(null);
+    }
 
-	protected LossConditionsDeserializer(Class<LossConditions> vc) {
-		super(vc);
-		// TODO Auto-generated constructor stub
-	}
+    protected LossConditionsDeserializer(final Class<LossConditions> vc) {
+        super(vc);
+    }
 
-	@Override
-	public LossConditions deserialize(JsonParser parser, DeserializationContext deserializer)
-			throws IOException, JsonProcessingException {
-		JsonNode node = deserializer.readValue(parser, JsonNode.class);
-		
-		boolean checkAllSnakesDied = node.get("checkAllSnakesDied").asBoolean();
-		boolean timeForward = node.get("timeForward").asBoolean();
-		Optional<Long> gameTime = node.get("gameTime").isIntegralNumber() ? Optional.of(node.get("gameTime").asLong()) : Optional.empty();
-		
-		return new LossConditionsImpl(checkAllSnakesDied, gameTime, timeForward);
-	}
+    @Override
+    public LossConditions deserialize(final JsonParser parser, final DeserializationContext deserializer)
+            throws IOException, JsonProcessingException {
+        JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        boolean checkAllSnakesDied = node.get("checkAllSnakesDied").asBoolean();
+        boolean timeForward = node.get("timeForward").asBoolean();
+        Optional<Long> gameTime = node.get("gameTime").isIntegralNumber() ? Optional.of(node.get("gameTime").asLong()) : Optional.empty();
+        return new LossConditionsImpl(checkAllSnakesDied, gameTime, timeForward);
+    }
 
 }

@@ -1,40 +1,53 @@
 package implementation.view.game;
 
-import java.util.*;
-import design.view.game.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GameHudImpl implements GameHud{
+import design.view.game.Background;
+import design.view.game.GameHud;
+import design.view.game.PlayerHud;
+import design.view.game.ResourcesLoader;
 
-	private String time;
-	private final List<PlayerHud> playerHUDs = new ArrayList<>();
-	private final Background hudBg;
-	
-	public GameHudImpl(int nPlayer, ResourcesLoader loader) {
-		hudBg = loader.getHudBackground();
-		time = "";
-		for (int i = 0; i < nPlayer; ++i) {
-			playerHUDs.add(new PlayerHudImpl());
-		}
-	}
+/**
+ * @see GameHud
+ * @author Alessandro Talmi
+ */
+public class GameHudImpl implements GameHud {
 
-	@Override
-	public void setTime(String time) {
-		this.time = time;
-	}
+    private String time;
+    private final List<PlayerHud> playerHUDs = new ArrayList<>();
+    private final Background hudBg;
 
-	@Override
-	public String getTime() {
-		return time;
-	}
+    /**
+     * @param nPlayer that will be displayed
+     * @param loader used to get all graphical resources needed to draw
+     */
+    public GameHudImpl(final int nPlayer, final ResourcesLoader loader) {
+        hudBg = loader.getHudBackground();
+        time = "";
+        for (int i = 0; i < nPlayer; ++i) {
+            playerHUDs.add(new PlayerHudImpl());
+        }
+    }
 
-	@Override
-	public Background getHudBackground() {
-		return hudBg;
-	}
+    @Override
+    public final void setTime(final String time) {
+        this.time = time;
+    }
 
-	@Override
-	public List<PlayerHud> getPlayerHUDs() {
-		return new ArrayList<>(playerHUDs);
-	}
+    @Override
+    public final String getTime() {
+        return time;
+    }
+
+    @Override
+    public final Background getHudBackground() {
+        return hudBg;
+    }
+
+    @Override
+    public final List<PlayerHud> getPlayerHUDs() {
+        return new ArrayList<>(playerHUDs);
+    }
 
 }
