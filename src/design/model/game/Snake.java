@@ -4,24 +4,24 @@ import java.util.List;
 
 public interface Snake extends Runnable{
 
-	public Player getPlayer();
-	
-	public Properties getProperties();
-	
-	public void addEffect(Effect effect);
-	
-	public boolean removeEffect(Effect effect);
-	
-	public List<Effect> getEffects();
-	
-	public boolean isAlive();
-	
-	public void kill();
-	
-	public void reverse();
-	
-	public List<BodyPart> getBodyParts();
-	
-	public boolean hasMoved();
-	
+    Player getPlayer();
+
+    Properties getProperties();
+
+    void addEffect(Effect effect);
+
+    boolean removeEffect(Effect effect);
+
+    List<Effect> getEffects();
+
+    boolean isAlive();
+
+    void kill();
+
+    void reverse();
+
+    List<BodyPart> getBodyParts();
+
+    boolean hasMoved();
+
 }
