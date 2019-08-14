@@ -1,21 +1,21 @@
 package design.model.game;
 
 public interface DirectionProperty {
-	
-	public Direction getDirection();
-	
-	public boolean setDirection(Direction direction);
-	
-	public void setReverseDirection(boolean reverse);
-	
-	public boolean getReverseDirection();
-	
-	public boolean forceDirection(Direction direction);
-	
-	public void allowChangeDirection();
-	
-	public boolean hasNextValidDirection();
-	
-	public Direction getNextValidDirection();
-	
+
+    Direction getDirection();
+
+    boolean setDirection(Direction direction);
+
+    void setReverseDirection(boolean reverse);
+
+    boolean getReverseDirection();
+
+    boolean forceDirection(Direction direction);
+
+    void allowChangeDirection();
+
+    boolean hasNextValidDirection();
+
+    public Direction getNextValidDirection();
+
 }

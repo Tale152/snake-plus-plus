@@ -2,18 +2,18 @@ package design.model.game;
 
 public interface Player {
 
-	public PlayerNumber getPlayerNumber();
-	
-	public String getName();
-	
-	public void addScore(int score);
-	
-	public void reduceScore(int score);
-	
-	public void applyScoreMultiplier(double mult);
-	
-	public double getScoreMultiplier();
-	
-	public int getScore();
-	
+    PlayerNumber getPlayerNumber();
+
+    String getName();
+
+    void addScore(int score);
+
+    void reduceScore(int score);
+
+    void applyScoreMultiplier(double mult);
+
+    double getScoreMultiplier();
+
+    int getScore();
+
 }
