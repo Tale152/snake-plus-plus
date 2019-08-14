@@ -1,0 +1,3 @@
+When snake collide with the beer, his direction is be changed in a random one.
+If the beer has a lasting effect, the snake's controls are reversed and you won't be able not to collide with something else. 
+You should leave these bad habits, if you get drunk while you play, you will die soon.  

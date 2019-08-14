@@ -1,0 +1,2 @@
+When snake collides with the score earning item, you will get some points that are going to be added to your score. 
+If you pick up more of then in a short amount of time, the points added will be more. 
