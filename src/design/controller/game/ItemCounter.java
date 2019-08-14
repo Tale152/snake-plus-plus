@@ -3,7 +3,7 @@ package design.controller.game;
 import java.util.NoSuchElementException;
 import design.model.game.Effect;
 
-interface ItemCounter {
+public interface ItemCounter {
 
     boolean increase(Class<? extends Effect> effect) throws NoSuchElementException;
 

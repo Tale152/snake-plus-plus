@@ -10,7 +10,7 @@ import java.util.Optional;
  * @author Elisa Tronetti
  * @author Nicola Orlando
  */
-interface EventTranslator {
+public interface EventTranslator {
     /**
      * Sets an action to be performed when the corresponding input is received.
      * @param e The physical input event.
