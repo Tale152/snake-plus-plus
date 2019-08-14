@@ -1,5 +1,2 @@
-When snake collide with a spring, his body and 
-direction will be reversed. 
-If the spring has a lasting effect, when snake
-collide with a wall, he bounces and proceed to
-to opposite direction. 
+When snake collide with a spring, his body and direction will be reversed. 
+If the spring has a lasting effect, when snake collide with a wall, he bounces and proceed to opposite direction. 
