@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox fx:controller="implementation.controller.application.GameEndControllerImpl" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Label fx:id="title" text="You won/lost! (how?)" />
+		<Label fx:id="reason" text="You did/didn't the thing! (Again, how?)" />
+		<Button onAction="#goToMainMenu" text="Return to main menu" />
+	</children>
+</VBox>
+

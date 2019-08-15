@@ -4,11 +4,16 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import design.controller.application.GameEndController;
+import design.controller.application.GameEndReason;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
 import implementation.model.game.items.*;
+import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
+import javafx.fxml.FXMLLoader;
 
 public class GameControllerImpl implements GameController {
 	
@@ -141,6 +146,32 @@ public class GameControllerImpl implements GameController {
 			waitAndUpdateTime();
 		}
 		this.gameView.stopRendering();
+		FXMLLoader endGame = new FXMLLoader(getClass().getResource("/implementation/view/application/GameEndView.fxml"));
+		try {
+			Main.getScene().setRoot(endGame.load());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		GameEndController controller = endGame.getController();
+		controller.setEndReason(getGameEndReason());
+		
+	}
+	
+	private GameEndReason getGameEndReason() {
+		List<Snake> snakes = this.gameModel.getField().getSnakes();
+		if (win.checkSnakeLength(snakes)) {
+			return GameEndReason.WON_LENGTH;
+		} else if (win.checkTime(gameTime)) {
+			return GameEndReason.WON_TIME;
+		} else if (win.checkScore(snakes)) {
+			return GameEndReason.WON_SCORE;
+		} else if (loss.checkSnakes(snakes)) {
+			return GameEndReason.LOST_DEATH;
+		} else if (loss.checkTime(gameTime)) {
+			return GameEndReason.LOST_TIME;
+		}
+		return GameEndReason.ERROR;
 	}
 	
 	@Override
