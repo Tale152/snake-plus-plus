@@ -5,7 +5,7 @@ import java.io.IOException;
 import design.controller.application.GameEndController;
 import design.controller.application.GameEndReason;
 import implementation.view.application.Main;
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -35,8 +35,10 @@ public class GameEndControllerImpl implements GameEndController {
 
 	@Override
 	public void setEndReason(GameEndReason endReason) {
-		title.setText(reasons[endReason.ordinal()][0]);
-		reason.setText(reasons[endReason.ordinal()][1]);
+		Platform.runLater(() -> {
+			title.setText(reasons[endReason.ordinal()][0]);
+			reason.setText(reasons[endReason.ordinal()][1]);
+		});
 	}
 	
 	public void goToMainMenu() {
