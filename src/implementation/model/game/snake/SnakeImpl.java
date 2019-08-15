@@ -334,7 +334,7 @@ public class SnakeImpl implements Snake{
 	//snake have to wait to move until it is his time
 	private synchronized void waitToMove() throws InterruptedException {
 		long startingTime = System.currentTimeMillis();		
-		long timeToWait = (long)((properties.getSpeedProperty().getDeltaT() + this.properties.getSpeedProperty().getLenghtSpeedValue()) * 
+		long timeToWait = (long)((properties.getSpeedProperty().getDeltaT() + this.properties.getSpeedProperty().getLengthSpeedValue()) * 
 				properties.getSpeedProperty().getSpeedMultiplier());	
 		//timeToWait must be a value between max and min, snake can not go faster or slower
 		if (timeToWait > MAXTIMETOWAIT) {
@@ -455,7 +455,7 @@ public class SnakeImpl implements Snake{
 		} else {
 			val = this.getProperties().getLengthProperty().getLength() * SPEEDWITHLENGHTMUL;
 		}
-		this.properties.getSpeedProperty().applyLenghtSpeedValue(val);
+		this.properties.getSpeedProperty().applyLengthSpeedValue(val);
 		return val;
 	}
 

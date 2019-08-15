@@ -16,11 +16,11 @@ import implementation.model.game.gameRules.WinConditionsImpl;
 @SuppressWarnings("serial")
 class WinConditionsDeserializer extends StdDeserializer<WinConditions> {
 
-    public WinConditionsDeserializer() {
+    WinConditionsDeserializer() {
         this(null);
     }
 
-    public WinConditionsDeserializer(final Class<WinConditions> vc) {
+    WinConditionsDeserializer(final Class<WinConditions> vc) {
         super(vc);
     }
 
