@@ -4,13 +4,20 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import design.controller.application.GameEndController;
+import design.controller.application.GameEndReason;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
+import implementation.controller.application.ClassicControllerImpl;
 import implementation.model.game.items.*;
+import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
+import javafx.fxml.FXMLLoader;
 
 public class GameControllerImpl implements GameController {
+
 
     private static final long CONTROLLER_REFRESH_RATE = 1000 / 60;
     private static final long MINIMUM_SPAWN_DISTANCE = 2;

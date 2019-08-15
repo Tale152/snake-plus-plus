@@ -1,8 +1,6 @@
 package implementation.view.application;
 import java.awt.Toolkit;
-import java.io.File;
 
-import implementation.controller.Path;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +10,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 /**
@@ -23,9 +19,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private static final double SCREEN_PERCENTAGE = 0.75;
-    private static final String MAIN_MENU_THEME_PATH = Path.THEMES + "Main_menu_theme.mp3";
     private static Scene scene = new Scene(new BorderPane());
-    private static MediaPlayer mediaPlayer;
 
     /**
      * Main method, launches it's thread.
@@ -40,19 +34,9 @@ public class Main extends Application {
     public static Scene getScene() {
         return scene;
     }
-    /**
-     * @return the javafx's MediaPlayer
-     */
-    public static MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
-    }
 
     @Override
     public final void start(final Stage primaryStage) throws Exception {
-        Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
-        mediaPlayer = new MediaPlayer(media); 
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();
         primaryStage.setOnCloseRequest(e -> {
             System.exit(0); });
         try {

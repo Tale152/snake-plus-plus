@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 import design.controller.application.ClassicController;
 import design.controller.application.MainMenuController;
-
+import implementation.controller.Path;
 import implementation.view.application.Main;
 
 import javafx.beans.value.ChangeListener;
@@ -25,6 +25,8 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * @see MainMenuController
@@ -43,6 +45,8 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 
     private String skinPackPath;
     private final Map<String, String> itemButtonMap = new HashMap<>();
+    private static final String MAIN_MENU_THEME_PATH = Path.THEMES + "Main_menu_theme.mp3";
+    private static MediaPlayer mediaPlayer;
 
     /**
      * @author Alessandro Talmi
@@ -78,6 +82,10 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
                 changeFontSize(snakeppLabel, TEXT_PERCENTAGE);
             }
         });
+        Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
+        mediaPlayer = new MediaPlayer(media); 
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
 
     /**This method read all the directory in the current directory that are put in a map
@@ -127,5 +135,12 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
      */
     private void changeFontSize(final Labeled labeled, final double percentage) {
         labeled.setStyle(String.format("-fx-font-size: %dpx;", (int) (labeled.getHeight() * percentage)));
+    }
+
+    /**
+     * stop javafx's music.
+     */
+    public static final void stopMusic() {
+        mediaPlayer.stop();
     }
 }
