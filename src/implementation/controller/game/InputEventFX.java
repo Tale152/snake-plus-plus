@@ -7,53 +7,52 @@ import design.controller.game.InputEvent;
 import javafx.scene.input.KeyEvent;
 
 public class InputEventFX implements InputEvent {
-	
-	private final String key;
 
-	@Override
-	public DeviceType getDeviceType() {
-		return DeviceType.KEYBOARD;
-	}
+    private final String key;
 
-	@Override
-	public Optional<Long> getDeviceID() {
-		return Optional.empty();
-	}
+    @Override
+    public DeviceType getDeviceType() {
+        return DeviceType.KEYBOARD;
+    }
 
-	@Override
-	public String getInput() {
-		return key;
-	}
-	
-	public int hashCode() {
-		//TODO: Return a proper hashcode
-		return getInput().hashCode();
-	}
+    @Override
+    public Optional<Long> getDeviceID() {
+        return Optional.empty();
+    }
 
-	public boolean equals(InputEvent input) {
-		boolean isKeyEqual = input.getInput().contentEquals(getInput());
+    @Override
+    public String getInput() {
+        return key;
+    }
 
-		boolean isDeviceTypeEqual = input.getDeviceType().equals(getDeviceType());
+    public int hashCode() {
+        //TODO: Return a proper hashcode
+        return getInput().hashCode();
+    }
 
-		boolean isDeviceIdEqual = false;
-		if (getDeviceID().isPresent() && input.getDeviceID().isPresent()) {
-			isDeviceIdEqual = getDeviceID().get().equals(input.getDeviceID().get());
-		} else if (!getDeviceID().isPresent() && !input.getDeviceID().isPresent()) {
-			isDeviceIdEqual = true;
-		}
-		return  isKeyEqual && isDeviceIdEqual && isDeviceTypeEqual;
-	}
+    public boolean equals(final InputEvent input) {
+        boolean isKeyEqual = input.getInput().contentEquals(getInput());
+        boolean isDeviceTypeEqual = input.getDeviceType().equals(getDeviceType());
+        boolean isDeviceIdEqual = false;
+        if (getDeviceID().isPresent() && input.getDeviceID().isPresent()) {
+            isDeviceIdEqual = getDeviceID().get().equals(input.getDeviceID().get());
+        } else if (!getDeviceID().isPresent() && !input.getDeviceID().isPresent()) {
+            isDeviceIdEqual = true;
+        }
+        return  isKeyEqual && isDeviceIdEqual && isDeviceTypeEqual;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		return o.getClass().equals(this.getClass()) && this.equals((InputEvent) o);
-	}
+    @Override
+    public boolean equals(final Object o) {
+        return o.getClass().equals(this.getClass()) && this.equals((InputEvent) o);
+    }
 
-	public InputEventFX(KeyEvent e) {
-		this.key = e.getCode().toString();
-	}
+    public InputEventFX(final KeyEvent e) {
+        this.key = e.getCode().toString();
+    }
 
-	public InputEventFX(String k) {
-		this.key = k;
-	}
+    public InputEventFX(final String k) {
+        this.key = k;
+    }
+
 }

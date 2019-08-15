@@ -1,23 +1,30 @@
 package implementation.model.game.snake;
 
 import design.model.game.CollisionProperty;
+/**
+ * This class is part of the snake properties, here there are the method to use
+ * to set all the collision properties, like intangibility and invincibility.
+ * @author Elisa Tronetti
+ */
+public class CollisionPropertyImpl implements CollisionProperty {
 
-public class CollisionPropertyImpl implements CollisionProperty{
+    private boolean invincible;
+    private boolean intangible;
+    private boolean spring;
 
-	private boolean invincible;
-	private boolean intangible;
-	private boolean spring;
-	
-	public CollisionPropertyImpl() {
-		this.invincible = false;
-		this.intangible = false;
-		this.spring = false;
-	}
-	
-	@Override
-	public void setInvincibility(boolean inv) {
-		this.invincible = inv;	
-	}
+    /**
+     * At first the properties invincible, intangible and spring are not active.
+     */
+    public CollisionPropertyImpl() {
+        this.invincible = false;
+        this.intangible = false;
+        this.spring = false;
+    }
+
+    @Override
+    public void setInvincibility(final boolean inv) {
+        this.invincible = inv;
+    }
 
 	@Override
 	public boolean getInvincibility() {
