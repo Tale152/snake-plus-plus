@@ -10,6 +10,7 @@ import design.controller.application.GameEndReason;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
+import implementation.controller.application.ClassicControllerImpl;
 import implementation.model.game.items.*;
 import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
@@ -153,6 +154,7 @@ public class GameControllerImpl implements GameController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		ClassicControllerImpl.stopMusic();
 		GameEndController controller = endGame.getController();
 		controller.setEndReason(getGameEndReason());
 		

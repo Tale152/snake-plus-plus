@@ -218,11 +218,11 @@ public class ClassicControllerImpl implements ClassicController {
     @FXML
     @Override
     public final void startSelectedLevel() throws FileNotFoundException, IOException {
+        MainMenuControllerImpl.stopMusic();
         GameLoader gl = levels.get(selected).getValue();
         for (int i = players; i < levels.get(selected).getValue().getMaxPlayers(); i++) {
             gl.getGameModel().getField().removeSnake(players);
         }
-        Main.getMediaPlayer().stop();
         int nFile = new File(Path.THEMES).listFiles().length;
         Random randomGenerator = new Random();
         int randomInt = randomGenerator.nextInt(nFile - 1);
@@ -245,5 +245,12 @@ public class ClassicControllerImpl implements ClassicController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Stops music.
+     */
+    public static final void stopMusic() {
+        mediaPlayer.stop();
     }
 }
