@@ -22,39 +22,42 @@ public class CollisionPropertyImpl implements CollisionProperty {
     }
 
     @Override
-    public void setInvincibility(final boolean inv) {
+    public final void setInvincibility(final boolean inv) {
         this.invincible = inv;
     }
 
-	@Override
-	public boolean getInvincibility() {
-		return this.invincible;
-	}
+    @Override
+    public final boolean getInvincibility() {
+        return this.invincible;
+    }
 
-	@Override
-	public void setIntangibility(boolean intangibility) {
-		this.intangible = intangibility;
-	}
+    @Override
+    public final void setIntangibility(final boolean intangibility) {
+        this.intangible = intangibility;
+    }
 
-	@Override
-	public boolean getIntangibility() {
-		return this.intangible;
-	}
+    @Override
+    public final boolean getIntangibility() {
+        return this.intangible;
+    }
 
-	@Override
-	public void setSpring(boolean spring) {
-		this.spring = spring;
-	}
+    @Override
+    public final void setSpring(final boolean spring) {
+        this.spring = spring;
+    }
 
-	@Override
-	public boolean getSpring() {
-		return this.spring;
-	}
-	
-	public String toString() {
-		return "Invincibility: " + this.invincible + "\n"
-				+ "Intangibility: " + this.intangible + "\n"
-				+ "Spring: " + this.spring + "\n";
-	}
+    @Override
+    public final boolean getSpring() {
+        return this.spring;
+    }
+
+    /**
+     * @return a string with all the collision properties and if they are active or not.
+     */
+    public String toString() {
+        return "Invincibility: " + this.invincible + "\n"
+                + "Intangibility: " + this.intangible + "\n"
+                + "Spring: " + this.spring + "\n";
+    }
 
 }
