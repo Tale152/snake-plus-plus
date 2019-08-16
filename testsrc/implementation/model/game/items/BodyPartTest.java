@@ -34,22 +34,6 @@ public class BodyPartTest {
      */
     @Test
     public void testInitBodyPart() {
-        try {
-            bodyPart = new BodyPartImpl(pointZero, null);
-            fail("Body part's owner snake cannot be null");
-        } catch (NullPointerException e) {
-        } catch (Exception e) {
-            fail("wrong exception thrown");
-        }
-        try {
-            Field field = new FieldImpl(new Point(10, 10));
-            bodyPart = new BodyPartImpl(null, 
-                    SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field));
-            fail("Body part's point cannot ben null");
-        } catch (NullPointerException e) {
-        } catch (Exception e) {
-            fail("wrong exception thrown");
-        }
         Field field = new FieldImpl(new Point(10, 10));
         Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         bodyPart = new BodyPartImpl(pointZero, testSnake);

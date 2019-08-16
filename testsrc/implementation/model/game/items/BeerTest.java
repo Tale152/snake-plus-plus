@@ -20,6 +20,7 @@ import implementation.model.game.field.FieldImpl;
  * Test regarding Item holding Beer effect.
  * @see Item
  * @see Beer
+ * @see Effect
  * @author Alessandro Talmi
  */
 public class BeerTest {

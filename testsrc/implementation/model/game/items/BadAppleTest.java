@@ -17,6 +17,7 @@ import implementation.model.game.field.FieldImpl;
  * Test regarding Item holding BadApple effect.
  * @see Item
  * @see BadApple
+ * @see Effect
  * @author Alessandro Talmi
  */
 public class BadAppleTest {
