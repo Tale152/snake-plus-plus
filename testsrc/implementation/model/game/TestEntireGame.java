@@ -10,15 +10,37 @@ import implementation.model.game.gameRules.GameRulesTest;
 import implementation.model.game.gameRules.ItemRuleTest;
 import implementation.model.game.gameRules.LossConditionsTest;
 import implementation.model.game.gameRules.WinConditionsTest;
-import implementation.model.game.items.*;
-import implementation.model.game.snake.*;
+import implementation.model.game.items.AppleTest;
+import implementation.model.game.items.BadAppleTest;
+import implementation.model.game.items.BeerTest;
+import implementation.model.game.items.BodyPartTest;
+import implementation.model.game.items.DoublePointsTest;
+import implementation.model.game.items.GeneralItemsTests;
+import implementation.model.game.items.GhostModeTest;
+import implementation.model.game.items.GodModeTest;
+import implementation.model.game.items.MagnetTest;
+import implementation.model.game.items.ScoreEarningTest;
+import implementation.model.game.items.ScoreLossTest;
+import implementation.model.game.items.SlugTest;
+import implementation.model.game.items.SpringTest;
+import implementation.model.game.items.TurboTest;
+import implementation.model.game.items.WallTest;
+import implementation.model.game.snake.CollisionPropertyTest;
+import implementation.model.game.snake.DirectionPropertyTest;
+import implementation.model.game.snake.LengthPropertyTest;
+import implementation.model.game.snake.PickupPropertyTest;
+import implementation.model.game.snake.PlayerTest;
+import implementation.model.game.snake.PropertiesTest;
+import implementation.model.game.snake.SnakeTest;
+import implementation.model.game.snake.SpeedPropertyTest;
+
 
 /**
  * Used to run all the test of the field, game rules, items and snake together.
  */
 public class TestEntireGame {
 
-    private static final boolean testCompleted = true;
+    private static final boolean TEST_COMPLETED = true;
 
     /**
      * Used to run all the snake tests.
@@ -39,7 +61,7 @@ public class TestEntireGame {
         new SnakeTest().testLenghtenMove();
         new SnakeTest().testShortenMove();
         new SnakeTest().testReverse();
-        assertTrue("test completed", testCompleted);
+        assertTrue("Snake test completed", TEST_COMPLETED);
     }
 
     /**
@@ -87,6 +109,7 @@ public class TestEntireGame {
         new SpringTest().testLastingEffect();
         new TurboTest().testInstantaneousEffect();
         new TurboTest().testLastingEffect();
+        assertTrue("Item test completed", TEST_COMPLETED);
     }
 
     /**
@@ -99,6 +122,7 @@ public class TestEntireGame {
         new FieldTest().testGetCell();
         new FieldTest().testGetItem();
         new FieldTest().testRemoveItem();
+        assertTrue("Field test completed", TEST_COMPLETED);
     }
 
     /**
@@ -110,6 +134,7 @@ public class TestEntireGame {
         new WinConditionsTest().testLengthConditions();
         new WinConditionsTest().testScoreConditions();
         new WinConditionsTest().testTimeConditions();
+        assertTrue("Win conditions test completed", TEST_COMPLETED);
     }
 
     /**
@@ -120,6 +145,7 @@ public class TestEntireGame {
         new LossConditionsTest().testInit();
         new LossConditionsTest().testAllSnakeDiedContitions();
         new LossConditionsTest().testTimeConditions();
+        assertTrue("Loss conditions test completed", TEST_COMPLETED);
     }
 
     /**
@@ -128,6 +154,7 @@ public class TestEntireGame {
     @Test
     public void testItemRule() {
         new ItemRuleTest().testInit();
+        assertTrue("Item rule test completed", TEST_COMPLETED);
     }
 
     /**
@@ -138,6 +165,7 @@ public class TestEntireGame {
         new GameModelTest().testInit();
         new GameModelTest().testGetField();
         new GameModelTest().testGetGameRules();
+        assertTrue("Game model test completed", TEST_COMPLETED);
     }
 
     /**
@@ -153,6 +181,7 @@ public class TestEntireGame {
         new GameRulesTest().testGetInitialSnakeMultiplier();
         new GameRulesTest().testGetInitialTime();
         new GameRulesTest().testIsTimeGoingForward();
+        assertTrue("Game rules test completed", TEST_COMPLETED);
     }
 
 }
