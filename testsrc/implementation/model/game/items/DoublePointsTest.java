@@ -1,7 +1,7 @@
 package implementation.model.game.items;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -19,27 +19,26 @@ import implementation.model.game.field.FieldImpl;
  * @see Item
  * @see DoublePoints
  * @see Effect
- * @author Alessandro Talmi
  */
 public class DoublePointsTest {
 
     private Item doublePoints;
-    private Point pointZero = new Point(0, 0);
+    private final Point pointZero = new Point(0, 0);
 
     /**
      * Test double points's instantaneous effect.
      */
     @Test
     public void testInstantaneousEffect() {
-        Field field = new FieldImpl(new Point(10, 10));
-        ItemFactory itemFactory = new ItemFactory(field);
+        final Field field = new FieldImpl(new Point(10, 10));
+        final ItemFactory itemFactory = new ItemFactory(field);
         doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.empty());
-        Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
-        assertEquals(testSnake.getPlayer().getScore(), 0);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        assertSame("check that multiplier is one", testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        assertEquals("check that score is zero", testSnake.getPlayer().getScore(), 0);
         AppleTest.collide(doublePoints, testSnake);
-        assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
-        assertEquals(testSnake.getPlayer().getScore(), 0);
+        assertSame("check that multiplier is still one", testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        assertEquals("check that score is still zero", testSnake.getPlayer().getScore(), 0);
     }
 
     /*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
@@ -51,31 +50,40 @@ public class DoublePointsTest {
     @Test 
     public void testLastingEffect() {
         final long effectDuration = 10;
-        Field field = new FieldImpl(new Point(10, 10));
-        ItemFactory itemFactory = new ItemFactory(field);
+        final Field field = new FieldImpl(new Point(10, 10));
+        final ItemFactory itemFactory = new ItemFactory(field);
         doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.of(effectDuration));
-        Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertEquals(testSnake.getPlayer().getScore(), 0);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        assertEquals("checking snake's score equals 0", 
+                testSnake.getPlayer().getScore(), 0);
         AppleTest.collide(doublePoints, testSnake);
-        assertEquals(testSnake.getPlayer().getScore(), 0);
-        assertEquals(testSnake.getEffects().size(), 1);
-        assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(effectDuration));
+        assertEquals("checking snake's score still equals 0", 
+                testSnake.getPlayer().getScore(), 0);
+        assertEquals("checking that snake has one effect active", 
+                testSnake.getEffects().size(), 1);
+        assertEquals("checking that active effect has duration equal to effectDuration",
+                testSnake.getEffects().get(0).getEffectDuration(), Optional.of(effectDuration));
         doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.of(effectDuration));
         AppleTest.collide(doublePoints, testSnake);
-        assertEquals(testSnake.getPlayer().getScore(), 0);
-        assertEquals(testSnake.getEffects().get(0).getEffectDuration(), Optional.of(2 * effectDuration));
-        assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
-        Thread t = new Thread(testSnake);
+        assertEquals("checking snake's score still equals 0", 
+                testSnake.getPlayer().getScore(), 0);
+        assertEquals("checking that active effect duration has doubled",
+                testSnake.getEffects().get(0).getEffectDuration(), Optional.of(2 * effectDuration));
+        assertSame("checking that currently score multiplier equals one", 
+                testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        final Thread t = new Thread(testSnake);
         t.start();
         try {
             Thread.sleep(effectDuration);
-            assertTrue(testSnake.getPlayer().getScoreMultiplier() == 2.0);
+            assertSame("checking that now score multiplier equal 2", 
+                    testSnake.getPlayer().getScoreMultiplier(), 2.0);
             Thread.sleep(2 * effectDuration);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         t.stop();
-        assertTrue(testSnake.getPlayer().getScoreMultiplier() == 1.0);
+        assertSame("checking that now score multiplier returned to 1",
+                testSnake.getPlayer().getScoreMultiplier(), 1.0);
     }
 
 }
