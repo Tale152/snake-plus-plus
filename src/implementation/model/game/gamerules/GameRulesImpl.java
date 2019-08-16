@@ -1,4 +1,4 @@
-package implementation.model.game.gameRules;
+package implementation.model.game.gamerules;
 
 import java.util.ArrayList;
 import java.util.List;

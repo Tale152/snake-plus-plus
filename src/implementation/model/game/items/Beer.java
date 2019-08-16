@@ -27,7 +27,7 @@ public final class Beer extends EffectAbstract {
     @Override
     public void instantaneousEffect(final Snake target) {
         final Direction direction = target.getProperties().getDirectionProperty().getDirection();
-        Random rnd = new Random();
+        final Random rnd = new Random();
         final boolean directionGuess = rnd.nextBoolean();
         if (direction == Direction.UP || direction == Direction.DOWN) {
             if (directionGuess) {
