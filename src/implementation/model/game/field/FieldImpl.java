@@ -92,9 +92,6 @@ public class FieldImpl implements Field {
 
     @Override
     public final synchronized boolean removeItem(final Item item) {
-        if (item == null) {
-            throw new NullPointerException();
-        }
         if (items.remove(item)) {
             removedItems.add(item);
             return true;
@@ -116,9 +113,6 @@ public class FieldImpl implements Field {
 
     @Override
     public final synchronized List<Collidable> getCell(final Point point) {
-        if (point == null) {
-            throw new NullPointerException();
-        }
         if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
             return new ArrayList<Collidable>();
         }

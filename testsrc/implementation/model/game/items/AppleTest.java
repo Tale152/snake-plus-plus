@@ -49,7 +49,7 @@ public class AppleTest {
         final Field field = new FieldImpl(new Point(10, 10));
         final ItemFactory itemFactory = new ItemFactory(field);
         apple = itemFactory.createItem(pointZero, Apple.class, Optional.empty(), Optional.empty());
-        final Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         assertEquals("checking that the current score is 0", testSnake.getPlayer().getScore(), 0);
         assertEquals("checking that the current length is 1", testSnake.getProperties().getLengthProperty().getLength(), 1);
         collide(apple, testSnake);
@@ -66,7 +66,7 @@ public class AppleTest {
         final Field field = new FieldImpl(new Point(10, 10));
         final ItemFactory itemFactory = new ItemFactory(field);
         apple = itemFactory.createItem(pointZero, Apple.class, Optional.empty(), Optional.empty());
-        final Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         assertEquals("checking that the current score is 0", testSnake.getPlayer().getScore(), 0);
         assertEquals("checking that the current length is 1", testSnake.getProperties().getLengthProperty().getLength(), 1);
         collide(apple, testSnake);
@@ -84,7 +84,7 @@ public class AppleTest {
         final Field field = new FieldImpl(new Point(10, 10));
         final ItemFactory itemFactory = new ItemFactory(field);
         apple = itemFactory.createItem(pointZero, Apple.class, Optional.empty(), Optional.of(effectDuration));
-        final Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         assertEquals("checking that the current score is 0", testSnake.getPlayer().getScore(), 0);
         assertEquals("checking that the current length is 1", testSnake.getProperties().getLengthProperty().getLength(), 1);
         collide(apple, testSnake);

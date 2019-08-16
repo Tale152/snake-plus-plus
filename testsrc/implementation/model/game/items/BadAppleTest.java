@@ -18,31 +18,31 @@ import implementation.model.game.field.FieldImpl;
  * @see Item
  * @see BadApple
  * @see Effect
- * @author Alessandro Talmi
  */
 public class BadAppleTest {
 
     private Item badApple;
-    private Point pointZero = new Point(0, 0);
-    private final int score = 100;
-    private final int lenghtToAdd = 5;
+    private final Point pointZero = new Point(0, 0);
+    private static final int SCORE = 100;
+    private static final int LENGTH_TO_ADD = 5;
 
     /**
      * Test bad apple's instantaneous effect.
      */
     @Test
     public void testInstantaneousEffect() {
-        Field field = new FieldImpl(new Point(10, 10));
-        ItemFactory itemFactory = new ItemFactory(field);
+        final Field field = new FieldImpl(new Point(10, 10));
+        final ItemFactory itemFactory = new ItemFactory(field);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.empty());
-        Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        testSnake.getPlayer().addScore(score);
-        testSnake.getProperties().getLengthProperty().lengthen(lenghtToAdd);
-        assertEquals(testSnake.getPlayer().getScore(), score);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), lenghtToAdd + 1);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        testSnake.getPlayer().addScore(SCORE);
+        testSnake.getProperties().getLengthProperty().lengthen(LENGTH_TO_ADD);
+        assertEquals("checking snake's score equals to SCORE", testSnake.getPlayer().getScore(), SCORE);
+        assertEquals("checking snake's length equals to 1 plus LENGTH_TO_ADD", 
+                testSnake.getProperties().getLengthProperty().getLength(), LENGTH_TO_ADD + 1);
         AppleTest.collide(badApple, testSnake);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), (lenghtToAdd + 1) / 2);
-        assertEquals(testSnake.getPlayer().getScore(), score / 2);
+        assertEquals("checking that snake's length halved", testSnake.getProperties().getLengthProperty().getLength(), (LENGTH_TO_ADD + 1) / 2);
+        assertEquals("checking that snake's score halved", testSnake.getPlayer().getScore(), SCORE / 2);
     }
 
     /**
@@ -50,17 +50,20 @@ public class BadAppleTest {
      */
     @Test
     public void testInstantaneousEffectOnGhost() {
-        Field field = new FieldImpl(new Point(10, 10));
-        ItemFactory itemFactory = new ItemFactory(field);
+        final Field field = new FieldImpl(new Point(10, 10));
+        final ItemFactory itemFactory = new ItemFactory(field);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.empty());
-        Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        testSnake.getPlayer().addScore(score);
-        testSnake.getProperties().getLengthProperty().lengthen(lenghtToAdd);
-        assertEquals(testSnake.getPlayer().getScore(), score);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), lenghtToAdd + 1);
+        final Snake testSnake = SnakeFactoryForTestsUtils.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        testSnake.getPlayer().addScore(SCORE);
+        testSnake.getProperties().getLengthProperty().lengthen(LENGTH_TO_ADD);
+        assertEquals("checking snake's score equals to SCORE", testSnake.getPlayer().getScore(), SCORE);
+        assertEquals("checking snake's length equals to 1 plus LENGTH_TO_ADD", 
+                testSnake.getProperties().getLengthProperty().getLength(), LENGTH_TO_ADD + 1);
         AppleTest.collide(badApple, testSnake);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), lenghtToAdd + 1);
-        assertEquals(testSnake.getPlayer().getScore(), score);
+        assertEquals("checking that snake's length didn't change", 
+                testSnake.getProperties().getLengthProperty().getLength(), LENGTH_TO_ADD + 1);
+        assertEquals("checking that snake's score didn't change", 
+                testSnake.getPlayer().getScore(), SCORE);
     }
 
     /**
@@ -69,23 +72,28 @@ public class BadAppleTest {
     @SuppressWarnings("deprecation")
     @Test 
     public void testLastingEffect() {
-        long effectDuration = 10;
-        Field field = new FieldImpl(new Point(10, 10));
-        ItemFactory itemFactory = new ItemFactory(field);
+        final long effectDuration = 10;
+        final Field field = new FieldImpl(new Point(10, 10));
+        final ItemFactory itemFactory = new ItemFactory(field);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.of(effectDuration));
-        Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        testSnake.getPlayer().addScore(score);
-        assertEquals(testSnake.getPlayer().getScore(), score);
-        testSnake.getProperties().getLengthProperty().lengthen(lenghtToAdd);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), lenghtToAdd + 1);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        testSnake.getPlayer().addScore(SCORE);
+        testSnake.getProperties().getLengthProperty().lengthen(LENGTH_TO_ADD);
+        assertEquals("checking snake's score equals to SCORE", testSnake.getPlayer().getScore(), SCORE);
+        assertEquals("checking snake's length equals to 1 plus LENGTH_TO_ADD", 
+                testSnake.getProperties().getLengthProperty().getLength(), LENGTH_TO_ADD + 1);
         AppleTest.collide(badApple, testSnake);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 3);
-        assertEquals(testSnake.getPlayer().getScore(), score / 2);
+        assertEquals("checking that snake's length halved",
+                testSnake.getProperties().getLengthProperty().getLength(), (LENGTH_TO_ADD + 1) / 2);
+        assertEquals("checking that snake's score halved",
+                testSnake.getPlayer().getScore(), SCORE / 2);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.of(effectDuration));
         AppleTest.collide(badApple, testSnake);
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), 2);
-        assertEquals(testSnake.getPlayer().getScore(), score / 4);
-        Thread t = new Thread(testSnake);
+        assertEquals("checking that snake's lenght was halved another time",
+                testSnake.getProperties().getLengthProperty().getLength(), 2);
+        assertEquals("checking that snake's score was halved another time",
+                testSnake.getPlayer().getScore(), SCORE / 4);
+        final Thread t = new Thread(testSnake);
         t.start();
         try {
             Thread.sleep(effectDuration * 3);
@@ -93,8 +101,10 @@ public class BadAppleTest {
             e.printStackTrace();
         }
         t.stop();
-        assertEquals(testSnake.getProperties().getLengthProperty().getLength(), lenghtToAdd + 1);
-        assertEquals(testSnake.getPlayer().getScore(), score / 4);
+        assertEquals("checking that snake's length is restored", 
+                testSnake.getProperties().getLengthProperty().getLength(), LENGTH_TO_ADD + 1);
+        assertEquals("checking that snake's score was not restored",
+                testSnake.getPlayer().getScore(), SCORE / 4);
     }
 
 }

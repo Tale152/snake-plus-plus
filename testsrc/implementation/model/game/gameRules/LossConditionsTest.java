@@ -7,6 +7,7 @@ import java.util.*;
 import org.junit.Test;
 import design.model.game.*;
 import implementation.model.game.field.FieldImpl;
+import implementation.model.game.gamerules.LossConditionsImpl;
 import implementation.model.game.items.SnakeFactoryForTests;
 
 public class LossConditionsTest {
