@@ -1,53 +1,65 @@
 package implementation.model.game.items;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
-import design.model.game.*;
+
+import design.model.game.Field;
+import design.model.game.Snake;
+import design.model.game.Wall;
 import implementation.model.game.field.FieldImpl;
 
+/**
+ * Test regarding Wall.
+ * @see Collidable
+ * @see Wall
+ */
 public class WallTest {
 
     private Wall wall;
-    private Point pointZero = new Point(0,0);
-    
+    private final Point pointZero = new Point(0, 0);
+
+    /**
+     * Tests initializing a wall.
+     */
     @Test
     public void testInitWall() {
-        Field field = new FieldImpl(new Point(10,10));
-        try{
-            wall = new WallImpl(null);
-            fail("Wall's point cannot be null");
-        } catch (NullPointerException e){
-        } catch (Exception e){
-            fail("wrong exception thrown");
-        }
-        
+        final Field field = new FieldImpl(new Point(10, 10));
         wall = new WallImpl(pointZero);
-        
-        Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         try {
             wall.onCollision(testSnake);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        assertEquals(testSnake.getEffects().size(),0);
-        
+        assertEquals("checks that snake has no effects active",
+                testSnake.getEffects().size(), 0);
     }
-    
+
+    /**
+     * Test various snake having different properties active while colliding with a wall.
+     */
     @Test
-    public void testCollision(){
-        Field field = new FieldImpl(new Point(10,10));
-        assertFalse(survives(SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field)));
-        assertTrue(survives(SnakeFactoryForTests.godSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field)));
-        assertTrue(survives(SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field)));
-        assertTrue(survives(SnakeFactoryForTests.springSnake(new ArrayList<Point>(Arrays.asList(new Point(0,0))), field)));
+    public void testCollision() {
+        final Field field = new FieldImpl(new Point(10, 10));
+        assertFalse("checks that a base snake does not survive colliding with a wall",
+                survives(SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field)));
+        assertTrue("checks that an invincible snake survives colliding with a wall",
+                survives(SnakeFactoryForTestsUtils.godSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field)));
+        assertTrue("checks that an intangible snake survives colliding with a wall",
+                survives(SnakeFactoryForTestsUtils.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field)));
+        assertTrue("checks that a spring snake survives colliding with a wall",
+                survives(SnakeFactoryForTestsUtils.springSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field)));
     }
-    
-    private boolean survives(Snake snake) {
+
+    private boolean survives(final Snake snake) {
         wall = new WallImpl(pointZero);
         try {
             wall.onCollision(snake);
@@ -57,5 +69,5 @@ public class WallTest {
         }
         return snake.isAlive();
     }
-    
+
 }
