@@ -15,7 +15,7 @@ public class PropertiesTest {
      */
     @Test
     public void testProperties() {
-        final Properties properties = SnakeComponentsFactoryForTest.createProperties();
+        final Properties properties = SnakeComponentsFactoryUtils.createProperties();
         assertNotNull("Check if collision properties are not null", properties.getCollisionProperty());
         assertNotNull("Check if direction properties are not null", properties.getDirectionProperty());
         assertNotNull("Check if length properties are not null", properties.getLengthProperty());

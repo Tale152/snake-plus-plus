@@ -18,7 +18,7 @@ public class CollisionPropertyTest {
      */
     @Test
     public void testCollisionProperty() {
-        final CollisionProperty collision = SnakeComponentsFactoryForTest.createCollisionProperty();
+        final CollisionProperty collision = SnakeComponentsFactoryUtils.createCollisionProperty();
 
         assertFalse("Checking if the invincibily is not active", collision.isInvincible());
         collision.setInvincibility(true);

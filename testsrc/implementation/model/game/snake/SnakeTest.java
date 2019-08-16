@@ -40,7 +40,7 @@ public class SnakeTest {
      */
     @Test
     public void testInit() {
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), new ArrayList<Point>(Arrays.asList(new Point(0, 0))));
         assertNotNull("Check if snake player is initialized", snake.getPlayer());
         assertNotNull("Check if snake properties are initialized", snake.getProperties());
@@ -51,7 +51,7 @@ public class SnakeTest {
      */
     @Test
     public void testNormalMove() {
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), new ArrayList<Point>(Arrays.asList(new Point(0, 0))));
         assertEquals("Check if snake length is 1", snake.getProperties().getLengthProperty().getLength(), 1);
         Thread t = new Thread(snake);
@@ -66,7 +66,7 @@ public class SnakeTest {
         assertEquals("Chek if snake length is still 1 after one movement", snake.getProperties().getLengthProperty().getLength(), 1);
 
         final List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(3, 0), new Point(2, 0), new Point(1, 0), new Point(0, 0))); //Point(3,0) is head
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), tmp);
         assertEquals("Check if snake current length is 4", snake.getProperties().getLengthProperty().getLength(), 4);
         t = new Thread(snake);
@@ -88,7 +88,7 @@ public class SnakeTest {
      */
     @Test
     public void testLenghtenMove() {
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), new ArrayList<Point>(Arrays.asList(new Point(0, 0))));
         snake.getProperties().getLengthProperty().lengthen(1);
         assertEquals("Check if snake length has increase and it is now 2", snake.getProperties().getLengthProperty().getLength(), 2);
@@ -102,7 +102,7 @@ public class SnakeTest {
             }
         }
 
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), new ArrayList<Point>(Arrays.asList(new Point(0, 0))));
         snake.getProperties().getLengthProperty().lengthen(3);
         assertEquals("Check if snake length is 4, after increased his length by 3", 
@@ -129,7 +129,7 @@ public class SnakeTest {
     @Test
     public void testShortenMove() {
         final List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(3, 0), new Point(2, 0), new Point(1, 0), new Point(0, 0))); //Point(3,0) is head
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), tmp);
         assertEquals("Check if snake length is actually 4", snake.getProperties().getLengthProperty().getLength(), 4);
         assertEquals("Check if snake body part list size is actually 4", snake.getBodyParts().size(), 4);
@@ -156,7 +156,7 @@ public class SnakeTest {
      */
     @Test
     public void testKill() {
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), new ArrayList<Point>(Arrays.asList(new Point(0, 0))));
         assertTrue("Check if snake is currently alive", snake.isAlive());
         snake.kill();
@@ -169,7 +169,7 @@ public class SnakeTest {
     @Test
     public void testEffect() {
         final Field field = new FieldImpl(new Point(1000, 1000));
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, field, new ArrayList<Point>(Arrays.asList(new Point(0, 0))));
         assertEquals("Check if the size of the list of snake effect is 0", snake.getEffects().size(), 0);
 
@@ -203,7 +203,7 @@ public class SnakeTest {
     @Test
     public void testReverse() {
         final List<Point> tmp = new ArrayList<Point>(Arrays.asList(new Point(1, 0), new Point(0, 0))); //Point(1,0) is head
-        snake = SnakeComponentsFactoryForTest.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
+        snake = SnakeComponentsFactoryUtils.createSnake(PlayerNumber.PLAYER1, "p1", Direction.RIGHT, 100L, 
                 1.0, new FieldImpl(new Point(1000, 1000)), tmp);
         assertEquals("Check if snake current direction is right", snake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
         snake.reverse();

@@ -14,46 +14,46 @@ public class DirectionPropertyTest {
 
     private boolean standardDirectionTestSupport(final Direction current, final Direction opposite,
             final Direction possible1, final Direction possible2) {
-        DirectionProperty direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        DirectionProperty direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setDirection(current);
         if (!direction.getDirection().equals(current)) {
             return false;
         }
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setDirection(opposite);
         if (!direction.getDirection().equals(current)) {
             return false;
         }
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setDirection(possible1);
         if (!direction.getDirection().equals(possible1)) {
             return false;
         }
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setDirection(possible2);
         return direction.getDirection().equals(possible2);
     }
 
     private boolean oppositeDirectionTestSupport(final Direction current, final Direction opposite, final Direction possible1, final Direction possible2) {
-        DirectionProperty direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        DirectionProperty direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setReverseDirection(true);
         direction.setDirection(opposite);
         if (!direction.getDirection().equals(current)) {
             return false;
         }
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setReverseDirection(true);
         direction.setDirection(current);
         if (!direction.getDirection().equals(current)) {
             return false;
         }
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setReverseDirection(true);
         direction.setDirection(possible1);
         if (!direction.getDirection().equals(possible2)) {
             return false;
         }
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(current);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(current);
         direction.setReverseDirection(true);
         direction.setDirection(possible2);
         return direction.getDirection().equals(possible1);
@@ -66,7 +66,7 @@ public class DirectionPropertyTest {
     public void testDirectionProperty() {
         DirectionProperty direction;
 
-        direction = SnakeComponentsFactoryForTest.createDirectionProperty(Direction.DOWN);
+        direction = SnakeComponentsFactoryUtils.createDirectionProperty(Direction.DOWN);
         assertFalse("Check if reverse direction is not active", direction.isDirectionReversed());
         direction.setReverseDirection(true);
         assertTrue("Check if reverse direction has been activated", direction.isDirectionReversed());

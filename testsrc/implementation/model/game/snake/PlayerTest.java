@@ -20,7 +20,7 @@ public class PlayerTest {
         Player player;
 
         try {
-            player = SnakeComponentsFactoryForTest.createPlayer(null, "Ale");
+            player = SnakeComponentsFactoryUtils.createPlayer(null, "Ale");
             fail("Player number cannot be null");
         } catch (IllegalArgumentException e) {
         } catch (Exception e) {
@@ -28,14 +28,14 @@ public class PlayerTest {
         }
 
         try {
-            player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, null);
+            player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, null);
             fail("Player name cannot be null");
         } catch (IllegalArgumentException e) {
         } catch (Exception e) {
             fail("wrong exception");
         }
 
-        player = SnakeComponentsFactoryForTest.createPlayer(PlayerNumber.PLAYER1, "Ale");
+        player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, "Ale");
 
         assertEquals("Check if the player number is the player1", player.getPlayerNumber(), PlayerNumber.PLAYER1);
         assertEquals("Check if the player name is Ale", player.getName(), "Ale");

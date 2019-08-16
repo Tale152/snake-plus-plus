@@ -18,7 +18,7 @@ public class LengthPropertyTest {
      */
     @Test
     public void testLengthProperty() {
-        final LengthProperty length = SnakeComponentsFactoryForTest.createLengthProperty();
+        final LengthProperty length = SnakeComponentsFactoryUtils.createLengthProperty();
         assertEquals("Check if snake current length is 1", length.getLength(), 1);
         length.lengthen(4);
         assertEquals("Check if snake current length is 5, after lengthen by 4", length.getLength(), FIVE_LENGTH);

@@ -14,7 +14,7 @@ public class PickupPropertyTest {
      */
     @Test
     public void testPickupProperty() {
-        final PickupProperty pickup = SnakeComponentsFactoryForTest.createPickupProperty();
+        final PickupProperty pickup = SnakeComponentsFactoryUtils.createPickupProperty();
         assertEquals("Check if snake basic pick up radius is 1", pickup.getPickupRadius(), 1);
         pickup.setPickupRadius(2);
         assertEquals("Check if snake pick up radius is 2", pickup.getPickupRadius(), 2);

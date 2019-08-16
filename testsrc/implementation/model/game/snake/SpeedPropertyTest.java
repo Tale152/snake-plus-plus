@@ -23,28 +23,28 @@ public class SpeedPropertyTest {
     public void testSpeedProperty() {
         SpeedProperty speed;
         try {
-            speed = SnakeComponentsFactoryForTest.createSpeedProperty(0, 1);
+            speed = SnakeComponentsFactoryUtils.createSpeedProperty(0, 1);
             fail("delta cannot be zero while initializing");
         } catch (IllegalArgumentException e) {
         } catch (Exception e) {
             fail("wrong exception");
         }
         try {
-            speed = SnakeComponentsFactoryForTest.createSpeedProperty(-1, 1);
+            speed = SnakeComponentsFactoryUtils.createSpeedProperty(-1, 1);
             fail("delta cannot be negative while initializing");
         } catch (IllegalArgumentException e) {
         } catch (Exception e) {
             fail("wrong exception");
         }
         try {
-            speed = SnakeComponentsFactoryForTest.createSpeedProperty(100, -1);
+            speed = SnakeComponentsFactoryUtils.createSpeedProperty(100, -1);
             fail("multiplier cannot be negative while initializing");
         } catch (IllegalArgumentException e) {
         } catch (Exception e) {
             fail("wrong exception");
         }
 
-        speed = SnakeComponentsFactoryForTest.createSpeedProperty(DELTA, 1);
+        speed = SnakeComponentsFactoryUtils.createSpeedProperty(DELTA, 1);
         assertEquals("Check if the speed multiplier is correct", speed.getDeltaT(), DELTA);
         speed.setDeltaT(1000L);
         assertEquals("Check if the speed multiplier is correct after setting it", speed.getDeltaT(), 1000L);
