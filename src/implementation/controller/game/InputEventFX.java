@@ -31,8 +31,8 @@ public class InputEventFX implements InputEvent {
     }
 
     public boolean equals(final InputEvent input) {
-        boolean isKeyEqual = input.getInput().contentEquals(getInput());
-        boolean isDeviceTypeEqual = input.getDeviceType().equals(getDeviceType());
+        final boolean isKeyEqual = input.getInput().contentEquals(getInput());
+        final boolean isDeviceTypeEqual = input.getDeviceType().equals(getDeviceType());
         boolean isDeviceIdEqual = false;
         if (getDeviceID().isPresent() && input.getDeviceID().isPresent()) {
             isDeviceIdEqual = getDeviceID().get().equals(input.getDeviceID().get());

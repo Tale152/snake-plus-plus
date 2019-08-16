@@ -34,7 +34,7 @@ public class BadAppleTest {
         final Field field = new FieldImpl(new Point(10, 10));
         final ItemFactory itemFactory = new ItemFactory(field);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.empty());
-        final Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         testSnake.getPlayer().addScore(SCORE);
         testSnake.getProperties().getLengthProperty().lengthen(LENGTH_TO_ADD);
         assertEquals("checking snake's score equals to SCORE", testSnake.getPlayer().getScore(), SCORE);
@@ -53,7 +53,7 @@ public class BadAppleTest {
         final Field field = new FieldImpl(new Point(10, 10));
         final ItemFactory itemFactory = new ItemFactory(field);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.empty());
-        final Snake testSnake = SnakeFactoryForTests.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.ghostSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         testSnake.getPlayer().addScore(SCORE);
         testSnake.getProperties().getLengthProperty().lengthen(LENGTH_TO_ADD);
         assertEquals("checking snake's score equals to SCORE", testSnake.getPlayer().getScore(), SCORE);
@@ -76,7 +76,7 @@ public class BadAppleTest {
         final Field field = new FieldImpl(new Point(10, 10));
         final ItemFactory itemFactory = new ItemFactory(field);
         badApple = itemFactory.createItem(pointZero, BadApple.class, Optional.empty(), Optional.of(effectDuration));
-        final Snake testSnake = SnakeFactoryForTests.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
+        final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         testSnake.getPlayer().addScore(SCORE);
         testSnake.getProperties().getLengthProperty().lengthen(LENGTH_TO_ADD);
         assertEquals("checking snake's score equals to SCORE", testSnake.getPlayer().getScore(), SCORE);
