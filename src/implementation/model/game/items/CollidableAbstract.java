@@ -11,12 +11,9 @@ public abstract class CollidableAbstract implements Collidable {
     private Point point;
 
     /**
-     * @param point coordinates where the coolidable is placed into the field
+     * @param point coordinates where the collidable is placed into the field
      */
     public CollidableAbstract(final Point point) {
-        if (point == null) {
-            throw new NullPointerException();
-        }
         this.point = point;
     }
 

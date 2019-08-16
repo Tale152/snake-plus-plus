@@ -11,7 +11,13 @@ import design.model.game.GameRules;
 import design.model.game.Item;
 import design.model.game.ItemRule;
 
+/**
+ * @see ItemCounter
+ * @author Alessandro Talmi
+ */
 public class ItemCounterImpl implements ItemCounter {
+
+    private final List<Countable> allElements;
 
     private final class Countable {
         private final Class<? extends Effect> effectClass;
@@ -27,14 +33,16 @@ public class ItemCounterImpl implements ItemCounter {
         }
     }
 
-    private final List<Countable> allElements;
-
-    public ItemCounterImpl(final Field field,final GameRules gameRules) {
+    /**
+     * @param field containing elements to check
+     * @param gameRules rules that determinate how to handle every type of item to spawn
+     */
+    public ItemCounterImpl(final Field field, final GameRules gameRules) {
         allElements = new ArrayList<>();
-        for (ItemRule ir : gameRules.getItemRules()) {
+        for (final ItemRule ir : gameRules.getItemRules()) {
             allElements.add(new Countable(ir.getEffectClass(), ir.getMax()));
         }
-        for (Item item : field.getItems()) {
+        for (final Item item : field.getItems()) {
             increase(item.getEffectClass());
         }
     }
@@ -45,7 +53,7 @@ public class ItemCounterImpl implements ItemCounter {
     }
 
     @Override
-    public boolean increase(final Class<? extends Effect> effect) {
+    public final boolean increase(final Class<? extends Effect> effect) {
         Countable elem = getElement(effect).get();
         if (elem.current < elem.max) {
             ++elem.current;
@@ -55,7 +63,7 @@ public class ItemCounterImpl implements ItemCounter {
     }
 
     @Override
-    public boolean decrease(final Class<? extends Effect> effect) {
+    public final boolean decrease(final Class<? extends Effect> effect) {
         Countable elem = getElement(effect).get();
         if (elem.current > 0) {
             --elem.current;
@@ -65,29 +73,27 @@ public class ItemCounterImpl implements ItemCounter {
     }
 
     @Override
-    public int getCurrent(final Class<? extends Effect> effect) {
+    public final int getCurrent(final Class<? extends Effect> effect) {
         return getElement(effect).get().current;
     }
 
     @Override
-    public int getMax(final Class<? extends Effect> effect) {
+    public final int getMax(final Class<? extends Effect> effect) {
         return getElement(effect).get().max;
     }
 
     @Override
-    public boolean isMax(final Class<? extends Effect> effect) {
-        Countable elem = getElement(effect).get();
-        return elem.current >= elem.max;
+    public final boolean isMax(final Class<? extends Effect> effect) {
+        return getElement(effect).get().current >= getElement(effect).get().max;
     }
 
     @Override
-    public long getLastSpawnAttempt(final Class<? extends Effect> effect) {
-        Countable elem = getElement(effect).get();
-        return elem.lastSpawnAttempt;
+    public final long getLastSpawnAttempt(final Class<? extends Effect> effect) {
+        return getElement(effect).get().lastSpawnAttempt;
     }
 
     @Override
-    public void setLastSpawnAttempt(final Class<? extends Effect> effect, final long time) {
+    public final void setLastSpawnAttempt(final Class<? extends Effect> effect, final long time) {
         getElement(effect).get().lastSpawnAttempt = time;
     }
 

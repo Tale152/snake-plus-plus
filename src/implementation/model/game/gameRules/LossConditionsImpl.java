@@ -30,9 +30,6 @@ public class LossConditionsImpl implements LossConditions {
      */
     public LossConditionsImpl(
             final boolean checkAllSnakesDied, final Optional<Long> gameTime, final boolean timeGoesForward) {
-        if (gameTime == null) {
-            throw new NullPointerException();
-        }
         if (gameTime.isPresent() && gameTime.get() < 0) {
             throw new IllegalArgumentException("gameTime cannot less than zero");
         }

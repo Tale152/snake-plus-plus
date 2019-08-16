@@ -28,7 +28,7 @@ public interface DirectionProperty {
     /**
      * @return if the snake's input controls are swapped (pressing up will be interpreted as down)
      */
-    boolean getReverseDirection();
+    boolean isDirectionReversed();
 
     /**
      * @param direction the new direction to force that will be set ignoring checks

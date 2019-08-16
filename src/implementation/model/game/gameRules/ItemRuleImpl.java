@@ -19,9 +19,6 @@ public class ItemRuleImpl implements ItemRule {
 
     private void checkArguments(final Class<? extends Effect> effectClass, final long spawnDelta,
             final double spawnChance, final int max, final Optional<Long> itemDuration, final Optional<Long> effectDuration) {
-        if (effectClass == null || itemDuration == null || effectDuration == null) {
-            throw new NullPointerException();
-        }
         if (spawnDelta <= 0L || spawnChance <= 0 || max <= 0) {
             throw new IllegalArgumentException();
         }

@@ -40,10 +40,10 @@ import javafx.util.Pair;
 
 public class ClassicControllerImpl implements ClassicController {
 
-    public static String PATH = "res" + File.separator + "resources" + File.separator + "TestPack";
+    public static final String PATH = "res" + File.separator + "resources" + File.separator + "TestPack";
     private static String levelsPath = "res" + File.separator + "stages" + File.separator + "classic";
-    private final ArrayList<Pair<String, GameLoader>> levels;
-    private final ArrayList<String> names;
+    private final List<Pair<String, GameLoader>> levels;
+    private final List<String> names;
     private int selected = 0;
     private int previous = 0;
     private int players = 1;

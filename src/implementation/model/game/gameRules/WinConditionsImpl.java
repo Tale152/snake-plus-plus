@@ -34,9 +34,6 @@ public class WinConditionsImpl implements WinConditions {
      */
     public WinConditionsImpl(final Optional<Integer> snakeLength, final Optional<Integer> score,
             final Optional<Long> time, final boolean timeGoesForward) {
-        if (snakeLength == null || score == null || time == null) {
-            throw new NullPointerException();
-        }
         if (snakeLength.isPresent() && snakeLength.get() < 0) {
             throw new IllegalArgumentException("snakeLenght cannot be less than 0");
         }

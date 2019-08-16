@@ -28,7 +28,7 @@ public class CollisionPropertyImpl implements CollisionProperty {
     }
 
     @Override
-    public final boolean getInvincibility() {
+    public final boolean isInvincible() {
         return this.invincible;
     }
 
@@ -38,7 +38,7 @@ public class CollisionPropertyImpl implements CollisionProperty {
     }
 
     @Override
-    public final boolean getIntangibility() {
+    public final boolean isIntangible() {
         return this.intangible;
     }
 
@@ -48,7 +48,7 @@ public class CollisionPropertyImpl implements CollisionProperty {
     }
 
     @Override
-    public final boolean getSpring() {
+    public final boolean isSpring() {
         return this.spring;
     }
 

@@ -78,7 +78,7 @@ public class DirectionPropertyImpl implements DirectionProperty {
     }
 
     @Override
-    public final boolean getReverseDirection() {
+    public final boolean isDirectionReversed() {
         return this.reversed;
     }
 
