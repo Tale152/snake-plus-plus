@@ -184,7 +184,7 @@ public class SnakeTest {
         assertEquals("Check if the size of snake effect list is 1, after colliding with an item", snake.getEffects().size(), 1);
         assertTrue("Check if the effect in the effect list is the same of the item collided",
                 snake.getEffects().get(0).getClass().equals(apple.getEffectClass()));
-        assertNotSame("Check if the effect list is a safe copie of the internal list", snake.getEffects(), snake.getEffects());
+        assertNotSame("Check if the effect list is a safe copy of the internal list", snake.getEffects(), snake.getEffects());
         final Item badApple = itemFactory.createItem(new Point(0, 0), BadApple.class, Optional.empty(), Optional.of(10L));
         try {
             badApple.onCollision(snake);
