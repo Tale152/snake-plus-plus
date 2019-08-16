@@ -60,6 +60,10 @@ public class GameLoaderJSON implements GameLoader {
         return json;
     }
 
+    public GameLoaderJSON(File stageFile, List<String> names) throws IOException {
+        this(stageFile.getAbsolutePath(), names);
+    }
+
     public GameLoaderJSON(String stagePath, List<String> names) throws IOException {
         objectMapper = new ObjectMapper();
         SimpleModule deserializerModule = new SimpleModule();

@@ -1,5 +1,5 @@
 package design.controller.application;
 
-public interface WorldSelectionController {
+public interface WorldSelectionController extends StageSelectionController {
 
 }

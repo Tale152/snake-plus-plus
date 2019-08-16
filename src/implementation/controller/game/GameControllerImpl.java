@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import design.controller.application.GameEndController;
 import design.controller.application.GameEndReason;
+import design.controller.application.GameInterstice;
 import design.controller.game.*;
 import design.model.game.*;
 import design.view.game.ResourcesLoader;
@@ -14,6 +15,7 @@ import implementation.controller.application.ClassicControllerImpl;
 import implementation.model.game.items.*;
 import implementation.view.application.Main;
 import implementation.view.game.GameViewImpl;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 
 public class GameControllerImpl implements GameController {
@@ -34,6 +36,7 @@ public class GameControllerImpl implements GameController {
 	private final ItemFactory itemFactory;
 	private final WinConditions win;
 	private final LossConditions loss;
+	private GameInterstice interstice;
 	
 	private long gameTime;
 	
@@ -140,24 +143,15 @@ public class GameControllerImpl implements GameController {
 	public void run() {
 		this.gameModel.getField().begin();
 		this.gameView.startRendering();
-		while(!isGameEnded()) {
+		while (!isGameEnded()) {
 			updateDeletedItems();
 			spawnItems();
 			updateSnakes();
 			waitAndUpdateTime();
 		}
 		this.gameView.stopRendering();
-		FXMLLoader endGame = new FXMLLoader(getClass().getResource("/implementation/view/application/GameEndView.fxml"));
-		try {
-			Main.getScene().setRoot(endGame.load());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ClassicControllerImpl.stopMusic();
-		GameEndController controller = endGame.getController();
-		controller.setEndReason(getGameEndReason());
-		
+		interstice.setGameEndReason(getGameEndReason());
+		interstice.showInterstice();
 	}
 	
 	private GameEndReason getGameEndReason() {
@@ -306,5 +300,10 @@ public class GameControllerImpl implements GameController {
 			direction.setDirection(action.get().getDirection());
 		}
 	}
+
+    @Override
+    public void setInterstice(GameInterstice interstice) {
+        this.interstice = interstice;
+    }
 
 }

@@ -42,7 +42,7 @@ public class ClassicControllerImpl implements ClassicController {
 
     public static String PATH = "res" + File.separator + "resources" + File.separator + "TestPack";
     private static String levelsPath = "res" + File.separator + "stages" + File.separator + "classic";
-    private final ArrayList<Pair<String, GameLoader>> levels;
+    private final ArrayList<GameLoader> levels;
     private final ArrayList<String> names;
     private int selected = 0;
     private int previous = 0;
@@ -81,7 +81,7 @@ public class ClassicControllerImpl implements ClassicController {
         names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
         for (File file : new File(levelsPath).listFiles()) {
             String levelPath = file.getPath();
-            levels.add(new Pair<String, GameLoader>(levelPath, new GameLoaderJSON(levelPath, names)));
+            levels.add(new GameLoaderJSON(levelPath, names));
         }
     }
 
@@ -120,7 +120,7 @@ public class ClassicControllerImpl implements ClassicController {
         }
         buttons.get(previous).setDisable(false);
         buttons.get(selected).setDisable(true);
-        level = levels.get(selected).getValue();
+        level = levels.get(selected);
         resources = new ResourcesLoaderFromFile(skinPackPath, level.getGameModel().getField().getWidth(), level.getGameModel().getField().getHeight());
         refreshItemList(level);
         String text = level.getLevelDescription();
@@ -170,7 +170,7 @@ public class ClassicControllerImpl implements ClassicController {
     }
 
     private void refreshPlayers() {
-        int maxPlayers = levels.get(selected).getValue().getMaxPlayers();
+        int maxPlayers = levels.get(selected).getMaxPlayers();
         this.players = Math.max(Math.min(this.players, maxPlayers), 1);
         if (this.players == 1) {
             removePlayerButton.setDisable(true);
@@ -218,22 +218,7 @@ public class ClassicControllerImpl implements ClassicController {
     @FXML
     @Override
     public final void startSelectedLevel() throws FileNotFoundException, IOException {
-        MainMenuControllerImpl.stopMusic();
-        GameLoader gl = levels.get(selected).getValue();
-        for (int i = players; i < levels.get(selected).getValue().getMaxPlayers(); i++) {
-            gl.getGameModel().getField().removeSnake(players);
-        }
-        int nFile = new File(Path.THEMES).listFiles().length;
-        Random randomGenerator = new Random();
-        int randomInt = randomGenerator.nextInt(nFile - 1);
-        Media media = new Media(new File(
-                Path.THEMES + Path.GAME_THEMES_PREFIX + Integer.toString(randomInt) + Path.GAME_THEMES_TYPE
-                ).toURI().toString()); 
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();
-        GameController gameController = 
-                new GameViewImpl(Main.getScene(), this.skinPackPath, gl.getGameModel()).getGameController();
+        new GameIntersticeImpl(levels.get(selected), skinPackPath, players).nextLevel();
     }
 
     @Override

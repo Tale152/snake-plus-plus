@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import design.controller.application.ClassicController;
 import design.controller.application.MainMenuController;
+import design.controller.application.StageSelectionController;
 import implementation.controller.Path;
 import implementation.view.application.Main;
 
@@ -47,6 +47,9 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     private final Map<String, String> itemButtonMap = new HashMap<>();
     private static final String MAIN_MENU_THEME_PATH = Path.THEMES + "Main_menu_theme.mp3";
     private static MediaPlayer mediaPlayer;
+    
+    private static final String CLASSIC_VIEW = "/implementation/view/application/ClassicView.fxml";
+    private static final String WORLD_VIEW = "/implementation/view/application/WorldSelectionView.fxml";
 
     /**
      * @author Alessandro Talmi
@@ -54,16 +57,20 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     @Override
     @FXML
     public final void goToClassicMode() throws IOException {
-        FXMLLoader root = new FXMLLoader(getClass().getResource("/implementation/view/application/ClassicView.fxml"));
-        Main.getScene().setRoot(root.load());
-        ClassicController controller = root.getController();
-        controller.setSkinPackPath(skinPackPath);
+        goToMode(CLASSIC_VIEW);
     }
 
     @Override
     @FXML
-    public void goToLevelMode() {
-
+    public void goToLevelMode() throws IOException {
+    	goToMode(WORLD_VIEW);
+    }
+    
+    private void goToMode(String FXMLPath) throws IOException {
+    	FXMLLoader root = new FXMLLoader(getClass().getResource(FXMLPath));
+        Main.getScene().setRoot(root.load());
+        StageSelectionController controller = root.getController();
+        controller.setSkinPackPath(skinPackPath);
     }
 
     /**
