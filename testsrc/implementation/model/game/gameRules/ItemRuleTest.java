@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 import org.junit.Test;
 import design.model.game.*;
+import implementation.model.game.gamerules.ItemRuleImpl;
 import implementation.model.game.items.Apple;
 
 public class ItemRuleTest {

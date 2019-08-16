@@ -11,10 +11,10 @@ import design.model.game.ItemRule;
 import design.model.game.LossConditions;
 import design.model.game.WinConditions;
 import implementation.model.game.field.FieldImpl;
-import implementation.model.game.gameRules.GameRulesImpl;
-import implementation.model.game.gameRules.ItemRuleImpl;
-import implementation.model.game.gameRules.LossConditionsImpl;
-import implementation.model.game.gameRules.WinConditionsImpl;
+import implementation.model.game.gamerules.GameRulesImpl;
+import implementation.model.game.gamerules.ItemRuleImpl;
+import implementation.model.game.gamerules.LossConditionsImpl;
+import implementation.model.game.gamerules.WinConditionsImpl;
 import implementation.model.game.items.Apple;
 
 import java.awt.Point;

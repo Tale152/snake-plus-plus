@@ -17,6 +17,10 @@ import design.model.game.GameRules;
 import design.model.game.ItemRule;
 import design.model.game.LossConditions;
 import design.model.game.WinConditions;
+import implementation.model.game.gamerules.GameRulesImpl;
+import implementation.model.game.gamerules.ItemRuleImpl;
+import implementation.model.game.gamerules.LossConditionsImpl;
+import implementation.model.game.gamerules.WinConditionsImpl;
 import implementation.model.game.items.Apple;
 import implementation.model.game.items.BadApple;
 
