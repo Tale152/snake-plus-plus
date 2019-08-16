@@ -46,8 +46,8 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 
     @Override
     public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (!collider.getProperties().getCollisionProperty().getIntangibility() 
-                || (collider.getProperties().getCollisionProperty().getIntangibility() && effectClass.equals(GhostMode.class))) {
+        if (!collider.getProperties().getCollisionProperty().isIntangible() 
+                || (collider.getProperties().getCollisionProperty().isIntangible()) && effectClass.equals(GhostMode.class)) {
             eaten = true;
             Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
             Effect effect = constructor.newInstance(dEffectDuration);

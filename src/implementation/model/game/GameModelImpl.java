@@ -18,9 +18,6 @@ public class GameModelImpl implements GameModel {
      * @param gameRules to apply to the game
      */
     public GameModelImpl(final Field field, final GameRules gameRules) {
-        if (field == null || gameRules == null) {
-            throw new NullPointerException();
-        }
         this.field = field;
         this.gameRules = gameRules;
     }

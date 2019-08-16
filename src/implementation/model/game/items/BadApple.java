@@ -44,7 +44,7 @@ public final class BadApple extends EffectAbstract {
 
     @Override
     protected void behaviorOnLastingEffectEnd(final Snake snake) {
-        int length = snake.getProperties().getLengthProperty().getLength();
+        final int length = snake.getProperties().getLengthProperty().getLength();
         snake.getProperties().getLengthProperty().lengthen((length * (getComboCounter() + 1)) - length);
     }
 

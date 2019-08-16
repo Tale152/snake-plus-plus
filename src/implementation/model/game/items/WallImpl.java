@@ -26,10 +26,10 @@ public class WallImpl extends CollidableAbstract implements Wall {
     @Override
     public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (collider.getProperties().getCollisionProperty().getSpring()) {
+        if (collider.getProperties().getCollisionProperty().isSpring()) {
             collider.reverse();
-        } else if (!collider.getProperties().getCollisionProperty().getIntangibility() 
-                && !collider.getProperties().getCollisionProperty().getInvincibility()) {
+        } else if (!collider.getProperties().getCollisionProperty().isIntangible() 
+                && !collider.getProperties().getCollisionProperty().isInvincible()) {
             collider.kill();
         }
     }
