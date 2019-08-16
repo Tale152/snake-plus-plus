@@ -1,7 +1,7 @@
 package implementation.model.game.snake;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import design.model.game.LengthProperty;
 /**
@@ -26,28 +26,25 @@ public class LengthPropertyTest {
         assertEquals("Check if snake current length is 6, after lengthen by 1", length.getLength(), SIX_LENGTH);
         length.lengthen(0);
         assertEquals("Check if snake current length is 6, after lengthen by 0", length.getLength(), SIX_LENGTH);
-        try {
-            length.lengthen(-1);
-            fail("lengthen arg cannot be negative");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
+        assertTrue("check if giving a negative argument to lengthen throws IllegalArgumenException",
+                checkIllegalArgumentLengthen(length, -1));
         length.shorten(0);
         assertEquals("Check if snake current length is 6 aftern shorten by 0", length.getLength(), SIX_LENGTH);
-        try {
-            length.shorten(-1);
-            fail("shorten arg cannot be negative");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
         length.shorten(1);
         assertEquals("Check if snake current length is 5, after shorten by 1", length.getLength(), FIVE_LENGTH);
         length.shorten(3);
         assertEquals("Check if snake current length is 2, after shorten by 3", length.getLength(), 2);
         length.shorten(3);
         assertEquals("Check if snake current length is 1, after shorten by 3", length.getLength(), 1);
+    }
+
+    private boolean checkIllegalArgumentLengthen(final LengthProperty length, final int lenghtIncrement) {
+        try {
+            length.lengthen(-1);
+        } catch (IllegalArgumentException e) {
+            return true;
+        }
+        return false;
     }
 
 }

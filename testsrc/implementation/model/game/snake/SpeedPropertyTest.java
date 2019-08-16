@@ -2,7 +2,7 @@ package implementation.model.game.snake;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -15,66 +15,62 @@ public class SpeedPropertyTest {
 
     private static final long DELTA = 900L;
     private static final double SPEED_MULTIPLIER = 1.5;
+
     /**
      * Test if snake speed is correctly initialize and if the speed can be increased
      * and decreased correctly.
      */
     @Test
     public void testSpeedProperty() {
-        SpeedProperty speed;
-        try {
-            speed = SnakeComponentsFactoryUtils.createSpeedProperty(0, 1);
-            fail("delta cannot be zero while initializing");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-        try {
-            speed = SnakeComponentsFactoryUtils.createSpeedProperty(-1, 1);
-            fail("delta cannot be negative while initializing");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-        try {
-            speed = SnakeComponentsFactoryUtils.createSpeedProperty(100, -1);
-            fail("multiplier cannot be negative while initializing");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-
-        speed = SnakeComponentsFactoryUtils.createSpeedProperty(DELTA, 1);
+        assertTrue("delta cannot be zero while initializing", 
+                checkSpeedPropertyInitIllegalArgumenException(0, 1));
+        assertTrue("delta cannot be negative while initializing", 
+                checkSpeedPropertyInitIllegalArgumenException(-1, 1));
+        assertTrue("multiplier cannot be negative while initializing", 
+                checkSpeedPropertyInitIllegalArgumenException(100, -1));
+        SpeedProperty speed = SnakeComponentsFactoryUtils.createSpeedProperty(DELTA, 1);
         assertEquals("Check if the speed multiplier is correct", speed.getDeltaT(), DELTA);
         speed.setDeltaT(1000L);
         assertEquals("Check if the speed multiplier is correct after setting it", speed.getDeltaT(), 1000L);
-        try {
-            speed.setDeltaT(0L);
-            fail("delta cannot be zero");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-        try {
-            speed.setDeltaT(-1L);
-            fail("delta cannot be negative");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-
+        assertTrue("delta cannot be zero",
+                checkSetDeltaTIllegalArgumenException(speed, 0L));
+        assertTrue("delta cannot be negative",
+                checkSetDeltaTIllegalArgumenException(speed, -1L));
         assertSame("Check if the speed multiplier is 1", speed.getSpeedMultiplier(), 1);
         speed.applySpeedMultiplier(0.5);
         assertSame("Check if the speed multiplier has been changed correctly", speed.getSpeedMultiplier(), SPEED_MULTIPLIER);
         speed.applySpeedMultiplier(-SPEED_MULTIPLIER);
         assertSame("Check if the speed multiplier is 0 when attempted to go negative", speed.getSpeedMultiplier(), 0);
+        assertTrue("multiplier cannot be negative",
+                checkApplySpeedMultiplierIllegalArgumenException(speed, -SPEED_MULTIPLIER));
+    }
+
+    private boolean checkSpeedPropertyInitIllegalArgumenException(final long delta, final double speedMultiplier) {
         try {
-            speed.applySpeedMultiplier(-SPEED_MULTIPLIER);
-            fail("multiplier cannot be negative");
-        } catch (IllegalStateException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
+            @SuppressWarnings("unused")
+            SpeedProperty speed = SnakeComponentsFactoryUtils.createSpeedProperty(delta, speedMultiplier);
+        } catch (IllegalArgumentException e) {
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkSetDeltaTIllegalArgumenException(final SpeedProperty speed, final long deltaT) {
+        try {
+            speed.setDeltaT(-1L);
+        } catch (IllegalArgumentException e) {
+            return true;
+        } 
+        return false;
+    }
+
+    private boolean checkApplySpeedMultiplierIllegalArgumenException(final SpeedProperty speed, final double multiplier) {
+        try {
+            speed.applySpeedMultiplier(multiplier);
+        } catch (IllegalStateException e) {
+            return true;
+        }
+        return false;
     }
 
 }
