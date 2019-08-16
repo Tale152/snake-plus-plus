@@ -18,6 +18,8 @@ import implementation.model.game.snake.*;
  */
 public class TestEntireGame {
 
+    private static final boolean testCompleted = true;
+
     /**
      * Used to run all the snake tests.
      */
@@ -37,6 +39,7 @@ public class TestEntireGame {
         new SnakeTest().testLenghtenMove();
         new SnakeTest().testShortenMove();
         new SnakeTest().testReverse();
+        assertTrue("test completed", testCompleted);
     }
 
     /**

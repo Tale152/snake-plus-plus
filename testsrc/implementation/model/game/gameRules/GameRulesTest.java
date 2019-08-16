@@ -25,40 +25,17 @@ import implementation.model.game.items.Apple;
 import implementation.model.game.items.BadApple;
 
 public class GameRulesTest {
-  
+
   GameRules gameRules;
-    
+
   @Test
   public void testInit() {
-    
     WinConditions winC = new WinConditionsImpl(Optional.of(10), Optional.empty(), Optional.empty(), 
         true);
     LossConditions lossC = new LossConditionsImpl(true, Optional.empty(), true);
     ItemRule itemR = new ItemRuleImpl(Apple.class, 100L, 0.5, 5, Optional.empty(),
         Optional.empty());
     List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(itemR));
-    
-    try {
-      gameRules = new GameRulesImpl(null, lossC, itemRules, 100L, 1.0, 10L, true);
-      fail("Win conditions can not be null");
-    } catch (NullPointerException e) {
-    } catch (Exception e) {
-      fail("wrong exception");
-    }
-    try {
-      gameRules = new GameRulesImpl(winC, null, itemRules, 100L, 1.0, 10L, true);
-      fail("Loss conditions can not be null");
-    } catch (NullPointerException e) {
-    } catch (Exception e) {
-      fail("wrong exception");
-    }
-    try {
-      gameRules = new GameRulesImpl(winC, lossC, null, 100L, 1.0, 10L, true);
-      fail("Item rules can not be null");
-    } catch (NullPointerException e) {
-    } catch (Exception e) {
-      fail("wrong exception");
-    }
     try {
       gameRules = new GameRulesImpl(winC, lossC, itemRules, 0L, 1.0, 10L, true);
       fail("Initial snake delta can not be 0");
@@ -76,7 +53,7 @@ public class GameRulesTest {
   }
  
   @Test
-  public void testGetWinConditions() {
+    public void testGetWinConditions() {
     GameRules gameRules;
     WinConditions winC = new WinConditionsImpl(Optional.of(10), Optional.empty(), Optional.empty(), 
         true);
@@ -85,10 +62,10 @@ public class GameRulesTest {
         Optional.empty());
     List<ItemRule> itemRules = new ArrayList<>(Arrays.asList(itemR));
     gameRules = new GameRulesImpl(winC, lossC, itemRules, 100L, 1.0, 10L, true);
-    
+
     assertEquals(gameRules.getWinConditions(), winC);
   }
-  
+
   @Test
   public void testGetLossConditions() {
     GameRules gameRules;
@@ -102,7 +79,7 @@ public class GameRulesTest {
     
     assertEquals(gameRules.getLossConditions(), lossC);
   }
-  
+
   @Test
   public void testGetItemRules() {
     GameRules gameRules;
@@ -126,7 +103,7 @@ public class GameRulesTest {
     
     assertTrue(gameRules.getItemRules() != gameRules.getItemRules());
   }
-  
+
   @Test
   public void testGetInitialSnakeDelta() {
     GameRules gameRules;

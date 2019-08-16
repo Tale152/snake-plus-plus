@@ -9,6 +9,7 @@ import design.model.game.*;
 import implementation.model.game.field.FieldImpl;
 import implementation.model.game.gamerules.WinConditionsImpl;
 import implementation.model.game.items.SnakeFactoryForTests;
+import implementation.model.game.items.SnakeFactoryForTestsUtils;
 
 public class WinConditionsTest {
 
@@ -48,7 +49,7 @@ public class WinConditionsTest {
 			for (int j = 0; j < i; ++j) {
 				points.add(new Point(j,0));
 			}
-			Snake snake = SnakeFactoryForTests.baseSnake(points, field);
+			Snake snake = SnakeFactoryForTestsUtils.baseSnake(points, field);
 			if (i < lenghtToReach) {
 				assertFalse(win.checkSnakeLength(new ArrayList<Snake>(Arrays.asList(snake))));
 			} else {
@@ -61,7 +62,7 @@ public class WinConditionsTest {
   public void testScoreConditions() {
     win = new WinConditionsImpl(Optional.empty(), Optional.of(10), Optional.empty(), true);
     Field field = new FieldImpl(new Point(100,100));
-    Snake snake = SnakeFactoryForTests.baseSnake(
+    Snake snake = SnakeFactoryForTestsUtils.baseSnake(
         new ArrayList<Point>(Arrays.asList(new Point(0,0))), field);
     List<Snake> snakeList = new ArrayList<Snake>(Arrays.asList(snake));
     int scoreToReach = 10;
