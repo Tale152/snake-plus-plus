@@ -49,8 +49,8 @@ public class ItemImpl extends CollidableAbstract implements Item  {
         if (!collider.getProperties().getCollisionProperty().isIntangible() 
                 || (collider.getProperties().getCollisionProperty().isIntangible()) && effectClass.equals(GhostMode.class)) {
             eaten = true;
-            Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
-            Effect effect = constructor.newInstance(dEffectDuration);
+            final Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
+            final Effect effect = constructor.newInstance(dEffectDuration);
             effect.instantaneousEffect(collider);
             if (dEffectDuration.isPresent()) {
                 collider.addEffect(effect);
@@ -67,8 +67,8 @@ public class ItemImpl extends CollidableAbstract implements Item  {
                 Thread.sleep(dExpire.get());
                 if (!eaten) {
                     field.removeItem(this);
-                    Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
-                    Effect effect = constructor.newInstance(dEffectDuration);
+                    final Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
+                    final Effect effect = constructor.newInstance(dEffectDuration);
                     effect.expirationEffect(field);
                 }
             } catch (InterruptedException | InstantiationException | IllegalAccessException | IllegalArgumentException

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import design.model.game.LossConditions;
-import implementation.model.game.gameRules.LossConditionsImpl;
+import implementation.model.game.gamerules.LossConditionsImpl;
 
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")

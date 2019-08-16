@@ -29,7 +29,7 @@ public class ScoreEarning extends EffectAbstract {
 
     @Override
     public final void instantaneousEffect(final Snake target) {
-        Optional<Effect> active = target.getEffects().stream().filter(e -> {
+        final Optional<Effect> active = target.getEffects().stream().filter(e -> {
             return e.getClass().equals(this.getClass()); })
                 .findFirst();
         if (active.isPresent()) {

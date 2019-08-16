@@ -42,7 +42,7 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
     public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (!collider.getProperties().getCollisionProperty().isIntangible()) {
-            CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
+            final CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
             if (!colliderProperty.isIntangible() && !colliderProperty.isInvincible()) {
                 collider.kill();
             }
