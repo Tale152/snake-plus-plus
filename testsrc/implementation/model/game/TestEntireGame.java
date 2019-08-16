@@ -1,5 +1,7 @@
 package implementation.model.game;
 
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
@@ -48,7 +50,6 @@ public class TestEntireGame {
      */
     @Test
     public void testItems() throws NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        new GeneralItemsTests().testInit();
         new GeneralItemsTests().testInstantaneousEffect();
         new GeneralItemsTests().testLastingEffect();
         new GeneralItemsTests().testOnGhost();
