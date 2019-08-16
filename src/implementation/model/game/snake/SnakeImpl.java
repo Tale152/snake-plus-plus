@@ -18,213 +18,231 @@ import design.model.game.Properties;
 import design.model.game.Snake;
 import implementation.model.game.items.BodyPartImpl;
 
-public class SnakeImpl implements Snake{
-	
-	private final static int SPEEDWITHLENGHTMUL = 1;
-	private final static long MAXTIMETOWAIT = 400;
-	private final static long MINTIMETOWAIT = 40;
-	
-	private final Player player;
-	private final Properties properties;
-	private final Field field;
-	private List<Effect> effects;
-	private List<BodyPart> bodyPart;
-	private boolean isAlive;
-	private boolean hasMoved;
-	private Direction nextDirection;
-	private Direction currentDirection;
-	private boolean hasReversed;
-	
-	public SnakeImpl(PlayerNumber playerNumber, String playerName, Direction direction, 
-			long deltaT, double speedMultiplier, Field field, List<Point> point) {
-		this.player = new PlayerImpl(playerNumber, playerName);
-		this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier);
-		this.effects = new ArrayList<>();
-		this.field = field;
-		this.effects = new ArrayList<>();
-		this.bodyPart = new ArrayList<>();
-		this.isAlive = true;
-		this.hasMoved = false;
-		this.hasReversed = false;
+/**
+ * This class is the main snake class, where is handled snake movement,
+ * snake collisions, his field, his owner and the reverse.
+ * All the algorithm to handle snake movements are contained here. 
+ * @author Elisa Tronetti
+ */
+public class SnakeImpl implements Snake {
 
-		for(int i = point.size() - 1; i >= 0; i--) {
-			insertNewHead(point.get(i));
-		}
-		properties.getLengthProperty().lengthen(point.size() - 1); 
-	}
+    private static final int SPEEDWITHLENGHTMUL = 1;
+    private static final long MAXTIMETOWAIT = 400;
+    private static final long MINTIMETOWAIT = 40;
 
+    private final Player player;
+    private final Properties properties;
+    private final Field field;
+    private final List<Effect> effects;
+    private final List<BodyPart> bodyPart;
+    private boolean isLiving;
+    private boolean moved;
+    private boolean hasReversed;
 
-	@Override
-	public void run() {
-		boolean lastMovementSettedNextDirection = false;
-		while(isAlive) {
-			try {
-				waitToMove();
-				if (lastMovementSettedNextDirection) {
-					this.getProperties().getDirectionProperty().forceDirection(
-							this.getProperties().getDirectionProperty().getNextValidDirection());
-				}
-				this.currentDirection = this.properties.getDirectionProperty().getDirection();
-				handleCollisions(obtainNextPoint());
-				this.nextDirection = this.properties.getDirectionProperty().getDirection();
-				if (this.hasReversed) {
-					move(obtainNextPoint());
-					reverse();
-					this.hasReversed = false;
-				} else if(!this.currentDirection.equals(this.nextDirection)) {
-					this.properties.getDirectionProperty().forceDirection(this.currentDirection);
-					move(obtainNextPoint());
-					this.properties.getDirectionProperty().forceDirection(this.nextDirection);
-				} else {
-					move(obtainNextPoint());
-				}
-				
-				if (this.getProperties().getDirectionProperty().hasNextValidDirection()) {
-					lastMovementSettedNextDirection = true;
-				}
-				else {
-					this.properties.getDirectionProperty().allowChangeDirection();
-					lastMovementSettedNextDirection = false;
-				}
-			} catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException | 
-					IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}	
-	}
+    /**
+     * Initialize all snake basic parameter.
+     * @param playerNumber the number of the player that owns this snake
+     * @param playerName the name of the player that owns this snake
+     * @param direction the starting snake direction
+     * @param deltaT the time in milliseconds between two snake's movements
+     * @param speedMultiplier the multiplier to apply to the delta
+     * @param field the field where snake is alive in
+     * @param point snake's spawn point
+     */
+    public SnakeImpl(final PlayerNumber playerNumber, final String playerName, final Direction direction, 
+            final long deltaT, final double speedMultiplier, final Field field, final List<Point> point) {
+        this.player = new PlayerImpl(playerNumber, playerName);
+        this.properties = new PropertiesImpl(direction, deltaT, speedMultiplier);
+        this.effects = new ArrayList<>();
+        this.field = field;
+        this.bodyPart = new ArrayList<>();
+        this.isLiving = true;
+        this.moved = false;
+        this.hasReversed = false;
+        //initialize snake first body part
+        for (int i = point.size() - 1; i >= 0; i--) {
+            insertNewHead(point.get(i));
+        }
+        properties.getLengthProperty().lengthen(point.size() - 1); 
+    }
 
-	@Override
-	public Player getPlayer() {
-		return this.player;
-	}
+    @Override
+    public final void run() {
+        boolean lastMovementSettedNextDirection = false;
+        while (this.isLiving) {
+            try {
+                waitToMove();
+                if (lastMovementSettedNextDirection) {
+                    this.getProperties().getDirectionProperty().forceDirection(
+                            this.getProperties().getDirectionProperty().getNextValidDirection());
+                }
+                Direction currentDirection = this.properties.getDirectionProperty().getDirection();
+                handleCollisions(obtainNextPoint());
+                Direction nextDirection = this.properties.getDirectionProperty().getDirection();
+                //if the property hasReversed has been activated, snake's move to the next point and then reverse his body
+                if (this.hasReversed) {
+                    move(obtainNextPoint());
+                    reverse();
+                    this.hasReversed = false;
+                //if snake current and next direction are not the same, i want him to actually move on the item
+                //and then change direction
+                } else if (!currentDirection.equals(nextDirection)) {
+                    this.properties.getDirectionProperty().forceDirection(currentDirection);
+                    move(obtainNextPoint());
+                    this.properties.getDirectionProperty().forceDirection(nextDirection);
+                } else {
+                    //if anything has happened snake just move to the next point 
+                    move(obtainNextPoint());
+                }
 
-	@Override
-	public Properties getProperties() {
-		return this.properties;
-	}
+                if (this.getProperties().getDirectionProperty().hasNextValidDirection()) {
+                    lastMovementSettedNextDirection = true;
+                } else {
+                    this.properties.getDirectionProperty().allowChangeDirection();
+                    lastMovementSettedNextDirection = false;
+                }
+            } catch (InterruptedException | NoSuchMethodException | SecurityException | InstantiationException 
+                    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	//if the effect is already in snake's list of effect, I just increment the duration of the effect, otherwise I add it in the list
-	@Override
-	public void addEffect(Effect effect) {
-		Optional<Effect> activeEffect = this.effects.stream().filter(e -> e.getClass() == effect.getClass()).findFirst();
-		if(!activeEffect.isPresent()) {
-			this.effects.add(effect);
-			effect.attachSnake(this);
-			new Thread(effect).start();
-		} else {
-			activeEffect.get().incrementDuration(effect.getEffectDuration().get());
-		}
-	}
+    @Override
+    public final Player getPlayer() {
+        return this.player;
+    }
 
-	@Override
-	public boolean removeEffect(Effect effect) {
-		return this.effects.remove(effect);
-	}
+    @Override
+    public final Properties getProperties() {
+        return this.properties;
+    }
 
-	@Override
-	public List<Effect> getEffects() {
-		return new ArrayList<>(this.effects);
-	}
+    @Override
+    public final void addEffect(final Effect effect) {
+        final Optional<Effect> activeEffect = this.effects.stream().filter(e -> e.getClass() == effect.getClass()).findFirst();
+        //if the effect is already in snake's list of effect, I just increment the duration of the effect, otherwise I add it in the list
+        if (!activeEffect.isPresent()) {
+            this.effects.add(effect);
+            effect.attachSnake(this);
+            new Thread(effect).start();
+        } else {
+            activeEffect.get().incrementDuration(effect.getEffectDuration().get());
+        }
+    }
 
-	@Override
-	public boolean isAlive() {
-		return this.isAlive;
-	}
+    @Override
+    public final boolean removeEffect(final Effect effect) {
+        return this.effects.remove(effect);
+    }
 
-	@Override
-	public void kill() {
-		this.isAlive = false;	
-	}
+    @Override
+    public final List<Effect> getEffects() {
+        return new ArrayList<>(this.effects);
+    }
 
-	@Override
-	public void reverse() {
-		if (hasReversed) {
-			Direction direction;
-			int snakeSize = this.bodyPart.size();
-			if(snakeSize > 1) {
-				Point p1 = this.bodyPart.get(snakeSize - 1).getPoint();
-				Point p2 = this.bodyPart.get(snakeSize - 2).getPoint();
-				direction = determinateDirection(p1, p2);
-				List<BodyPart> tmp = new ArrayList<>();
-				tmp.addAll(this.bodyPart);
-				this.bodyPart.clear();
-				for(int i = 0; i <= tmp.size() - 1; i++) {
-					this.field.removeBodyPart(tmp.get(i));
-					insertNewHead(tmp.get(i).getPoint());
-				}
-			} else {
-				direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); //calcolo la direzione opposta se snake ha lunghezza 1
-			}
-			this.properties.getDirectionProperty().forceDirection(direction);	
-		}
-		this.hasReversed = true;
-	}
+    @Override
+    public final boolean isAlive() {
+        return this.isLiving;
+    }
 
-	@Override
-	public List<BodyPart> getBodyParts() {
-		return new ArrayList<>(this.bodyPart);
-	}
-	
-	//method that determinate the opposite direction of snake
-	private Direction determinateOppositeDirection(Direction d) {
-		Direction updatedDirection;	
-		
-		switch(d) {
-		case UP: updatedDirection = Direction.DOWN; break;
-		case DOWN: updatedDirection = Direction.UP; break;
-		case RIGHT: updatedDirection = Direction.LEFT; break;
-		case LEFT: updatedDirection = Direction.RIGHT; break;
-		default: throw new IllegalStateException();	
-		}
-		return updatedDirection;
-	}
-	
-	public boolean hasMoved() {
-		if(this.hasMoved) {
-			this.hasMoved = false;
-			return true;
-		}
-		return false;
-	}
-	
-	//used to determinate the direction of snake, it returns the direction of p1 based on the position of p2
-	private Direction determinateDirection(Point p1, Point p2) {
-		//if x are the same Snake is moving up or down
-		if(p1.x == p2.x) {
-			if(p1.y > p2.y) {
-				if(p1.y - p2.y == 1) {
-					return Direction.DOWN;
-				}else {
-					return Direction.UP;
-				}
-			} else {
-				if(p1.y - p2.y == -1) {
-					return Direction.UP;
-				}else {
-					return Direction.DOWN;
-				}		
-			}
-		}
-		
-		//in this case Snake is moving right or left
-		if(p1.y == p2.y) {
-			
-			if(p1.x > p2.x) {
-				if(p1.x - p2.x == 1) {
-					return Direction.RIGHT;
-				}else {
-					return Direction.LEFT;
-				}
-			} else {
-				if(p1.x - p2.x == -1) {
-					return Direction.LEFT;
-				}else {
-					return Direction.RIGHT;
-				}		
-			}
-		}
-		throw new IllegalStateException();
-	}
+    @Override
+    public final void kill() {
+        this.isLiving = false;
+    }
+
+    @Override
+    public final void reverse() {
+        //the reverse start only if the property has been activated
+        if (this.hasReversed) {
+            Direction direction;
+            final int snakeSize = this.bodyPart.size();
+            //if snake size is bigger than 1, I determinate the new direction using the position of 
+            //the two last snake body part
+            if (snakeSize > 1) {
+                final Point p1 = this.bodyPart.get(snakeSize - 1).getPoint();
+                final Point p2 = this.bodyPart.get(snakeSize - 2).getPoint();
+                direction = determinateDirection(p1, p2);
+                List<BodyPart> tmp = new ArrayList<>();
+                tmp.addAll(this.bodyPart);
+                //then I rebuild snake in the new direction
+                this.bodyPart.clear();
+                for (int i = 0; i <= tmp.size() - 1; i++) {
+                    this.field.removeBodyPart(tmp.get(i));
+                    insertNewHead(tmp.get(i).getPoint());
+                }
+            } else {
+                //if snake length is just 1, I only have to determinate the opposite direction of the current one. 
+                direction = determinateOppositeDirection(this.properties.getDirectionProperty().getDirection()); 
+            }
+            this.properties.getDirectionProperty().forceDirection(direction);
+        }
+        this.hasReversed = true;
+    }
+
+    @Override
+    public final List<BodyPart> getBodyParts() {
+        return new ArrayList<>(this.bodyPart);
+    }
+
+    //method that determinate the opposite direction of snake
+    private Direction determinateOppositeDirection(final Direction d) {
+        switch (d) {
+        case UP: return Direction.DOWN;
+        case DOWN: return Direction.UP;
+        case RIGHT: return Direction.LEFT;
+        case LEFT: return Direction.RIGHT;
+        default: throw new IllegalStateException();
+        }
+    }
+
+    /**
+     * @return true if snake has moved, false otherwise
+     */
+    public boolean hasMoved() {
+        if (this.moved) {
+            this.moved = false;
+            return true;
+        }
+        return false;
+    }
+
+    //used to determinate the direction of snake, it returns the direction of p1 based on the position of p2
+    private Direction determinateDirection(final Point p1, final Point p2) {
+        //if x are the same Snake is moving up or down
+        if (p1.x == p2.x) {
+            if (p1.y > p2.y) {
+                if (p1.y - p2.y == 1) {
+                    return Direction.DOWN;
+                } else {
+                    return Direction.UP;
+                }
+            } else {
+                if (p1.y - p2.y == -1) {
+                    return Direction.UP;
+                } else {
+                    return Direction.DOWN;
+                }
+            }
+        }
+        //in this case Snake is moving right or left
+        if (p1.y == p2.y) {
+            if (p1.x > p2.x) {
+                if (p1.x - p2.x == 1) {
+                    return Direction.RIGHT;
+                } else {
+                    return Direction.LEFT;
+                }
+            } else {
+                if (p1.x - p2.x == -1) {
+                    return Direction.LEFT;
+                } else {
+                    return Direction.RIGHT;
+                }
+            }
+        }
+        throw new IllegalStateException();
+    }
 
 	//method used to insert a new head and set all the bodypart's properties. Also used to initialize snake for the first time
 	private void insertNewHead(Point point) {
@@ -328,7 +346,7 @@ public class SnakeImpl implements Snake{
 		while(this.bodyPart.size() > this.properties.getLengthProperty().getLength()){
 			removeTail();
 		}
-		this.hasMoved = true;
+		this.moved = true;
 	}
 	
 	//snake have to wait to move until it is his time

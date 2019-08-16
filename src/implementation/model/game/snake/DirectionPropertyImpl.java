@@ -47,7 +47,7 @@ public class DirectionPropertyImpl implements DirectionProperty {
             this.canChangeDirection = false;
             this.direction = directionCase(direction);
         } else if (!this.nextInputedDirection.isPresent()) {
-            Direction nextPossibleDirection = directionCase(direction);
+            final Direction nextPossibleDirection = directionCase(direction);
             if (nextPossibleDirection != this.direction) {
                 this.nextInputedDirection = Optional.of(nextPossibleDirection);
             }
@@ -106,7 +106,7 @@ public class DirectionPropertyImpl implements DirectionProperty {
     @Override
     public final Direction getNextValidDirection() {
         if (nextInputedDirection.isPresent()) {
-            Direction result = nextInputedDirection.get();
+            final Direction result = nextInputedDirection.get();
             nextInputedDirection = Optional.empty();
             return result;
         }

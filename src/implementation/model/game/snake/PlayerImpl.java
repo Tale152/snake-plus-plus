@@ -13,8 +13,8 @@ public class PlayerImpl implements Player {
     private static final int MULTIPLIER = 1;
     private static final int SCORE = 0;
 
-    private PlayerNumber playerNumber;
-    private String playerName;
+    private final PlayerNumber playerNumber;
+    private final String playerName;
     private int score;
     private double scoreMultiplier;
 
