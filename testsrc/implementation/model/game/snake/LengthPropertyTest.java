@@ -40,7 +40,7 @@ public class LengthPropertyTest {
 
     private boolean checkIllegalArgumentLengthen(final LengthProperty length, final int lenghtIncrement) {
         try {
-            length.lengthen(-1);
+            length.lengthen(lenghtIncrement);
         } catch (IllegalArgumentException e) {
             return true;
         }

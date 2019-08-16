@@ -16,7 +16,7 @@ public class PlayerTest {
      */
     @Test
     public void testPlayer() {
-        Player player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, "Player");
+        final Player player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, "Player");
         assertEquals("Check if the player number is the player1", player.getPlayerNumber(), PlayerNumber.PLAYER1);
         assertEquals("Check if the player name is Player", player.getName(), "Player");
         assertEquals("Check if the initial score is 0", player.getScore(), 0);

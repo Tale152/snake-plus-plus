@@ -9,6 +9,7 @@ import design.model.game.*;
 import implementation.model.game.field.FieldImpl;
 import implementation.model.game.gamerules.LossConditionsImpl;
 import implementation.model.game.items.SnakeFactoryForTests;
+import implementation.model.game.items.SnakeFactoryForTestsUtils;
 
 public class LossConditionsTest {
 	
@@ -32,7 +33,7 @@ public class LossConditionsTest {
 		List<Snake> snakes = new ArrayList<>();
 		int nSnakes = 4;
 		for (int i = 0; i < nSnakes; ++i) {
-			snakes.add(SnakeFactoryForTests.baseSnake(
+			snakes.add(SnakeFactoryForTestsUtils.baseSnake(
 					new ArrayList<Point>(Arrays.asList(new Point(0,0))), field));
 		}
 		for (int i = 0; i < nSnakes; ++i) {

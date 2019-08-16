@@ -28,7 +28,7 @@ public class SpeedPropertyTest {
                 checkSpeedPropertyInitIllegalArgumenException(-1, 1));
         assertTrue("multiplier cannot be negative while initializing", 
                 checkSpeedPropertyInitIllegalArgumenException(100, -1));
-        SpeedProperty speed = SnakeComponentsFactoryUtils.createSpeedProperty(DELTA, 1);
+        final SpeedProperty speed = SnakeComponentsFactoryUtils.createSpeedProperty(DELTA, 1);
         assertEquals("Check if the speed multiplier is correct", speed.getDeltaT(), DELTA);
         speed.setDeltaT(1000L);
         assertEquals("Check if the speed multiplier is correct after setting it", speed.getDeltaT(), 1000L);
@@ -48,7 +48,7 @@ public class SpeedPropertyTest {
     private boolean checkSpeedPropertyInitIllegalArgumenException(final long delta, final double speedMultiplier) {
         try {
             @SuppressWarnings("unused")
-            SpeedProperty speed = SnakeComponentsFactoryUtils.createSpeedProperty(delta, speedMultiplier);
+            final SpeedProperty speed = SnakeComponentsFactoryUtils.createSpeedProperty(delta, speedMultiplier);
         } catch (IllegalArgumentException e) {
             return true;
         }
@@ -57,7 +57,7 @@ public class SpeedPropertyTest {
 
     private boolean checkSetDeltaTIllegalArgumenException(final SpeedProperty speed, final long deltaT) {
         try {
-            speed.setDeltaT(-1L);
+            speed.setDeltaT(deltaT);
         } catch (IllegalArgumentException e) {
             return true;
         } 
