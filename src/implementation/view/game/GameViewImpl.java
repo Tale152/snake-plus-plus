@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 
 /**
  * @see GameView
- * @author Alessandro Talmi
  */
 public class GameViewImpl implements GameView {
 
@@ -56,14 +55,14 @@ public class GameViewImpl implements GameView {
     private final double hudPercentage;
     private final ResourcesLoader loader;
 
-    private BackgroundPane root;
-    private double labelY = 0;
-    private double timeLabelX = 0;
-    private double playerSpacingX = 0;
-    private double scoreSpacingY = 0;
-    private double namesSpacingY = 0;
-    private double hudSpritesSpacingY = 0;
-    private double hudSpritesDimension = 0;
+    private final BackgroundPane root;
+    private double labelY;
+    private double timeLabelX;
+    private double playerSpacingX;
+    private double scoreSpacingY;
+    private double namesSpacingY;
+    private double hudSpritesSpacingY;
+    private double hudSpritesDimension;
 
     private Font timeFont;
     private Font playerFont;

@@ -123,8 +123,8 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 
     private Background readBackground(final String path, final double width, final double height) 
             throws FileNotFoundException, IOException {
-        File file = new File(path);
-        FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
+        final File file = new File(path);
+        final FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
         return new BackgroundImpl(new Image(fis, width, height, false, false), width, height);
     }
 
