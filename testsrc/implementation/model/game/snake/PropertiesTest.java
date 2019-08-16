@@ -1,18 +1,26 @@
 package implementation.model.game.snake;
 
 import design.model.game.Properties;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
+/**
+ * Tests regarding all snake the properties.
+ */
 public class PropertiesTest {
 
-	@Test
-	public void testProperties() {
-		Properties properties = SnakeComponentsFactoryForTest.createProperties();
-		assertTrue(properties.getCollisionProperty() != null);
-		assertTrue(properties.getDirectionProperty() != null);
-		assertTrue(properties.getLengthProperty() != null);
-		assertTrue(properties.getPickupProperty() != null);
-		assertTrue(properties.getSpeedProperty() != null);
-	}
+    /**
+     * Test than all the snake properties can not be non-initialize.
+     */
+    @Test
+    public void testProperties() {
+        final Properties properties = SnakeComponentsFactoryForTest.createProperties();
+        assertNotNull("Check if collision properties are not null", properties.getCollisionProperty());
+        assertNotNull("Check if direction properties are not null", properties.getDirectionProperty());
+        assertNotNull("Check if length properties are not null", properties.getLengthProperty());
+        assertNotNull("Check if pick up properties are not null", properties.getPickupProperty());
+        assertNotNull("Check if speed properties are not null", properties.getSpeedProperty());
+    }
+
 }
