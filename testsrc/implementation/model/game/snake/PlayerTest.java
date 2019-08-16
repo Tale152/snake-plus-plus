@@ -1,7 +1,6 @@
 package implementation.model.game.snake;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Test;
 import design.model.game.Player;
 import design.model.game.PlayerNumber;
@@ -17,31 +16,11 @@ public class PlayerTest {
      */
     @Test
     public void testPlayer() {
-        Player player;
-
-        try {
-            player = SnakeComponentsFactoryUtils.createPlayer(null, "Ale");
-            fail("Player number cannot be null");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-
-        try {
-            player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, null);
-            fail("Player name cannot be null");
-        } catch (IllegalArgumentException e) {
-        } catch (Exception e) {
-            fail("wrong exception");
-        }
-
-        player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, "Ale");
-
+        Player player = SnakeComponentsFactoryUtils.createPlayer(PlayerNumber.PLAYER1, "Player");
         assertEquals("Check if the player number is the player1", player.getPlayerNumber(), PlayerNumber.PLAYER1);
-        assertEquals("Check if the player name is Ale", player.getName(), "Ale");
+        assertEquals("Check if the player name is Player", player.getName(), "Player");
         assertEquals("Check if the initial score is 0", player.getScore(), 0);
         assertEquals("Check if the initial score multiplier is 1", player.getScoreMultiplier(), 1, 0);
-
         player.addScore(100);
         assertEquals("Check if the score is 100, after adding 100 points and the score multiplier is 1",
                 player.getScore(), 100);
