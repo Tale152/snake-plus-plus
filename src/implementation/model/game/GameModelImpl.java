@@ -6,7 +6,6 @@ import design.model.game.GameRules;
 
 /**
  * @see GameModel
- * @author Alessandro Talmi
  */
 public class GameModelImpl implements GameModel {
 
