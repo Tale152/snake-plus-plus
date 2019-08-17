@@ -333,8 +333,7 @@ public class GameControllerImpl implements GameController {
             }
             gameView.getHUD().setTime(convertGameTime());
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new RuntimeException(e.toString());
         }
     }
 
@@ -349,7 +348,7 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void setInterstice(GameInterstice interstice) {
+    public final void setInterstice(final GameInterstice interstice) {
         this.interstice = interstice;
     }
 
