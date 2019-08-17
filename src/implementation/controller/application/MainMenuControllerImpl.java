@@ -24,6 +24,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -39,9 +41,9 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     private static final double TEXT_PERCENTAGE = 0.4;
     @FXML private Button classic;
     @FXML private Button level;
-    @FXML private Label snakeppLabel;
     @FXML private AnchorPane root;
     @FXML private MenuButton skinPacks;
+    @FXML private ImageView snakeppImageView;
 
     private String skinPackPath;
     private final Map<String, String> itemButtonMap = new HashMap<>();
@@ -86,13 +88,16 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
             public void changed(final ObservableValue<?> observable, final Object oldValue, final Object newValue) {
                 changeFontSize(level, TEXT_PERCENTAGE);
                 changeFontSize(classic, TEXT_PERCENTAGE);
-                changeFontSize(snakeppLabel, TEXT_PERCENTAGE);
             }
         });
         final Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
         mediaPlayer = new MediaPlayer(media); 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+        System.out.println(new File("/home/elisa/Desktop/snekpp/res/menu").exists());
+        snakeppImageView.setImage(
+                new Image(
+                        new File("/home/elisa/Desktop/snekpp/res/menu").toURI().toString()));
     }
 
     /**This method read all the directory in the current directory that are put in a map

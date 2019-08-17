@@ -39,7 +39,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(e -> {
             System.exit(0); });
         try {
-            final AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
+            final BorderPane root = (BorderPane) FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
             scene = new Scene(root, 
                     Toolkit.getDefaultToolkit().getScreenSize().getWidth() * SCREEN_PERCENTAGE, 
                     Toolkit.getDefaultToolkit().getScreenSize().getHeight() * SCREEN_PERCENTAGE);
@@ -53,10 +53,6 @@ public class Main extends Application {
                     }
                 }
             });
-            primaryStage.setFullScreenExitHint("");
-            primaryStage.setFullScreen(true);
-            primaryStage.setResizable(false);
-            primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
             primaryStage.setTitle("Snake++");
             primaryStage.show();
         } catch (Exception e) {
