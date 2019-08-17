@@ -62,7 +62,7 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 
     @Override
     public final void run() {
-        if (dExpire.isPresent()) {
+        if (dExpire != null && dExpire.isPresent()) {
             try {
                 Thread.sleep(dExpire.get());
                 if (!eaten) {
