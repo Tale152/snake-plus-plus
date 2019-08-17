@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import design.controller.application.ClassicController;
-import design.controller.game.GameController;
 import design.controller.game.GameLoader;
 import design.model.game.Field;
 import design.model.game.ItemRule;
@@ -18,8 +16,6 @@ import design.view.game.ResourcesLoader;
 import implementation.controller.Path;
 import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
-import implementation.view.application.Main;
-import implementation.view.game.GameViewImpl;
 import implementation.view.game.ResourcesLoaderFromFile;
 import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
@@ -33,15 +29,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 
 public class ClassicControllerImpl implements ClassicController {
 
-    public static final String PATH = "res" + File.separator + "resources" + File.separator + "TestPack";
-    private static String levelsPath = "res" + File.separator + "stages" + File.separator + "classic";
     private final List<GameLoader> levels;
     private final List<String> names;
     private int selected = 0;
@@ -79,7 +71,7 @@ public class ClassicControllerImpl implements ClassicController {
     public ClassicControllerImpl() throws IOException {
         levels = new ArrayList<>();
         names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
-        for (final File file : new File(levelsPath).listFiles()) {
+        for (final File file : new File(Path.CLASSIC).listFiles()) {
             final String levelPath = file.getPath();
             levels.add(new GameLoaderJSON(levelPath, names));
         }
