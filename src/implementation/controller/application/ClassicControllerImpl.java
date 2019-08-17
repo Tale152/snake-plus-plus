@@ -18,6 +18,7 @@ import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.view.game.ResourcesLoaderFromFile;
 import javafx.animation.AnimationTimer;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -95,6 +96,11 @@ public class ClassicControllerImpl implements ClassicController {
         }
         preview.widthProperty().bind(previewContainer.widthProperty());
         preview.heightProperty().bind(previewContainer.heightProperty());
+        ChangeListener<Number> canvasResize = (observable, oldValue, newValue) ->
+            drawPreview(preview, levels.get(selected).getGameModel().getField());
+
+        preview.widthProperty().addListener(canvasResize);
+        preview.heightProperty().addListener(canvasResize);
         gc = preview.getGraphicsContext2D();
         refreshPlayers();
     }
