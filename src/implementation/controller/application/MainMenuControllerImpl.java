@@ -3,7 +3,10 @@ package implementation.controller.application;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -30,8 +33,6 @@ import javafx.scene.media.MediaPlayer;
 
 /**
  * @see MainMenuController
- * @author Alessandro Talmi
- * @author Elisa Tronetti
  */
 public class MainMenuControllerImpl implements MainMenuController, Initializable {
 
@@ -47,7 +48,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     private final Map<String, String> itemButtonMap = new HashMap<>();
     private static final String MAIN_MENU_THEME_PATH = Path.THEMES + "Main_menu_theme.mp3";
     private static MediaPlayer mediaPlayer;
-    
+
     private static final String CLASSIC_VIEW = "/implementation/view/application/ClassicView.fxml";
     private static final String WORLD_VIEW = "/implementation/view/application/WorldSelectionView.fxml";
 
@@ -62,20 +63,17 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 
     @Override
     @FXML
-    public void goToLevelMode() throws IOException {
-    	goToMode(WORLD_VIEW);
+    public final void goToLevelMode() throws IOException {
+        goToMode(WORLD_VIEW);
     }
-    
-    private void goToMode(String FXMLPath) throws IOException {
-    	FXMLLoader root = new FXMLLoader(getClass().getResource(FXMLPath));
+
+    private void goToMode(final String fxmlPath) throws IOException {
+        final FXMLLoader root = new FXMLLoader(getClass().getResource(fxmlPath));
         Main.getScene().setRoot(root.load());
-        StageSelectionController controller = root.getController();
+        final StageSelectionController controller = root.getController();
         controller.setSkinPackPath(skinPackPath);
     }
 
-    /**
-     * @author Alessandro Talmi
-     */
     @Override
     public final void initialize(final URL arg0, final ResourceBundle arg1) {
         final File folder = new File("res" + File.separator + "resources");
@@ -98,25 +96,30 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     /**This method read all the directory in the current directory that are put in a map
     *with the path and the name. The first directory is a random pack, used if the default pack
     does not exist. If there are any directory in the folder, the game will stop running.
-    @author Elisa Tronetti*/
+    */
     private void listFiles(final File folder) {
         String randomPack = "";
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getAbsolutePath());
-                if (randomPack.isEmpty()) {
-                    randomPack = fileEntry.getAbsolutePath();
+        final File[] files = folder.listFiles();
+        if (files != null) {
+            final List<File> filesList = new ArrayList<>(Arrays.asList(files));
+            for (final File fileEntry : filesList) {
+                if (fileEntry.isDirectory()) {
+                    this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getAbsolutePath());
+                    if (randomPack.isEmpty()) {
+                        randomPack = fileEntry.getAbsolutePath();
+                    }
                 }
             }
-        }
-        if (this.itemButtonMap.isEmpty()) {
-            System.out.println("There are no skin packs");
-            System.exit(1);
-        } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
-            this.skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);
+            if (this.itemButtonMap.isEmpty()) {
+                throw new RuntimeException("no skin paks found");
+            } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
+                this.skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);
+            } else {
+                this.skinPackPath = randomPack;
+            } 
         } else {
-            this.skinPackPath = randomPack;
-        } 
+            throw new RuntimeException("there are problems with directory " + folder.getAbsolutePath());
+        }
     }
 
     /**This method initialize all the menu item in the menu button
