@@ -28,9 +28,6 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
      */
     public BodyPartImpl(final Point point, final Snake owner) {
         super(point);
-        if (owner == null) {
-            throw new NullPointerException();
-        }
         head = false;
         body = false;
         tail = false;
@@ -44,9 +41,9 @@ public class BodyPartImpl extends CollidableAbstract implements BodyPart {
     @Override
     public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (!collider.getProperties().getCollisionProperty().getIntangibility()) {
-            CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
-            if (!colliderProperty.getIntangibility() && !colliderProperty.getInvincibility()) {
+        if (!collider.getProperties().getCollisionProperty().isIntangible()) {
+            final CollisionProperty colliderProperty = collider.getProperties().getCollisionProperty();
+            if (!colliderProperty.isIntangible() && !colliderProperty.isInvincible()) {
                 collider.kill();
             }
         }

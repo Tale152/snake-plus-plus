@@ -26,29 +26,29 @@ public class FieldDeserializer extends StdDeserializer<Field> {
         this(null);
     }
 
-    public FieldDeserializer(Class<?> vc) {
+    public FieldDeserializer(final Class<?> vc) {
         super(vc);
     }
 
     public Field deserialize(final JsonParser parser, final DeserializationContext deserializer) throws IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        final ObjectMapper om = new ObjectMapper();
+        final JsonNode node = deserializer.readValue(parser, JsonNode.class);
 
-        Point fieldSize = om.readValue(node.get("dimensions").traverse(), Point.class);
-        Field f = new FieldImpl(fieldSize);
-        ItemFactory itemFactory = new ItemFactory(f);
+        final Point fieldSize = om.readValue(node.get("dimensions").traverse(), Point.class);
+        final Field f = new FieldImpl(fieldSize);
+        final ItemFactory itemFactory = new ItemFactory(f);
 
-        JsonNode walls = node.get("walls");
+        final JsonNode walls = node.get("walls");
         for (final JsonNode wall : walls) {
             f.addWall(om.readValue(wall.traverse(), WallImpl.class));
         }
 
-        JsonNode items = node.get("items");
+        final JsonNode items = node.get("items");
 
         for (final JsonNode item : items) {
-            Point position = om.readValue(item.get("position").traverse(), Point.class);
+            final Point position = om.readValue(item.get("position").traverse(), Point.class);
 
-            Class<? extends Effect> effect = item.get("effect").traverse().readValueAs(new TypeReference<Class<? extends Effect>>() { });
+            final Class<? extends Effect> effect = item.get("effect").traverse().readValueAs(new TypeReference<Class<? extends Effect>>() { });
 
             //TODO: read Optionals instead of ternary
             Optional<Long> itemDuration;

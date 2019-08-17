@@ -1,4 +1,4 @@
-package implementation.model.game.gameRules;
+package implementation.model.game.gamerules;
 
 import java.util.Optional;
 import design.model.game.Effect;
@@ -17,11 +17,8 @@ public class ItemRuleImpl implements ItemRule {
     private final Optional<Long> itemDuration;
     private final Optional<Long> effectDuration;
 
-    private void checkArguments(final Class<? extends Effect> effectClass, final long spawnDelta,
-            final double spawnChance, final int max, final Optional<Long> itemDuration, final Optional<Long> effectDuration) {
-        if (effectClass == null || itemDuration == null || effectDuration == null) {
-            throw new NullPointerException();
-        }
+    private void checkArguments(final long spawnDelta, final double spawnChance, final int max, 
+            final Optional<Long> itemDuration, final Optional<Long> effectDuration) {
         if (spawnDelta <= 0L || spawnChance <= 0 || max <= 0) {
             throw new IllegalArgumentException();
         }
@@ -45,7 +42,7 @@ public class ItemRuleImpl implements ItemRule {
      */
     public ItemRuleImpl(final Class<? extends Effect> effectClass, final long spawnDelta, final double spawnChance, 
             final int max, final Optional<Long> itemDuration, final Optional<Long> effectDuration) {
-        checkArguments(effectClass, spawnDelta, spawnChance, max, itemDuration, effectDuration);
+        checkArguments(spawnDelta, spawnChance, max, itemDuration, effectDuration);
         this.effectClass = effectClass;
         this.spawnDelta = spawnDelta;
         this.spawnChance = spawnChance;

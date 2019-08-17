@@ -16,7 +16,7 @@ public interface CollisionProperty {
     /**
      * @return if the snake is invincible or not
      */
-    boolean getInvincibility();
+    boolean isInvincible();
 
     /**
      * @param intangibility sets if the snake is intangible or not
@@ -26,7 +26,7 @@ public interface CollisionProperty {
     /**
      * @return if the snake is intangible or not
      */
-    boolean getIntangibility();
+    boolean isIntangible();
 
     /**
      * @param spring set if the snake bounces off walls on collision or not
@@ -36,6 +36,6 @@ public interface CollisionProperty {
     /**
      * @return if the snake bounces off walls on collision or not
      */
-    boolean getSpring();
+    boolean isSpring();
 
 }

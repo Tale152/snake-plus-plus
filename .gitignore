@@ -17,6 +17,8 @@ local.properties
 .recommenders
 .checkstyle
 checkstyle/
+.pmd
+.ruleset
 
 # External tool builders
 .externalToolBuilders/

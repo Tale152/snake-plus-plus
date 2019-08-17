@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import design.model.game.Effect;
 import design.model.game.ItemRule;
-import implementation.model.game.gameRules.ItemRuleImpl;
+import implementation.model.game.gamerules.ItemRuleImpl;
 
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")

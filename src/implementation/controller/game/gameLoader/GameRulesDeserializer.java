@@ -16,7 +16,7 @@ import design.model.game.GameRules;
 import design.model.game.ItemRule;
 import design.model.game.LossConditions;
 import design.model.game.WinConditions;
-import implementation.model.game.gameRules.GameRulesImpl;
+import implementation.model.game.gamerules.GameRulesImpl;
 
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")

@@ -5,13 +5,12 @@ import javafx.scene.image.Image;
 
 /**
  * @see Background
- * @author Alessandro Talmi
  */
 public class BackgroundImpl implements Background {
 
     private final Image bg;
-    private double width;
-    private double height;
+    private final double width;
+    private final double height;
 
     /**
      * @param bg background image

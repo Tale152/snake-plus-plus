@@ -11,17 +11,15 @@ public class ActionImpl implements Action {
 
     @Override
     public PlayerNumber getPlayerNumber() {
-        // TODO Auto-generated method stub
         return this.player;
     }
 
     @Override
     public Direction getDirection() {
-        // TODO Auto-generated method stub
         return this.direction;
     }
 
-    public ActionImpl(PlayerNumber n, Direction dir) {
+    public ActionImpl(final PlayerNumber n, final Direction dir) {
         this.player = n;
         this.direction = dir;
     }

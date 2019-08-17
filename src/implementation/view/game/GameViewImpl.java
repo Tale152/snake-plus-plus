@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 
 /**
  * @see GameView
- * @author Alessandro Talmi
  */
 public class GameViewImpl implements GameView {
 
@@ -56,14 +55,14 @@ public class GameViewImpl implements GameView {
     private final double hudPercentage;
     private final ResourcesLoader loader;
 
-    private BackgroundPane root;
-    private double labelY = 0;
-    private double timeLabelX = 0;
-    private double playerSpacingX = 0;
-    private double scoreSpacingY = 0;
-    private double namesSpacingY = 0;
-    private double hudSpritesSpacingY = 0;
-    private double hudSpritesDimension = 0;
+    private final BackgroundPane root;
+    private double labelY;
+    private double timeLabelX;
+    private double playerSpacingX;
+    private double scoreSpacingY;
+    private double namesSpacingY;
+    private double hudSpritesSpacingY;
+    private double hudSpritesDimension;
 
     private Font timeFont;
     private Font playerFont;
@@ -79,8 +78,8 @@ public class GameViewImpl implements GameView {
      * @throws IOException if there are problems regarding resourcesPath
      */
     public GameViewImpl(final Scene scene, final String resourcesPath, final GameModel gameModel) throws FileNotFoundException, IOException {
-        List<String> playerNames = new ArrayList<>();
-        for (Snake s : gameModel.getField().getSnakes()) {
+        final List<String> playerNames = new ArrayList<>();
+        for (final Snake s : gameModel.getField().getSnakes()) {
             playerNames.add(s.getPlayer().getName());
         }
         loader = new ResourcesLoaderFromFile(resourcesPath, gameModel.getField().getWidth(), gameModel.getField().getHeight());
@@ -119,7 +118,7 @@ public class GameViewImpl implements GameView {
             public void handle(final long currentNanoTime) {
                 drawBg(root.getBackgroundGraphicsContext(), root.getBackgroundCanvas(), (Image) loader.getHudBackground().getBackground());
                 drawBg(root.getFieldGraphicsContext(), root.getFieldCanvas(), (Image) loader.getFieldBackground().getBackground());
-                drawField(loader, field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayers);
+                drawField(field, root.getFieldGraphicsContext(), root.getSpriteSize(), nPlayers);
                 drawHud(nPlayers);
             }
         };
@@ -127,7 +126,7 @@ public class GameViewImpl implements GameView {
 
     private BackgroundPane initRoot(final Scene scene, final int nPlayers, 
             final int nCellWidth, final int nCellHeight) throws FileNotFoundException, IOException {
-        BackgroundPane root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
+        final BackgroundPane root = new BackgroundPane(hudPercentage, nCellWidth, nCellHeight);
         scene.setRoot(root);
         root.widthProperty().addListener(new ChangeListener<Object>() {
             @Override
@@ -158,7 +157,7 @@ public class GameViewImpl implements GameView {
 
     private void setHeightProperies() {
         labelY = (root.getHeight() * hudPercentage) / 2;
-        double bottomHudSubSpaceHeight = ((root.getHeight() * hudPercentage) / BOTTOM_HUD_SUB_SPACES);
+        final double bottomHudSubSpaceHeight = ((root.getHeight() * hudPercentage) / BOTTOM_HUD_SUB_SPACES);
         scoreSpacingY = root.getHeight() - (bottomHudSubSpaceHeight * SCORE_SPACING_Y_POSITIONING);
         namesSpacingY = root.getHeight() - (bottomHudSubSpaceHeight * NAMES_SPACING_Y_POSITIONING);
         hudSpritesSpacingY = root.getHeight() - (bottomHudSubSpaceHeight * HUD_SPRITES_SPACING_Y_POSITIONING);
@@ -170,11 +169,11 @@ public class GameViewImpl implements GameView {
     }
 
     private GameController initGameController(final Scene scene, final GameModel gameModel) throws IOException {
-        GameController controller = new GameControllerImpl(gameModel, this, loader);
+        final GameController controller = new GameControllerImpl(gameModel, this, loader);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             controller.playerInput(new InputEventFX(key));
         });
-        Thread t  = new Thread(controller);
+        final Thread t  = new Thread(controller);
         t.start();
         return controller;
     }
@@ -184,16 +183,16 @@ public class GameViewImpl implements GameView {
         gc.drawImage(bg, 0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
-    private void drawField(final ResourcesLoader loader, final GameField field, 
-            final GraphicsContext fieldGC, final double spriteLen, final int nPlayer) {
-        for (Entry<Point, Sprite> entry : field.getItemSprites().entrySet()) {
+    private void drawField(final GameField field, final GraphicsContext fieldGC, 
+            final double spriteLen, final int nPlayer) {
+        for (final Entry<Point, Sprite> entry : field.getItemSprites().entrySet()) {
             drawSprite(fieldGC, (Image) entry.getValue().getSprite(), entry.getKey(), spriteLen);
         }
-        for (Entry<Point, Sprite> entry : field.getWallSprites().entrySet()) {
+        for (final Entry<Point, Sprite> entry : field.getWallSprites().entrySet()) {
             drawSprite(fieldGC, (Image) entry.getValue().getSprite(), entry.getKey(), spriteLen);
         }
         for (int i = 0; i < nPlayer; i++) {
-            for (Entry<Point, List<Sprite>> entry : field.getSnakeSprites(i).entrySet()) {
+            for (final Entry<Point, List<Sprite>> entry : field.getSnakeSprites(i).entrySet()) {
                 for (int j = entry.getValue().size() - 1; 0 <= j; j--) {
                     drawSprite(fieldGC, (Image) entry.getValue().get(j).getSprite(), entry.getKey(), spriteLen);
                 }
@@ -219,7 +218,7 @@ public class GameViewImpl implements GameView {
                     scoreSpacingY);
             drawPlayerHeadAndActiveItems(i);
             if (!hud.getPlayerHUDs().get(i).isAlive()) {
-                Double deadDim = root.getHeight() * hudPercentage;
+                final Double deadDim = root.getHeight() * hudPercentage;
                 root.getBackgroundGraphicsContext().drawImage((Image) loader.getDeadPlayerIndicator().getSprite(),
                         (playerSpacingX * i) + playerSpacingX - (deadDim / 2), root.getHeight() - deadDim, 
                         deadDim, deadDim);
@@ -228,12 +227,12 @@ public class GameViewImpl implements GameView {
     }
 
     private void drawPlayerHeadAndActiveItems(final int nPlayer) {
-        List<Sprite> spriteList = hud.getPlayerHUDs().get(nPlayer).getSpriteList();
-        double totalSpaceSprites = ((spriteList.size() * hudSpritesDimension) + ((hudSpritesDimension * SPACING_BETWEEN_HUD_SPRITES) * (spriteList.size() - 1)));
-        double leftCorner = (playerSpacingX * nPlayer) + playerSpacingX - (totalSpaceSprites / 2);
+        final List<Sprite> spriteList = hud.getPlayerHUDs().get(nPlayer).getSpriteList();
+        final double totalSpaceSprites = ((spriteList.size() * hudSpritesDimension) + ((hudSpritesDimension * SPACING_BETWEEN_HUD_SPRITES) * (spriteList.size() - 1)));
+        final double leftCorner = (playerSpacingX * nPlayer) + playerSpacingX - (totalSpaceSprites / 2);
         int i = 0;
-        for (Sprite sprite : spriteList) {
-            double xSpacing = leftCorner + (hudSpritesDimension * (1 + SPACING_BETWEEN_HUD_SPRITES) * i);
+        for (final Sprite sprite : spriteList) {
+            final double xSpacing = leftCorner + (hudSpritesDimension * (1 + SPACING_BETWEEN_HUD_SPRITES) * i);
             root.getBackgroundGraphicsContext().drawImage((Image) sprite.getSprite(), xSpacing, hudSpritesSpacingY, 
                     hudSpritesDimension, hudSpritesDimension);
             ++i;
@@ -246,9 +245,9 @@ public class GameViewImpl implements GameView {
             if (percentage >= HUD_ERROR_PERCENTAGE) {
                 throw new IllegalStateException("Cannot size screen with this nCellWidth and nCellHeight");
             }
-            double hudHeight = SCREEN_SIZE.getHeight() * percentage;
-            double fieldHeight = SCREEN_SIZE.getHeight() - (hudHeight * 2);
-            double cellSize = fieldHeight / nCellHeight;
+            final double hudHeight = SCREEN_SIZE.getHeight() * percentage;
+            final double fieldHeight = SCREEN_SIZE.getHeight() - (hudHeight * 2);
+            final double cellSize = fieldHeight / nCellHeight;
             if (cellSize * nCellWidth < SCREEN_SIZE.getWidth()) {
                 break;
             } else {

@@ -28,15 +28,17 @@ import design.model.game.PlayerNumber;
 import design.model.game.Snake;
 import design.model.game.WinConditions;
 import implementation.model.game.GameModelImpl;
-import implementation.model.game.gameRules.GameRulesImpl;
-import implementation.model.game.gameRules.ItemRuleImpl;
-import implementation.model.game.gameRules.LossConditionsImpl;
-import implementation.model.game.gameRules.WinConditionsImpl;
+import implementation.model.game.gamerules.GameRulesImpl;
+import implementation.model.game.gamerules.ItemRuleImpl;
+import implementation.model.game.gamerules.LossConditionsImpl;
+import implementation.model.game.gamerules.WinConditionsImpl;
 import implementation.model.game.items.Apple;
 import implementation.model.game.items.Beer;
 import implementation.model.game.snake.SnakeImpl;
 
 public class GameLoaderJSON implements GameLoader {
+
+    private static final long L = (long) 10e9;
 
     private final GameModel gameModel;
 
@@ -48,14 +50,12 @@ public class GameLoaderJSON implements GameLoader {
 
     private final int maxPlayers;
 
-    private static long L = (long) 10e9;
-
     @Override
     public GameModel getGameModel() {
         return this.gameModel;
     }
 
-    private String readJSON(String path) throws IOException {
+    private String readJSON(final String path) throws IOException {
         String json = new String(Files.readAllBytes(Paths.get(path)));
         return json;
     }
@@ -64,7 +64,7 @@ public class GameLoaderJSON implements GameLoader {
         this(stageFile.getAbsolutePath(), names);
     }
 
-    public GameLoaderJSON(String stagePath, List<String> names) throws IOException {
+    public GameLoaderJSON(final String stagePath, final List<String> names) throws IOException {
         objectMapper = new ObjectMapper();
         SimpleModule deserializerModule = new SimpleModule();
         deserializerModule.addDeserializer(WinConditions.class, new WinConditionsDeserializer());
@@ -102,7 +102,7 @@ public class GameLoaderJSON implements GameLoader {
         this.description = loader.get("description").asText();
     }
 
-    public static void main(String arg[]) throws IOException {
+    public static void main(final String[] arg) throws IOException {
         Optional<Integer> length = Optional.ofNullable(10);
         Optional<Integer> score = Optional.ofNullable(null);
         Optional<Long> time = Optional.ofNullable(null);

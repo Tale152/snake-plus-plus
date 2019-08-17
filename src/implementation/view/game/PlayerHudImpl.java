@@ -72,7 +72,7 @@ public class PlayerHudImpl implements PlayerHud {
 
     @Override
     public final List<Sprite> getSpriteList() {
-        List<Sprite> res = new ArrayList<Sprite>();
+        final List<Sprite> res = new ArrayList<Sprite>();
         if (playerSprite != null) {
             res.add(playerSprite);
         }

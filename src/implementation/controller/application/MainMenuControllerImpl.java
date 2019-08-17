@@ -89,7 +89,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
                 changeFontSize(snakeppLabel, TEXT_PERCENTAGE);
             }
         });
-        Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
+        final Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
         mediaPlayer = new MediaPlayer(media); 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
@@ -124,9 +124,9 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     *and when you select a skin the name of the menu button has the name of the skin selected.
     *@author Elisa Tronetti*/
     private void initializeMenuItem() {
-        for (String s : this.itemButtonMap.keySet()) {
-            MenuItem m = new MenuItem(s);
-            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+        for (final String s : this.itemButtonMap.keySet()) {
+            final MenuItem m = new MenuItem(s);
+            final EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
                 public void handle(final ActionEvent e) { 
                     skinPackPath = itemButtonMap.get(s);
                     skinPacks.setText(m.getText());

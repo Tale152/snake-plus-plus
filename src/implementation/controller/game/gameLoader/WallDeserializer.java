@@ -20,7 +20,7 @@ public class WallDeserializer extends StdDeserializer<Wall> {
         this(null);
     }
 
-    public WallDeserializer(Class<?> vc) {
+    public WallDeserializer(final Class<?> vc) {
         super(vc);
     }
 

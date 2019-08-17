@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 /**
  * Application's entry point.
- * @author Alessandro Talmi
  */
 public class Main extends Application {
 
@@ -40,7 +39,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(e -> {
             System.exit(0); });
         try {
-            AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
+            final AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
             scene = new Scene(root, 
                     Toolkit.getDefaultToolkit().getScreenSize().getWidth() * SCREEN_PERCENTAGE, 
                     Toolkit.getDefaultToolkit().getScreenSize().getHeight() * SCREEN_PERCENTAGE);

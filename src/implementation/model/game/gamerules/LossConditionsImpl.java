@@ -1,4 +1,4 @@
-package implementation.model.game.gameRules;
+package implementation.model.game.gamerules;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,10 @@ public class LossConditionsImpl implements LossConditions {
     private final boolean checkAllSnakesDied;
 
     @JsonProperty("gameTime")
-    private Optional<Long> gameTime;
+    private final Optional<Long> gameTime;
 
     @JsonProperty("timeForward")
-    private boolean timeGoesForward;
+    private final boolean timeGoesForward;
 
     /**
      * @param checkAllSnakesDied whether or not check if all snake died 
@@ -30,9 +30,6 @@ public class LossConditionsImpl implements LossConditions {
      */
     public LossConditionsImpl(
             final boolean checkAllSnakesDied, final Optional<Long> gameTime, final boolean timeGoesForward) {
-        if (gameTime == null) {
-            throw new NullPointerException();
-        }
         if (gameTime.isPresent() && gameTime.get() < 0) {
             throw new IllegalArgumentException("gameTime cannot less than zero");
         }
@@ -44,7 +41,7 @@ public class LossConditionsImpl implements LossConditions {
     @Override
     public final boolean checkSnakes(final List<Snake> snakes) {
         if (checkAllSnakesDied) {
-            for (Snake s : snakes) {
+            for (final Snake s : snakes) {
                 if (s.isAlive()) {
                     return false;
                 }

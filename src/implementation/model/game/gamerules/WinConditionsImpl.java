@@ -1,4 +1,4 @@
-package implementation.model.game.gameRules;
+package implementation.model.game.gamerules;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +34,6 @@ public class WinConditionsImpl implements WinConditions {
      */
     public WinConditionsImpl(final Optional<Integer> snakeLength, final Optional<Integer> score,
             final Optional<Long> time, final boolean timeGoesForward) {
-        if (snakeLength == null || score == null || time == null) {
-            throw new NullPointerException();
-        }
         if (snakeLength.isPresent() && snakeLength.get() < 0) {
             throw new IllegalArgumentException("snakeLenght cannot be less than 0");
         }
@@ -54,7 +51,7 @@ public class WinConditionsImpl implements WinConditions {
     @Override
     public final boolean checkSnakeLength(final List<Snake> snakes) {
         if (snakeLength.isPresent()) {
-            for (Snake s : snakes) {
+            for (final Snake s : snakes) {
                 if (s.isAlive() && s.getBodyParts().size() >= snakeLength.get()) {
                     return true;
                 }
@@ -66,7 +63,7 @@ public class WinConditionsImpl implements WinConditions {
     @Override
     public final boolean checkScore(final List<Snake> snakes) {
         if (scoreToReach.isPresent()) {
-            for (Snake s : snakes) {
+            for (final Snake s : snakes) {
                 if (s.isAlive() && s.getPlayer().getScore() >= scoreToReach.get()) {
                     return true;
                 }

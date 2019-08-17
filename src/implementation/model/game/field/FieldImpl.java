@@ -18,8 +18,8 @@ import implementation.controller.game.gameLoader.FieldDeserializer;
 @JsonDeserialize(using = FieldDeserializer.class)
 public class FieldImpl implements Field {
 
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     // TODO: maybe use Sets instead of Lists? order is irrelevant and stuff can't be repeated
     private final List<Item> items;
@@ -51,13 +51,10 @@ public class FieldImpl implements Field {
     }
 
     private synchronized boolean contains(final Collidable item) {
-        Point coord = item.getPoint();
-        int x = (int) coord.getX();
-        int y = (int) coord.getY();
-        if (x >= 0 && x < this.width && y >= 0 && y <= this.height) {
-            return true;
-        }
-        return false;
+        final Point coord = item.getPoint();
+        final int x = (int) coord.getX();
+        final int y = (int) coord.getY();
+        return (x >= 0 && x < this.width && y >= 0 && y <= this.height);
     }
 
     private synchronized boolean isCollidableAddable(final Collidable item, final List<? extends Collidable> list) {
@@ -73,7 +70,7 @@ public class FieldImpl implements Field {
     }
 
     private synchronized void addThread(final Runnable runnable) {
-        Thread thread = new Thread(runnable);
+        final Thread thread = new Thread(runnable);
         thread.start();
         threads.add(thread);
     }
@@ -95,9 +92,6 @@ public class FieldImpl implements Field {
 
     @Override
     public final synchronized boolean removeItem(final Item item) {
-        if (item == null) {
-            throw new NullPointerException();
-        }
         if (items.remove(item)) {
             removedItems.add(item);
             return true;
@@ -119,13 +113,10 @@ public class FieldImpl implements Field {
 
     @Override
     public final synchronized List<Collidable> getCell(final Point point) {
-        if (point == null) {
-            throw new NullPointerException();
-        }
         if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) {
             return new ArrayList<Collidable>();
         }
-        List<Collidable> cellList = new ArrayList<Collidable>();
+        final List<Collidable> cellList = new ArrayList<Collidable>();
         items.stream().filter(i -> i.getPoint().equals(point)).forEach(Item -> cellList.add(Item));
         walls.stream().filter(i -> i.getPoint().equals(point)).forEach(Wall -> cellList.add(Wall));
         bodyParts.stream().filter(i -> i.getPoint().equals(point)).forEach(BodyPart -> cellList.add(BodyPart));
@@ -134,11 +125,11 @@ public class FieldImpl implements Field {
 
     @Override
     public final synchronized void begin() {
-        for (Snake snake : snakes) {
+        for (final Snake snake : snakes) {
             addThread(snake);
         }
 
-        for (Item item : items) {
+        for (final Item item : items) {
             addThread(item);
         }
 
@@ -147,7 +138,7 @@ public class FieldImpl implements Field {
 
     @Override
     public final synchronized List<Item> getEliminatedItems() {
-        List<Item> returnedList = new ArrayList<Item>(removedItems);
+        final List<Item> returnedList = new ArrayList<Item>(removedItems);
         removedItems.clear();
         return returnedList;
     }
@@ -200,7 +191,7 @@ public class FieldImpl implements Field {
 
     @Override
     public final Snake removeSnake(final int i) {
-        for (BodyPart b : snakes.get(i).getBodyParts()) {
+        for (final BodyPart b : snakes.get(i).getBodyParts()) {
             removeBodyPart(b);
         }
         return snakes.remove(i);

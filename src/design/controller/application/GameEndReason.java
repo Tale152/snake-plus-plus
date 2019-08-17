@@ -1,12 +1,34 @@
 package design.controller.application;
 
+/**
+ * Every possible reason that a game can end.
+ * @author Alessandro Talmi
+ * @author Elisa Tronetti
+ * @author Nicola Orlando
+ */
 public enum GameEndReason {
-	WON_LENGTH,
-	WON_TIME,
-	WON_SCORE,
-	
-	LOST_DEATH,
-	LOST_TIME,
-	
-	ERROR;
+    /**
+     * One of the snakes reached the desired length.
+     */
+    WON_LENGTH,
+    /**
+     * The game time reached the desired value.
+     */
+    WON_TIME,
+    /**
+     * One of the snakes reached the desired score.
+     */
+    WON_SCORE,
+    /**
+     * Every snake into the field is dead.
+     */
+    LOST_DEATH,
+    /**
+     * The game time reached a certain value.
+     */
+    LOST_TIME,
+    /**
+     * Any kind of error occurred.
+     */
+    ERROR;
 }

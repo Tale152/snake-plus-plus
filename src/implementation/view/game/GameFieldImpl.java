@@ -17,7 +17,7 @@ import design.view.game.Sprite;
  */
 public class GameFieldImpl implements GameField {
 
-    private Background bg;
+    private final Background bg;
     private final Map<Point, Sprite> itemMap;
     private final Map<Point, Sprite> wallMap;
     private final List<Map<Point, List<Sprite>>> loadingSnakeSprites;
@@ -51,14 +51,14 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public final synchronized List<Sprite> getCell(final Point point) {
-        List<Sprite> res = new ArrayList<>();
+        final List<Sprite> res = new ArrayList<>();
         if (itemMap.containsKey(point)) {
             res.add(itemMap.get(point));
         }
         if (wallMap.containsKey(point)) {
             res.add(wallMap.get(point));
         }
-        for (Map<Point, List<Sprite>> snake : actualSnakeSprites) {
+        for (final Map<Point, List<Sprite>> snake : actualSnakeSprites) {
             if (snake.containsKey(point)) {
                 res.addAll(snake.get(point));
             }

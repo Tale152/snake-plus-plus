@@ -52,15 +52,15 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
     public ResourcesLoaderFromFile(final String path, final double nCellsWidth, final double nCellsHeight) 
             throws FileNotFoundException, IOException {
 
-        double hudTopBottomHeight = SCREEN_SIZE.getHeight() * HUD_PERCENTAGE;
-        double fieldHeight =  SCREEN_SIZE.getHeight() - (hudTopBottomHeight * 2);
-        double spriteSize = fieldHeight / nCellsHeight;
+        final double hudTopBottomHeight = SCREEN_SIZE.getHeight() * HUD_PERCENTAGE;
+        final double fieldHeight =  SCREEN_SIZE.getHeight() - (hudTopBottomHeight * 2);
+        final double spriteSize = fieldHeight / nCellsHeight;
 
         readDirectory(getDirectory(path, ITEMS_DIRECTORY), items, spriteSize, spriteSize);
         readDirectory(getDirectory(path, WALLS_DIRECTORY), walls, spriteSize, spriteSize);
         readDirectory(getDirectory(path, BODYPARTS_DIRECTORY), bodyParts, spriteSize, spriteSize);
 
-        String bgPath = path + File.separator + BACKGROUNDS_DIRECTORY + File.separator;
+        final String bgPath = path + File.separator + BACKGROUNDS_DIRECTORY + File.separator;
         fieldBg = readBackground(bgPath + BACKGROUND_FIELD, spriteSize * nCellsWidth, fieldHeight);
         hudBg = readBackground(bgPath + BACKGROUND_HUD, SCREEN_SIZE.getWidth(), SCREEN_SIZE.getHeight());
         deadPlayer = new SpriteImpl(DEAD_PLAYER.replaceFirst("[.][^.]+$", ""), 
@@ -93,7 +93,7 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
     }
 
     private Sprite getFromList(final String object, final List<Sprite> source) {
-        Optional<Sprite> result = source.stream().filter(o -> {
+        final Optional<Sprite> result = source.stream().filter(o -> {
             return o.getName().equals(object); })
                 .findFirst();
         if (result.isPresent()) {
@@ -104,16 +104,16 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 
     private void readDirectory(final File directory, final List<Sprite> container, 
             final double maxSpriteWidth, final double maxSpriteHeight) throws FileNotFoundException, IOException {
-        for (File file : directory.listFiles()) {
+        for (final File file : directory.listFiles()) {
             //getting sprite file
-            FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
+            final FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
             //instantiating a new Sprite with file name (without extension) and scaled Image
             container.add(new SpriteImpl(file.getName().replaceFirst("[.][^.]+$", ""), new Image(fis, maxSpriteWidth, maxSpriteHeight, false, false)));
         }
     }
 
     private File getDirectory(final String path, final String directoryName) {
-        File directory = new File(path + File.separator + directoryName);
+        final File directory = new File(path + File.separator + directoryName);
         //check that everything is OK
         if (!directory.exists() || !directory.canRead() || !directory.isDirectory()) {
             throw new IllegalStateException("There are problems with directory " + path);
@@ -123,8 +123,8 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 
     private Background readBackground(final String path, final double width, final double height) 
             throws FileNotFoundException, IOException {
-        File file = new File(path);
-        FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
+        final File file = new File(path);
+        final FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
         return new BackgroundImpl(new Image(fis, width, height, false, false), width, height);
     }
 

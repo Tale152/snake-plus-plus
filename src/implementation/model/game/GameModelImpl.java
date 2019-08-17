@@ -6,7 +6,6 @@ import design.model.game.GameRules;
 
 /**
  * @see GameModel
- * @author Alessandro Talmi
  */
 public class GameModelImpl implements GameModel {
 
@@ -18,9 +17,6 @@ public class GameModelImpl implements GameModel {
      * @param gameRules to apply to the game
      */
     public GameModelImpl(final Field field, final GameRules gameRules) {
-        if (field == null || gameRules == null) {
-            throw new NullPointerException();
-        }
         this.field = field;
         this.gameRules = gameRules;
     }
