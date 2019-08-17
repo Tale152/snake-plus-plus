@@ -52,9 +52,6 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     private static final String CLASSIC_VIEW = "/implementation/view/application/ClassicView.fxml";
     private static final String WORLD_VIEW = "/implementation/view/application/WorldSelectionView.fxml";
 
-    /**
-     * @author Alessandro Talmi
-     */
     @Override
     @FXML
     public final void goToClassicMode() throws IOException {

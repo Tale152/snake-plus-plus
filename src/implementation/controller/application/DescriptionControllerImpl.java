@@ -7,7 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -121,21 +124,26 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     private void listDirectory(final File folder) {
         //random pack is used if the default pack does not exist
         String randomPack = "";
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getName());
-                if (randomPack.isEmpty()) {
-                    randomPack = fileEntry.getName().replace(" ", "_");
+        final File[] files = folder.listFiles();
+        if (files != null) {
+            final List<File> filesList = new ArrayList<>(Arrays.asList(files));
+            for (final File fileEntry : filesList) {
+                if (fileEntry.isDirectory()) {
+                    this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getName());
+                    if (randomPack.isEmpty()) {
+                        randomPack = fileEntry.getName().replace(" ", "_");
+                    }
                 }
             }
-        }
-        if (this.itemButtonMap.isEmpty()) {
-            System.out.println("There are no skin packs");
-            System.exit(1);
-        } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
-            this.packName = this.itemButtonMap.get(DEFAULT_PACK);
+            if (this.itemButtonMap.isEmpty()) {
+                throw new RuntimeException("no skin paks found");
+            } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
+                this.packName = this.itemButtonMap.get(DEFAULT_PACK);
+            } else {
+                this.packName = randomPack;
+            }
         } else {
-            this.packName = randomPack;
+            throw new RuntimeException("there are problems with directory " + folder.getAbsolutePath());
         }
     }
 
