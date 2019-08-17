@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,6 @@ import javafx.scene.image.Image;
 /**
  * This implementation of resources loader loads graphical resources from local files.
  * @see ResourcesLoader
- * @author Alessandro Talmi
  */
 public class ResourcesLoaderFromFile implements ResourcesLoader {
 
@@ -102,13 +102,21 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
         throw new IllegalArgumentException("Cannot find " + object + "into requested list");
     }
 
+    private List<File> initFileList(final File directory) {
+        final File[] list = directory.listFiles();
+        if (list != null) {
+            return new ArrayList<File>(Arrays.asList(list));
+        }
+        throw new RuntimeException("problems with directory " + directory.getAbsolutePath());
+    }
+
     private void readDirectory(final File directory, final List<Sprite> container, 
             final double maxSpriteWidth, final double maxSpriteHeight) throws FileNotFoundException, IOException {
-        for (final File file : directory.listFiles()) {
-            //getting sprite file
-            final FileInputStream fis = new FileInputStream(file.getCanonicalPath().toString());
+        final List<File> listFile = initFileList(directory);
+        for (final File file : listFile) {
             //instantiating a new Sprite with file name (without extension) and scaled Image
-            container.add(new SpriteImpl(file.getName().replaceFirst("[.][^.]+$", ""), new Image(fis, maxSpriteWidth, maxSpriteHeight, false, false)));
+            container.add(new SpriteImpl(file.getName().replaceFirst("[.][^.]+$", ""), 
+                    new Image(file.toURI().toString(), maxSpriteWidth, maxSpriteHeight, false, false)));
         }
     }
 
