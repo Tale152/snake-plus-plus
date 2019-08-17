@@ -15,16 +15,11 @@ import design.controller.application.StageSelectionController;
 import implementation.controller.Path;
 import implementation.view.application.Main;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -39,9 +34,9 @@ import javafx.scene.media.MediaPlayer;
 public class MainMenuControllerImpl implements MainMenuController, Initializable {
 
     private static final String DEFAULT_PACK = "Default Pack";
-    private static final double TEXT_PERCENTAGE = 0.4;
-    @FXML private Button classic;
-    @FXML private Button level;
+
+    @FXML private ImageView classicImageView;
+    @FXML private ImageView levelImageView;
     @FXML private AnchorPane root;
     @FXML private MenuButton skinPacks;
     @FXML private ImageView snakeppImageView;
@@ -78,21 +73,19 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
         final File folder = new File("res" + File.separator + "resources");
         listFiles(folder);
         initializeMenuItem();
-        root.heightProperty().addListener(new ChangeListener<Object>() {
-            @Override
-            public void changed(final ObservableValue<?> observable, final Object oldValue, final Object newValue) {
-                changeFontSize(level, TEXT_PERCENTAGE);
-                changeFontSize(classic, TEXT_PERCENTAGE);
-            }
-        });
         final Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
         mediaPlayer = new MediaPlayer(media); 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-        System.out.println(new File("/home/elisa/Desktop/snekpp/res/menu").exists());
         snakeppImageView.setImage(
                 new Image(
-                        new File("/home/elisa/Desktop/snekpp/res/menu").toURI().toString()));
+                        new File("res" + File.separator + "menu" + File.separator + "Snake++.png").toURI().toString()));
+        classicImageView.setImage(
+                new Image(
+                        new File("res" + File.separator + "menu" + File.separator + "Classic.png").toURI().toString()));
+        levelImageView.setImage(
+                new Image(
+                        new File("res" + File.separator + "menu" + File.separator + "Levels.png").toURI().toString()));
     }
 
     /**This method read all the directory in the current directory that are put in a map
@@ -140,13 +133,6 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
             m.setOnAction(event);
             this.skinPacks.getItems().add(m);
         }
-    }
-
-    /**
-     * @author Alessandro Talmi
-     */
-    private void changeFontSize(final Labeled labeled, final double percentage) {
-        labeled.setStyle(String.format("-fx-font-size: %dpx;", (int) (labeled.getHeight() * percentage)));
     }
 
     /**
