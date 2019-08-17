@@ -48,6 +48,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 
     private static final String CLASSIC_VIEW = "/implementation/view/application/ClassicView.fxml";
     private static final String WORLD_VIEW = "/implementation/view/application/WorldSelectionView.fxml";
+    private static final String DESCRIPTION_VIEW = "/implementation/view/application/DescriptionView.fxml";
 
     @Override
     @FXML
@@ -61,6 +62,16 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
         goToMode(WORLD_VIEW);
     }
 
+    @Override
+    @FXML
+    public final void goToDescriptionMode() throws IOException {
+        final FXMLLoader root = new FXMLLoader(getClass().getResource(DESCRIPTION_VIEW));
+        try {
+            Main.getScene().setRoot(root.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void goToMode(final String fxmlPath) throws IOException {
         final FXMLLoader root = new FXMLLoader(getClass().getResource(fxmlPath));
         Main.getScene().setRoot(root.load());
