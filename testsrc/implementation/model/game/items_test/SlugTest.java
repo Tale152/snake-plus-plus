@@ -1,7 +1,6 @@
 package implementation.model.game.items_test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -36,11 +35,11 @@ public class SlugTest {
         final ItemFactory itemFactory = new ItemFactory(field);
         slug = itemFactory.createItem(pointZero, Slug.class, Optional.empty(), Optional.empty());
         final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertSame("checking that speed multiplier is 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checking that speed multiplier is 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
         AppleTest.collide(slug, testSnake);
-        assertSame("checking that speed multiplier is still 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checking that speed multiplier is still 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
     }
 
     /*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
@@ -56,8 +55,8 @@ public class SlugTest {
         final ItemFactory itemFactory = new ItemFactory(field);
         slug = itemFactory.createItem(pointZero, Slug.class, Optional.empty(), Optional.of(effectDuration));
         final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertSame("checking that speed multiplier is 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checking that speed multiplier is 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
         AppleTest.collide(slug, testSnake);
         assertEquals("checking that snake has only one effect active", testSnake.getEffects().size(), 1);
         assertEquals("checking that active effect duration is equal to effectDuration", 
@@ -73,15 +72,15 @@ public class SlugTest {
         t.start();
         try {
             Thread.sleep(effectDuration);
-            assertSame("checking that speed multiplier is now 2",
-                    testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 2.0);
+            assertEquals("checking that speed multiplier is now 2",
+                    testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 2.0, 0);
             Thread.sleep(effectDuration  * 2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         t.stop();
-        assertSame("checking that speed multiplier is back to one",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checking that speed multiplier is back to one",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
     }
 
 }

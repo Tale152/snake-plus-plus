@@ -1,7 +1,6 @@
 package implementation.model.game.items_test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -36,11 +35,11 @@ public class TurboTest {
         final ItemFactory itemFactory = new ItemFactory(field);
         turbo = itemFactory.createItem(pointZero, Turbo.class, Optional.empty(), Optional.empty());
         final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertSame("checks that speed multiplier is 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checks that speed multiplier is 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
         AppleTest.collide(turbo, testSnake);
-        assertSame("cheks that speed multiplier is still 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("cheks that speed multiplier is still 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
     }
 
     /*no need to test instantaneous effect on ghost, already does nothing if previous test succeeded*/
@@ -56,8 +55,8 @@ public class TurboTest {
         final ItemFactory itemFactory = new ItemFactory(field);
         turbo = itemFactory.createItem(pointZero, Turbo.class, Optional.empty(), Optional.of(effectDuration));
         final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertSame("checks that speed multiplier is 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checks that speed multiplier is 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
         AppleTest.collide(turbo, testSnake);
         assertEquals("checking that snake has one effect active",
                 testSnake.getEffects().size(), 1);
@@ -73,15 +72,15 @@ public class TurboTest {
         t.start();
         try {
             Thread.sleep(effectDuration);
-            assertSame("checks that speed multiplier is now 0.5",
-                    testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+            assertEquals("checks that speed multiplier is now 0.5",
+                    testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 0.5, 0);
             Thread.sleep(effectDuration * 2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         t.stop();
-        assertSame("checks that speed multiplier is back to 1",
-                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0);
+        assertEquals("checks that speed multiplier is back to 1",
+                testSnake.getProperties().getSpeedProperty().getSpeedMultiplier(), 1.0, 0);
     }
 
 }

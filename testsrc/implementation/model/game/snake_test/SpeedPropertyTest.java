@@ -1,7 +1,6 @@
 package implementation.model.game.snake_test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -36,11 +35,11 @@ public class SpeedPropertyTest {
                 checkSetDeltaTIllegalArgumenException(speed, 0L));
         assertTrue("delta cannot be negative",
                 checkSetDeltaTIllegalArgumenException(speed, -1L));
-        assertSame("Check if the speed multiplier is 1", speed.getSpeedMultiplier(), 1);
+        assertEquals("Check if the speed multiplier is 1", 1.0, speed.getSpeedMultiplier(), 0);
         speed.applySpeedMultiplier(0.5);
-        assertSame("Check if the speed multiplier has been changed correctly", speed.getSpeedMultiplier(), SPEED_MULTIPLIER);
+        assertEquals("Check if the speed multiplier has been changed correctly", speed.getSpeedMultiplier(), SPEED_MULTIPLIER, 0);
         speed.applySpeedMultiplier(-SPEED_MULTIPLIER);
-        assertSame("Check if the speed multiplier is 0 when attempted to go negative", speed.getSpeedMultiplier(), 0);
+        assertEquals("Check if the speed multiplier is 0 when attempted to go negative", speed.getSpeedMultiplier(), 0, 0);
         assertTrue("multiplier cannot be negative",
                 checkApplySpeedMultiplierIllegalArgumenException(speed, -SPEED_MULTIPLIER));
     }

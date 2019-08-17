@@ -66,8 +66,6 @@ public class GodModeTest {
         AppleTest.collide(god, testSnake);
         assertEquals("checking that active effect duration has doubled",
                 testSnake.getEffects().get(0).getEffectDuration(), Optional.of(effectDuration * 2));
-        assertFalse("checking that snake is still not invincible",
-                testSnake.getProperties().getCollisionProperty().isInvincible());
         final Thread t = new Thread(testSnake);
         t.start();
         try {

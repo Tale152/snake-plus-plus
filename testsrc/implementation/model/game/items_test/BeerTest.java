@@ -78,9 +78,12 @@ public class BeerTest {
         final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
         assertFalse("checking that direction reversed property is false",
                 testSnake.getProperties().getDirectionProperty().isDirectionReversed());
-        AppleTest.collide(beer, testSnake);
         assertEquals("checking that current direction is right",
                 testSnake.getProperties().getDirectionProperty().getDirection(), Direction.RIGHT);
+        AppleTest.collide(beer, testSnake);
+        assertTrue("checking that direction changed into either up or down",
+                testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.UP) 
+                || testSnake.getProperties().getDirectionProperty().getDirection().equals(Direction.DOWN));
         assertEquals("checking that snake has only one effect active", testSnake.getEffects().size(), 1);
         assertEquals("checking that the effect duration is the same as expected", 
                 testSnake.getEffects().get(0).getEffectDuration(), Optional.of(effectDuration));

@@ -1,7 +1,6 @@
 package implementation.model.game.items_test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -36,10 +35,10 @@ public class DoublePointsTest {
         final ItemFactory itemFactory = new ItemFactory(field);
         doublePoints = itemFactory.createItem(pointZero, DoublePoints.class, Optional.empty(), Optional.empty());
         final Snake testSnake = SnakeFactoryForTestsUtils.baseSnake(new ArrayList<Point>(Arrays.asList(new Point(0, 0))), field);
-        assertSame("check that multiplier is one", testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        assertEquals("check that multiplier is one", testSnake.getPlayer().getScoreMultiplier(), 1.0, 0);
         assertEquals("check that score is zero", testSnake.getPlayer().getScore(), 0);
         AppleTest.collide(doublePoints, testSnake);
-        assertSame("check that multiplier is still one", testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        assertEquals("check that multiplier is still one", testSnake.getPlayer().getScoreMultiplier(), 1.0, 0);
         assertEquals("check that score is still zero", testSnake.getPlayer().getScore(), 0);
     }
 
@@ -71,21 +70,21 @@ public class DoublePointsTest {
                 testSnake.getPlayer().getScore(), 0);
         assertEquals("checking that active effect duration has doubled",
                 testSnake.getEffects().get(0).getEffectDuration(), Optional.of(2 * effectDuration));
-        assertSame("checking that currently score multiplier equals one", 
-                testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        assertEquals("checking that currently score multiplier equals one", 
+                testSnake.getPlayer().getScoreMultiplier(), 1.0, 0);
         final Thread t = new Thread(testSnake);
         t.start();
         try {
             Thread.sleep(effectDuration);
-            assertSame("checking that now score multiplier equal 2", 
-                    testSnake.getPlayer().getScoreMultiplier(), 2.0);
+            assertEquals("checking that now score multiplier equal 2", 
+                    testSnake.getPlayer().getScoreMultiplier(), 2.0, 0);
             Thread.sleep(2 * effectDuration);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         t.stop();
-        assertSame("checking that now score multiplier returned to 1",
-                testSnake.getPlayer().getScoreMultiplier(), 1.0);
+        assertEquals("checking that now score multiplier returned to 1",
+                testSnake.getPlayer().getScoreMultiplier(), 1.0, 0);
     }
 
 }

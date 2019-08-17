@@ -64,8 +64,6 @@ public class GhostModeTest {
         AppleTest.collide(ghost, testSnake);
         assertEquals("checking that active effect duration has doubled",
                 testSnake.getEffects().get(0).getEffectDuration(), Optional.of(effectDuration * 2));
-        assertFalse("checking that snake is currently not intangible", 
-                testSnake.getProperties().getCollisionProperty().isIntangible());
         final Thread t = new Thread(testSnake);
         t.start();
         try {

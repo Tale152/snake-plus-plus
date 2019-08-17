@@ -1,4 +1,4 @@
-package implementation.model.game;
+package implementation.model.game_test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,11 +10,12 @@ import design.model.game.GameRules;
 import design.model.game.ItemRule;
 import design.model.game.LossConditions;
 import design.model.game.WinConditions;
+import implementation.model.game.GameModelImpl;
 import implementation.model.game.field.FieldImpl;
-import implementation.model.game.gamerules.GameRulesImpl;
-import implementation.model.game.gamerules.ItemRuleImpl;
-import implementation.model.game.gamerules.LossConditionsImpl;
-import implementation.model.game.gamerules.WinConditionsImpl;
+import implementation.model.game.rules.GameRulesImpl;
+import implementation.model.game.rules.ItemRuleImpl;
+import implementation.model.game.rules.LossConditionsImpl;
+import implementation.model.game.rules.WinConditionsImpl;
 import implementation.model.game.items.Apple;
 
 import java.awt.Point;
