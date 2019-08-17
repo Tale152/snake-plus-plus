@@ -136,7 +136,9 @@ public class GameIntersticeImpl implements GameInterstice {
 
     @Override
     public void showInterstice() {
-        Main.getScene().setRoot((Parent) root);
+        Platform.runLater(() -> {
+            Main.getScene().setRoot((Parent) root);
+        });
     }
 
     @Override
