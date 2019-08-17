@@ -27,7 +27,7 @@ public class GameRulesImpl implements GameRules {
      * @param loss this game rules's loss conditions
      * @param itemRules this game rules's list of item rules
      * @param initialSnakeDelta how much initial snake delta (milliseconds) will be
-     * @param initialSnakeMultiplier mow much initial snake score multiplier will be
+     * @param initialSnakeMultiplier how much initial snake score multiplier will be
      * @param initialTime starting game time (milliseconds)
      * @param timeGoingForward whether or not time goes forward or backward
      */
