@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import design.controller.application.WorldDescriptor;
 import design.controller.application.WorldSelectionController;
 import design.controller.game.GameLoader;
-import implementation.controller.Path;
+import implementation.controller.PathUtils;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -47,21 +47,21 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
     }
 
     public final void initialize() throws JsonProcessingException, IOException {
-        File worldsFolder = new File(Path.WORLDS);
-        for (File world : worldsFolder.listFiles(f -> f.isFile())) {
+        final File worldsFolder = new File(PathUtils.WORLDS);
+        for (final File world : worldsFolder.listFiles(f -> f.isFile())) {
             worlds.add(parseWorld(world));
         }
         worlds.sort(null);
-        for (WorldDescriptor world : worlds) {
+        for (final WorldDescriptor world : worlds) {
             worldButtons.getChildren().add(newWorldButton(world));
         }
         refreshWorld();
     }
 
     private Button newWorldButton(final WorldDescriptor world) {
-        Button button = new Button(world.getName());
-        ObservableList<Node> buttons = worldButtons.getChildren();
-        int n = buttons.size();
+        final Button button = new Button(world.getName());
+        final ObservableList<Node> buttons = worldButtons.getChildren();
+        final int n = buttons.size();
         button.setOnMouseClicked(e -> {
             selected = n;
             refreshWorld();
@@ -70,18 +70,18 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
     }
 
     private WorldDescriptor parseWorld(final File worldJson) throws JsonProcessingException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode loader = om.readTree(worldJson);
-        String name = loader.get("name").asText();
-        String description = loader.get("description").asText();
-        String folder = worldJson.getName().replaceAll(JSONREGEX, "");
+        final ObjectMapper om = new ObjectMapper();
+        final JsonNode loader = om.readTree(worldJson);
+        final String name = loader.get("name").asText();
+        final String description = loader.get("description").asText();
+        final String folder = worldJson.getName().replaceAll(JSONREGEX, "");
         return new WorldDescriptorImpl(name, description, folder);
     }
 
     private void refreshWorld() {
-        int nWorlds = worlds.size();
+        final int nWorlds = worlds.size();
         WorldDescriptor world;
-        ObservableList<Node> buttons = worldButtons.getChildren();
+        final ObservableList<Node> buttons = worldButtons.getChildren();
         while (this.selected < 0) {
             this.selected = this.selected + nWorlds;
         }
@@ -91,8 +91,8 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
         buttons.get(previous).setDisable(false);
         buttons.get(selected).setDisable(true);
         world = worlds.get(selected);
-        String description = world.getDescription();
-        String name = world.getName();
+        final String description = world.getDescription();
+        final String name = world.getName();
         worldDescription.setText(description);
         worldName.setText(name);
         previous = selected;
@@ -112,18 +112,18 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
 
     @FXML
     public final void startWorld() throws IOException {
-        File worldFolder = new File(Path.WORLDS + File.separator + worlds.get(selected).getFolderName());
-        File[] worldFiles = worldFolder.listFiles(f -> f.isFile());
+        final File worldFolder = new File(PathUtils.WORLDS + File.separator + worlds.get(selected).getFolderName());
+        final File[] worldFiles = worldFolder.listFiles(f -> f.isFile());
         Arrays.sort(worldFiles);
-        List<GameLoader> world = new ArrayList<>();
-        for (File level : worldFiles) {
+        final List<GameLoader> world = new ArrayList<>();
+        for (final File level : worldFiles) {
             world.add(new GameLoaderJSON(level, NAMES));
         }
         new GameIntersticeImpl(world, skinPackPath).nextLevel();
     }
 
     @Override
-    public void setSkinPackPath(final String path) {
+    public final void setSkinPackPath(final String path) {
         skinPackPath = path;
     }
 

@@ -8,29 +8,29 @@ public class WorldDescriptorImpl implements WorldDescriptor, Comparable<WorldDes
     private final String description;
     private final String folderName;
 
-    public WorldDescriptorImpl(String name, String description, String folderName) {
+    public WorldDescriptorImpl(final String name, final String description, final String folderName) {
         this.name = name;
         this.description = description;
         this.folderName = folderName;
     }
 
     @Override
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
     @Override
-    public String getFolderName() {
+    public final String getFolderName() {
         return folderName;
     }
 
     @Override
-    public int compareTo(WorldDescriptor arg0) {
+    public final int compareTo(final WorldDescriptor arg0) {
         return this.folderName.compareTo(arg0.getFolderName());
     }
 

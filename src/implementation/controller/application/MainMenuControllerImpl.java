@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 import design.controller.application.MainMenuController;
 import design.controller.application.StageSelectionController;
-import implementation.controller.Path;
+import implementation.controller.PathUtils;
 import implementation.view.application.Main;
 
 import javafx.event.ActionEvent;
@@ -43,7 +43,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 
     private String skinPackPath;
     private final Map<String, String> itemButtonMap = new HashMap<>();
-    private static final String MAIN_MENU_THEME_PATH = Path.THEMES + "Main_menu_theme.mp3";
+    private static final String MAIN_MENU_THEME_PATH = PathUtils.THEMES + "Main_menu_theme.mp3";
     private static MediaPlayer mediaPlayer;
 
     private static final String CLASSIC_VIEW = "/implementation/view/application/ClassicView.fxml";
@@ -79,13 +79,13 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
         mediaPlayer.play();
         snakeppImageView.setImage(
                 new Image(
-                        new File("res" + File.separator + "menu" + File.separator + "Snake++.png").toURI().toString()));
+                        new File(PathUtils.MENU + "Snake++" + PathUtils.IMAGE_TYPE).toURI().toString()));
         classicImageView.setImage(
                 new Image(
-                        new File("res" + File.separator + "menu" + File.separator + "Classic.png").toURI().toString()));
+                        new File(PathUtils.MENU + "Classic" + PathUtils.IMAGE_TYPE).toURI().toString()));
         levelImageView.setImage(
                 new Image(
-                        new File("res" + File.separator + "menu" + File.separator + "Levels.png").toURI().toString()));
+                        new File(PathUtils.MENU + "Levels" + PathUtils.IMAGE_TYPE).toURI().toString()));
     }
 
     /**This method read all the directory in the current directory that are put in a map

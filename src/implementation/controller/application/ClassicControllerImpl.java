@@ -13,7 +13,7 @@ import design.model.game.Field;
 import design.model.game.ItemRule;
 import design.model.game.Wall;
 import design.view.game.ResourcesLoader;
-import implementation.controller.Path;
+import implementation.controller.PathUtils;
 import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.gameLoader.GameLoaderJSON;
 import implementation.view.game.ResourcesLoaderFromFile;
@@ -72,7 +72,7 @@ public class ClassicControllerImpl implements ClassicController {
     public ClassicControllerImpl() throws IOException {
         levels = new ArrayList<>();
         names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
-        for (final File file : new File(Path.CLASSIC).listFiles()) {
+        for (final File file : new File(PathUtils.CLASSIC).listFiles()) {
             final String levelPath = file.getPath();
             levels.add(new GameLoaderJSON(levelPath, names));
         }
@@ -96,7 +96,7 @@ public class ClassicControllerImpl implements ClassicController {
         }
         preview.widthProperty().bind(previewContainer.widthProperty());
         preview.heightProperty().bind(previewContainer.heightProperty());
-        ChangeListener<Number> canvasResize = (observable, oldValue, newValue) ->
+        final ChangeListener<Number> canvasResize = (observable, oldValue, newValue) ->
             drawPreview(preview, levels.get(selected).getGameModel().getField());
 
         preview.widthProperty().addListener(canvasResize);
