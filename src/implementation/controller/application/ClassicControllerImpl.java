@@ -79,17 +79,17 @@ public class ClassicControllerImpl implements ClassicController {
     public ClassicControllerImpl() throws IOException {
         levels = new ArrayList<>();
         names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
-        for (File file : new File(levelsPath).listFiles()) {
-            String levelPath = file.getPath();
+        for (final File file : new File(levelsPath).listFiles()) {
+            final String levelPath = file.getPath();
             levels.add(new GameLoaderJSON(levelPath, names));
         }
     }
 
     public final void initialize() throws FileNotFoundException, IOException {
-        ObservableList<Node> buttons = levelButtons.getChildren();
+        final ObservableList<Node> buttons = levelButtons.getChildren();
         for (int i = 0; i < levels.size(); i++) {
             final int n = i;
-            Button button = new Button(String.valueOf(i));
+            final Button button = new Button(String.valueOf(i));
             buttons.add(button);
             button.setOnMouseClicked(e -> {
                 selected = n;
@@ -97,7 +97,6 @@ public class ClassicControllerImpl implements ClassicController {
                     refreshLevel();
                     refreshPlayers();
                 } catch (IOException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             });
@@ -109,9 +108,9 @@ public class ClassicControllerImpl implements ClassicController {
     }
 
     private void refreshLevel() throws FileNotFoundException, IOException {
-        int nLevels = levels.size();
+        final int nLevels = levels.size();
         GameLoader level;
-        ObservableList<Node> buttons = levelButtons.getChildren();
+        final ObservableList<Node> buttons = levelButtons.getChildren();
         while (this.selected < 0) {
             this.selected = this.selected + nLevels;
         }
@@ -123,7 +122,7 @@ public class ClassicControllerImpl implements ClassicController {
         level = levels.get(selected);
         resources = new ResourcesLoaderFromFile(skinPackPath, level.getGameModel().getField().getWidth(), level.getGameModel().getField().getHeight());
         refreshItemList(level);
-        String text = level.getLevelDescription();
+        final String text = level.getLevelDescription();
         levelDescription.setText(text);
         new AnimationTimer() {
             private int f = 0;
@@ -141,36 +140,36 @@ public class ClassicControllerImpl implements ClassicController {
 
     private void refreshItemList(final GameLoader level) {
         itemList.getChildren().clear();
-        List<ItemRule> items = level.getGameModel().getGameRules().getItemRules();
-        for (ItemRule item : items) {
-            Image sprite = (Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite();
-            ImageView imv = new ImageView(sprite);
+        final List<ItemRule> items = level.getGameModel().getGameRules().getItemRules();
+        for (final ItemRule item : items) {
+            final Image sprite = (Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite();
+            final ImageView imv = new ImageView(sprite);
             imv.setPreserveRatio(true);
             imv.setFitHeight(32); // TODO: remove magic number
-            double freq = 1000.0 * item.getSpawnChance() / (double) item.getSpawnDelta();
-            String tooltip = String.format("Spawn chance per second: %d%%\nMaximum amount on screen: %d", (int) (freq * 100), item.getMax());
+            final double freq = 1000.0 * item.getSpawnChance() / (double) item.getSpawnDelta();
+            final String tooltip = String.format("Spawn chance per second: %d%%\nMaximum amount on screen: %d", (int) (freq * 100), item.getMax());
             Tooltip.install(imv, new Tooltip(tooltip));
             itemList.getChildren().add(imv);
         }
     }
 
     private void drawPreview(final Canvas canvas, final Field field) {
-        List<Wall> walls = field.getWalls();
-        int spriteSize = (int) Math.min(canvas.getWidth() / field.getWidth(), canvas.getHeight() / field.getHeight());
-        int x0 = (int) (canvas.getWidth() - spriteSize * field.getWidth()) / 2;
-        int y0 = (int) (canvas.getHeight() - spriteSize * field.getHeight()) / 2;
+        final List<Wall> walls = field.getWalls();
+        final int spriteSize = (int) Math.min(canvas.getWidth() / field.getWidth(), canvas.getHeight() / field.getHeight());
+        final int x0 = (int) (canvas.getWidth() - spriteSize * field.getWidth()) / 2;
+        final int y0 = (int) (canvas.getHeight() - spriteSize * field.getHeight()) / 2;
         gc.drawImage((Image) resources.getFieldBackground().getBackground(), 0, 0, canvas.getWidth(), canvas.getHeight());
-        for (Wall wall : walls) {
-            String wName = GameControllerImpl.wallSpriteName(wall, walls);
-            Image wallSprite = (Image) resources.getWall(wName).getSprite();
-            double x = wall.getPoint().getX();
-            double y = wall.getPoint().getY();
+        for (final Wall wall : walls) {
+            final String wName = GameControllerImpl.wallSpriteName(wall, walls);
+            final Image wallSprite = (Image) resources.getWall(wName).getSprite();
+            final double x = wall.getPoint().getX();
+            final double y = wall.getPoint().getY();
             gc.drawImage(wallSprite, x0 + x * spriteSize, y0 + y * spriteSize, spriteSize, spriteSize);
         }
     }
 
     private void refreshPlayers() {
-        int maxPlayers = levels.get(selected).getMaxPlayers();
+        final int maxPlayers = levels.get(selected).getMaxPlayers();
         this.players = Math.max(Math.min(this.players, maxPlayers), 1);
         if (this.players == 1) {
             removePlayerButton.setDisable(true);
