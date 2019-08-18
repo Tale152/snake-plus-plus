@@ -1,5 +1,7 @@
 package design.controller.game;
 
+import java.io.IOException;
+
 import design.model.game.GameModel;
 
 /**
@@ -29,5 +31,12 @@ public interface GameLoader {
      * @return The maximum amount of players in this level.
      */
     int getMaxPlayers();
+
+    /**
+     * Reloads the game from file, restoring the stored GameModel to an untouched state.
+     * @throws IOException 
+     * @see GameModel
+     */
+    void reset() throws IOException;
 
 }
