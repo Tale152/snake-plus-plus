@@ -7,8 +7,9 @@ import java.io.IOException;
 /**
  * The classic controller handles method used into the Classic view. <p>
  * Here you can select "classic levels". In other words when a level ends if you win
- * no other level will start, contrary to the "word levels".
+ * no other level will start, contrary to the "world levels".
  * @see WordSelectionController
+ * @see StageSelectionController
  * @see GameView
  * @author Alessandro Talmi
  * @author Elisa Tronetti
