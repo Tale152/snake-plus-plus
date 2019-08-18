@@ -33,13 +33,16 @@ import implementation.model.game.snake.SnakeImpl;
  */
 public final class GameLoaderJSON implements GameLoader {
 
-    private final GameModel gameModel;
+    private GameModel gameModel;
 
     private final String name;
-
     private final String description;
 
     private final int maxPlayers;
+
+    private final List<String> names;
+    private final JsonNode loader;
+    private final ObjectMapper objectMapper;
 
     @Override
     public GameModel getGameModel() {
@@ -67,7 +70,8 @@ public final class GameLoaderJSON implements GameLoader {
      * @throws IOException If a level is malformed or absent.
      */
     public GameLoaderJSON(final String stagePath, final List<String> names) throws IOException {
-        final ObjectMapper objectMapper = new ObjectMapper();
+        this.names = names;
+        objectMapper = new ObjectMapper();
         final SimpleModule deserializerModule = new SimpleModule();
         deserializerModule.addDeserializer(WinConditions.class, new WinConditionsDeserializer());
         deserializerModule.addDeserializer(LossConditions.class, new LossConditionsDeserializer());
@@ -80,7 +84,17 @@ public final class GameLoaderJSON implements GameLoader {
 
         final String json = readJSON(stagePath);
 
-        final JsonNode loader = objectMapper.readTree(json);
+        loader = objectMapper.readTree(json);
+
+        generateModel();
+
+        this.maxPlayers = gameModel.getField().getSnakes().size();
+
+        this.name = loader.get("name").asText();
+        this.description = loader.get("description").asText();
+    }
+
+    private void generateModel() throws IOException {
         final Field field = objectMapper.readValue(loader.get("field").traverse(), Field.class);
 
         final GameRules rules = objectMapper.readValue(loader.get("rules").traverse(), GameRules.class);
@@ -96,11 +110,6 @@ public final class GameLoaderJSON implements GameLoader {
         }
 
         this.gameModel = new GameModelImpl(field, rules);
-
-        this.maxPlayers = snakes.size();
-
-        this.name = loader.get("name").asText();
-        this.description = loader.get("description").asText();
     }
 
     @Override
@@ -116,6 +125,11 @@ public final class GameLoaderJSON implements GameLoader {
     @Override
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    @Override
+    public void reset() throws IOException {
+        generateModel();
     }
 
 }
