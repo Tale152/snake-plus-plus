@@ -25,6 +25,10 @@ import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+/**
+ * @see GameInterstice
+ * @author Nicola Orlando
+ */
 public class GameIntersticeImpl implements GameInterstice {
 
     private static final String WIN = "You won!";
@@ -45,7 +49,7 @@ public class GameIntersticeImpl implements GameInterstice {
     private String skinPackPath;
     private final List<GameLoader> levels;
     private int currentLevel;
-    private int playerNumber;
+    private int playerNumber = 1;
     private MediaPlayer mediaPlayer;
 
     private final Node root;
@@ -83,11 +87,6 @@ public class GameIntersticeImpl implements GameInterstice {
         currentLevel = 0;
         this.levels = levels;
         this.skinPackPath = skinPackPath;
-        playerNumber = 1;
-    }
-
-    @FXML
-    public void inizialize() {
     }
 
     @Override
@@ -159,6 +158,9 @@ public class GameIntersticeImpl implements GameInterstice {
         gameController.setInterstice(this);
     }
 
+    /**
+     * Method called to display the main menu. Only to be used by FXML.
+     */
     @FXML
     public void goToMainMenu() {
         stopMusic();
@@ -176,7 +178,12 @@ public class GameIntersticeImpl implements GameInterstice {
     }
 
     private void startLevelMusic() {
-        final int nFile = new File(PathUtils.THEMES).listFiles().length;
+        final File[] themesList = new File(PathUtils.THEMES).listFiles();
+        if (themesList == null) {
+            System.err.println("Themes folder not found. Aborting music.");
+            return;
+        }
+        final int nFile = themesList.length;
         final Random randomGenerator = new Random();
         final int randomInt = randomGenerator.nextInt(nFile - 1);
         final Media media = new Media(new File(
