@@ -5,8 +5,9 @@ import java.io.IOException;
 
 /** This class handles the transition between various levels in a world, or after a Classic level.
  * 
- * @author nix
- *
+ * @author Alessandro Talmi
+ * @author Elisa Tronetti
+ * @author Nicola Orlando
  */
 public interface GameInterstice {
     /** Provide to the object how the last game ended.
