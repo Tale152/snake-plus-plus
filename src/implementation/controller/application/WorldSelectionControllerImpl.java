@@ -10,13 +10,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import design.controller.application.GameEndReason;
+import design.controller.application.GameInterstice;
 import design.controller.application.WorldDescriptor;
 import design.controller.application.WorldSelectionController;
 import design.controller.game.GameLoader;
 import implementation.controller.PathUtils;
 import implementation.controller.game.loader.GameLoaderJSON;
+import implementation.view.application.Main;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -147,12 +151,21 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
         for (final File level : worldFiles) {
             world.add(new GameLoaderJSON(level, NAMES));
         }
-        new GameIntersticeImpl(world, skinPackPath).nextLevel();
+        final GameInterstice interstice = new GameIntersticeImpl(world, skinPackPath);
+        interstice.setGameEndReason(GameEndReason.START);
+        interstice.showInterstice();
     }
 
     @Override
     public final void setSkinPackPath(final String path) {
         skinPackPath = path;
+    }
+
+    @FXML
+    @Override
+    public final void loadMainMenu() throws IOException {
+        final FXMLLoader root = new FXMLLoader(getClass().getResource("/implementation/view/application/MainMenuView.fxml"));
+        Main.getScene().setRoot(root.load());
     }
 
 }

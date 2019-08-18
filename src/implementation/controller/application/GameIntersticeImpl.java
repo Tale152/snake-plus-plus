@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -31,36 +32,53 @@ import javafx.scene.media.MediaPlayer;
  */
 public class GameIntersticeImpl implements GameInterstice {
 
+    private enum GameMode {
+        CLASSIC,
+        WORLD;
+    }
+
     private static final String WIN = "You won!";
     private static final String LOSS = "You lost!";
     private static final String ERROR = "I am error";
 
     private static final String[][] REASONS = {
-                    {WIN, "You reached the required length!"},
-                    {WIN, "You survived until the end!"},
-                    {WIN, "You reached the required score!"},
+            {"", ""},
+            {WIN, "You reached the required length!"},
+            {WIN, "You survived until the end!"},
+            {WIN, "You reached the required score!"},
 
-                    {LOSS, "You died!"},
-                    {LOSS, "You failed to complete the objective in time!"},
+            {LOSS, "You died!"},
+            {LOSS, "You failed to complete the objective in time!"},
 
-                    {ERROR, ".: :;"}
+            {ERROR, ".: :;"}
     };
+
+    private static final String START_WORLD_BUTTON = "Start World";
+    private static final String WON_LEVEL_BUTTON = "Next Level";
+    private static final String LOST_LEVEL_BUTTON = "Retry Level";
 
     private String skinPackPath;
     private final List<GameLoader> levels;
     private int currentLevel;
     private int playerNumber = 1;
     private MediaPlayer mediaPlayer;
+    private GameMode gameMode;
 
-    private final Node root;
+    private Node root;
     @FXML
     private Label titleLabel;
     @FXML
     private Label reasonLabel;
     @FXML
+    private Label nextLevelNameLabel;
+    @FXML
+    private Label nextLevelDescriptionLabel;
+    @FXML
     private Button nextLevelButton;
     @FXML
     private Button mainMenuButton;
+    @FXML
+    private VBox layoutBox;
     /** Instantiate a GameInterstice for Classic mode.
      * 
      * @param level The level to load.
@@ -80,54 +98,93 @@ public class GameIntersticeImpl implements GameInterstice {
      * @throws IOException 
      */
     public GameIntersticeImpl(final List<GameLoader> levels, final String skinPackPath) throws IOException {
+        currentLevel = 0;
+        this.levels = levels;
+        this.skinPackPath = skinPackPath;
+        gameMode = (levels.size() == 1) ? GameMode.CLASSIC : GameMode.WORLD;
+    }
+
+    @Override
+    public final void setGameEndReason(final GameEndReason reason) throws IOException {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/implementation/view/application/GameIntersticeView.fxml"));
         loader.setController(this);
         root = loader.load();
 
-        currentLevel = 0;
-        this.levels = levels;
-        this.skinPackPath = skinPackPath;
-    }
-
-    @Override
-    public final void setGameEndReason(final GameEndReason reason) {
         final int n = reason.ordinal();
         final String[] reasonStrings = REASONS[n];
         Platform.runLater(() -> {
             titleLabel.setText(reasonStrings[0]);
             reasonLabel.setText(reasonStrings[1]);
         });
-
-        currentLevel += 1;
-        if (n <= 2) {
+        switch (reason) {
+        case START:
+            gameStart();
+            break;
+        case WON_TIME:
+        case WON_SCORE:
+        case WON_LENGTH:
             gameWon();
-        } else if (n <= 4) {
+            break;
+        case LOST_TIME:
+        case LOST_DEATH:
             gameLost();
-        } else {
+            break;
+        case ERROR:
+        default:
             iAmError();
         }
     }
 
+    private void gameStart() {
+        layoutBox.getChildren().remove(titleLabel);
+        layoutBox.getChildren().remove(reasonLabel);
+        populateNextLevelLabels();
+        nextLevelButton.setText(START_WORLD_BUTTON);
+    }
+
     private void gameWon() {
+        currentLevel += 1;
+        nextLevelButton.setText(WON_LEVEL_BUTTON);
         if (currentLevel == levels.size()) {
-            gameLost();
-            return;
+            worldEnd();
+        } else {
+            populateNextLevelLabels();
         }
-        mainMenuButton.setDisable(true);
-        mainMenuButton.setVisible(false);
-        nextLevelButton.setDisable(false);
-        nextLevelButton.setVisible(true);
+    }
+
+    private void worldEnd() {
+        nextLevelButton.setDisable(true);
+        nextLevelButton.setVisible(false);
+        hideNextLabels();
     }
 
     private void gameLost() {
-        mainMenuButton.setDisable(false);
-        mainMenuButton.setVisible(true);
-        nextLevelButton.setDisable(true);
-        nextLevelButton.setVisible(false);
+        switch (gameMode) {
+        case CLASSIC:
+            nextLevelButton.setText(LOST_LEVEL_BUTTON);
+            break;
+        case WORLD:
+            worldEnd();
+            break;
+        default:
+            break;
+        }
+
+        hideNextLabels();
     }
 
     private void iAmError() {
         gameLost();
+    }
+
+    private void hideNextLabels() {
+        layoutBox.getChildren().remove(nextLevelNameLabel);
+        layoutBox.getChildren().remove(nextLevelDescriptionLabel);
+    }
+
+    private void populateNextLevelLabels() {
+        nextLevelNameLabel.setText("Next level: " + levels.get(currentLevel).getLevelName());
+        nextLevelDescriptionLabel.setText(levels.get(currentLevel).getLevelDescription());
     }
 
     @Override
@@ -142,10 +199,11 @@ public class GameIntersticeImpl implements GameInterstice {
     public final void nextLevel() throws FileNotFoundException, IOException {
         if (currentLevel == 0) {
             MainMenuControllerImpl.stopMusic();
-        } else {
-            this.stopMusic();
         }
+        this.stopMusic();
+
         startLevelMusic();
+        levels.get(currentLevel).reset();
         final GameModel model = levels.get(currentLevel).getGameModel();
         for (int i = playerNumber; i < levels.get(currentLevel).getMaxPlayers(); i++) {
             model.getField().removeSnake(playerNumber);
@@ -171,6 +229,9 @@ public class GameIntersticeImpl implements GameInterstice {
     }
 
     private void stopMusic() {
+        if (mediaPlayer == null) {
+            return;
+        }
         mediaPlayer.stop();
     }
 

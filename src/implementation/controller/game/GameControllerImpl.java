@@ -28,6 +28,7 @@ import design.model.game.WinConditions;
 import design.view.game.ResourcesLoader;
 import implementation.model.game.items.ItemFactory;
 import implementation.view.game.GameViewImpl;
+import javafx.application.Platform;
 
 /**
  * @see GameController
@@ -127,8 +128,13 @@ public class GameControllerImpl implements GameController {
             waitAndUpdateTime();
         }
         this.gameView.stopRendering();
-        interstice.setGameEndReason(getGameEndReason());
-        interstice.showInterstice();
+        try {
+            interstice.setGameEndReason(getGameEndReason());
+            interstice.showInterstice();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Platform.exit();
+        }
     }
 
     private GameEndReason getGameEndReason() {

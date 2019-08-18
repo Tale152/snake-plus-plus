@@ -15,8 +15,9 @@ public interface GameInterstice {
      *  it will offer to get back to the main menu after a loss or after winning the last level in a world, or a
      *  classic.
      * @param reason The enum representing how the game ended.
+     * @throws IOException 
      */
-    void setGameEndReason(GameEndReason reason);
+    void setGameEndReason(GameEndReason reason) throws IOException;
 
     /** Show the interstice screen to the user.
      * 
