@@ -106,6 +106,8 @@ public class SnakeImpl implements Snake {
                 e.printStackTrace();
             }
         }
+        //clear the field from snake body parts when snake is not alive anymore
+        fieldCleaningFromDeadSnake();
     }
 
     @Override
@@ -482,6 +484,13 @@ public class SnakeImpl implements Snake {
         return val;
     }
 
+    //used to clean the field from snake body parts when snake is dead
+    private void fieldCleaningFromDeadSnake() {
+        for (final BodyPart b : this.bodyPart) {
+            this.field.removeBodyPart(b);
+        }
+        this.bodyPart.clear();
+    }
     //Useful method to test all the properties of every body part of snake
     /*private void printBodyPartProperties() {
         for (final BodyPart b : this.bodyPart) {

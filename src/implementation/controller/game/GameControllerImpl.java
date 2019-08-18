@@ -340,7 +340,8 @@ public class GameControllerImpl implements GameController {
     @Override
     public final void playerInput(final InputEvent input) {
         final Optional<Action> action = controls.getEventBinding(input);
-        if (action.isPresent()) {
+        if (action.isPresent() 
+                && gameModel.getField().getSnakes().size() > action.get().getPlayerNumber().ordinal()) {
             final Snake target = gameModel.getField().getSnakes().get(action.get().getPlayerNumber().ordinal());
             final DirectionProperty direction = target.getProperties().getDirectionProperty();
             direction.setDirection(action.get().getDirection());
