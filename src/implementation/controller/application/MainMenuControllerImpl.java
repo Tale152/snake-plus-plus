@@ -27,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 
 /**
  * @see MainMenuController
@@ -84,19 +85,28 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
         final File folder = new File("res" + File.separator + "resources");
         listFiles(folder);
         initializeMenuItem();
-        final Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString()); 
+        if (mediaPlayer == null) {
+            startMusic();
+        } else {
+            if (!mediaPlayer.getStatus().equals(Status.PLAYING)) {
+                startMusic();
+            }
+        }
+        setImage(PathUtils.MENU + "Snake++" + PathUtils.IMAGE_TYPE, snakeppImageView);
+        setImage(PathUtils.MENU + "Classic" + PathUtils.IMAGE_TYPE, classicImageView);
+        setImage(PathUtils.MENU + "Levels" + PathUtils.IMAGE_TYPE, levelImageView);
+    }
+
+    private void startMusic() {
+        final Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString());
         mediaPlayer = new MediaPlayer(media); 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-        snakeppImageView.setImage(
-                new Image(
-                        new File(PathUtils.MENU + "Snake++" + PathUtils.IMAGE_TYPE).toURI().toString()));
-        classicImageView.setImage(
-                new Image(
-                        new File(PathUtils.MENU + "Classic" + PathUtils.IMAGE_TYPE).toURI().toString()));
-        levelImageView.setImage(
-                new Image(
-                        new File(PathUtils.MENU + "Levels" + PathUtils.IMAGE_TYPE).toURI().toString()));
+    }
+
+    private void setImage(final String path, final ImageView imageView) {
+        imageView.setImage(
+                new Image(new File(path).toURI().toString()));
     }
 
     /**This method read all the directory in the current directory that are put in a map

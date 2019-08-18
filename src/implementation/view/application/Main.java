@@ -2,12 +2,8 @@ package implementation.view.application;
 import java.awt.Toolkit;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -44,14 +40,6 @@ public class Main extends Application {
                     Toolkit.getDefaultToolkit().getScreenSize().getHeight() * SCREEN_PERCENTAGE);
             scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
-            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(final KeyEvent arg0) {
-                    if (arg0.getCode().equals(KeyCode.ESCAPE)) {
-                        Platform.exit();
-                    }
-                }
-            });
             primaryStage.setTitle("Snake++");
             primaryStage.show();
         } catch (Exception e) {
