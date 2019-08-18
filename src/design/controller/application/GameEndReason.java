@@ -8,6 +8,10 @@ package design.controller.application;
  */
 public enum GameEndReason {
     /**
+     * There was no game.
+     */
+    START,
+    /**
      * One of the snakes reached the desired length.
      */
     WON_LENGTH,
