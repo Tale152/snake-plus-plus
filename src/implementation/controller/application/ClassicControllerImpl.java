@@ -16,11 +16,14 @@ import design.view.game.ResourcesLoader;
 import implementation.controller.PathUtils;
 import implementation.controller.game.GameControllerImpl;
 import implementation.controller.game.loader.GameLoaderJSON;
+import implementation.view.application.Main;
 import implementation.view.game.ResourcesLoaderFromFile;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -95,18 +99,9 @@ public class ClassicControllerImpl implements ClassicController {
     public final void initialize() {
         final ObservableList<Node> buttons = levelButtons.getChildren();
         for (int i = 0; i < levels.size(); i++) {
-            final int n = i;
             final Button button = new Button(String.valueOf(i));
             buttons.add(button);
-            button.setOnMouseClicked(e -> {
-                selected = n;
-                try {
-                    refreshLevel();
-                    refreshPlayers();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            });
+            button.setOnMouseClicked(buttonMethod(i));
         }
         preview.widthProperty().bind(previewContainer.widthProperty());
         preview.heightProperty().bind(previewContainer.heightProperty());
@@ -117,6 +112,18 @@ public class ClassicControllerImpl implements ClassicController {
         preview.heightProperty().addListener(canvasResize);
         gc = preview.getGraphicsContext2D();
         refreshPlayers();
+    }
+
+    private EventHandler<? super MouseEvent> buttonMethod(final int n) {
+        return e -> {
+            selected = n;
+            try {
+                refreshLevel();
+                refreshPlayers();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        };
     }
 
     private void refreshLevel() throws FileNotFoundException, IOException {
@@ -230,6 +237,13 @@ public class ClassicControllerImpl implements ClassicController {
     @Override
     public final void startSelectedLevel() throws FileNotFoundException, IOException {
         new GameIntersticeImpl(levels.get(selected), skinPackPath, players).nextLevel();
+    }
+
+    @FXML
+    @Override
+    public final void loadMainMenu() throws IOException {
+        final FXMLLoader root = new FXMLLoader(getClass().getResource("/implementation/view/application/MainMenuView.fxml"));
+        Main.getScene().setRoot(root.load());
     }
 
     @Override
