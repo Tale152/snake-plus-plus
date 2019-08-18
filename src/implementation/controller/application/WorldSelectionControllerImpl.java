@@ -1,7 +1,6 @@
 package implementation.controller.application;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,7 @@ import design.controller.application.WorldDescriptor;
 import design.controller.application.WorldSelectionController;
 import design.controller.game.GameLoader;
 import implementation.controller.PathUtils;
-import implementation.controller.game.gameLoader.GameLoaderJSON;
+import implementation.controller.game.loader.GameLoaderJSON;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -24,6 +23,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+/**
+ * @see WorldSelectionController
+ * @author Nicola Orlando
+ */
 public class WorldSelectionControllerImpl implements WorldSelectionController {
 
     private static final String JSONREGEX = "[.]json$";
@@ -40,15 +43,27 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
     @FXML
     private Text worldDescription;
 
-    public WorldSelectionControllerImpl() throws JsonProcessingException, IOException {
+    /**
+     * Creates a WorldSelectionController.
+     */
+    public WorldSelectionControllerImpl() {
         worlds = new ArrayList<>();
         selected = 0;
         previous = 0;
     }
 
+    /**
+     * Initializes the world selection view. Only to be called by FXML.
+     * @throws JsonProcessingException If a world descriptor file is invalid.
+     * @throws IOException If the folder containing the worlds does not exist, or there's an I/O error.
+     */
     public final void initialize() throws JsonProcessingException, IOException {
         final File worldsFolder = new File(PathUtils.WORLDS);
-        for (final File world : worldsFolder.listFiles(f -> f.isFile())) {
+        final File[] worldFiles = worldsFolder.listFiles(f -> f.isFile());
+        if (worldFiles == null) {
+            throw new IOException("Worlds folder is missing. how.");
+        }
+        for (final File world : worldFiles) {
             worlds.add(parseWorld(world));
         }
         worlds.sort(null);
@@ -98,22 +113,35 @@ public class WorldSelectionControllerImpl implements WorldSelectionController {
         previous = selected;
     }
 
+    /**
+     * Selects the previous world. Only to be called by FXML.
+     */
     @FXML
-    public final void selectPrev() throws FileNotFoundException, IOException {
+    public final void selectPrev() {
         this.selected -= 1;
         refreshWorld();
     }
 
+    /**
+     * Selects the next world. Only to be called by FXML.
+     */
     @FXML
-    public final void selectNext() throws FileNotFoundException, IOException {
+    public final void selectNext() {
         this.selected += 1;
         refreshWorld();
     }
 
+    /**
+     * Starts the game with the selected world. Only to be called by FXML.
+     * @throws IOException If the world folder is invalid or a level is malformed.
+     */
     @FXML
     public final void startWorld() throws IOException {
         final File worldFolder = new File(PathUtils.WORLDS + File.separator + worlds.get(selected).getFolderName());
         final File[] worldFiles = worldFolder.listFiles(f -> f.isFile());
+        if (worldFiles == null) {
+            throw new IOException("World folder is invalid.");
+        }
         Arrays.sort(worldFiles);
         final List<GameLoader> world = new ArrayList<>();
         for (final File level : worldFiles) {
