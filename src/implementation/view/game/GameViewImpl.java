@@ -171,7 +171,7 @@ public class GameViewImpl implements GameView {
     private GameController initGameController(final Scene scene, final GameModel gameModel) throws IOException {
         final GameController controller = new GameControllerImpl(gameModel, this, loader);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            controller.playerInput(new InputEventFX(key));
+            controller.playerInput(new InputEventFX(key.getCode()));
         });
         final Thread t  = new Thread(controller);
         t.start();
