@@ -47,11 +47,13 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     private final Map<String, String> descriptionButtonMap = new HashMap<>();
     private final Map<String, String> itemButtonMap = new HashMap<>();
     private String packName;
+    private boolean isSelected;
 
     @Override
     public final void initialize(final URL location, final ResourceBundle resources) {
         final File folderDescriptions = new File("res" + File.separator + "descriptions");
         final File folderPack = new File("res" + File.separator + "resources");
+        this.isSelected = false;
         listFiles(folderDescriptions);
         listDirectory(folderPack);
         initializeMenuPack();
@@ -87,6 +89,7 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
             //set the action for each menu item, when selected
             final EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
                 public void handle(final ActionEvent e) { 
+                    isSelected = true; //an item has been selected
                     //string that contains all the item description
                     String descStr = "";
                     try {
@@ -107,23 +110,28 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                     //change the text of the menu button and the label
                     selectItem.setText(m.getText());
                     itemDescription.setText(descStr);
-
-                    //path where there are all the items images
-                    Image item = new Image(
-                            new File(PathUtils.RESPACKS + packName + File.separator + ITEMS + m.getText().replace(" ", "") 
-                                    + PathUtils.IMAGE_TYPE).toURI().toString(), 100, 100, true, true);
-                    //set the image in the image view
-                    ImageView itemImage = new ImageView(item);
-                    itemImage.setPreserveRatio(true);
-                    imageSpot.getChildren().clear();
-                    imageSpot.getChildren().add(itemImage);
-                    itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
-                    itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
+                    //change the image in the image view
+                    printImage(packName, m.getText().replace(" ", ""));
                 }
             };
             m.setOnAction(event);
             this.selectItem.getItems().add(m);
         } 
+    }
+
+    //used to print a new image in the image view
+    private void printImage(final String packName, final String itemName) {
+      //path where there are all the items images
+        Image item = new Image(
+                new File(PathUtils.RESPACKS + packName + File.separator + ITEMS + itemName 
+                        + PathUtils.IMAGE_TYPE).toURI().toString(), 100, 100, true, true);
+        //set the image in the image view
+        ImageView itemImage = new ImageView(item);
+        itemImage.setPreserveRatio(true);
+        imageSpot.getChildren().clear();
+        imageSpot.getChildren().add(itemImage);
+        itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
+        itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
     }
 
     //used to find all the directories that contains the skin pack
@@ -162,6 +170,10 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                public void handle(final ActionEvent e) { 
                    skinPacks.setText(m.getText());
                    packName = m.getText().replace(" ", "_");
+                   //if an item has been selected and I change pack, the image changes
+                   if (isSelected) {
+                       printImage(packName, selectItem.getText().replace(" ", ""));
+                   }
                } 
            }; 
            m.setOnAction(event);
