@@ -7,7 +7,7 @@ public interface GameController extends Runnable{
     void playerInput(InputEvent input);
 
     boolean isGameEnded();
-    
+
     void setInterstice(GameInterstice interstice);
 
 }
