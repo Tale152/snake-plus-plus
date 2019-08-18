@@ -1,4 +1,4 @@
-package implementation.controller.game.gameLoader;
+package implementation.controller.game.loader;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -17,19 +17,36 @@ import implementation.model.game.field.FieldImpl;
 import implementation.model.game.items.ItemFactory;
 import implementation.model.game.items.WallImpl;
 
-
+/**
+ * Deserialize a field from a json file.
+ * @author Nicola Orlando
+ */
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")
 public class FieldDeserializer extends StdDeserializer<Field> {
 
+    /**
+     * Only to be used by Jackson.
+     */
     public FieldDeserializer() {
         this(null);
     }
 
+    /**
+     * Only to be used by Jackson.
+     * @param vc 
+     */
     public FieldDeserializer(final Class<?> vc) {
         super(vc);
     }
 
+    /**
+     * Only to be used by Jackson.
+     * @param parser A configured JsonParser.
+     * @param deserializer A configured DeserializationContext.
+     * @throws IOException Throws an IOException if a Field is malformed.
+     * @return a Field.
+     */
     public Field deserialize(final JsonParser parser, final DeserializationContext deserializer) throws IOException {
         final ObjectMapper om = new ObjectMapper();
         final JsonNode node = deserializer.readValue(parser, JsonNode.class);
@@ -50,7 +67,6 @@ public class FieldDeserializer extends StdDeserializer<Field> {
 
             final Class<? extends Effect> effect = item.get("effect").traverse().readValueAs(new TypeReference<Class<? extends Effect>>() { });
 
-            //TODO: read Optionals instead of ternary
             Optional<Long> itemDuration;
             itemDuration = item.get("itemDuration").isLong() ? Optional.of(item.get("itemDuration").asLong()) : Optional.empty();
 

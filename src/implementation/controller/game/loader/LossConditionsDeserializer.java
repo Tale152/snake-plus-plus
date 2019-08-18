@@ -1,4 +1,4 @@
-package implementation.controller.game.gameLoader;
+package implementation.controller.game.loader;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -26,10 +26,10 @@ class LossConditionsDeserializer extends StdDeserializer<LossConditions> {
     @Override
     public LossConditions deserialize(final JsonParser parser, final DeserializationContext deserializer)
             throws IOException, JsonProcessingException {
-        JsonNode node = deserializer.readValue(parser, JsonNode.class);
-        boolean checkAllSnakesDied = node.get("checkAllSnakesDied").asBoolean();
-        boolean timeForward = node.get("timeForward").asBoolean();
-        Optional<Long> gameTime = node.get("gameTime").isIntegralNumber() ? Optional.of(node.get("gameTime").asLong()) : Optional.empty();
+        final JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        final boolean checkAllSnakesDied = node.get("checkAllSnakesDied").asBoolean();
+        final boolean timeForward = node.get("timeForward").asBoolean();
+        final Optional<Long> gameTime = node.get("gameTime").isIntegralNumber() ? Optional.of(node.get("gameTime").asLong()) : Optional.empty();
         return new LossConditionsImpl(checkAllSnakesDied, gameTime, timeForward);
     }
 

@@ -1,4 +1,4 @@
-package implementation.controller.game.gameLoader;
+package implementation.controller.game.loader;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,14 +30,14 @@ class ItemRuleDeserializer extends StdDeserializer<ItemRule> {
     @Override
     public ItemRule deserialize(final JsonParser parser, final DeserializationContext deserializer)
             throws IOException, JsonProcessingException {
-        JsonNode node = deserializer.readValue(parser, JsonNode.class);
-        ObjectMapper om = new ObjectMapper();
-        Class<? extends Effect> effect = om.readValue(node.get("effectClass").traverse(), new TypeReference<Class<? extends Effect>>() { });
-        long spawnDelta = node.get("spawnDelta").asLong();
-        double spawnChance = node.get("spawnChance").asDouble();
-        int maximum = node.get("max").asInt();
-        Optional<Long> itemDuration = node.get("itemDuration").isIntegralNumber() ? Optional.of(node.get("itemDuration").asLong()) : Optional.empty();
-        Optional<Long> effectDuration = node.get("effectDuration").isIntegralNumber() ? Optional.of(node.get("effectDuration").asLong()) : Optional.empty();
+        final JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        final ObjectMapper om = new ObjectMapper();
+        final Class<? extends Effect> effect = om.readValue(node.get("effectClass").traverse(), new TypeReference<Class<? extends Effect>>() { });
+        final long spawnDelta = node.get("spawnDelta").asLong();
+        final double spawnChance = node.get("spawnChance").asDouble();
+        final int maximum = node.get("max").asInt();
+        final Optional<Long> itemDuration = node.get("itemDuration").isIntegralNumber() ? Optional.of(node.get("itemDuration").asLong()) : Optional.empty();
+        final Optional<Long> effectDuration = node.get("effectDuration").isIntegralNumber() ? Optional.of(node.get("effectDuration").asLong()) : Optional.empty();
         return new ItemRuleImpl(effect, spawnDelta, spawnChance, maximum, itemDuration, effectDuration);
     }
 

@@ -1,4 +1,4 @@
-package implementation.controller.game.gameLoader;
+package implementation.controller.game.loader;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -27,13 +27,12 @@ class WinConditionsDeserializer extends StdDeserializer<WinConditions> {
     @Override
     public final WinConditions deserialize(final JsonParser parser, final DeserializationContext deserializer)
             throws IOException, JsonProcessingException {
-        // TODO: properly read optionals
-        //JsonNode node = parser.getCodec().readTree(parser);
-        JsonNode node = deserializer.readValue(parser, JsonNode.class);
-        Optional<Integer> snakeLength = node.get("snakeLength").isIntegralNumber() ? Optional.of(node.get("snakeLength").asInt()) : Optional.empty();
-        Optional<Integer> scoreGoal = node.get("scoreGoal").isIntegralNumber() ? Optional.of(node.get("scoreGoal").asInt()) : Optional.empty();
-        Optional<Long> timeGoal = node.get("timeGoal").isIntegralNumber() ? Optional.of(node.get("timeGoal").asLong()) : Optional.empty();
-        boolean timeForward = node.get("timeForward").asBoolean();
+
+        final JsonNode node = deserializer.readValue(parser, JsonNode.class);
+        final Optional<Integer> snakeLength = node.get("snakeLength").isIntegralNumber() ? Optional.of(node.get("snakeLength").asInt()) : Optional.empty();
+        final Optional<Integer> scoreGoal = node.get("scoreGoal").isIntegralNumber() ? Optional.of(node.get("scoreGoal").asInt()) : Optional.empty();
+        final Optional<Long> timeGoal = node.get("timeGoal").isIntegralNumber() ? Optional.of(node.get("timeGoal").asLong()) : Optional.empty();
+        final boolean timeForward = node.get("timeForward").asBoolean();
         return new WinConditionsImpl(snakeLength, scoreGoal, timeGoal, timeForward);
     }
 
