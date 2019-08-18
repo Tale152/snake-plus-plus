@@ -2,6 +2,7 @@ package implementation.view.application;
 import java.awt.Toolkit;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -47,7 +48,7 @@ public class Main extends Application {
                 @Override
                 public void handle(final KeyEvent arg0) {
                     if (arg0.getCode().equals(KeyCode.ESCAPE)) {
-                        System.exit(0);
+                        Platform.exit();
                     }
                 }
             });
