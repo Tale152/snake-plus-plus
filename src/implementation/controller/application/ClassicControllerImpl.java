@@ -15,7 +15,7 @@ import design.model.game.Wall;
 import design.view.game.ResourcesLoader;
 import implementation.controller.PathUtils;
 import implementation.controller.game.GameControllerImpl;
-import implementation.controller.game.gameLoader.GameLoaderJSON;
+import implementation.controller.game.loader.GameLoaderJSON;
 import implementation.view.game.ResourcesLoaderFromFile;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
@@ -30,15 +30,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 
+/**
+ * @see ClassicController
+ * @author Nicola Orlando
+ *
+ */
 public class ClassicControllerImpl implements ClassicController {
 
     private final List<GameLoader> levels;
-    private final List<String> names;
-    private int selected = 0;
-    private int previous = 0;
+    private int selected = 0; //NOPMD
+    private int previous = 0; //NOPMD
     private int players = 1;
     private String skinPackPath;
     private ResourcesLoader resources;
@@ -67,18 +70,29 @@ public class ClassicControllerImpl implements ClassicController {
     @FXML
     private Text playersText;
 
-    private static MediaPlayer mediaPlayer;
-
+    /**
+     * Creates a ClassicController, loading all Classic levels to be displayed by default.
+     * @throws IOException if a level is malformed or somehow missing, or if the levels folder does not exist.
+     * This shouldn't happen as long as the game is packaged correctly.
+     */
     public ClassicControllerImpl() throws IOException {
         levels = new ArrayList<>();
-        names = new ArrayList<>(Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4"));
-        for (final File file : new File(PathUtils.CLASSIC).listFiles()) {
+        final File[] levelFiles = new File(PathUtils.CLASSIC).listFiles();
+        if (levelFiles == null) {
+            throw new IOException("Classic levels folder is a file. how.");
+        }
+        final List<String> names = Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4");
+        for (final File file : levelFiles) {
             final String levelPath = file.getPath();
             levels.add(new GameLoaderJSON(levelPath, names));
         }
     }
 
-    public final void initialize() throws FileNotFoundException, IOException {
+    /**
+     * Initializes the UI. Only to be called by FXML.
+     */
+    @FXML
+    public final void initialize() {
         final ObservableList<Node> buttons = levelButtons.getChildren();
         for (int i = 0; i < levels.size(); i++) {
             final int n = i;
@@ -123,7 +137,7 @@ public class ClassicControllerImpl implements ClassicController {
         final String text = level.getLevelDescription();
         levelDescription.setText(text);
         new AnimationTimer() {
-            private int f = 0;
+            private int f;
             @Override
             public void handle(final long now) {
                 f++;
@@ -224,15 +238,7 @@ public class ClassicControllerImpl implements ClassicController {
         try {
             refreshLevel();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Stops music.
-     */
-    public static final void stopMusic() {
-        mediaPlayer.stop();
     }
 }
