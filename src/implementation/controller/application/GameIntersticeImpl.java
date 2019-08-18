@@ -86,10 +86,6 @@ public class GameIntersticeImpl implements GameInterstice {
         playerNumber = 1;
     }
 
-    @FXML
-    public void inizialize() {
-    }
-
     @Override
     public final void setGameEndReason(final GameEndReason reason) {
         final int n = reason.ordinal();
