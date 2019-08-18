@@ -13,7 +13,7 @@ import design.model.game.Field;
 import design.model.game.Item;
 import design.model.game.Snake;
 import design.model.game.Wall;
-import implementation.controller.game.gameLoader.FieldDeserializer;
+import implementation.controller.game.loader.FieldDeserializer;
 
 @JsonDeserialize(using = FieldDeserializer.class)
 public class FieldImpl implements Field {
@@ -21,7 +21,6 @@ public class FieldImpl implements Field {
     private final int width;
     private final int height;
 
-    // TODO: maybe use Sets instead of Lists? order is irrelevant and stuff can't be repeated
     private final List<Item> items;
     private final List<Wall> walls;
     private final List<BodyPart> bodyParts;

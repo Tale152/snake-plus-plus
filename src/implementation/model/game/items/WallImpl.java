@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import design.model.game.Snake;
 import design.model.game.Wall;
-import implementation.controller.game.gameLoader.WallDeserializer;
+import implementation.controller.game.loader.WallDeserializer;
 
 /**
  * @see Wall
