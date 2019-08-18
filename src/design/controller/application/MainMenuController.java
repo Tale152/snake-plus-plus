@@ -22,4 +22,10 @@ public interface MainMenuController {
      */
     void goToLevelMode() throws IOException;
 
+    /**
+     * Loads the description view menu.
+     * @throws IOException if the menu does not exist.
+     */
+    void goToDescriptionMode() throws IOException;
+
 }

@@ -3,15 +3,14 @@ package implementation.controller;
 import java.io.File;
 
 /**
- * Utility class containing constants usefull to del with files.
+ * Utility class containing constants useful to del with files.
  * @author Alessandro Talmi
  * @author Elisa Tronetti
  * @author Nicola Orlando
  *
  */
-public final class Path {
+public final class PathUtils {
 
-    private Path() { }
     private static final String SEP = File.separator;
     private static final String HOME = System.getProperty("user.home") + SEP + ".snekpp" + SEP;
     private static final String RES = "res";
@@ -25,6 +24,15 @@ public final class Path {
      */
     public static final String RESPACKS = RES + SEP + "resources" + SEP;
 
+    /**
+     * Path to descriptions files.
+     */
+    public static final String DESCRIPTIONS = RES + SEP + "descriptions" + SEP;
+
+    /**
+     * Path to the menu images.
+     */
+    public static final String MENU = RES + SEP + "menu" + SEP;
     /**
      * Path to world stages.
      */
@@ -50,4 +58,10 @@ public final class Path {
      */
     public static final String GAME_THEMES_TYPE = ".mp3";
 
+    /**
+     * Type of image files used in this application.
+     */
+    public static final String IMAGE_TYPE = ".png";
+
+    private PathUtils() { }
 }

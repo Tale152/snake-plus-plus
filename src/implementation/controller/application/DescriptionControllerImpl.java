@@ -2,7 +2,6 @@ package implementation.controller.application;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import design.controller.application.DescriptionController;
+import implementation.controller.PathUtils;
 import implementation.view.application.Main;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,12 +28,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * The description controller define the behaviors of the description view,
+ * where there are all the item's descriptions, that can be selected from every 
+ * skin pack.
+ */
 public class DescriptionControllerImpl implements DescriptionController, Initializable {
 
-    private static final String PATH = "res" + File.separator + "descriptions" + File.separator;
-    private static final String PATH_ITEMS = "res" + File.separator + "resources" + File.separator;
     private static final String ITEMS = "Items" + File.separator;
-    private static final String FILE_TYPE = ".png"; 
     private static final String DEFAULT_PACK = "Default Pack";
 
     @FXML private MenuButton selectItem;
@@ -43,7 +45,6 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
 
     private final Map<String, String> descriptionButtonMap = new HashMap<>();
     private final Map<String, String> itemButtonMap = new HashMap<>();
-    private String labelStr;
     private String packName;
 
     @Override
@@ -67,23 +68,30 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
         }
     }
 
+    //used to list all the files contained in a folder, which are the file of the item's descriptions
     private void listFiles(final File folder) {
-        for (final File fileEntry : folder.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                this.descriptionButtonMap.put(fileEntry.getName().replace("_", " "), PATH + fileEntry.getName());
+        final File[] files = folder.listFiles();
+        if (files != null) {
+            final List<File> filesList = new ArrayList<>(Arrays.asList(files));
+            for (final File fileEntry : filesList) {
+                if (!fileEntry.isDirectory()) {
+                    this.descriptionButtonMap.put(fileEntry.getName().replace("_", " "), PathUtils.DESCRIPTIONS + fileEntry.getName());
+                }
             }
         }
     }
 
     private void initializeMenuItem() {
         for (final String s : this.descriptionButtonMap.keySet()) {
-            MenuItem m = new MenuItem(s);
-            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+            final MenuItem m = new MenuItem(s);
+            //set the action for each menu item, when selected
+            final EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
                 public void handle(final ActionEvent e) { 
+                    //string that contains all the item description
+                    String labelStr = "";
                     try {
                         BufferedReader br = new BufferedReader(new FileReader(descriptionButtonMap.get(s)));
                         //read item description
-                        labelStr = "";
                         String nextStr;
                         nextStr = br.readLine();
                         while (nextStr != null) {
@@ -100,19 +108,17 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                     selectItem.setText(m.getText());
                     itemDescription.setText(labelStr);
 
-                    try {
-                        //path where there are all the items images
-                        FileInputStream inputStream = new FileInputStream(PATH_ITEMS + packName + File.separator + ITEMS + m.getText().replace(" ", "") + FILE_TYPE);
-                        Image item = new Image(inputStream, 100, 100, true, true);
-                        ImageView itemImage = new ImageView(item);
-                        itemImage.setPreserveRatio(true);
-                        imageSpot.getChildren().clear();
-                        imageSpot.getChildren().add(itemImage);
-                        itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
-                        itemImage.fitHeightProperty().bind(imageSpot.heightProperty()); 
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
+                    //path where there are all the items images
+                    Image item = new Image(
+                            new File(PathUtils.RESPACKS + packName + File.separator + ITEMS + m.getText().replace(" ", "") 
+                                    + PathUtils.IMAGE_TYPE).toURI().toString(), 100, 100, true, true);
+                    //set the image in the image view
+                    ImageView itemImage = new ImageView(item);
+                    itemImage.setPreserveRatio(true);
+                    imageSpot.getChildren().clear();
+                    imageSpot.getChildren().add(itemImage);
+                    itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
+                    itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
                 }
             };
             m.setOnAction(event);
@@ -135,6 +141,7 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                     }
                 }
             }
+            //set the default skin pack if the user does not select one
             if (this.itemButtonMap.isEmpty()) {
                 throw new RuntimeException("no skin paks found");
             } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
