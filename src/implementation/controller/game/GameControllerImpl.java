@@ -117,7 +117,7 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void run() {
+    public final void run() {
         this.gameModel.getField().begin();
         this.gameView.startRendering();
         while (!isGameEnded()) {
@@ -132,7 +132,7 @@ public class GameControllerImpl implements GameController {
     }
 
     private GameEndReason getGameEndReason() {
-        List<Snake> snakes = this.gameModel.getField().getSnakes();
+        final List<Snake> snakes = this.gameModel.getField().getSnakes();
         if (win.checkSnakeLength(snakes)) {
             return GameEndReason.WON_LENGTH;
         } else if (win.checkTime(gameTime)) {
