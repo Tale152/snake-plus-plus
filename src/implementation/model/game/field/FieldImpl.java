@@ -15,6 +15,11 @@ import design.model.game.Snake;
 import design.model.game.Wall;
 import implementation.controller.game.loader.FieldDeserializer;
 
+/**
+ * @see Field
+ * @author Nicola Orlando
+ *
+ */
 @JsonDeserialize(using = FieldDeserializer.class)
 public class FieldImpl implements Field {
 
@@ -32,6 +37,10 @@ public class FieldImpl implements Field {
 
     private boolean begun;
 
+    /**
+     * Initializes a field with a set dimension.
+     * @param dimensions The dimension of the field.
+     */
     public FieldImpl(final Point dimensions) {
         if (dimensions.x <= 0 || dimensions.y <= 0) {
             throw new IllegalArgumentException();
