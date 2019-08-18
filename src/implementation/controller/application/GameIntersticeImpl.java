@@ -127,10 +127,7 @@ public class GameIntersticeImpl implements GameInterstice {
     }
 
     private void iAmError() {
-        mainMenuButton.setDisable(false);
-        nextLevelButton.setDisable(true);
-        nextLevelButton.setDisable(true);
-        nextLevelButton.setVisible(false);
+        gameLost();
     }
 
     @Override

@@ -21,9 +21,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -37,9 +37,10 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
 
     private static final String ITEMS = "Items" + File.separator;
     private static final String DEFAULT_PACK = "Default Pack";
+    private static final String MAIN_MENU_VIEW = "/implementation/view/application/MainMenuView.fxml";
 
     @FXML private MenuButton selectItem;
-    @FXML private Label itemDescription;
+    @FXML private TextArea itemDescription;
     @FXML private AnchorPane imageSpot;
     @FXML private MenuButton skinPacks;
 
@@ -55,12 +56,11 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
         listDirectory(folderPack);
         initializeMenuPack();
         initializeMenuItem();
-        this.itemDescription.setWrapText(true);
     }
 
     @Override
     public final void goToMainMenu() {
-        final FXMLLoader root = new FXMLLoader(getClass().getResource("/implementation/view/application/MainMenuView.fxml"));
+        final FXMLLoader root = new FXMLLoader(getClass().getResource(MAIN_MENU_VIEW));
         try {
             Main.getScene().setRoot(root.load());
         } catch (IOException e) {
@@ -88,14 +88,14 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
             final EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
                 public void handle(final ActionEvent e) { 
                     //string that contains all the item description
-                    String labelStr = "";
+                    String descStr = "";
                     try {
                         BufferedReader br = new BufferedReader(new FileReader(descriptionButtonMap.get(s)));
                         //read item description
                         String nextStr;
                         nextStr = br.readLine();
                         while (nextStr != null) {
-                            labelStr += nextStr + "\n";
+                            descStr += nextStr + "\n";
                             nextStr = br.readLine();
                         }
                         br.close();
@@ -106,7 +106,7 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                     }
                     //change the text of the menu button and the label
                     selectItem.setText(m.getText());
-                    itemDescription.setText(labelStr);
+                    itemDescription.setText(descStr);
 
                     //path where there are all the items images
                     Image item = new Image(
