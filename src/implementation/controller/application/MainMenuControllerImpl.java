@@ -42,7 +42,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     @FXML private MenuButton skinPacks;
     @FXML private ImageView snakeppImageView;
 
-    private String skinPackPath;
+    private static String skinPackPath;
     private final Map<String, String> itemButtonMap = new HashMap<>();
     private static final String MAIN_MENU_THEME_PATH = PathUtils.THEMES + "Main_menu_theme.mp3";
     private static MediaPlayer mediaPlayer;
@@ -126,13 +126,15 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
                     }
                 }
             }
-            if (this.itemButtonMap.isEmpty()) {
-                throw new RuntimeException("no skin paks found");
-            } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
-                this.skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);
-            } else {
-                this.skinPackPath = randomPack;
-            } 
+            if (skinPackPath == null) {
+                if (this.itemButtonMap.isEmpty()) {
+                    throw new RuntimeException("no skin paks found");
+                } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
+                    skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);
+                } else {
+                    skinPackPath = randomPack;
+                } 
+            }
         } else {
             throw new RuntimeException("there are problems with directory " + folder.getAbsolutePath());
         }
@@ -161,5 +163,10 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
      */
     public static final void stopMusic() {
         mediaPlayer.stop();
+    }
+
+    @Override
+    public final String getSelectedSkinPack() {
+        return skinPackPath;
     }
 }

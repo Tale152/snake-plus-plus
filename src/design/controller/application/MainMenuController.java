@@ -28,4 +28,8 @@ public interface MainMenuController {
      */
     void goToDescriptionMode() throws IOException;
 
+    /**
+     * @return path to selected skin pack
+     */
+    String getSelectedSkinPack();
 }
