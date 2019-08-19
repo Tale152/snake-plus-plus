@@ -7,9 +7,6 @@ package design.controller.application;
  * @see ClassicController
  * @see StageSelectionController
  * @see GameView
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface WorldSelectionController extends StageSelectionController {
 

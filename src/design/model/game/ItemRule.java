@@ -6,9 +6,6 @@ import java.util.Optional;
  * An ItemRule defines how an item will behave into the game.<p>
  * It defines it's spawn rules and whether or not it will disappear from field
  * if not picked and if will activate it's lasting effect. 
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface ItemRule {
 

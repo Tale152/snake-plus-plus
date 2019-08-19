@@ -22,7 +22,6 @@ import implementation.model.game.items.BodyPartImpl;
  * This class is the main snake class, where is handled snake movement,
  * snake collisions, his field, his owner and the reverse.
  * All the algorithm to handle snake movements are contained here. 
- * @author Elisa Tronetti
  */
 public class SnakeImpl implements Snake {
 

@@ -9,7 +9,6 @@ import design.model.game.Snake;
 
 /**
  * @see BodyPart
- * @author Alessandro Talmi
  */
 public class BodyPartImpl extends CollidableAbstract implements BodyPart {
 

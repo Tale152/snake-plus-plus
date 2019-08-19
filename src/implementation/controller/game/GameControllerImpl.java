@@ -32,8 +32,6 @@ import javafx.application.Platform;
 
 /**
  * @see GameController
- * @author Alessandro Talmi
- * @author Elisa Tronetti
  */
 public class GameControllerImpl implements GameController {
 

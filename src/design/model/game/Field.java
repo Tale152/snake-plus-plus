@@ -5,9 +5,6 @@ import java.util.List;
 
 /**
  * Field is the container to hold everything in game, such as snakes, items and walls.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface Field {
 

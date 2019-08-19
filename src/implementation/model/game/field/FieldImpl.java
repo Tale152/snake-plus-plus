@@ -17,8 +17,6 @@ import implementation.controller.game.loader.FieldDeserializer;
 
 /**
  * @see Field
- * @author Nicola Orlando
- *
  */
 @JsonDeserialize(using = FieldDeserializer.class)
 public class FieldImpl implements Field {

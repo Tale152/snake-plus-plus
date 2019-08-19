@@ -19,7 +19,6 @@ import implementation.model.game.items.WallImpl;
 
 /**
  * Deserialize a field from a json file.
- * @author Nicola Orlando
  */
 //Deserializers are not to be serialized or deserialized. Serial field is unnecessary.
 @SuppressWarnings("serial")

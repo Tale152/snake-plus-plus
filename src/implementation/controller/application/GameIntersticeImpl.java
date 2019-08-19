@@ -28,7 +28,6 @@ import javafx.scene.media.MediaPlayer;
 
 /**
  * @see GameInterstice
- * @author Nicola Orlando
  */
 public class GameIntersticeImpl implements GameInterstice {
 

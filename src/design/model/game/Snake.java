@@ -5,10 +5,6 @@ import java.util.List;
 /**
  * Snake contains all the method that can be used to communicate with him, to kill him 
  * and to get all his properties.
- * @author Elisa Tronetti
- * @author Alessandro Talmi
- * @author Nicola Orlando
- *
  */
 public interface Snake extends Runnable {
 

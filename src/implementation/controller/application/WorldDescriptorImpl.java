@@ -4,7 +4,6 @@ import design.controller.application.WorldDescriptor;
 
 /**
  * @see WorldDescriptor
- * @author Nicola Orlando
  */
 public class WorldDescriptorImpl implements WorldDescriptor, Comparable<WorldDescriptor> {
 

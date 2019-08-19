@@ -2,10 +2,6 @@ package design.model.game;
 
 /**
 * Contains enum values representing every possible direction that a snake can take.
-* @author Alessandro Talmi
-* @author Elisa Tronetti
-* @author Nicola Orlando
- *
  */
 public enum Direction {
     /**

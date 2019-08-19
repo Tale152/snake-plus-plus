@@ -6,9 +6,6 @@ import design.model.game.GameModel;
 
 /**
  * Loads a game, generating a model and some information about the level.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface GameLoader {
 

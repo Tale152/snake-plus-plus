@@ -8,8 +8,6 @@ import design.model.game.Snake;
  * Instantaneous effect: halve snake's length and score.<p>
  * Lasting effect: multiplies snake's length by every bad apple eaten (+1)
  * since lasting effect activation. Does not restore score.
- * @author Alessandro Talmi
- *
  */
 public final class BadApple extends EffectAbstract {
 

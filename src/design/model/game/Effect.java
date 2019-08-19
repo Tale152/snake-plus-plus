@@ -6,10 +6,6 @@ import java.util.Optional;
 * An Effect is contained into an Item and can be passed to a Snake if has a duration.<p>
 * When contained into an Item specifies it's behavior on collision.<p>
 * When contained into a Snake changes it's properties depending on Effect's implementation.
-* @author Alessandro Talmi
-* @author Elisa Tronetti
-* @author Nicola Orlando
- *
  */
 public interface Effect extends Runnable {
 

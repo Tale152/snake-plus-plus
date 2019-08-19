@@ -5,9 +5,6 @@ package design.model.game;
  * For example, having pickup property set to one means that snake will pickup items only from the cell
  * that will occupy (like normally would). Setting the property to 2 instead affect not only the next cell
  * but also everyone surrounding it.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface PickupProperty {
 

@@ -13,7 +13,6 @@ import design.model.game.Snake;
 
 /**
  * @see Item
- * @author Alessandro Talmi
  */
 public class ItemImpl extends CollidableAbstract implements Item  {
 

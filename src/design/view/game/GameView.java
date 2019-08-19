@@ -7,9 +7,6 @@ import design.controller.game.GameController;
  * @see GameHud
  * @see GameField
  * @see GameController
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface GameView {
 

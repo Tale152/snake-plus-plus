@@ -2,9 +2,6 @@ package design.view.game;
 
 /**
  * This abstraction represents a graphical background to be printed, independent from used graphical API.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface Background {
 

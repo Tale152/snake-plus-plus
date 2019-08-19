@@ -11,7 +11,6 @@ import design.model.game.SpeedProperty;
 /**
  * This class initialize and return all the snake different properties,
  * such as length, direction, collision, speed and pick up properties.
- * @author Elisa Tronetti
  */
 public class PropertiesImpl implements Properties {
 

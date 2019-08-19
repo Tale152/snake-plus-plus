@@ -2,9 +2,6 @@ package design.controller.application;
 
 /**
  * A class to hold some informations about a world without loading it in its entirety.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface WorldDescriptor {
     /**

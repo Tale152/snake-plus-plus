@@ -38,8 +38,6 @@ import javafx.scene.text.Text;
 
 /**
  * @see ClassicController
- * @author Nicola Orlando
- *
  */
 public class ClassicControllerImpl implements ClassicController {
 

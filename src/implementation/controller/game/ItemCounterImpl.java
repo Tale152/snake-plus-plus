@@ -13,7 +13,6 @@ import design.model.game.ItemRule;
 
 /**
  * @see ItemCounter
- * @author Alessandro Talmi
  */
 public class ItemCounterImpl implements ItemCounter {
 

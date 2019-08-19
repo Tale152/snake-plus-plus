@@ -4,7 +4,6 @@ import design.model.game.LengthProperty;
 /**
  * This class is part of the snake properties, here there are the method to use
  * to set all the length properties and to get snake current length.
- * @author Elisa Tronetti
  */
 public class LengthPropertyImpl implements LengthProperty {
 

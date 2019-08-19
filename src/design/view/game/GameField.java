@@ -6,9 +6,6 @@ import java.util.Map;
 
 /**
  * A container that contains everything graphical that will be printed regarding the field.
- * @author Alessandro Talmi
- * @author Elista Tronetti
- * @author Nicola Orlando
  */
 public interface GameField {
 

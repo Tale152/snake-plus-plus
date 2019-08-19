@@ -5,9 +5,6 @@ import java.util.List;
 /**
  * Contains every information that needs to be printed regarding a player's hud.
  * @see GameHud
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface PlayerHud {
 

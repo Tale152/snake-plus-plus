@@ -8,7 +8,6 @@ import design.model.game.Snake;
 /**
  * Instant effect: reverses snake. <p>
  * Lasting effect: reverses snake every time it collides with a wall.
- * @author Alessandro Talmi
  */
 public class Spring extends EffectAbstract {
 
