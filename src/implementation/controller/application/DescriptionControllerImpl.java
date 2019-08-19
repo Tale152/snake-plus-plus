@@ -92,8 +92,8 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                     isSelected = true; //an item has been selected
                     //string that contains all the item description
                     String descStr = "";
-                    try {
-                        BufferedReader br = new BufferedReader(new FileReader(descriptionButtonMap.get(s)));
+                    //try-with-resources ensures the BufferedReader will be closed correctly (pmd does not recognize it)
+                    try (BufferedReader br = new BufferedReader(new FileReader(descriptionButtonMap.get(s)))) { //NOPMD
                         //read item description
                         String nextStr;
                         nextStr = br.readLine();
@@ -101,12 +101,11 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                             descStr += nextStr + "\n";
                             nextStr = br.readLine();
                         }
-                        br.close();
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     } catch (IOException e1) {
                         e1.printStackTrace();
-                    }
+                    } 
                     //change the text of the menu button and the label
                     selectItem.setText(m.getText());
                     itemDescription.setText(descStr);
@@ -122,11 +121,11 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     //used to print a new image in the image view
     private void printImage(final String packName, final String itemName) {
       //path where there are all the items images
-        Image item = new Image(
+        final Image item = new Image(
                 new File(PathUtils.RESPACKS + packName + File.separator + ITEMS + itemName 
                         + PathUtils.IMAGE_TYPE).toURI().toString(), 100, 100, true, true);
         //set the image in the image view
-        ImageView itemImage = new ImageView(item);
+        final ImageView itemImage = new ImageView(item);
         itemImage.setPreserveRatio(true);
         imageSpot.getChildren().clear();
         imageSpot.getChildren().add(itemImage);
