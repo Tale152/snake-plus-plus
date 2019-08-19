@@ -30,7 +30,7 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
-                        <ImageView fx:id="classicImageView" fitHeight="104.0" fitWidth="445.0" layoutX="28.0" layoutY="43.0" onMouseClicked="#goToClassicMode" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="40.0" />
+                        <ImageView fx:id="classicImageView" fitHeight="104.0" fitWidth="445.0" layoutX="28.0" layoutY="43.0" onMouseClicked="#goToClassicMode" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="36.0" />
                      </children>
                   </AnchorPane>
                </children>
