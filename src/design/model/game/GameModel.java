@@ -4,9 +4,6 @@ package design.model.game;
  * A game model is used as a container to store everything that a level is composed.<p>
  * In other words this contains how the field is composed, what items will spawn, 
  * what rules will be applied, etc... 
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface GameModel {
 

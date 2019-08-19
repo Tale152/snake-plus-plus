@@ -4,10 +4,6 @@ import java.io.File;
 
 /**
  * Utility class containing constants useful to deal with files.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
- *
  */
 public final class PathUtils {
 

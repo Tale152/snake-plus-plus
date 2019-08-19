@@ -4,9 +4,6 @@ import java.util.List;
 
 /**
  * The conditions to loose a game. Not necessarily all conditions are active.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface LossConditions {
 

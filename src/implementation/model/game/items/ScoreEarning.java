@@ -10,7 +10,6 @@ import design.model.game.Snake;
  * Instant effect: increases snake's score by double of Apple's score increment.<p>
  * Lasting effect: increases snake's score by a single ScoreEarning SCORE_INCREMENT value
  * multiplied by number of ScoreEarning collided before lasting effect ends.
- * @author Alessandro Talmi
  */
 public class ScoreEarning extends EffectAbstract {
 

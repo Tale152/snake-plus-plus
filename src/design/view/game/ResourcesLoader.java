@@ -3,9 +3,6 @@ package design.view.game;
 /**
  * Class used to load resources used to display graphical elements used 
  * while playing the game.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface ResourcesLoader {
 

@@ -12,7 +12,6 @@ import design.model.game.Snake;
  * (example: snake going RIGHT, collides with beer, now goes UP or DOWN).<p>
  * Lasting effect: snake's controls are swapped 
  * (example: pressing RIGHT equals to pressing LEFT and the other way around).
- * @author Alessandro Talmi
  */
 public final class Beer extends EffectAbstract {
 

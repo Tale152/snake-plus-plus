@@ -6,7 +6,6 @@ import design.model.game.PlayerNumber;
 
 /**
  * @see Action
- * @author Nicola Orlando
  */
 public final class ActionImpl implements Action {
 

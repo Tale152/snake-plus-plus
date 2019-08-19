@@ -6,7 +6,6 @@ import design.model.game.PlayerNumber;
  * This class is part of the snake properties, here there are the method to use
  * to set all the player properties, such as the player number, name, current score
  * and the score multiplier.
- * @author Elisa Tronetti
  */
 public class PlayerImpl implements Player {
 

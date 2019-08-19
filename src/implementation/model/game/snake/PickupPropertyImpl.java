@@ -5,7 +5,6 @@ import design.model.game.PickupProperty;
  * This class is part of the snake properties, here there are the method to use
  * to set snake's pick up radius, which is how many cell he collide with in front 
  * of him.
- * @author Elisa Tronetti
  */
 public class PickupPropertyImpl implements PickupProperty {
 

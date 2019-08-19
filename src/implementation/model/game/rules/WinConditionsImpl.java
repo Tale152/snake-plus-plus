@@ -10,7 +10,6 @@ import design.model.game.WinConditions;
 
 /**
  * @see WinConditions
- * @author Alessandro Talmi
  */
 public class WinConditionsImpl implements WinConditions {
 

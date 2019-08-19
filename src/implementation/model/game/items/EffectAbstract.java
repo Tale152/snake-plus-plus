@@ -6,8 +6,6 @@ import design.model.game.Snake;
 
 /**
  * Abstract class that specifies common behaviors between all effects implementation.
- * @author Alessandro Talmi
- *
  */
 public abstract class EffectAbstract implements Effect {
 

@@ -2,9 +2,6 @@ package design.model.game;
 
 /**
  * A set of properties that determinate and can change the direction of a snake.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface DirectionProperty {
 

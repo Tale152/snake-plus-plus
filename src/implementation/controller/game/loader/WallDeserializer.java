@@ -15,8 +15,6 @@ import implementation.model.game.items.WallImpl;
 
 /**
  * Deserialize a wall from a JSON file.
- * @author Nicola Orlando
- *
  */
 @SuppressWarnings("serial")
 public class WallDeserializer extends StdDeserializer<Wall> {

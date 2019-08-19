@@ -5,11 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
 *A collidable is the root of everything that stands in a cell into the field and that you can collide with.
-*
-* @author Alessandro Talmi
-* @author Elisa Tronetti
-* @author Nicola Orlando
-*
 */
 public interface Collidable {
 

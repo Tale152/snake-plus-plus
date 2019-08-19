@@ -2,10 +2,9 @@ package implementation.model.game.snake;
 
 import design.model.game.SpeedProperty;
 /**
- *  * This class is part of the snake properties, here there are the method to use
+ * This class is part of the snake properties, here there are the method to use
  * to set all the speed properties, such us the delta, the speed multiplier and the 
  * multiplier that changes snake speed based on his length.
- * @author Elisa Tronetti
  */
 public class SpeedPropertyImpl implements SpeedProperty {
 

@@ -10,7 +10,6 @@ import design.model.game.Snake;
 
 /**
  * @see LossConditions
- * @author Alessandro Talmi
  */
 public class LossConditionsImpl implements LossConditions {
 

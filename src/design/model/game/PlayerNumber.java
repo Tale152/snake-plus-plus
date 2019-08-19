@@ -1,11 +1,7 @@
 package design.model.game;
 
 /**
-* Contains enum values associated to every player.
-* @author Alessandro Talmi
-* @author Elisa Tronetti
-* @author Nicola Orlando
- *
+ * Contains enum values associated to every player.
  */
 public enum PlayerNumber {
 

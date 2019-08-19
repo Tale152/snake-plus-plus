@@ -13,7 +13,6 @@ import design.view.game.Sprite;
 
 /**
  * @see GameField
- * @author Alessandro Talmi
  */
 public class GameFieldImpl implements GameField {
 

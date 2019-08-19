@@ -5,9 +5,6 @@ import design.model.game.PlayerNumber;
 
 /**
  * Describes an action for a snake to perform.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface Action {
     /**

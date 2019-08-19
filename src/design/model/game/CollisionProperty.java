@@ -2,9 +2,6 @@ package design.model.game;
 
 /**
  * A set of properties that can change the result of a collision within the snake and everything else.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface CollisionProperty {
 

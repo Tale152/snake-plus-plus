@@ -4,9 +4,6 @@ import java.util.List;
 
 /**
  * This contains the entire set of rules that will govern a level.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface GameRules {
 

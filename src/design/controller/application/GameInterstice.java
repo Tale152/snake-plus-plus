@@ -3,11 +3,8 @@ package design.controller.application;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-/** This class handles the transition between various levels in a world, or after a Classic level.
- * 
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
+/** 
+ * This class handles the transition between various levels in a world, or after a Classic level.
  */
 public interface GameInterstice {
     /** Provide to the object how the last game ended.

@@ -13,8 +13,6 @@ import javafx.scene.input.KeyCode;
 
 /**
  * @see EventTranslator
- * @author Nicola Orlando
- *
  */
 public final class EventTranslatorImpl implements EventTranslator {
 

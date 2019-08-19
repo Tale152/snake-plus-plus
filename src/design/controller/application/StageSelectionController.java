@@ -6,9 +6,6 @@ import java.io.IOException;
  * to play. 
  * @see WordSelectionController
  * @see ClassicController
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface StageSelectionController {
     /**

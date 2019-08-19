@@ -6,9 +6,6 @@ import java.util.Optional;
  * Represents an input to be associated to an action to be performed by a snake.
  * @see DeviceType
  * @see EventTranslator
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface InputEvent {
 

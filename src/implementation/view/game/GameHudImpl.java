@@ -10,7 +10,6 @@ import design.view.game.ResourcesLoader;
 
 /**
  * @see GameHud
- * @author Alessandro Talmi
  */
 public class GameHudImpl implements GameHud {
 

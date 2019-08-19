@@ -4,9 +4,6 @@ package design.view.game;
  * A sprite is an abstract idea representing the graphical resources
  * that will be displayed trying to isolate View implementation 
  * from used API to better suit MVC philosophy.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface Sprite {
 

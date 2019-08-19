@@ -2,11 +2,7 @@ package design.model.game;
 
 /**
  * Every snake has some properties, and this is where all of them are contained.
- * When you need to get a snake property, you take it from here. 
- * @author Elisa Tronetti
- * @author Alessandro Talmi
- * @author Nicola Orlando
- *
+ * When you need to get a snake property, you take it from here.
  */
 public interface Properties {
 

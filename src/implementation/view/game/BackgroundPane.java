@@ -17,7 +17,6 @@ import javafx.scene.layout.Pane;
  * <li> Canvas and GraphicContext of the field </li>
  * </ul>
  * Everything is encapsulated into a BorderPane
- * @author Alessandro Talmi
  */
 public class BackgroundPane extends Pane {
 

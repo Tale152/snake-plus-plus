@@ -8,7 +8,6 @@ import design.model.game.DirectionProperty;
  * This class is part of the snake properties, here there are the method to use
  * to set all the direction properties, to force a direction an to get the
  * current snake direction.
- * @author Elisa Tronetti
  */
 public class DirectionPropertyImpl implements DirectionProperty {
 

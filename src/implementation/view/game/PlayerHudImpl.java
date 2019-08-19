@@ -8,7 +8,6 @@ import design.view.game.Sprite;
 
 /**
  * @see PlayerHud
- * @author Alessandro Talmi 
  */
 public class PlayerHudImpl implements PlayerHud {
 

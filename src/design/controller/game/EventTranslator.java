@@ -8,9 +8,6 @@ import java.util.Optional;
  * performed by snakes.
  * @see InputEvent
  * @see Action
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface EventTranslator {
 

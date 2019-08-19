@@ -10,7 +10,6 @@ import design.model.game.WinConditions;
 
 /**
  * @see GameRules
- * @author Alessandro Talmi
  */
 public class GameRulesImpl implements GameRules {
 

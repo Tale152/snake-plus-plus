@@ -8,7 +8,6 @@ import design.model.game.Snake;
 /**
  * Instant effect: nothing. <p>
  * Lasting effect: doubles snake's speed.
- * @author Alessandro Talmi
  */
 public class Turbo extends EffectAbstract {
 

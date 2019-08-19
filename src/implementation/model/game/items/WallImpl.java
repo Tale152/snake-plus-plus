@@ -11,7 +11,6 @@ import implementation.controller.game.loader.WallDeserializer;
 
 /**
  * @see Wall
- * @author Alessandro Talmi
  */
 @JsonDeserialize(using = WallDeserializer.class)
 public class WallImpl extends CollidableAbstract implements Wall {

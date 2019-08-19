@@ -3,9 +3,6 @@ package design.model.game;
 /**
  * A body part is what a snake is composed. It has various properties that determinate which kind of body part 
  * we are dealing with and whom owns it.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface BodyPart extends Collidable {
 

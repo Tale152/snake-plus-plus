@@ -4,9 +4,6 @@ import java.io.IOException;
 
 /**
  * The controller of the Main Menu, containing methods to access all the game modes.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface MainMenuController {
 

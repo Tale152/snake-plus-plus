@@ -10,7 +10,6 @@ import design.model.game.Item;
  * Allows to create items with any effect that defines them.<p>
  * Having the effect class into arguments allows automates the process
  * of spawning items.
- * @author Alessandro Talmi
  */
 public class ItemFactory {
 

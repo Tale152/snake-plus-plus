@@ -5,7 +5,6 @@ import design.model.game.CollisionProperty;
 /**
  * This class is part of the snake properties, here there are the method to use
  * to set all the collision properties, like intangibility and invincibility.
- * @author Elisa Tronetti
  */
 public class CollisionPropertyImpl implements CollisionProperty {
 

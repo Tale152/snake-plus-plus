@@ -11,9 +11,6 @@ import java.io.IOException;
  * @see WordSelectionController
  * @see StageSelectionController
  * @see GameView
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface ClassicController extends StageSelectionController {
     /**

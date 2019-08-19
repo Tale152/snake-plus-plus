@@ -28,8 +28,6 @@ import implementation.model.game.snake.SnakeImpl;
 
 /**
  * Loads a level from a JSON file.
- * @author Nicola Orlando
- *
  */
 public final class GameLoaderJSON implements GameLoader {
 

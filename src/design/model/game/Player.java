@@ -1,12 +1,7 @@
 package design.model.game;
 
 /**
-<<<<<<< HEAD
  * A player is an entity that is associated to a snake, used to recognize the different snake by the owner.
- * @author Elisa Tronetti
- * @author Alessandro Talmi
- * @author Nicola Orlando
- *
  */
 
 public interface Player {

@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 
 /**
  * @see Sprite
- * @author Alessandro Talmi
  */
 public class SpriteImpl implements Sprite {
 

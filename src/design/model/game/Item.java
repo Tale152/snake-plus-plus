@@ -3,10 +3,6 @@ package design.model.game;
 /**
  * An Item represents something in the field that you can collide with and will have some sort of effect
  * but it's not a Wall or a snake's BodyPart.
-* @author Alessandro Talmi
-* @author Elisa Tronetti
-* @author Nicola Orlando
- *
  */
 public interface Item extends Collidable, Runnable {
 

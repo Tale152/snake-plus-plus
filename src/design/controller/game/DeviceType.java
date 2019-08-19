@@ -3,9 +3,6 @@ package design.controller.game;
 /**
  * Enum representing various types of device. Useful for input differentiation.
  * @see EventTranslator
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public enum DeviceType {
     /**

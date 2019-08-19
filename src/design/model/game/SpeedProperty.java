@@ -2,9 +2,6 @@ package design.model.game;
 
 /**
  * A set of properties useful to handle snake's speed.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public interface SpeedProperty {
 

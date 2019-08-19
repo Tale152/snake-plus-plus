@@ -2,9 +2,6 @@ package design.controller.application;
 
 /**
  * Every possible reason that a game can end.
- * @author Alessandro Talmi
- * @author Elisa Tronetti
- * @author Nicola Orlando
  */
 public enum GameEndReason {
     /**

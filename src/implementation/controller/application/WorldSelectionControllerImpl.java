@@ -29,7 +29,6 @@ import javafx.scene.text.Text;
 
 /**
  * @see WorldSelectionController
- * @author Nicola Orlando
  */
 public class WorldSelectionControllerImpl implements WorldSelectionController {
 
