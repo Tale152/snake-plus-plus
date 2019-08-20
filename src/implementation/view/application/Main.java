@@ -15,6 +15,9 @@ public class Main extends Application {
 
     private static final double SCREEN_PERCENTAGE = 0.75;
     private static Scene scene = new Scene(new BorderPane());
+    private static final double BASE_HEIGHT = 810;
+    private static final double BASE_RATIO = 16 / 9;
+    private static final double BASE_FONT_SIZE = 14;
     private Dimension stageDimension;
 
     /**
@@ -43,11 +46,29 @@ public class Main extends Application {
                     stageDimension.getWidth(), 
                     stageDimension.getHeight());
             scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+            scene.widthProperty().addListener((obs, old, width) -> {
+                stageDimension.setSize((double) width, stageDimension.getHeight());
+                updateTextSize();
+            });
+            scene.heightProperty().addListener((obs, old, height) -> {
+                stageDimension.setSize(stageDimension.getWidth(), (double) height);
+                updateTextSize();
+            });
+            scene.rootProperty().addListener((a, b, c) -> {
+                updateTextSize();
+            });
             primaryStage.setScene(scene);
             primaryStage.setTitle("Snake++");
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateTextSize() {
+        final double scale = Math.min(stageDimension.getHeight(), stageDimension.getWidth() / BASE_RATIO) / BASE_HEIGHT;
+        final double fontSize = BASE_FONT_SIZE * scale;
+        scene.getRoot().setStyle("-fx-font-size: " + fontSize + ";");
     }
 }

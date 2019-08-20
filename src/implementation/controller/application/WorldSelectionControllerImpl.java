@@ -24,6 +24,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -38,13 +40,18 @@ public class WorldSelectionControllerImpl implements StageSelectionController {
     private int previous;
     private final List<WorldDescriptor> worlds;
     private String skinPackPath;
+    private static final double DESCRIPTION_PERCENT_HEIGHT = 0.12;
 
+    @FXML
+    private AnchorPane root;
     @FXML
     private Label worldName;
     @FXML
     private HBox worldButtons;
     @FXML
     private Text worldDescription;
+    @FXML
+    private BorderPane descriptionPane;
 
     /**
      * Creates a WorldSelectionController.
@@ -73,6 +80,7 @@ public class WorldSelectionControllerImpl implements StageSelectionController {
         for (final WorldDescriptor world : worlds) {
             worldButtons.getChildren().add(newWorldButton(world));
         }
+        descriptionPane.minHeightProperty().bind(root.heightProperty().multiply(DESCRIPTION_PERCENT_HEIGHT));
         refreshWorld();
     }
 

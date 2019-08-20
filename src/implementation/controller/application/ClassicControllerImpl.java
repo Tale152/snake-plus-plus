@@ -32,6 +32,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -47,7 +48,11 @@ public class ClassicControllerImpl implements StageSelectionController {
     private int players = 1;
     private String skinPackPath;
     private ResourcesLoader resources;
+    private static final double ITEMBAR_PERCENT_HEIGHT = 0.04;
+    private static final double DESCRIPTION_PERCENT_HEIGHT = 0.12;
 
+    @FXML
+    private AnchorPane root;
     @FXML
     private Text levelDescription;
     @FXML
@@ -71,6 +76,8 @@ public class ClassicControllerImpl implements StageSelectionController {
     private HBox levelButtons;
     @FXML
     private Text playersText;
+    @FXML
+    private Pane descriptionPane;
 
     /**
      * Creates a ClassicController, loading all Classic levels to be displayed by default.
@@ -108,6 +115,8 @@ public class ClassicControllerImpl implements StageSelectionController {
 
         preview.widthProperty().addListener(canvasResize);
         preview.heightProperty().addListener(canvasResize);
+
+        descriptionPane.minHeightProperty().bind(root.heightProperty().multiply(DESCRIPTION_PERCENT_HEIGHT));
         gc = preview.getGraphicsContext2D();
         refreshPlayers();
     }
@@ -162,7 +171,7 @@ public class ClassicControllerImpl implements StageSelectionController {
             final Image sprite = (Image) resources.getItem(item.getEffectClass().getSimpleName()).getSprite();
             final ImageView imv = new ImageView(sprite);
             imv.setPreserveRatio(true);
-            imv.setFitHeight(32); // TODO: remove magic number
+            imv.fitHeightProperty().bind(root.heightProperty().multiply(ITEMBAR_PERCENT_HEIGHT));
             final double freq = 1000.0 * item.getSpawnChance() / (double) item.getSpawnDelta();
             final String tooltip = String.format("Spawn chance per second: %d%%\nMaximum amount on screen: %d", (int) (freq * 100), item.getMax());
             Tooltip.install(imv, new Tooltip(tooltip));
