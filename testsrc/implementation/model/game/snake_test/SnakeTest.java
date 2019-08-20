@@ -62,7 +62,6 @@ public class SnakeTest {
                 break;
             }
         }
-        snake.getBodyParts().get(0).getPoint().equals(new Point(0, 1));
         assertEquals("Chek if snake length is still 1 after one movement", snake.getProperties().getLengthProperty().getLength(), 1);
 
         final List<Point> tmp = new ArrayList<>(Arrays.asList(new Point(3, 0), new Point(2, 0), new Point(1, 0), new Point(0, 0))); //Point(3,0) is head
@@ -77,9 +76,9 @@ public class SnakeTest {
                 break;
             }
         }
-        snake.getBodyParts().get(1).getPoint().equals(new Point((int) snake.getBodyParts().get(0).getPoint().getX() - 1, 0));
-        snake.getBodyParts().get(2).getPoint().equals(new Point((int) snake.getBodyParts().get(0).getPoint().getX() - 2, 0));
-        snake.getBodyParts().get(3).getPoint().equals(new Point((int) snake.getBodyParts().get(0).getPoint().getX() - 3, 0));
+        assertEquals("Check if first body part is in the right position", snake.getBodyParts().get(1).getPoint(), new Point((int) snake.getBodyParts().get(0).getPoint().getX() - 1, 0));
+        assertEquals("Check if second body part is in the right position", snake.getBodyParts().get(2).getPoint(), new Point((int) snake.getBodyParts().get(0).getPoint().getX() - 2, 0));
+        assertEquals("Check if third body part is in the right position", snake.getBodyParts().get(3).getPoint(), new Point((int) snake.getBodyParts().get(0).getPoint().getX() - 3, 0));
         assertEquals("Check if snake length is still 4 after a movement", snake.getProperties().getLengthProperty().getLength(), 4); 
     }
 
