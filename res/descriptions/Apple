@@ -1,3 +1,3 @@
 When snake eats an apple, his lenght will be increased and some point are added to the score.
 If the apple has a lasting effect, the snake's lenght is going to be increased only until the effect ends. 
-Then, the lenght and the score will be decreased, like nothing ever happened.
+Then, the lenght and the score will be decreased to 1, like nothing ever happened.
