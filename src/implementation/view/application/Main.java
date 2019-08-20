@@ -1,4 +1,5 @@
 package implementation.view.application;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javafx.application.Application;
@@ -14,12 +15,13 @@ public class Main extends Application {
 
     private static final double SCREEN_PERCENTAGE = 0.75;
     private static Scene scene = new Scene(new BorderPane());
+    private Dimension stageDimension;
 
     /**
      * Main method, launches it's thread.
      */
     public static void main() {
-    Application.launch(Main.class);
+        Application.launch(Main.class);
     }
 
     /**
@@ -35,9 +37,11 @@ public class Main extends Application {
             System.exit(0); });
         try {
             final BorderPane root = (BorderPane) FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
+            stageDimension = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
+            stageDimension.setSize(stageDimension.getWidth() * SCREEN_PERCENTAGE, stageDimension.getHeight() * SCREEN_PERCENTAGE);
             scene = new Scene(root, 
-                    Toolkit.getDefaultToolkit().getScreenSize().getWidth() * SCREEN_PERCENTAGE, 
-                    Toolkit.getDefaultToolkit().getScreenSize().getHeight() * SCREEN_PERCENTAGE);
+                    stageDimension.getWidth(), 
+                    stageDimension.getHeight());
             scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Snake++");
@@ -45,6 +49,5 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-  }
-
+    }
 }

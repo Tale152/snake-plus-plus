@@ -23,16 +23,24 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <ImageView fx:id="levelImageView" fitHeight="77.0" fitWidth="423.0" layoutX="28.0" layoutY="36.0" onMouseClicked="#goToLevelMode" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="49.689186096191406" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="36.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                     <children>
-                        <ImageView fx:id="classicImageView" fitHeight="104.0" fitWidth="445.0" layoutX="28.0" layoutY="43.0" onMouseClicked="#goToClassicMode" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="36.0" />
-                     </children>
-                  </AnchorPane>
+                  <BorderPane>
+                     <center>
+                        <Button mnemonicParsing="false" onMouseClicked="#goToLevelMode">
+                           <graphic>
+                              <ImageView fx:id="levelImageView" fitHeight="77.0" fitWidth="423.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Button>
+                     </center>
+                  </BorderPane>
+                  <BorderPane GridPane.columnIndex="1">
+                     <center>
+                        <Button mnemonicParsing="false" onMouseClicked="#goToClassicMode">
+                           <graphic>
+                              <ImageView fx:id="classicImageView" fitHeight="104.0" fitWidth="445.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Button>
+                     </center>
+                  </BorderPane>
                </children>
             </GridPane>
             <GridPane layoutY="225.0" prefHeight="50.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="225.0">

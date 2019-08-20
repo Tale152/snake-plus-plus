@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import design.controller.application.GameEndReason;
 import design.controller.application.GameInterstice;
+import design.controller.application.StageSelectionController;
 import design.controller.application.WorldDescriptor;
-import design.controller.application.WorldSelectionController;
 import design.controller.game.GameLoader;
 import implementation.controller.PathUtils;
 import implementation.controller.game.loader.GameLoaderJSON;
@@ -30,7 +30,7 @@ import javafx.scene.text.Text;
 /**
  * @see WorldSelectionController
  */
-public class WorldSelectionControllerImpl implements WorldSelectionController {
+public class WorldSelectionControllerImpl implements StageSelectionController {
 
     private static final String JSONREGEX = "[.]json$";
     private static final List<String> NAMES = Arrays.asList("Player");

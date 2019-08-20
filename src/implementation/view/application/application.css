@@ -1,13 +1,26 @@
 .button {
 	-fx-background-color: rgba(255, 255, 255, .80);
-	-fx-text-fill: blue;
-	-fx-border-color:blue;
+	-fx-text-fill: rgba(0, 127, 0, 1);
+	-fx-border-color: rgba(0, 127, 0, 1);
 	-fx-padding: 6 6 6 6;
 	-fx-border-radius: 8;
 	-fx-font-weight: bold;
 }
+
+.root {
+	-fx-background-color: rgba(220, 255, 220, 1);
+}
+
+.button:hover {
+	-fx-background-color: rgba(240, 240, 240, 1);
+}
+
+.menu-item .label, .menu-button .label {
+	-fx-text-fill: rgba(0, 127, 0, 1);
+}
+
 .label {
-	-fx-text-fill: blue;
+	-fx-text-fill: black;
 	-fx-padding: 6 6 6 6;
 	-fx-font-weight: bold;
 }
