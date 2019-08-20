@@ -73,31 +73,6 @@ public class GameControllerImpl implements GameController {
         initView();
     }
 
-    private void initView() {
-        initTime();
-        initWallSprites();
-        initItemSprites();
-        initSnakeSpritesAndHUD();
-    }
-
-    private void initTime() {
-        gameTime = gameModel.getGameRules().getInitialTime();
-        gameView.getHUD().setTime(convertGameTime());
-    }
-
-    private String convertGameTime() {
-        final long minutes = TimeUnit.MILLISECONDS.toMinutes(gameTime);
-        final long seconds = TimeUnit.MILLISECONDS.toSeconds(gameTime) - (60 * minutes);
-        return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-    }
-
-    private void initWallSprites() {
-        for (final Wall w : this.gameModel.getField().getWalls()) {
-            final String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
-            this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
-        }
-    }
-
     /**
      * Algorithm to obtain the correct wall sprite name.
      * 
@@ -120,92 +95,22 @@ public class GameControllerImpl implements GameController {
         this.gameModel.getField().begin();
         this.gameView.startRendering();
         while (!isGameEnded()) {
+            //until the game runs, everything must be updated
             updateDeletedItems();
             spawnItems();
             updateSnakes();
             waitAndUpdateTime();
         }
+        //when a game stops, the view stops rendering
         this.gameView.stopRendering();
         try {
+            //then the interstice specify if you win/lose the match and why
             interstice.setGameEndReason(getGameEndReason());
             interstice.showInterstice();
         } catch (IOException e) {
             e.printStackTrace();
             Platform.exit();
         }
-    }
-
-    private GameEndReason getGameEndReason() {
-        final List<Snake> snakes = this.gameModel.getField().getSnakes();
-        if (win.checkSnakeLength(snakes)) {
-            return GameEndReason.WON_LENGTH;
-        } else if (win.checkTime(gameTime)) {
-            return GameEndReason.WON_TIME;
-        } else if (win.checkScore(snakes)) {
-            return GameEndReason.WON_SCORE;
-        } else if (loss.checkSnakes(snakes)) {
-            return GameEndReason.LOST_DEATH;
-        } else if (loss.checkTime(gameTime)) {
-            return GameEndReason.LOST_TIME;
-        }
-        return GameEndReason.ERROR;
-    }
-
-    private static String collide(final List<Wall> allWalls, final Point point) {
-        return allWalls.stream().anyMatch(e -> {
-            return e.getPoint().equals(point);
-        }) ? "1" : "0";
-    }
-
-    private void initItemSprites() {
-        for (final Item i : this.gameModel.getField().getItems()) {
-            this.gameView.getField().addItemSprite(i.getPoint(),
-                    this.resources.getItem(i.getEffectClass().getSimpleName()));
-        }
-    }
-
-    private void initSnakeSpritesAndHUD() {
-        int i = 0;
-        for (final Snake s : this.gameModel.getField().getSnakes()) {
-            if (s.isAlive()) {
-                gameView.getField().initNewSnakeMap(i);
-                for (final BodyPart b : s.getBodyParts()) {
-                    this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(),
-                            this.resources.getBodyPart(snakeSpriteName(b, s)));
-                }
-                gameView.getField().endNewSnakeMap(i);
-                gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
-                gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
-                gameView.getHUD().getPlayerHUDs().get(i)
-                        .setSnakeSprite(resources.getBodyPart("P" + (i + 1) + "_head_tail_DOWN"));
-            }
-            ++i;
-        }
-    }
-
-    private String snakeSpriteName(final BodyPart b, final Snake snake) {
-        String s = "P" + Integer.toString(snake.getPlayer().getPlayerNumber().ordinal() + 1) + "_";
-        if (b.isHead()) {
-            s += HEAD;
-        }
-        if (b.isBody()) {
-            s += BODY;
-        }
-        if (b.isTail()) {
-            s += TAIL;
-        }
-        if (b.isHead() && b.isTail()) {
-            s += snake.getProperties().getDirectionProperty().getDirection();
-            return s;
-        } else {
-            s += isCombined(b.isCombinedOnTop()) + isCombined(b.isCombinedOnRight())
-                    + isCombined(b.isCombinedOnBottom()) + isCombined(b.isCombinedOnLeft());
-            return s;
-        }
-    }
-
-    private String isCombined(final boolean b) {
-        return b ? "1" : "0";
     }
 
     @Override
@@ -215,8 +120,26 @@ public class GameControllerImpl implements GameController {
                 || win.checkSnakeLength(snakes) || win.checkTime(gameTime);
     }
 
+    @Override
+    public final void playerInput(final InputEvent input) {
+        final Optional<Action> action = controls.getEventBinding(input);
+        if (action.isPresent() 
+                && gameModel.getField().getSnakes().size() > action.get().getPlayerNumber().ordinal()) {
+            final Snake target = gameModel.getField().getSnakes().get(action.get().getPlayerNumber().ordinal());
+            final DirectionProperty direction = target.getProperties().getDirectionProperty();
+            direction.setDirection(action.get().getDirection());
+        }
+    }
+
+    @Override
+    public final void setInterstice(final GameInterstice interstice) {
+        this.interstice = interstice;
+    }
+
+    //used to update everything when a item is deleted
     private void updateDeletedItems() {
         final List<Item> deletedItems = this.gameModel.getField().getEliminatedItems();
+        //for every item deleted, the counter is decreased and the sprite is deleted from the view
         for (final Item i : deletedItems) {
             this.counter.decrease(i.getEffectClass());
             this.gameView.getField().removeItemSprite(i.getPoint(),
@@ -224,6 +147,7 @@ public class GameControllerImpl implements GameController {
         }
     }
 
+    //when there is not the maximum number of an item in the field, it tries to spawn, based on the spawn chance
     private void spawnItems() {
         final long time = System.currentTimeMillis();
         for (final ItemRule rule : this.gameModel.getGameRules().getItemRules()) {
@@ -299,6 +223,7 @@ public class GameControllerImpl implements GameController {
         final List<Snake> snakes = this.gameModel.getField().getSnakes();
         for (final Snake s : snakes) {
             final int nPlayer = s.getPlayer().getPlayerNumber().ordinal();
+            //if snake is alive and has moved, the view has to be updated
             if (s.isAlive()) {
                 if (s.hasMoved()) {
                     this.gameView.getField().initNewSnakeMap(nPlayer);
@@ -341,20 +266,120 @@ public class GameControllerImpl implements GameController {
         }
     }
 
-    @Override
-    public final void playerInput(final InputEvent input) {
-        final Optional<Action> action = controls.getEventBinding(input);
-        if (action.isPresent() 
-                && gameModel.getField().getSnakes().size() > action.get().getPlayerNumber().ordinal()) {
-            final Snake target = gameModel.getField().getSnakes().get(action.get().getPlayerNumber().ordinal());
-            final DirectionProperty direction = target.getProperties().getDirectionProperty();
-            direction.setDirection(action.get().getDirection());
+    //init every part of the view
+    private void initView() {
+        initTime();
+        initWallSprites();
+        initItemSprites();
+        initSnakeSpritesAndHUD();
+    }
+
+    //set the initial time of the game and converts it in seconds
+    private void initTime() {
+        gameTime = gameModel.getGameRules().getInitialTime();
+        gameView.getHUD().setTime(convertGameTime());
+    }
+
+    private String convertGameTime() {
+        final long minutes = TimeUnit.MILLISECONDS.toMinutes(gameTime);
+        final long seconds = TimeUnit.MILLISECONDS.toSeconds(gameTime) - (60 * minutes);
+        return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+    }
+
+    //calculate the name of the sprite of the wall of every wall in the field 
+    //and the adds it in the view
+    private void initWallSprites() {
+        for (final Wall w : this.gameModel.getField().getWalls()) {
+            final String wallName = wallSpriteName(w, this.gameModel.getField().getWalls());
+            this.gameView.getField().addWallSprite(w.getPoint(), this.resources.getWall(wallName));
         }
     }
 
-    @Override
-    public final void setInterstice(final GameInterstice interstice) {
-        this.interstice = interstice;
+    //used to get why a game ended
+    private GameEndReason getGameEndReason() {
+        final List<Snake> snakes = this.gameModel.getField().getSnakes();
+        if (win.checkSnakeLength(snakes)) {
+            return GameEndReason.WON_LENGTH;
+        } else if (win.checkTime(gameTime)) {
+            return GameEndReason.WON_TIME;
+        } else if (win.checkScore(snakes)) {
+            return GameEndReason.WON_SCORE;
+        } else if (loss.checkSnakes(snakes)) {
+            return GameEndReason.LOST_DEATH;
+        } else if (loss.checkTime(gameTime)) {
+            return GameEndReason.LOST_TIME;
+        }
+        return GameEndReason.ERROR;
+    }
+
+    //used to get where a wall is connected
+    //It is used to get the correct wall sprite name
+    private static String collide(final List<Wall> allWalls, final Point point) {
+        return allWalls.stream().anyMatch(e -> {
+            return e.getPoint().equals(point);
+        }) ? "1" : "0";
+    }
+
+    //calculate the name of the sprite of the item of every item in the field 
+    //and the adds it in the view
+    private void initItemSprites() {
+        for (final Item i : this.gameModel.getField().getItems()) {
+            this.gameView.getField().addItemSprite(i.getPoint(),
+                    this.resources.getItem(i.getEffectClass().getSimpleName()));
+        }
+    }
+
+    //used to initialize snake in the field, only if snake is alive
+    //it also sets the HUD, wit the name of the players and the scores. 
+    private void initSnakeSpritesAndHUD() {
+        int i = 0;
+        for (final Snake s : this.gameModel.getField().getSnakes()) {
+            if (s.isAlive()) {
+                gameView.getField().initNewSnakeMap(i);
+                for (final BodyPart b : s.getBodyParts()) {
+                    this.gameView.getField().addBodyPart(s.getPlayer().getPlayerNumber().ordinal(), b.getPoint(),
+                            this.resources.getBodyPart(snakeSpriteName(b, s)));
+                }
+                gameView.getField().endNewSnakeMap(i);
+                gameView.getHUD().getPlayerHUDs().get(i).setName(s.getPlayer().getName());
+                gameView.getHUD().getPlayerHUDs().get(i).setScore(Integer.toString(s.getPlayer().getScore()));
+                gameView.getHUD().getPlayerHUDs().get(i)
+                        .setSnakeSprite(resources.getBodyPart("P" + (i + 1) + "_head_tail_DOWN"));
+            }
+            ++i;
+        }
+    }
+
+    // used to get the correct name of a snake
+    private String snakeSpriteName(final BodyPart b, final Snake snake) {
+        //set the initial part of the string, composed by the player number
+        String s = "P" + Integer.toString(snake.getPlayer().getPlayerNumber().ordinal() + 1) + "_";
+        //select the correct part of the snake
+        //are used three consecutive if because a body part may be, head, tail, body and head tail
+        //this is more clear, than using other constructions
+        if (b.isHead()) {
+            s += HEAD;
+        }
+        if (b.isBody()) {
+            s += BODY;
+        }
+        if (b.isTail()) {
+            s += TAIL;
+        }
+        if (b.isHead() && b.isTail()) {
+            //if snake is just head tail, the name is compose also by snake direction
+            s += snake.getProperties().getDirectionProperty().getDirection();
+            return s;
+        } else {
+            //otherwise it is important where a body part is connected
+            s += isCombined(b.isCombinedOnTop()) + isCombined(b.isCombinedOnRight())
+                    + isCombined(b.isCombinedOnBottom()) + isCombined(b.isCombinedOnLeft());
+            return s;
+        }
+    }
+
+    private String isCombined(final boolean b) {
+        return b ? "1" : "0";
     }
 
 }
