@@ -201,6 +201,11 @@ public class ClassicControllerImpl implements StageSelectionController {
         playersText.setText("Players: " + this.players);
     }
 
+    /**
+     * Select the previous available level. Only to be called by FXML.
+     * @throws FileNotFoundException If the selected resource pack can't be found.
+     * @throws IOException 
+     */
     @FXML
     public final void selectPrev() throws FileNotFoundException, IOException {
         this.selected -= 1;
@@ -208,6 +213,11 @@ public class ClassicControllerImpl implements StageSelectionController {
         refreshPlayers();
     }
 
+    /**
+     * Select the next available level. Only to be called by FXML.
+     * @throws FileNotFoundException If the selected resource pack can't be found.
+     * @throws IOException 
+     */
     @FXML
     public final void selectNext() throws FileNotFoundException, IOException {
         this.selected += 1;
@@ -215,20 +225,30 @@ public class ClassicControllerImpl implements StageSelectionController {
         refreshPlayers();
     }
 
+    /**
+     * Decrease the number of players in this game. Only to be called by FXML.
+     */
     @FXML
     public final void removePlayer() {
         this.players -= 1;
         refreshPlayers();
     }
 
+    /**
+     * Increase the number of players in this game. Only to be called by FXML.
+     */
     @FXML
     public final void addPlayer() {
         this.players += 1;
         refreshPlayers();
     }
 
+    /**
+     * Start the selected level. Only to be called by FXML.
+     * @throws IOException 
+     */
     @FXML
-    public final void startSelectedLevel() throws FileNotFoundException, IOException {
+    public final void startSelectedLevel() throws IOException {
         new GameIntersticeImpl(levels.get(selected), skinPackPath, players).nextLevel();
     }
 
