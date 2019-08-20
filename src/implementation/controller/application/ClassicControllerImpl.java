@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import design.controller.application.ClassicController;
+import design.controller.application.StageSelectionController;
 import design.controller.game.GameLoader;
 import design.model.game.Field;
 import design.model.game.ItemRule;
@@ -39,7 +39,7 @@ import javafx.scene.text.Text;
 /**
  * @see ClassicController
  */
-public class ClassicControllerImpl implements ClassicController {
+public class ClassicControllerImpl implements StageSelectionController {
 
     private final List<GameLoader> levels;
     private int selected = 0; //NOPMD
@@ -202,7 +202,6 @@ public class ClassicControllerImpl implements ClassicController {
     }
 
     @FXML
-    @Override
     public final void selectPrev() throws FileNotFoundException, IOException {
         this.selected -= 1;
         refreshLevel();
@@ -210,7 +209,6 @@ public class ClassicControllerImpl implements ClassicController {
     }
 
     @FXML
-    @Override
     public final void selectNext() throws FileNotFoundException, IOException {
         this.selected += 1;
         refreshLevel();
@@ -218,21 +216,18 @@ public class ClassicControllerImpl implements ClassicController {
     }
 
     @FXML
-    @Override
     public final void removePlayer() {
         this.players -= 1;
         refreshPlayers();
     }
 
     @FXML
-    @Override
     public final void addPlayer() {
         this.players += 1;
         refreshPlayers();
     }
 
     @FXML
-    @Override
     public final void startSelectedLevel() throws FileNotFoundException, IOException {
         new GameIntersticeImpl(levels.get(selected), skinPackPath, players).nextLevel();
     }
