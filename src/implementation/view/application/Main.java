@@ -22,8 +22,9 @@ public class Main extends Application {
 
     /**
      * Main method, launches it's thread.
+     * @param args command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Application.launch(Main.class);
     }
 
