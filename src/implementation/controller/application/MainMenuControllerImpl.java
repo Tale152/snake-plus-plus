@@ -81,7 +81,6 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 
     @Override
     public final void initialize(final URL arg0, final ResourceBundle arg1) {
-        //final File folder = new File("res" + File.separator + "resources");
         final Path folder = PathUtils.getResourcePath("resources");
         listFiles(folder);
         initializeMenuItem();
@@ -92,9 +91,9 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
                 startMusic();
             }
         }
-        setImage(PathUtils.getResourcePath(PathUtils.MENU + "Snake++" + PathUtils.IMAGE_TYPE), snakeppImageView);
-        setImage(PathUtils.getResourcePath(PathUtils.MENU + "Classic" + PathUtils.IMAGE_TYPE), classicImageView);
-        setImage(PathUtils.getResourcePath(PathUtils.MENU + "Levels" + PathUtils.IMAGE_TYPE), levelImageView);
+        setImage(PathUtils.getResourcePath(PathUtils.MENU).resolve("Snake++" + PathUtils.IMAGE_TYPE), snakeppImageView);
+        setImage(PathUtils.getResourcePath(PathUtils.MENU).resolve("Classic" + PathUtils.IMAGE_TYPE), classicImageView);
+        setImage(PathUtils.getResourcePath(PathUtils.MENU).resolve("Levels" + PathUtils.IMAGE_TYPE), levelImageView);
     }
 
     private void startMusic() {
@@ -115,13 +114,12 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     */
     private void listFiles(final Path folder) {
         Path randomPack = null;
-        //final File[] files = folder.listFiles();
         try {
-            for (Iterator<Path> iterator = Files.walk(folder,  1).iterator(); iterator.hasNext();) {
-                Path item = iterator.next();
-                Path itemFileName = item.getFileName();
+            for (final Iterator<Path> iterator = Files.walk(folder,  1).iterator(); iterator.hasNext();) {
+                final Path item = iterator.next();
+                final Path itemFileName = item.getFileName();
                 if (Files.isDirectory(item) && itemFileName != null && !item.equals(folder)) {
-                    String packName = itemFileName.toString().replace("_", " ").replace("/", "");
+                    final String packName = itemFileName.toString().replace("_", " ").replace("/", "");
                     this.itemButtonMap.put(packName, item);
                     if (randomPack == null) {
                         randomPack = item;

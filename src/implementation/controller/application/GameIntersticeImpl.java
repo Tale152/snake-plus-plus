@@ -107,7 +107,7 @@ public class GameIntersticeImpl implements GameInterstice {
         gameMode = (levels.size() == 1) ? GameMode.CLASSIC : GameMode.WORLD;
 
         final Path themesFolder = PathUtils.getResourcePath(PathUtils.THEMES);
-        themesList = Files.walk(themesFolder, 1).filter(p -> !p.toString().contains("menu")).collect(Collectors.toList());
+        themesList = Files.walk(themesFolder, 1).filter(p -> !(p.toString().contains("menu") || p.equals(themesFolder))).collect(Collectors.toList());
     }
 
     @Override
@@ -242,11 +242,6 @@ public class GameIntersticeImpl implements GameInterstice {
     }
 
     private void startLevelMusic() {
-        /*final File[] themesList = new File(PathUtils.THEMES).listFiles();
-        if (themesList == null) {
-            System.err.println("Themes folder not found. Aborting music.");
-            return;
-        }*/
         final int nFile = themesList.size();
         final Random randomGenerator = new Random();
         final int randomInt = randomGenerator.nextInt(nFile - 1);

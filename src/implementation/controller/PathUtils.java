@@ -63,17 +63,17 @@ public final class PathUtils {
      */
     public static final String IMAGE_TYPE = ".png";
 
-    private static FileSystem fileSystem = null;
+    private static FileSystem fileSystem;
 
     /**
      * Return the Path representing the requested item.
      * @param path 
      * @return The Path representing the requested item.
      */
-    public static Path getResourcePath(final String path) {
+    public static synchronized Path getResourcePath(final String path) {
         Path myPath = null;
         try {
-            URI root = PathUtils.class.getResource("").toURI();
+            final URI root = PathUtils.class.getResource("").toURI();
             if (root.getScheme().equals("jar")) {
                 if (fileSystem == null) {
                     fileSystem = FileSystems.newFileSystem(root, Collections.<String, Object>emptyMap());

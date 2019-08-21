@@ -1,19 +1,13 @@
 package implementation.controller.application;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -79,15 +73,17 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
         try {
             Files.walk(folder, 1).filter(p -> !p.equals(folder)).forEach(p -> {
                 try {
-                    this.descriptionButtonMap.put(p.getFileName().toString().replace("_", " "),
+                    final Path fileName = p.getFileName();
+                    if (fileName == null) {
+                        return;
+                    }
+                    this.descriptionButtonMap.put(fileName.toString().replace("_", " "),
                             new String(Files.readAllBytes(p)));
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             });
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -135,13 +131,12 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     //used to find all the directories that contains the skin pack
     private void listDirectory(final Path folder) {
         Path randomPack = null;
-        //final File[] files = folder.listFiles();
         try {
-            for (Iterator<Path> iterator = Files.walk(folder,  1).iterator(); iterator.hasNext();) {
-                Path item = iterator.next();
-                Path itemFileName = item.getFileName();
-                if (Files.isDirectory(item) && itemFileName != null && !item.equals(folder)) {
-                    String packName = itemFileName.toString().replace("_", " ").replace("/", "");
+            for (final Iterator<Path> iterator = Files.walk(folder,  1).filter(p -> !p.equals(folder)).iterator(); iterator.hasNext();) {
+                final Path item = iterator.next();
+                final Path itemFileName = item.getFileName();
+                if (Files.isDirectory(item) && itemFileName != null) {
+                    final String packName = itemFileName.toString().replace("_", " ").replace("/", "");
                     this.itemButtonMap.put(packName, item);
                     if (randomPack == null) {
                         randomPack = item;
