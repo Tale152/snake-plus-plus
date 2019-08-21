@@ -1405,7 +1405,7 @@
 		]
 	},
 	"rules": {
-		"initialSnakeDelta": 200,
+		"initialSnakeDelta": 180,
 		"initialSnakeMultiplier": 1.0,
 		"timeGoingForward": true,
 		"initialTime": 0,
@@ -1459,7 +1459,7 @@
         "effectDuration": 5000
       }
     ],
-		"winConditions":  {"snakeLength":50,"scoreGoal":null,"timeGoal":null,"timeForward":true},
+		"winConditions":  {"snakeLength":35,"scoreGoal":null,"timeGoal":null,"timeForward":true},
 		"lossConditions": {"checkAllSnakesDied":true,"gameTime":null,"timeForward":true}
 	},
 	"snakes": [
@@ -1477,6 +1477,6 @@
     "Player 1"
 	],
 
-	"name": "Drifts",
-	"description": "Dejavù"
+	"name": "2-2",
+	"description": "Let's get closer, shall we?\nReach a length of 35 this time."
 }

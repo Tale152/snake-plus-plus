@@ -1873,7 +1873,7 @@
 		]
 	},
 	"rules": {
-		"initialSnakeDelta": 200,
+		"initialSnakeDelta": 160,
 		"initialSnakeMultiplier": 1.0,
 		"timeGoingForward": true,
 		"initialTime": 0,
@@ -1895,7 +1895,7 @@
         "effectDuration": 6000
       }
     ],
-		"winConditions":  {"snakeLength":50,"scoreGoal":null,"timeGoal":null,"timeForward":true},
+		"winConditions":  {"snakeLength":20,"scoreGoal":null,"timeGoal":null,"timeForward":true},
 		"lossConditions": {"checkAllSnakesDied":true,"gameTime":null,"timeForward":true}
 	},
 	"snakes": [
@@ -1913,6 +1913,6 @@
     "Player 1"
 	],
 
-	"name": "Drifts",
-	"description": "Dejavù"
+	"name": "2-3",
+	"description": "Now we're talking!\nReach a lenght of 20. Be carefull, once you get into a path you\ncannot go back for a while."
 }
