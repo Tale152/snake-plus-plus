@@ -1,6 +1,7 @@
 package design.controller.application;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /** A common interface for controllers that allow the user to choose a level
  * to play. 
@@ -10,9 +11,9 @@ import java.io.IOException;
 public interface StageSelectionController {
     /**
      * Sets the skin that will be used for snakes, walls and items.
-     * @param path where to find the graphical resources to load
+     * @param skinPackPath where to find the graphical resources to load
      */
-    void setSkinPackPath(String path);
+    void setSkinPackPath(Path skinPackPath);
 
     /**
      * Load the main menu. Only to be called by FXML.

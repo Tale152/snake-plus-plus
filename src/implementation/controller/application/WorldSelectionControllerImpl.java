@@ -2,9 +2,12 @@ package implementation.controller.application;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,12 +37,12 @@ import javafx.scene.text.Text;
  */
 public class WorldSelectionControllerImpl implements StageSelectionController {
 
-    private static final String JSONREGEX = "[.]json$";
+    private static final String JSONREGEX = ".json";
     private static final List<String> NAMES = Arrays.asList("Player");
     private int selected;
     private int previous;
     private final List<WorldDescriptor> worlds;
-    private String skinPackPath;
+    private Path skinPackPath;
     private static final double DESCRIPTION_PERCENT_HEIGHT = 0.12;
 
     @FXML
@@ -68,14 +71,19 @@ public class WorldSelectionControllerImpl implements StageSelectionController {
      * @throws IOException If the folder containing the worlds does not exist, or there's an I/O error.
      */
     public final void initialize() throws JsonProcessingException, IOException {
-        final File worldsFolder = new File(PathUtils.WORLDS);
-        final File[] worldFiles = worldsFolder.listFiles(f -> f.isFile());
-        if (worldFiles == null) {
-            throw new IOException("Worlds folder is missing. how.");
-        }
-        for (final File world : worldFiles) {
-            worlds.add(parseWorld(world));
-        }
+        final Path worldsFolder = PathUtils.getResourcePath(PathUtils.WORLDS);
+        Files.walk(worldsFolder, 1).forEach(p -> {
+            if (p.equals(worldsFolder)) {
+                return;
+            }
+            if (Files.isRegularFile(p)) {
+                try {
+                    worlds.add(parseWorld(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         worlds.sort(null);
         for (final WorldDescriptor world : worlds) {
             worldButtons.getChildren().add(newWorldButton(world));
@@ -95,12 +103,16 @@ public class WorldSelectionControllerImpl implements StageSelectionController {
         return button;
     }
 
-    private WorldDescriptor parseWorld(final File worldJson) throws JsonProcessingException, IOException {
+    private WorldDescriptor parseWorld(final Path p) throws JsonProcessingException, IOException {
         final ObjectMapper om = new ObjectMapper();
-        final JsonNode loader = om.readTree(worldJson);
+        final JsonNode loader = om.readTree(p.toUri().toURL());
         final String name = loader.get("name").asText();
         final String description = loader.get("description").asText();
-        final String folder = worldJson.getName().replaceAll(JSONREGEX, "");
+        final Path folderPath = p.getFileName();
+        if (folderPath == null) {
+            return null;
+        }
+        final String folder = folderPath.toString().replaceAll(JSONREGEX, "").replace("/", "");
         return new WorldDescriptorImpl(name, description, folder);
     }
 
@@ -148,15 +160,16 @@ public class WorldSelectionControllerImpl implements StageSelectionController {
      */
     @FXML
     public final void startWorld() throws IOException {
-        final File worldFolder = new File(PathUtils.WORLDS + File.separator + worlds.get(selected).getFolderName());
-        final File[] worldFiles = worldFolder.listFiles(f -> f.isFile());
-        if (worldFiles == null) {
-            throw new IOException("World folder is invalid.");
-        }
-        Arrays.sort(worldFiles);
+        //final File worldFolder = new File(PathUtils.WORLDS + File.separator + worlds.get(selected).getFolderName());
+        //final File[] worldFiles = worldFolder.listFiles(f -> f.isFile());
+        final Path worldFolder = PathUtils.getResourcePath(PathUtils.WORLDS + File.separator + worlds.get(selected).getFolderName());
+        final List<Path> worldFiles = Files.walk(worldFolder).collect(Collectors.toList());
+        worldFiles.sort(null);
         final List<GameLoader> world = new ArrayList<>();
-        for (final File level : worldFiles) {
-            world.add(new GameLoaderJSON(level, NAMES));
+        for (final Path level : worldFiles) {
+            if (!level.equals(worldFolder)) {
+                world.add(new GameLoaderJSON(level, NAMES));
+            }
         }
         final GameInterstice interstice = new GameIntersticeImpl(world, skinPackPath);
         interstice.setGameEndReason(GameEndReason.START);
@@ -164,7 +177,7 @@ public class WorldSelectionControllerImpl implements StageSelectionController {
     }
 
     @Override
-    public final void setSkinPackPath(final String path) {
+    public final void setSkinPackPath(final Path path) {
         skinPackPath = path;
     }
 

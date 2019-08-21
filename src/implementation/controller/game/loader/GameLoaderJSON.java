@@ -1,10 +1,8 @@
 package implementation.controller.game.loader;
 
 import java.awt.Point;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -47,27 +45,13 @@ public final class GameLoaderJSON implements GameLoader {
         return this.gameModel;
     }
 
-    private String readJSON(final String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(path)));
-    }
-
     /**
-     * Loads a game from a File and a list of names.
-     * @param stageFile The file containing the level.
-     * @param names The names of the players.
-     * @throws IOException If a level is malformed or absent.
-     */
-    public GameLoaderJSON(final File stageFile, final List<String> names) throws IOException {
-        this(stageFile.getAbsolutePath(), names);
-    }
-
-    /**
-     * Loads a game from a file path and a list of names.
+     * Loads a game from a Path and a list of names.
      * @param stagePath The path of the file containing the level.
      * @param names The names of the players.
      * @throws IOException If a level is malformed or absent.
      */
-    public GameLoaderJSON(final String stagePath, final List<String> names) throws IOException {
+    public GameLoaderJSON(final Path stagePath, final List<String> names) throws IOException {
         this.names = names;
         objectMapper = new ObjectMapper();
         final SimpleModule deserializerModule = new SimpleModule();
@@ -80,9 +64,7 @@ public final class GameLoaderJSON implements GameLoader {
 
         objectMapper.registerModule(new Jdk8Module());
 
-        final String json = readJSON(stagePath);
-
-        loader = objectMapper.readTree(json);
+        loader = objectMapper.readTree(stagePath.toUri().toURL());
 
         generateModel();
 

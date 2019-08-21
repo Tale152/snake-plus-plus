@@ -1,11 +1,13 @@
 package implementation.controller.application;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import design.controller.application.GameEndReason;
 import design.controller.application.GameInterstice;
@@ -56,12 +58,14 @@ public class GameIntersticeImpl implements GameInterstice {
     private static final String WON_LEVEL_BUTTON = "Next Level";
     private static final String LOST_LEVEL_BUTTON = "Retry Level";
 
-    private String skinPackPath;
+    private Path skinPackPath;
     private final List<GameLoader> levels;
     private int currentLevel;
     private int playerNumber = 1;
     private MediaPlayer mediaPlayer;
     private GameMode gameMode;
+
+    private final List<Path> themesList;
 
     private Node root;
     @FXML
@@ -85,7 +89,7 @@ public class GameIntersticeImpl implements GameInterstice {
      * @param players The number of players in the game.
      * @throws IOException 
      */
-    public GameIntersticeImpl(final GameLoader level, final String skinPackPath, final int players) throws IOException {
+    public GameIntersticeImpl(final GameLoader level, final Path skinPackPath, final int players) throws IOException {
         this(Arrays.asList(level), skinPackPath);
         playerNumber = players;
     }
@@ -96,11 +100,14 @@ public class GameIntersticeImpl implements GameInterstice {
      * @param skinPackPath The path to the skin pack to be loaded. Needed to instantiate a GameView.
      * @throws IOException 
      */
-    public GameIntersticeImpl(final List<GameLoader> levels, final String skinPackPath) throws IOException {
+    public GameIntersticeImpl(final List<GameLoader> levels, final Path skinPackPath) throws IOException {
         currentLevel = 0;
         this.levels = levels;
         this.skinPackPath = skinPackPath;
         gameMode = (levels.size() == 1) ? GameMode.CLASSIC : GameMode.WORLD;
+
+        final Path themesFolder = PathUtils.getResourcePath(PathUtils.THEMES);
+        themesList = Files.walk(themesFolder, 1).filter(p -> !p.toString().contains("menu")).collect(Collectors.toList());
     }
 
     @Override
@@ -235,17 +242,15 @@ public class GameIntersticeImpl implements GameInterstice {
     }
 
     private void startLevelMusic() {
-        final File[] themesList = new File(PathUtils.THEMES).listFiles();
+        /*final File[] themesList = new File(PathUtils.THEMES).listFiles();
         if (themesList == null) {
             System.err.println("Themes folder not found. Aborting music.");
             return;
-        }
-        final int nFile = themesList.length;
+        }*/
+        final int nFile = themesList.size();
         final Random randomGenerator = new Random();
         final int randomInt = randomGenerator.nextInt(nFile - 1);
-        final Media media = new Media(new File(
-                PathUtils.THEMES + PathUtils.GAME_THEMES_PREFIX + Integer.toString(randomInt) 
-                + PathUtils.GAME_THEMES_TYPE).toURI().toString()); 
+        final Media media = new Media(themesList.get(randomInt).toUri().toString()); 
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();

@@ -1,12 +1,11 @@
 package implementation.controller.application;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -42,8 +41,8 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     @FXML private MenuButton skinPacks;
     @FXML private ImageView snakeppImageView;
 
-    private static String skinPackPath;
-    private final Map<String, String> itemButtonMap = new HashMap<>();
+    private static Path skinPackPath;
+    private final Map<String, Path> itemButtonMap = new HashMap<>();
     private static final String MAIN_MENU_THEME_PATH = PathUtils.THEMES + "Main_menu_theme.mp3";
     private static MediaPlayer mediaPlayer;
 
@@ -82,7 +81,8 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
 
     @Override
     public final void initialize(final URL arg0, final ResourceBundle arg1) {
-        final File folder = new File("res" + File.separator + "resources");
+        //final File folder = new File("res" + File.separator + "resources");
+        final Path folder = PathUtils.getResourcePath("resources");
         listFiles(folder);
         initializeMenuItem();
         if (mediaPlayer == null) {
@@ -92,51 +92,54 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
                 startMusic();
             }
         }
-        setImage(PathUtils.MENU + "Snake++" + PathUtils.IMAGE_TYPE, snakeppImageView);
-        setImage(PathUtils.MENU + "Classic" + PathUtils.IMAGE_TYPE, classicImageView);
-        setImage(PathUtils.MENU + "Levels" + PathUtils.IMAGE_TYPE, levelImageView);
+        setImage(PathUtils.getResourcePath(PathUtils.MENU + "Snake++" + PathUtils.IMAGE_TYPE), snakeppImageView);
+        setImage(PathUtils.getResourcePath(PathUtils.MENU + "Classic" + PathUtils.IMAGE_TYPE), classicImageView);
+        setImage(PathUtils.getResourcePath(PathUtils.MENU + "Levels" + PathUtils.IMAGE_TYPE), levelImageView);
     }
 
     private void startMusic() {
-        final Media media = new Media(new File(MAIN_MENU_THEME_PATH).toURI().toString());
+        final Media media = new Media(PathUtils.getResourcePath(MAIN_MENU_THEME_PATH).toUri().toString());
         mediaPlayer = new MediaPlayer(media); 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
 
-    private void setImage(final String path, final ImageView imageView) {
+    private void setImage(final Path path, final ImageView imageView) {
         imageView.setImage(
-                new Image(new File(path).toURI().toString()));
+                new Image(path.toUri().toString()));
     }
 
     /**This method read all the directory in the current directory that are put in a map
     *with the path and the name. The first directory is a random pack, used if the default pack
     does not exist. If there are any directory in the folder, the game will stop running.
     */
-    private void listFiles(final File folder) {
-        String randomPack = "";
-        final File[] files = folder.listFiles();
-        if (files != null) {
-            final List<File> filesList = new ArrayList<>(Arrays.asList(files));
-            for (final File fileEntry : filesList) {
-                if (fileEntry.isDirectory()) {
-                    this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getAbsolutePath());
-                    if (randomPack.isEmpty()) {
-                        randomPack = fileEntry.getAbsolutePath();
+    private void listFiles(final Path folder) {
+        Path randomPack = null;
+        //final File[] files = folder.listFiles();
+        try {
+            for (Iterator<Path> iterator = Files.walk(folder,  1).iterator(); iterator.hasNext();) {
+                Path item = iterator.next();
+                Path itemFileName = item.getFileName();
+                if (Files.isDirectory(item) && itemFileName != null && !item.equals(folder)) {
+                    String packName = itemFileName.toString().replace("_", " ").replace("/", "");
+                    this.itemButtonMap.put(packName, item);
+                    if (randomPack == null) {
+                        randomPack = item;
                     }
                 }
             }
-            if (skinPackPath == null) {
-                if (this.itemButtonMap.isEmpty()) {
-                    throw new RuntimeException("no skin paks found");
-                } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
-                    skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);
-                } else {
-                    skinPackPath = randomPack;
-                } 
-            }
-        } else {
-            throw new RuntimeException("there are problems with directory " + folder.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("There are problems with directory " + folder);
+        }
+        if (skinPackPath == null) {
+            if (this.itemButtonMap.isEmpty()) {
+                throw new RuntimeException("no skin paks found");
+            } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
+                skinPackPath = this.itemButtonMap.get(DEFAULT_PACK);
+            } else {
+                skinPackPath = randomPack;
+            } 
         }
     }
 
@@ -166,7 +169,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     }
 
     @Override
-    public final String getSelectedSkinPack() {
+    public final Path getSelectedSkinPack() {
         return skinPackPath;
     }
 }

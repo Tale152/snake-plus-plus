@@ -1,6 +1,7 @@
 package design.controller.application;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * The controller of the Main Menu, containing methods to access all the game modes.
@@ -28,5 +29,5 @@ public interface MainMenuController {
     /**
      * @return path to selected skin pack
      */
-    String getSelectedSkinPack();
+    Path getSelectedSkinPack();
 }
