@@ -23,6 +23,12 @@ public class ScoreLoss extends EffectAbstract {
 
     @Override
     public final void instantaneousEffect(final Snake target) {
+        //the lasting effect of this item is a little bit trickier
+        //eating this item while this lasting effect is active will result in a multiplication
+        //of the points you loose every time you eat one instance of this item
+        //but this needs to be done instantly and not on lasting effect
+        //so I check if snake has already an instance of this effect and if so 
+        //I calculate how much point to remove based on the counter
         final Optional<Effect> active = target.getEffects()
                                     .stream()
                                     .filter(e -> {

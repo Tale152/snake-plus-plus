@@ -7,6 +7,8 @@ import design.model.game.Snake;
 /**
  * Instant effect: nothing.<p>
  * Lasting effect: doubles the value of every added score to that snake.
+ * @see Effect
+ * @see Item
  */
 public final class DoublePoints extends EffectAbstract {
 

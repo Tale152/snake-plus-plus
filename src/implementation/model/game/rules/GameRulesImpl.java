@@ -10,6 +10,9 @@ import design.model.game.WinConditions;
 
 /**
  * @see GameRules
+ * @see WinConditions
+ * @see LossConditions
+ * @see ItemRule
  */
 public class GameRulesImpl implements GameRules {
 

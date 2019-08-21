@@ -7,6 +7,8 @@ import design.model.game.Snake;
 /**
  * Instant effect: nothing. <p>
  * Lasting effect: halves snake's speed.
+ * @see Effect
+ * @see Item
  */
 public class Slug extends EffectAbstract {
 

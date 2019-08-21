@@ -6,6 +6,7 @@ import design.model.game.Snake;
 
 /**
  * Abstract class that specifies common behaviors between all effects implementation.
+ * @see Effect
  */
 public abstract class EffectAbstract implements Effect {
 
@@ -41,15 +42,19 @@ public abstract class EffectAbstract implements Effect {
     @Override
     public final void run() {
     if (!attachedSnake.isPresent()) {
+        //that means that lasting effect was activated without a snake to reference, and that's impossible
         throw new IllegalStateException();
     }
+    //what actually happens on lasting effect activation, depends on implementation
     behaviorOnLastingEffectStart(attachedSnake.get());
     final long activationTime = System.currentTimeMillis();
     long timeToWait = this.getEffectDuration().get();
+    //sleeping until effect ends
     while (true) {
         try {
             Thread.sleep(timeToWait);
             final long enlapsedTime = System.currentTimeMillis() - activationTime;
+            //the effect can be made longer if another effect of same instance is eaten
             if (enlapsedTime >= this.getEffectDuration().get()) {
                 break;
             } else {
@@ -60,11 +65,14 @@ public abstract class EffectAbstract implements Effect {
         }
     }
     attachedSnake.get().removeEffect(this);
+    //what actually happens on lasting effect end, depends on implementation
     behaviorOnLastingEffectEnd(attachedSnake.get());
     }
 
     @Override
     public final void incrementDuration(final long duration) {
+        //other than incrementing effect duration it increments counter of effects
+        //of the same kind eaten before effect end
         ++counter;
         this.dEffectDuration = Optional.of(dEffectDuration.get() + duration);
     }

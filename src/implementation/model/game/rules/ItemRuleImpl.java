@@ -6,6 +6,9 @@ import design.model.game.ItemRule;
 
 /**
  * @see ItemRule
+ * @see GameRules
+ * @see Item
+ * @see Effect
  */
 public class ItemRuleImpl implements ItemRule {
 

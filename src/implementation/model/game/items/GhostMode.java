@@ -7,6 +7,8 @@ import design.model.game.Snake;
 /**
  * Instant effect: nothing.<p>
  * Lasting effect: makes snake intangible.
+ * @see Effect
+ * @see Item
  */
 public class GhostMode extends EffectAbstract {
 

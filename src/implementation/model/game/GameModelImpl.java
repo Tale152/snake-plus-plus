@@ -6,6 +6,8 @@ import design.model.game.GameRules;
 
 /**
  * @see GameModel
+ * @see Field
+ * @see GameRules
  */
 public class GameModelImpl implements GameModel {
 

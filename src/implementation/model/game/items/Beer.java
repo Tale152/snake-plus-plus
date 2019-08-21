@@ -12,6 +12,8 @@ import design.model.game.Snake;
  * (example: snake going RIGHT, collides with beer, now goes UP or DOWN).<p>
  * Lasting effect: snake's controls are swapped 
  * (example: pressing RIGHT equals to pressing LEFT and the other way around).
+ * @see Effect
+ * @see Item
  */
 public final class Beer extends EffectAbstract {
 
@@ -27,6 +29,7 @@ public final class Beer extends EffectAbstract {
     public void instantaneousEffect(final Snake target) {
         final Direction direction = target.getProperties().getDirectionProperty().getDirection();
         final Random rnd = new Random();
+        //creating a random boolean variable to chose between two possible directions
         final boolean directionGuess = rnd.nextBoolean();
         if (direction == Direction.UP || direction == Direction.DOWN) {
             if (directionGuess) {

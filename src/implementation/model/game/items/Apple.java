@@ -8,6 +8,8 @@ import design.model.game.Snake;
  * Instantaneous effect: increments size and score to a snake. <p>
  * Lasting effect: when lasting effect ends returns Snake's size to 
  * one and set's it's score to zero.
+ * @see Effect
+ * @see Item
  */
 public final class Apple extends EffectAbstract {
 

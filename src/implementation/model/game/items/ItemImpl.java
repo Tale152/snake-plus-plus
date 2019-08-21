@@ -43,14 +43,20 @@ public class ItemImpl extends CollidableAbstract implements Item  {
         eaten = false;
     }
 
+    private boolean isEaten(final Snake collider) {
+        return !collider.getProperties().getCollisionProperty().isIntangible() 
+                || (collider.getProperties().getCollisionProperty().isIntangible()) && effectClass.equals(GhostMode.class);
+    }
+
     @Override
     public final void onCollision(final Snake collider) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (!collider.getProperties().getCollisionProperty().isIntangible() 
-                || (collider.getProperties().getCollisionProperty().isIntangible()) && effectClass.equals(GhostMode.class)) {
+        if (isEaten(collider)) {
             eaten = true;
             final Constructor<? extends Effect> constructor = effectClass.getConstructor(Optional.class);
             final Effect effect = constructor.newInstance(dEffectDuration);
             effect.instantaneousEffect(collider);
+            //if the effect duration is present than that means that lasting effect
+            //needs to be activated, so I give it to snake that than decides what to do
             if (dEffectDuration.isPresent()) {
                 collider.addEffect(effect);
             }
@@ -61,6 +67,10 @@ public class ItemImpl extends CollidableAbstract implements Item  {
 
     @Override
     public final void run() {
+        //if expire delta is present that means that, after a period of time of not being eaten
+        //this item will disappear from field, so it waits until the time comes and, if not been eaten,
+        //removes itself from field and activates it's expiration effect (despite the fact that no item has
+        //any expiration effect unfortunately for time reasons).
         if (dExpire != null && dExpire.isPresent()) {
             try {
                 Thread.sleep(dExpire.get());

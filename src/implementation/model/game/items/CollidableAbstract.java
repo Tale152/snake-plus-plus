@@ -4,6 +4,7 @@ import java.awt.Point;
 import design.model.game.Collidable;
 /**
  * This abstract class defines all common behaviors of a collidable.
+ * @see Collidable
  */
 public abstract class CollidableAbstract implements Collidable {
 

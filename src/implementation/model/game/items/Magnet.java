@@ -10,6 +10,9 @@ import design.model.game.Snake;
  * if normally a snake would have passed by side of an item, 
  * now it will collide with it even tho that item is not in
  * the next cell where the snake will be)
+ * @see Effect
+ * @see Item
+ * 
  */
 public class Magnet extends EffectAbstract {
 

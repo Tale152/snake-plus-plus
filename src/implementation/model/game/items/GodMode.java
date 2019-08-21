@@ -7,6 +7,8 @@ import design.model.game.Snake;
 /**
  * Instant effect: nothing.<p>
  * Lasting effect: makes you invincible.
+ * @see Effect
+ * @see Item
  */
 public class GodMode extends EffectAbstract {
 

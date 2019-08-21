@@ -11,6 +11,8 @@ import implementation.controller.game.loader.WallDeserializer;
 
 /**
  * @see Wall
+ * @see Snake
+ * @see Collidable
  */
 @JsonDeserialize(using = WallDeserializer.class)
 public class WallImpl extends CollidableAbstract implements Wall {
@@ -27,9 +29,13 @@ public class WallImpl extends CollidableAbstract implements Wall {
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (collider.getProperties().getCollisionProperty().isSpring()) {
             collider.reverse();
-        } else if (!collider.getProperties().getCollisionProperty().isIntangible() 
-                && !collider.getProperties().getCollisionProperty().isInvincible()) {
+        } else if (canBeKilled(collider)) {
             collider.kill();
         }
+    }
+
+    private boolean canBeKilled(final Snake collider) {
+        return !collider.getProperties().getCollisionProperty().isIntangible() 
+                && !collider.getProperties().getCollisionProperty().isInvincible();
     }
 }
