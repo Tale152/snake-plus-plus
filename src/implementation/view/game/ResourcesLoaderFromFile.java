@@ -116,7 +116,7 @@ public class ResourcesLoaderFromFile implements ResourcesLoader {
 
     private Background readBackground(final Path path, final double width, final double height) 
             throws FileNotFoundException, IOException {
-        final Image bg = new Image(path.toUri().toURL().toString(), width, height, false, false);
+        final Image bg = new Image(path.toUri().toString(), width, height, false, false);
         return new BackgroundImpl(bg, width, height);
     }
 

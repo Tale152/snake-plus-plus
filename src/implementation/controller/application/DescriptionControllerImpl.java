@@ -2,7 +2,6 @@ package implementation.controller.application;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -112,21 +111,17 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     //used to print a new image in the image view
     private void printImage(final Path packName, final String itemName) {
       //path where there are all the items images
-        try {
-            final Image item = new Image(
-                    packName.resolve(ITEMS).resolve(itemName + PathUtils.IMAGE_TYPE).toUri().toURL().toString(),
-                    100, 100, true, true);
-            //set the image in the image view
-            final ImageView itemImage = new ImageView(item);
-            itemImage.setPreserveRatio(true);
-            imageSpot.getChildren().clear();
-            imageSpot.getChildren().add(itemImage);
-            itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
-            itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
+        final Image item = new Image(
+                packName.resolve(ITEMS).resolve(itemName + PathUtils.IMAGE_TYPE).toUri().toString(),
+                100, 100, true, true);
+        //set the image in the image view
+        final ImageView itemImage = new ImageView(item);
+        itemImage.setPreserveRatio(true);
+        imageSpot.getChildren().clear();
+        imageSpot.getChildren().add(itemImage);
+        itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
+        itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
+}
 
     //used to find all the directories that contains the skin pack
     private void listDirectory(final Path folder) {
