@@ -1,0 +1,53 @@
+{
+	"field": {
+		"dimensions": {"x":10.0,"y":10.0},
+    "walls": [
+    ],
+		"items" : [
+		]
+	},
+  "rules": {
+    "initialSnakeDelta": 80,
+    "initialSnakeMultiplier": 1.0,
+    "timeGoingForward": false,
+    "initialTime": 180000,
+    "itemRules": [
+      {
+        "effectClass": "implementation.model.game.items.Apple",
+        "spawnDelta": 100,
+        "spawnChance": 1.0,
+        "max": 8,
+        "itemDuration": null,
+        "effectDuration": null
+      }
+    ],
+    "winConditions": {
+      "snakeLength": null,
+      "scoreGoal": null,
+      "timeGoal": 0,
+      "timeForward": false
+    },
+    "lossConditions": {
+      "checkAllSnakesDied": true,
+      "gameTime": null,
+      "timeForward": false
+    }
+  },
+  "snakes": [
+    [
+      {
+        "x": 4.0,
+        "y": 5.0
+      }
+    ]
+  ],
+	"directions": [
+    "RIGHT"
+	],
+	"names": [
+    "Player 1"
+	],
+
+	"name": "Square of madness",
+	"description": "Just think outside the box.\nTry get the best score in 3 minutes, noob."
+}

@@ -1,8 +1,9 @@
 package implementation.controller.application;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,7 @@ public class ClassicControllerImpl implements StageSelectionController {
     private int selected = 0; //NOPMD
     private int previous = 0; //NOPMD
     private int players = 1;
-    private String skinPackPath;
+    private Path skinPackPath;
     private ResourcesLoader resources;
     private static final double ITEMBAR_PERCENT_HEIGHT = 0.04;
     private static final double DESCRIPTION_PERCENT_HEIGHT = 0.12;
@@ -86,15 +87,15 @@ public class ClassicControllerImpl implements StageSelectionController {
      */
     public ClassicControllerImpl() throws IOException {
         levels = new ArrayList<>();
-        final File[] levelFiles = new File(PathUtils.CLASSIC).listFiles();
-        if (levelFiles == null) {
-            throw new IOException("Classic levels folder is a file. how.");
-        }
+        final Path levelsFolder = PathUtils.getResourcePath(PathUtils.CLASSIC);
         final List<String> names = Arrays.asList("Player 1", "Player 2", "Player 3", "Player 4");
-        for (final File file : levelFiles) {
-            final String levelPath = file.getPath();
-            levels.add(new GameLoaderJSON(levelPath, names));
-        }
+        Files.walk(levelsFolder, 1).filter(p -> !p.equals(levelsFolder)).forEach(p -> {
+            try {
+                levels.add(new GameLoaderJSON(p, names));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -269,7 +270,7 @@ public class ClassicControllerImpl implements StageSelectionController {
     }
 
     @Override
-    public final void setSkinPackPath(final String path) {
+    public final void setSkinPackPath(final Path path) {
         skinPackPath = path;
         try {
             refreshLevel();

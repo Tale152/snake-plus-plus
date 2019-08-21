@@ -1,15 +1,12 @@
 package implementation.controller.application;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -45,14 +42,14 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     @FXML private MenuButton skinPacks;
 
     private final Map<String, String> descriptionButtonMap = new HashMap<>();
-    private final Map<String, String> itemButtonMap = new HashMap<>();
-    private String packName;
+    private final Map<String, Path> itemButtonMap = new HashMap<>();
+    private Path packName;
     private boolean isSelected;
 
     @Override
     public final void initialize(final URL location, final ResourceBundle resources) {
-        final File folderDescriptions = new File("res" + File.separator + "descriptions");
-        final File folderPack = new File("res" + File.separator + "resources");
+        final Path folderDescriptions = PathUtils.getResourcePath("descriptions");
+        final Path folderPack = PathUtils.getResourcePath("resources");
         this.isSelected = false;
         listFiles(folderDescriptions);
         listDirectory(folderPack);
@@ -71,15 +68,22 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     }
 
     //used to list all the files contained in a folder, which are the file of the item's descriptions
-    private void listFiles(final File folder) {
-        final File[] files = folder.listFiles();
-        if (files != null) {
-            final List<File> filesList = new ArrayList<>(Arrays.asList(files));
-            for (final File fileEntry : filesList) {
-                if (!fileEntry.isDirectory()) {
-                    this.descriptionButtonMap.put(fileEntry.getName().replace("_", " "), PathUtils.DESCRIPTIONS + fileEntry.getName());
+    private void listFiles(final Path folder) {
+        try {
+            Files.walk(folder, 1).filter(p -> !p.equals(folder)).forEach(p -> {
+                try {
+                    final Path fileName = p.getFileName();
+                    if (fileName == null) {
+                        return;
+                    }
+                    this.descriptionButtonMap.put(fileName.toString().replace("_", " "),
+                            new String(Files.readAllBytes(p)));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -91,21 +95,7 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
                 public void handle(final ActionEvent e) { 
                     isSelected = true; //an item has been selected
                     //string that contains all the item description
-                    String descStr = "";
-                    //try-with-resources ensures the BufferedReader will be closed correctly (pmd does not recognize it)
-                    try (BufferedReader br = new BufferedReader(new FileReader(descriptionButtonMap.get(s)))) { //NOPMD
-                        //read item description
-                        String nextStr;
-                        nextStr = br.readLine();
-                        while (nextStr != null) {
-                            descStr += nextStr + "\n";
-                            nextStr = br.readLine();
-                        }
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    } 
+                    String descStr = descriptionButtonMap.get(s);
                     //change the text of the menu button and the label
                     selectItem.setText(m.getText());
                     itemDescription.setText(descStr);
@@ -119,11 +109,11 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
     }
 
     //used to print a new image in the image view
-    private void printImage(final String packName, final String itemName) {
+    private void printImage(final Path packName, final String itemName) {
       //path where there are all the items images
         final Image item = new Image(
-                new File(PathUtils.RESPACKS + packName + File.separator + ITEMS + itemName 
-                        + PathUtils.IMAGE_TYPE).toURI().toString(), 100, 100, true, true);
+                packName.resolve(ITEMS).resolve(itemName + PathUtils.IMAGE_TYPE).toUri().toString(),
+                100, 100, true, true);
         //set the image in the image view
         final ImageView itemImage = new ImageView(item);
         itemImage.setPreserveRatio(true);
@@ -131,44 +121,45 @@ public class DescriptionControllerImpl implements DescriptionController, Initial
         imageSpot.getChildren().add(itemImage);
         itemImage.fitWidthProperty().bind(imageSpot.widthProperty());
         itemImage.fitHeightProperty().bind(imageSpot.heightProperty());
-    }
+}
 
     //used to find all the directories that contains the skin pack
-    private void listDirectory(final File folder) {
-        //random pack is used if the default pack does not exist
-        String randomPack = "";
-        final File[] files = folder.listFiles();
-        if (files != null) {
-            final List<File> filesList = new ArrayList<>(Arrays.asList(files));
-            for (final File fileEntry : filesList) {
-                if (fileEntry.isDirectory()) {
-                    this.itemButtonMap.put(fileEntry.getName().replace("_", " "), fileEntry.getName());
-                    if (randomPack.isEmpty()) {
-                        randomPack = fileEntry.getName().replace(" ", "_");
+    private void listDirectory(final Path folder) {
+        Path randomPack = null;
+        try {
+            for (final Iterator<Path> iterator = Files.walk(folder,  1).filter(p -> !p.equals(folder)).iterator(); iterator.hasNext();) {
+                final Path item = iterator.next();
+                final Path itemFileName = item.getFileName();
+                if (Files.isDirectory(item) && itemFileName != null) {
+                    final String packName = itemFileName.toString().replace("_", " ").replace("/", "");
+                    this.itemButtonMap.put(packName, item);
+                    if (randomPack == null) {
+                        randomPack = item;
                     }
                 }
             }
-            //set the default skin pack if the user does not select one
-            if (this.itemButtonMap.isEmpty()) {
-                throw new RuntimeException("no skin paks found");
-            } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
-                this.packName = this.itemButtonMap.get(DEFAULT_PACK);
-            } else {
-                this.packName = randomPack;
-            }
-        } else {
-            throw new RuntimeException("there are problems with directory " + folder.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("There are problems with directory " + folder);
         }
+        if (this.itemButtonMap.isEmpty()) {
+            throw new RuntimeException("no skin paks found");
+        } else if (this.itemButtonMap.containsKey(DEFAULT_PACK)) {
+            this.packName = this.itemButtonMap.get(DEFAULT_PACK);
+        } else {
+            this.packName = randomPack;
+        } 
     }
 
     //used to initialize the menu item of the pack
    private void initializeMenuPack() {
        for (final String s : this.itemButtonMap.keySet()) {
            final MenuItem m = new MenuItem(s);
+           m.setUserData(this.itemButtonMap.get(s));
            final EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
                public void handle(final ActionEvent e) { 
                    skinPacks.setText(m.getText());
-                   packName = m.getText().replace(" ", "_");
+                   packName = (Path) m.getUserData();
                    //if an item has been selected and I change pack, the image changes
                    if (isSelected) {
                        printImage(packName, selectItem.getText().replace(" ", ""));

@@ -575,14 +575,14 @@
         "spawnDelta": 1000,
         "spawnChance": 1.0,
         "max": 5,
-        "itemDuration": 6000,
+        "itemDuration": null,
         "effectDuration": null
       },
       {
         "effectClass": "implementation.model.game.items.Beer",
         "spawnDelta": 1000,
         "spawnChance": 0.7,
-        "max": 2,
+        "max": 1,
         "itemDuration": 3000,
         "effectDuration": 3000
       },
@@ -590,31 +590,23 @@
         "effectClass": "implementation.model.game.items.BadApple",
         "spawnDelta": 1000,
         "spawnChance": 1.0,
-        "max": 5,
+        "max": 3,
         "itemDuration": 6000,
-        "effectDuration": 8000
+        "effectDuration": 4000
       },
       {
         "effectClass": "implementation.model.game.items.DoublePoints",
         "spawnDelta": 2000,
-        "spawnChance": 0.1,
+        "spawnChance": 0.2,
         "max": 1,
         "itemDuration": 7000,
-        "effectDuration": 8000
-      },
-      {
-        "effectClass": "implementation.model.game.items.Turbo",
-        "spawnDelta": 2000,
-        "spawnChance": 0.5,
-        "max": 2,
-        "itemDuration": 5000,
-        "effectDuration": 2500
+        "effectDuration": 10000
       },
       {
         "effectClass": "implementation.model.game.items.Slug",
         "spawnDelta": 2000,
-        "spawnChance": 0.1,
-        "max": 2,
+        "spawnChance": 0.2,
+        "max": 3,
         "itemDuration": 5000,
         "effectDuration": 2500
       },
@@ -622,7 +614,7 @@
         "effectClass": "implementation.model.game.items.ScoreLoss",
         "spawnDelta": 1000,
         "spawnChance": 1.0,
-        "max": 2,
+        "max": 1,
         "itemDuration": 5000,
         "effectDuration": null
       },
@@ -635,21 +627,32 @@
         "effectDuration": null
       }
     ],
-		"winConditions":  {"snakeLength":null,"scoreGoal":300000,"timeGoal":null,"timeForward":true},
-		"lossConditions": {"checkAllSnakesDied":true,"gameTime":864000000000000,"timeForward":true}
+		"winConditions":  {"snakeLength":null,"scoreGoal":null,"timeGoal":null,"timeForward":true},
+		"lossConditions": {"checkAllSnakesDied":true,"gameTime":null,"timeForward":true}
 	},
-	"snakes": [
-		[
-			{"x":8.0,"y":15.0}
-		]
-	],
+  "snakes": [
+    [
+      {
+        "x": 8.0,
+        "y": 15.0
+      }
+    ],
+    [
+      {
+        "x": 8.0,
+        "y": 4.0
+      }
+    ]
+  ],
 	"directions": [
-		"RIGHT"
+    "RIGHT",
+    "RIGHT"
 	],
 	"names": [
-		"LASERPE"
+    "Player 1",
+    "Player 2"
 	],
 
-	"name": "Hight Points 5 Min Hard",
-	"description": "Lorem ipsum dolor sit amet.\nI could write something more meaningful, but nah."
+	"name": "Mansion",
+	"description": "If you think you can relax, think again.\nLet's how many point you can get."
 }

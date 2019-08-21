@@ -28,6 +28,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -77,7 +78,7 @@ public class GameViewImpl implements GameView {
      * @throws FileNotFoundException if there are problems regarding resourcesPath
      * @throws IOException if there are problems regarding resourcesPath
      */
-    public GameViewImpl(final Scene scene, final String resourcesPath, final GameModel gameModel) throws FileNotFoundException, IOException {
+    public GameViewImpl(final Scene scene, final Path resourcesPath, final GameModel gameModel) throws FileNotFoundException, IOException {
         final List<String> playerNames = new ArrayList<>();
         for (final Snake s : gameModel.getField().getSnakes()) {
             playerNames.add(s.getPlayer().getName());

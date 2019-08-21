@@ -51,7 +51,7 @@
 		]
 	},
 	"rules": {
-		"initialSnakeDelta": 250,
+		"initialSnakeDelta": 200,
 		"initialSnakeMultiplier": 1.0,
 		"timeGoingForward": true,
         "initialTime": 0,
