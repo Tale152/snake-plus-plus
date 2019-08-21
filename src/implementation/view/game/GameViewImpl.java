@@ -113,6 +113,10 @@ public class GameViewImpl implements GameView {
         animationTimer.stop();
     }
 
+    /**
+     * @param nPlayers number of players in game
+     * @return the animation timer used by JavaFX to regulate rendering
+     */
     private AnimationTimer initAnimationTimer(final int nPlayers) {
         return new AnimationTimer() {
             public void handle(final long currentNanoTime) {
@@ -150,11 +154,17 @@ public class GameViewImpl implements GameView {
         return root;
     }
 
+    /**
+     * Calculating relative coordinates and spaces relative to current screen width.
+     */
     private void setWidthProperties(final int nPlayers) {
         timeLabelX = root.getWidth() / 2; 
         playerSpacingX = root.getWidth() / (nPlayers + 1);
     }
 
+    /**
+     * Calculating relative coordinates and spaces relative to current screen height.
+     */
     private void setHeightProperies() {
         labelY = (root.getHeight() * hudPercentage) / 2;
         final double bottomHudSubSpaceHeight = ((root.getHeight() * hudPercentage) / BOTTOM_HUD_SUB_SPACES);
@@ -168,6 +178,13 @@ public class GameViewImpl implements GameView {
                 root.getHeight() * hudPercentage * PLAYER_HEIGHT_PERCENTAGE / 3);
     }
 
+    /**
+     * Initializing and starting game controller.
+     * @param scene application's scene
+     * @param gameModel the model to give to the controller
+     * @return initialized game controller
+     * @throws IOException files not found
+     */
     private GameController initGameController(final Scene scene, final GameModel gameModel) throws IOException {
         final GameController controller = new GameControllerImpl(gameModel, this, loader);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
@@ -183,6 +200,12 @@ public class GameViewImpl implements GameView {
         gc.drawImage(bg, 0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    /**
+     * @param field field where to draw
+     * @param fieldGC field's graphical context
+     * @param spriteLen size of a sprite (sprite is a square)
+     * @param nPlayer number of player in game
+     */
     private void drawField(final GameField field, final GraphicsContext fieldGC, 
             final double spriteLen, final int nPlayer) {
         for (final Entry<Point, Sprite> entry : field.getItemSprites().entrySet()) {
@@ -205,6 +228,10 @@ public class GameViewImpl implements GameView {
         fieldGC.drawImage(sprite, point.x * spriteLen, point.y * spriteLen, spriteLen, spriteLen);
     }
 
+    /**
+     * Draws everything into hud for every player.
+     * @param nPlayers number of players in game
+     */
     private void drawHud(final int nPlayers) {
         root.getBackgroundGraphicsContext().setFont(timeFont);
         root.getBackgroundGraphicsContext().fillText(hud.getTime(), timeLabelX, labelY);
@@ -226,8 +253,14 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /**
+     ** Draws the sprites into player's hud, such as the sprite representing the player and the sprites
+     * representing it's active effects.
+     * @param nPlayer player number
+     */
     private void drawPlayerHeadAndActiveItems(final int nPlayer) {
         final List<Sprite> spriteList = hud.getPlayerHUDs().get(nPlayer).getSpriteList();
+        //calculating relative coordinates to center of this player hud
         final double totalSpaceSprites = ((spriteList.size() * hudSpritesDimension) + ((hudSpritesDimension * SPACING_BETWEEN_HUD_SPRITES) * (spriteList.size() - 1)));
         final double leftCorner = (playerSpacingX * nPlayer) + playerSpacingX - (totalSpaceSprites / 2);
         int i = 0;
@@ -239,6 +272,12 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /**
+     * Calculating hud percentage relative to screen size and field number of cells.
+     * @param nCellWidth number of cells in width in field
+     * @param nCellHeight number of cells in height in field
+     * @return represent the screen's height percentage that will be used for hud
+     */
     private double calculateHudPercentage(final int nCellWidth, final int nCellHeight) {
         double percentage = MIN_HUD_PERCENTAGE;
         while (true) {

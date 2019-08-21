@@ -69,6 +69,4 @@ public class ScoreLossTest {
                 testSnake.getProperties().getLengthProperty().getLength(), 1);
     }
 
-    //TODO test lasting efect
-
 }

@@ -50,6 +50,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public final synchronized List<Sprite> getCell(final Point point) {
+        //getting sprites from item, wall and snake maps
         final List<Sprite> res = new ArrayList<>();
         if (itemMap.containsKey(point)) {
             res.add(itemMap.get(point));
@@ -67,6 +68,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public final synchronized void addItemSprite(final Point point, final Sprite sprite) {
+        //cannot be two items into same point
         if (!itemMap.containsKey(point)) {
             itemMap.put(point, sprite);
         }
@@ -91,6 +93,8 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public final synchronized void addBodyPart(final int playerNumber, final Point point, final Sprite sprite) {
+        //If this is first sprite into this position then initialize a list binded into map
+        //with that point. It can happen that a snake has two or more of it's bodypart into the same cell.
         if (!loadingSnakeSprites.get(playerNumber).containsKey(point)) {
             loadingSnakeSprites.get(playerNumber).put(point, new ArrayList<>());
         }
@@ -104,6 +108,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public final synchronized void addWallSprite(final Point point, final Sprite sprite) {
+        //cannot be two walls into same point
         if (!wallMap.containsKey(point)) {
             wallMap.put(point, sprite);
         }

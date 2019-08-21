@@ -81,7 +81,7 @@ public class BackgroundPane extends Pane {
     }
 
     /**
-     * @return the GraphicsContext of the backround (the hud one)
+     * @return the GraphicsContext of the background (the hud one)
      */
     public GraphicsContext getBackgroundGraphicsContext() {
         return backgroundGraphicsContext;
