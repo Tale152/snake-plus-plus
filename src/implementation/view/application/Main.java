@@ -23,7 +23,7 @@ public class Main extends Application {
     /**
      * Main method, launches it's thread.
      */
-    public static void main() {
+    public static void main(String[] args) {
         Application.launch(Main.class);
     }
 
