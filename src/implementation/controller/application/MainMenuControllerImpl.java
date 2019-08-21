@@ -143,7 +143,7 @@ public class MainMenuControllerImpl implements MainMenuController, Initializable
     /**This method initialize all the menu item in the menu button
     *the name of an item is the name of the directory where there is the skin
     *and when you select a skin the name of the menu button has the name of the skin selected.
-    *@author Elisa Tronetti*/
+    */
     private void initializeMenuItem() {
         for (final String s : this.itemButtonMap.keySet()) {
             final MenuItem m = new MenuItem(s);
