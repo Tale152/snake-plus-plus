@@ -7,10 +7,10 @@
 		]
 	},
   "rules": {
-    "initialSnakeDelta": 80,
+    "initialSnakeDelta": 100,
     "initialSnakeMultiplier": 1.0,
     "timeGoingForward": false,
-    "initialTime": 180000,
+    "initialTime": 60000,
     "itemRules": [
       {
         "effectClass": "implementation.model.game.items.Apple",
@@ -22,14 +22,14 @@
       }
     ],
     "winConditions": {
-      "snakeLength": null,
+      "snakeLength": 50,
       "scoreGoal": null,
       "timeGoal": 0,
       "timeForward": false
     },
     "lossConditions": {
       "checkAllSnakesDied": true,
-      "gameTime": null,
+      "gameTime": 0,
       "timeForward": false
     }
   },
@@ -48,6 +48,6 @@
     "Player 1"
 	],
 
-	"name": "Square of madness",
-	"description": "Just think outside the box.\nTry get the best score in 3 minutes, noob."
+	"name": "Speed madness",
+	"description": "Hey, Hey! I'm not a bug, I'm just a little level without walls...\nI may be little but I'm pretty strong. Can you beat me?\nReach a length of 50 in only a minute.\nI hope your fingers will be fine after this."
 }
