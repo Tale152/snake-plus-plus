@@ -12,13 +12,13 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.settings/
+#.settings/
 .loadpath
 .recommenders
-.checkstyle
+#.checkstyle
 checkstyle/
-.pmd
-.ruleset
+#.pmd
+#.ruleset
 
 # External tool builders
 .externalToolBuilders/
