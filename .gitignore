@@ -5,7 +5,7 @@
 ### Eclipse ###
 
 .metadata
-bin/
+#bin/
 tmp/
 *.tmp
 *.bak
@@ -66,10 +66,10 @@ checkstyle/
 
 ### Eclipse Patch ###
 # Eclipse Core
-.project
+#.project
 
 # JDT-specific (Eclipse Java Development Tools)
-.classpath
+#.classpath
 
 # Annotation Processing
 .apt_generated
@@ -90,7 +90,7 @@ checkstyle/
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
@@ -143,3 +143,4 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/java,linux,eclipse,windows
 
+/bin/
